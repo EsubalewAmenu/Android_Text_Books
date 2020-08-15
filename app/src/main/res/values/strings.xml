@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">9_12 Text Books</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="nav_header_subtitle">በ Herma Apps የተሰራ</string>
+    <string name="nav_header_desc" translatable="false">Navigation header</string>
+    <string name="action_settings">ማስተካከያ/Settings</string>
+
+    <string name="menu_share">ለሌሎች አካፍል</string>
+
+    <string name="about_short">Herma computing P.L.C. \n\nWe are dedicated to develop mobile applications for *free*. \n\nPlease contact us on: esubalew.a2009@gmail.com</string>
+    <string name="about">ስለ</string>
+    <string name="sle">ስለ አፑ</string>
+    <string name="action_rate">አስተያየቶን ይስጡን</string>
+    <string name="action_store">ሌሎች አፖች</string>
+    <string name="exit">ዝጋ</string>
+
+    <string name="app_description">ይህ አፕሊኬሽን ከ 9-12ተኛ ክፍል ያሉ የመማሪያ መፃሕፍትን በሙሉ አካቶ የያዘ ነው። ለተማሪዎች እና ለመምህራን በጣም ጠቃሚ እንደሆነ ይታመናል። በነፃ መጠቀምም ሆነ ዋውረድ/Download ማድረግ ይቻላል! ይህ አፕ የወረቀቱን መፅሐፎች መስልካችን ላይ በቀላሉ እንድንገለገልበት ተደርጎ የተሰራ ስለሆነ በየትኛውም ቦታ እና ጊዜ መጠቀም የሚያስችል ነው።</string>
+    <string name="pls_wait">እባክዎን ትንሽ ይጠብቁ...\n\nTelegram:-@ethio_textbooks</string>
+    <string name="title_activity_settings">ማስተካከያ</string>
+    <string name="owner_name">የእርስዎ ስም</string>
+    <string name="owner_phone">ስልክ ቁጥር</string>
+    <string name="test_phone_owner">የእርስዎ መረጃ</string>
+    <string name="text_books">የመማሪያ መፅሀፎች</string>
+    <string name="teachers_guide">የመምህራን መምሪያ</string>
+    <string name="lang">ቋንቋ</string>
+
+    <string name="internet_for_1">ለ 1 ደቂቃ ኢንተርኔት እንፈልጋለን</string>
+    <string name="internet_for_1_desc">አፑን ለመመዝገብ ለ 1 ደቂቃ ኢንተርኔት እንፈልጋለን\n\nእባክዎን መዝግብ የሚለውን ይጫኑና ትንሽ ይጠብቁት።</string>
+    <string name="downloading">በማውረዳ ላይ/Downloading...</string>
+    <string name="download">አወርድ/Download</string>
+    <string name="cancel">ተወው</string>
+    <string name="register">መዝግብ</string>
+    <string name="close">ዝጋ</string>
+    <string name="registering">በመመዝገብ ላይ</string>
+    <string name="no_file">ፋይሉ የሎትም።</string>
+    <string name="no_file_desc_pre">\'</string>
+    <string name="no_file_desc_pos">\' የሚለውን ከጓደኛዎ \'Herma/books\' ፎልደር ውስጥ ይውሰዱ ወይም ከዚሁ ያውርዱ/download</string>
+    <string name="grade">Grade</string>
+    <string name="snackbar_offline">Please check your mobile data or Wi-Fi and try again</string>
+
+    <!-- Strings related to the network-->
+    <string name="no_network_title">ኢንተርኔት የለም/No Network Available</string>
+    <string name="no_network_message">ለ መጀመሪያ ጊዜ ለ 1 ደቂቃ ኢንተርኔት ያስፈልግዎታል።\nWe cannot detect a network connection on this device. Please check your mobile data or Wi-Fi and try again.</string>
+    <string name="check_network">No network available.\nPlease make sure you are connected to the Internet.</string>
+    <string name="go_to_settings">Go to settings</string>
+
+
+</resources>
