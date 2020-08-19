@@ -17,9 +17,9 @@ import com.herma.apps.textbooks.model.Item;
 import java.util.ArrayList;
 
 /*
- * Created by Sambhaji Karad on 04-Jan-18
- * Mobile 9423476192
- * Email sambhaji2134@gmail.com/
+ * Created by Esubalew Amenu on 04-Jan-19
+ * Mobile +251 92 348 1783
+ * Email esubalew.a2009@gmail.com/
 */
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {

@@ -13,7 +13,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private static int SPLASH_SCREEN_TIME_OUT=1100;
 
-    DB db;
+//    DB db;
     //After completion of 2000 ms, the next activity will get started.
     @Override
     protected void onCreate(Bundle savedInstanceState) {

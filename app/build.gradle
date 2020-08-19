@@ -4,11 +4,13 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.herma.apps.textbooks"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 29
-        versionCode 5
-        versionName "1.4.2"
+        versionCode 8
+        versionName "1.5.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -20,6 +22,10 @@ android {
     compileOptions {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
+    }
+
+    packagingOptions {
+        exclude("build-data.properties")
     }
 }
 
@@ -37,6 +43,9 @@ dependencies {
 
     implementation "androidx.preference:preference:1.1.0"
 
-    implementation 'com.google.android.gms:play-services-ads:18.3.0'
+    implementation 'com.google.android.gms:play-services-ads:19.3.0'
+    implementation 'com.google.crypto.tink:apps-rewardedads:1.4.0'
+
+    implementation 'androidx.multidex:multidex:2.0.1'
 
 }
