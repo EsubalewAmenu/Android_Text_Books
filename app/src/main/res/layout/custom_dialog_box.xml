@@ -45,6 +45,6 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
-        android:background="@color/divider"></Button>
+        android:background="@color/divider"/>
 
 </RelativeLayout>
