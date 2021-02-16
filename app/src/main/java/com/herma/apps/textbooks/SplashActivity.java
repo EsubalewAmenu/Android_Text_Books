@@ -1,19 +1,19 @@
 package com.herma.apps.textbooks;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Bundle;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.herma.apps.textbooks.questions.DB;
-
 public class SplashActivity extends AppCompatActivity {
 
     private static int SPLASH_SCREEN_TIME_OUT=1100;
 
-//    DB db;
+    //    DB db;
     //After completion of 2000 ms, the next activity will get started.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +31,70 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                Intent i=new Intent( SplashActivity.this, MainActivity.class);
-                //Intent is used to switch from one activity to another.
-                startActivity(i);
-                //invoke the SecondActivity.
 
-                finish();
-                //the current activity will get finished.
+                SharedPreferences sharedPref = SplashActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+                String choosedP = sharedPref.getString("choosedP", null);
+                String choosedGrade = sharedPref.getString("choosedGrade", null);
+
+//                if(choosedGrade == null || choosedGrade.equals(null) || choosedGrade.equals("")){
+//                    Intent intent = new Intent(SplashActivity.this, ChooseCountry.class);
+//                    startActivity(intent);
+//                    finish();
+//                }else{
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    intent.putExtra("choosedP", choosedP);
+                    intent.putExtra("choosedGrade", choosedGrade);
+                    startActivity(intent);
+                    finish();
+//                }
+
+//                Intent i=new Intent( SplashActivity.this, MainActivity.class);
+//                //Intent is used to switch from one activity to another.
+//                startActivity(i);
+//                //invoke the SecondActivity.
+//
+//                finish();
+//                //the current activity will get finished.
             }
         }, SPLASH_SCREEN_TIME_OUT);
     }
 }
+//package com.herma.apps.textbooks;
+//
+//import android.content.Context;
+//import android.content.Intent;
+//import android.content.SharedPreferences;
+//import android.os.Bundle;
+//import android.preference.PreferenceManager;
+//import android.widget.TextView;
+//
+//import androidx.appcompat.app.AppCompatActivity;
+//
+//public class SplashActivity extends AppCompatActivity {
+//
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_splash);
+//
+//
+//        SharedPreferences sharedPref = this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+//        int choosedGrade = sharedPref.getInt("choosedGrade", 0);
+//        String choosedP = sharedPref.getString("choosedP", null);
+//        String choosedSubject = sharedPref.getString("choosedSubject", null);
+//
+//        if(choosedGrade != 0){
+//            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+//            intent.putExtra("choosedGrade", choosedGrade);
+//            intent.putExtra("choosedP", choosedP);
+//            intent.putExtra("choosedSubject", choosedSubject);
+//            startActivity(intent);
+//            finish();
+//        }else{
+//            Intent intent = new Intent(SplashActivity.this, ChooseCountry.class);
+//            startActivity(intent);
+//            finish();
+//        }
+//
+//    }
+//}

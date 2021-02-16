@@ -1,4 +1,4 @@
-package com.herma.apps.drivertraining;
+package com.herma.apps.textbooks;
 
 import org.junit.Test;
 
