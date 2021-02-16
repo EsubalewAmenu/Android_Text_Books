@@ -1,32 +1,38 @@
 <resources>
-    <string name="app_name">(India) Textbook</string>
+
+    <string name="adReaderInt">ca-app-pub-8011674951494696/4934737105</string>
+    <string name="adHome">ca-app-pub-8011674951494696/8312993039</string>
+    <string name="adChapter">ca-app-pub-8011674951494696/7079802411</string>
+    <string name="adReader">ca-app-pub-8011674951494696/3605507555</string>
+
+    <string name="app_name">5_12 Text Books</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Textbooks</string>
+    <string name="nav_header_title">5-12 Textbooks</string>
     <string name="nav_header_subtitle">apps@datascienceplc.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
     <string name="action_back">Back</string>
 
-    <string name="downloading">Downloading...</string>
-    <string name="download">Download</string>
-    <string name="cancel">Cancel</string>
-    <string name="no_file">File not found! </string>
-    <string name="no_file_desc_pre">Please download the file or copy \'</string>
-    <string name="no_file_desc_pos">\' file from your friend \'Herma/books\' folder.\n\n(We advise you to use Wi-Fi to download the file/or please download at night)</string>
+    <string name="downloading">በማውረዳ ላይ/Downloading...</string>
+    <string name="download">አውርድ/Download</string>
+    <string name="cancel">ተወው</string>
+    <string name="no_file">ፋይሉ የሎትም።</string>
+    <string name="no_file_desc_pre">\'</string>
+    <string name="no_file_desc_pos">\' የሚለውን ከጓደኛዎ \'Herma/books\' ፎልደር ውስጥ ይውሰዱ ወይም ከዚሁ ያውርዱ/download\n\n(ለማውረድ Wi-Fi እንዲጠቀሙ እንመክራለን ወይም ኔትዎርክ በማይጨናነቅበት ሰአት ያውርዱ)</string>
     <string name="try_later">"No/Slow internet connection! Please try later"</string>
 
     <string name="share_link_pre">Hey! Have you downloaded </string>
     <string name="share_link_center"> app? Download the app here </string>
     <string name="share_link_pos"> and you will forever be happy just like me because the app has the most important thing ever.</string>
 
-    <string name="app_description">This app will be useful for students, works offline and only one time download with complete features. The app is in a soft form as a handbook you can keep it in your smart device and use it wherever you are.</string>
-    <string name="about">About</string>
+    <string name="app_description">ይህ አፕሊኬሽን ከ 5-12ተኛ ክፍል ያሉ የመማሪያ መፃሕፍትን አካቶ የያዘ ነው። ለተማሪዎች እና ለመምህራን በጣም ጠቃሚ እንደሆነ ይታመናል። በነፃ መጠቀምም ሆነ ዋውረድ/Download ማድረግ ይቻላል! ይህ አፕ የወረቀቱን መፅሐፎች መስልካችን ላይ በቀላሉ እንድንገለገልበት ተደርጎ የተሰራ ስለሆነ በየትኛውም ቦታ እና ጊዜ መጠቀም የሚያስችል ነው።</string>
+    <string name="about">ስለ</string>
     <string name="menu_share">Share this app</string>
-    <string name="action_rate">Rate us on PlayStore</string>
-    <string name="action_store">More apps from us</string>
-    <string name="exit">Exit</string>
-    <string name="pls_wait">Please wait...</string>
+    <string name="action_rate">አስተያየቶን ይስጡን</string>
+    <string name="action_store">ሌሎች አፖች</string>
+    <string name="exit">ዝጋ</string>
+    <string name="pls_wait">እባክዎን ትንሽ ይጠብቁ...\n\nTelegram:-@ethio_textbooks</string>
 
 </resources>
