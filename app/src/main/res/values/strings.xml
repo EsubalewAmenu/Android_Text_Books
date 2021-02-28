@@ -5,10 +5,10 @@
     <string name="adChapter">ca-app-pub-8011674951494696/7079802411</string>
     <string name="adReader">ca-app-pub-8011674951494696/3605507555</string>
 
-    <string name="app_name">5_12 Text Books</string>
+    <string name="app_name">1_12 Text Books</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">5-12 Textbooks</string>
+    <string name="nav_header_title">1-12 Textbooks</string>
     <string name="nav_header_subtitle">apps@datascienceplc.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
@@ -27,12 +27,27 @@
     <string name="share_link_center"> app? Download the app here </string>
     <string name="share_link_pos"> and you will forever be happy just like me because the app has the most important thing ever.</string>
 
-    <string name="app_description">ይህ አፕሊኬሽን ከ 5-12ተኛ ክፍል ያሉ የመማሪያ መፃሕፍትን አካቶ የያዘ ነው። ለተማሪዎች እና ለመምህራን በጣም ጠቃሚ እንደሆነ ይታመናል። በነፃ መጠቀምም ሆነ ዋውረድ/Download ማድረግ ይቻላል! ይህ አፕ የወረቀቱን መፅሐፎች መስልካችን ላይ በቀላሉ እንድንገለገልበት ተደርጎ የተሰራ ስለሆነ በየትኛውም ቦታ እና ጊዜ መጠቀም የሚያስችል ነው።</string>
+    <string name="app_description">ይህ አፕሊኬሽን ከ 1-12ተኛ ክፍል ያሉ የመማሪያ መፃሕፍትን አካቶ የያዘ ነው። ለተማሪዎች እና ለመምህራን በጣም ጠቃሚ እንደሆነ ይታመናል። በነፃ መጠቀምም ሆነ ዋውረድ/Download ማድረግ ይቻላል! ይህ አፕ የወረቀቱን መፅሐፎች መስልካችን ላይ በቀላሉ እንድንገለገልበት ተደርጎ የተሰራ ስለሆነ በየትኛውም ቦታ እና ጊዜ መጠቀም የሚያስችል ነው።</string>
     <string name="about">ስለ</string>
-    <string name="menu_share">Share this app</string>
+    <string name="menu_share">Tell a friend (Link)</string>
     <string name="action_rate">አስተያየቶን ይስጡን</string>
     <string name="action_store">ሌሎች አፖች</string>
     <string name="exit">ዝጋ</string>
     <string name="pls_wait">እባክዎን ትንሽ ይጠብቁ...\n\nTelegram:-@ethio_textbooks</string>
+    <string name="menu_g12">Grade 12</string>
+    <string name="menu_g11">Grade 11</string>
+    <string name="menu_g10">Grade 10</string>
+    <string name="menu_g9">Grade 9</string>
+    <string name="menu_g8">Grade 8</string>
+    <string name="menu_g7">Grade 7</string>
+    <string name="menu_g6">Grade 6</string>
+    <string name="menu_g5">Grade 5</string>
+    <string name="menu_g12t">Grade 12 Teachers Guide</string>
+    <string name="menu_g11t">Grade 11 Teachers Guide</string>
+    <string name="menu_g4">Grade 4</string>
+    <string name="menu_g3">Grade 3</string>
+    <string name="menu_g2">Grade 2</string>
+    <string name="menu_g1">Grade 1</string>
+    <string name="communicate">Communicate</string>
 
 </resources>

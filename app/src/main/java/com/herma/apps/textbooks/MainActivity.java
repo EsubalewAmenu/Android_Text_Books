@@ -40,21 +40,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     DB db;
     Intent chaptersIntent;
 //    public ViewPager fragmentViewPager;
 //    final ArrayList<Fragment> fragmentArrayList = new ArrayList<>();
 /////////////////////////
-    Menu drawerMenu;
-    DrawerLayout drawerLayout;
+//    Menu drawerMenu;
+    DrawerLayout drawer;
     NavigationView navigationView;
     Toolbar toolbar;
-    NavigationView.OnNavigationItemSelectedListener item_click_listener;
-    ActionBarDrawerToggle mDrawerToggle;
-    ArrayList<String> menuItemsArray;
-    int choosedGrade = 0, closeCounter = 1;
+//    NavigationView.OnNavigationItemSelectedListener item_click_listener;
+//    ActionBarDrawerToggle mDrawerToggle;
+//    ArrayList<String> menuItemsArray;
+    int choosedGrade = 1, closeCounter = 1;
 
     FragmentManager mFragmentManager;
     FragmentTransaction mFragmentTransaction;
@@ -63,7 +64,8 @@ public class MainActivity extends AppCompatActivity {
     ////////////////////////
     ArrayList<String[]> grades = new ArrayList<>();
 
-    String selectedGrade = "0", p = "";
+    String choosedGradeT = "", //selectedGrade = "0",
+            p = "";
 
     private AdView mAdView;
 
@@ -74,92 +76,42 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
 
-        drawerMenu = navigationView.getMenu();
+//        drawerMenu = navigationView.getMenu();
 
-//        View headerView = navigationView.getHeaderView(0);
-//        Spinner spin = (Spinner) headerView.findViewById(R.id.spinnerCountry);
-
-        try { grades = getGradesFromDB(MainActivity.this);} catch (Exception e) { e.printStackTrace(); }
-
-//        String[] gradesSpinner = new String[grades.size()];
-//        for (int i = 0; i< grades.size(); i++)
-//            gradesSpinner[i] = grades.get(i)[0];
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
 
 
-//  //      Creating the ArrayAdapter instance having the country list
-//        ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item,gradesSpinner);
-//        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//    //    Setting the ArrayAdapter data on the Spinner
-//        spin.setAdapter(aa);
-//
+//        try { grades = getGradesFromDB(MainActivity.this);} catch (Exception e) { e.printStackTrace(); }
+
+
         if (getIntent().getExtras() != null) {
 //            spin.setSelection(getIntent().getIntExtra("choosedGrade", 0)-1);
             p = getIntent().getStringExtra("choosedP");
-            choosedGrade = getIntent().getIntExtra("choosedGrade", 0);
+            choosedGrade = getIntent().getIntExtra("choosedGrade", 1);
+            choosedGradeT = getIntent().getStringExtra("choosedGradeT");
         }
 
-//        spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        changeFragment(choosedGrade+"", choosedGradeT);
+
+
+//        menuItemsArray = new ArrayList<String>();
+
+//        try {
+//            gradeMap = getSubjectsFromDB(MainActivity.this, selectedGrade);
 //
-//                SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-//                SharedPreferences.Editor editor = sharedPref.edit();
-//                editor.putInt("choosedGrade", (i+1));
-//                editor.putString("choosedSubject", null);
-//                editor.apply();
-//                choosedGrade = (i+1);
-//
-//                menuItemsArray = new ArrayList<String>();
-//                try {
-//                    for (int j = 0; j < grades.size(); j++){
-//                        if(spin.getSelectedItem().toString().equalsIgnoreCase(grades.get(i)[0]))
-//                            selectedGrade = grades.get(i)[1]; p = grades.get(i)[2];
-//                    }
-//
-//                    subjectsMap = getSubjectsFromDB(MainActivity.this, selectedGrade);
-//
-//                    for (Map.Entry<String, String> entry : subjectsMap.entrySet()) {
-//                        menuItemsArray.add(entry.getKey());
-//                    }
-//
-//                } catch (Exception e) {e.printStackTrace();}
-//                setMenuItems(menuItemsArray);
+//            for (Map.Entry<String, String> entry : gradeMap.entrySet()) {
+//                menuItemsArray.add(entry.getKey());
 //            }
 //
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
-
-
-//        SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPref.edit();
-//        editor.putInt("choosedGrade", (i+1));
-//        editor.putString("choosedSubject", null);
-//        editor.apply();
-//        choosedGrade = (i+1);
-
-        menuItemsArray = new ArrayList<String>();
-        try {
-//            for (int j = 0; j < grades.size(); j++){
-//                if(spin.getSelectedItem().toString().equalsIgnoreCase(grades.get(i)[0]))
-//                    selectedGrade = grades.get(i)[1]; p = grades.get(i)[2];
-//            }
-
-//            subjectsMap = getGradesFromDB(MainActivity.this);
-//            subjectsMap = getSubjectsFromDB(MainActivity.this, selectedGrade);
-            gradeMap = getSubjectsFromDB(MainActivity.this, selectedGrade);
-
-            for (Map.Entry<String, String> entry : gradeMap.entrySet()) {
-                menuItemsArray.add(entry.getKey());
-            }
-
-        } catch (Exception e) {e.printStackTrace();}
-        setMenuItems(menuItemsArray);
+//        } catch (Exception e) {e.printStackTrace();}
+//        setMenuItems(menuItemsArray);
 
 
         /////////////
@@ -224,7 +176,6 @@ public class MainActivity extends AppCompatActivity {
 
         open(context,"read", "books.hrm");
 
-
         // get if textbook or teacher guide
         final Cursor gradeCursor = db.getSelect("*", "grade", "id="+choosedGrade);
         gradeCursor.moveToFirst();
@@ -239,21 +190,21 @@ public class MainActivity extends AppCompatActivity {
         }
         return arrayList;
     }
-    public ArrayList<String[]> getGradesFromDB(Context context) throws Exception {
-
-        ArrayList<String[]> dbGrades = new ArrayList<>();
-
-        open(context,"read", "books.hrm");
-        final Cursor gradeCursor = db.getSelect("*", "grade", "1");
-        if (gradeCursor.moveToFirst()) {
-            do {
-                dbGrades.add(new String[]{gradeCursor.getString(1), gradeCursor.getString(2), gradeCursor.getString(3)});//grade name, num, p
-            } while (gradeCursor.moveToNext());
-        }
-
-
-        return dbGrades;
-    }
+//    public ArrayList<String[]> getGradesFromDB(Context context) throws Exception {
+//
+//        ArrayList<String[]> dbGrades = new ArrayList<>();
+//
+//        open(context,"read", "books.hrm");
+//        final Cursor gradeCursor = db.getSelect("*", "grade", "1");
+//        if (gradeCursor.moveToFirst()) {
+//            do {
+//                dbGrades.add(new String[]{gradeCursor.getString(1), gradeCursor.getString(2), gradeCursor.getString(3)});//grade name, num, p
+//            } while (gradeCursor.moveToNext());
+//        }
+//
+//
+//        return dbGrades;
+//    }
     public Map<String, String> getSubjectsFromDB(Context context, String grade) throws Exception {
 
         Map<String, String> dbSubjects = new HashMap<>();
@@ -268,13 +219,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-//        open(context,"read", "books.hrm");
-//        final Cursor gradeCursor = db.getSelect("*", "books", "grade='" + grade + "'");
-//        if (gradeCursor.moveToFirst()) {
-//            do {
-//                dbSubjects.put(gradeCursor.getString(2), gradeCursor.getInt(0)+"");
-//            } while (gradeCursor.moveToNext());
-//        }
         return dbSubjects;
     }
     public MainAdapter setData(final Context context, ArrayList arrayList, String a){
@@ -342,73 +286,132 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
     }
-    public void setMenuItems(ArrayList<String> menuItemsArray){
+//    public void setMenuItems(ArrayList<String> menuItemsArray){
+//
+//        drawerMenu.clear();
+//        for(int temp=0;temp<menuItemsArray.size();temp++){
+//            // groupId, itemId, order, title
+//            drawerMenu.add(1, 0, 0, menuItemsArray.get(temp)).setIcon(R.drawable.ic_menu_send);
+//        }
+//        drawerMenu.setGroupCheckable(1, true, true);
+//
+//        Menu communicateMenu = drawerMenu.addSubMenu("Communicate");
+//        communicateMenu.add(2, 50, 50, "Tell a friend (Link)").setIcon(R.drawable.ic_menu_share);
+////        communicateMenu.add(2, 51, 51, "Share app (apk)").setIcon(R.drawable.ic_menu_share);
+//
+//        Menu aboutMenu = drawerMenu.addSubMenu("About");
+//        aboutMenu.add(3, 56, 56, "Rate us on PlayStore").setIcon(android.R.drawable.star_on);
+//        aboutMenu.add(3, 57, 57, "More apps from us").setIcon(R.drawable.b_next);
+//        aboutMenu.add(3, 58, 58, "About").setIcon(R.drawable.about);
+//        aboutMenu.add(3, 59, 59, "Exit").setIcon(android.R.drawable.ic_delete);
+//
+//        if(getIntent().getStringExtra("choosedGrade") != null) changeFragment(gradeMap.get(getIntent().getStringExtra("choosedGrade")), getIntent().getStringExtra("choosedGrade"));
+//        else changeFragment((String)gradeMap.values().toArray()[0], (String)gradeMap.keySet().toArray()[0]);
+//
+//        item_click_listener = new NavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+////                System.out.println("Clicked item is " + item.toString() + " & id is " + item.getItemId());
+//
+//                  if(item.getItemId() == 0){
+////System.out.println("gradeMap.get(item.toString()) is " + gradeMap.get(item.toString()));
+//                      changeFragment(gradeMap.get(item.toString()), item.toString());
+//
+//                      SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+//                      SharedPreferences.Editor editor = sharedPref.edit();
+//                      editor.putString("choosedGrade", item.toString());
+//                      editor.apply();
+//
+//                  }else if(item.getItemId() == 50){// Tell a friend (Link)
+//                Intent intent4 = new Intent("android.intent.action.SEND");
+//                intent4.setType("text/plain");
+//                intent4.putExtra("android.intent.extra.TEXT", getString(R.string.share_link_pre) + " " + getString(R.string.app_name) + " " + getString(R.string.share_link_center) + " " + "https://play.google.com/store/apps/details?id="+getPackageName() + " "+ getString(R.string.share_link_pos));
+//                startActivity(Intent.createChooser(intent4, "SHARE VIA"));
+////                  }else if(item.getItemId() == 51){// Share app (apk)
+////                      shareApp(MainActivity.this,"titleTezt", "messageTezt", "subjectTezt");
+//                  }else if(item.getItemId() == 56){//Rate us
+//            Toast.makeText(MainActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
+//            rateApp();
+//                  }else if(item.getItemId() == 57){//More app
+//            Toast.makeText(MainActivity.this, "More apps by us :)", Toast.LENGTH_SHORT).show();
+//            openUrl("https://play.google.com/store/apps/developer?id=Herma%20plc");
+//                  }else if(item.getItemId() == 58){//About
+//            startActivity(new Intent(getApplicationContext(), About_us.class));
+//                  }else if(item.getItemId() == 59){//Exit
+//                      finish();
+//                      System.exit(0);
+//                  }
+//
+//                drawerLayout.closeDrawers();
+//                return true;
+//            }
+//        };
+//
+//        navigationView.setNavigationItemSelectedListener(item_click_listener);
+//        mDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout, toolbar,R.string.app_name,
+//                R.string.app_name);
+//        drawerLayout.setDrawerListener(mDrawerToggle);
+//        mDrawerToggle.syncState();
+//
+//    }
 
-        drawerMenu.clear();
-        for(int temp=0;temp<menuItemsArray.size();temp++){
-            // groupId, itemId, order, title
-            drawerMenu.add(1, 0, 0, menuItemsArray.get(temp)).setIcon(R.drawable.ic_menu_send);
-        }
-        drawerMenu.setGroupCheckable(1, true, true);
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
 
-        Menu communicateMenu = drawerMenu.addSubMenu("Communicate");
-        communicateMenu.add(2, 50, 50, "Tell a friend (Link)").setIcon(R.drawable.ic_menu_share);
-//        communicateMenu.add(2, 51, 51, "Share app (apk)").setIcon(R.drawable.ic_menu_share);
-
-        Menu aboutMenu = drawerMenu.addSubMenu("About");
-        aboutMenu.add(3, 56, 56, "Rate us on PlayStore").setIcon(android.R.drawable.star_on);
-        aboutMenu.add(3, 57, 57, "More apps from us").setIcon(R.drawable.b_next);
-        aboutMenu.add(3, 58, 58, "About").setIcon(R.drawable.about);
-        aboutMenu.add(3, 59, 59, "Exit").setIcon(android.R.drawable.ic_delete);
-
-        if(getIntent().getStringExtra("choosedGrade") != null) changeFragment(gradeMap.get(getIntent().getStringExtra("choosedGrade")), getIntent().getStringExtra("choosedGrade"));
-        else changeFragment((String)gradeMap.values().toArray()[0], (String)gradeMap.keySet().toArray()[0]);
-
-        item_click_listener = new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                System.out.println("Clicked item is " + item.toString() + " & id is " + item.getItemId());
-
-                  if(item.getItemId() == 0){
-//System.out.println("gradeMap.get(item.toString()) is " + gradeMap.get(item.toString()));
-                      changeFragment(gradeMap.get(item.toString()), item.toString());
-
-                      SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-                      SharedPreferences.Editor editor = sharedPref.edit();
-                      editor.putString("choosedGrade", item.toString());
-                      editor.apply();
-
-                  }else if(item.getItemId() == 50){// Tell a friend (Link)
+        if (id == R.id.nav_g12) {
+            changeFragment("1", "Grade 12");
+        } else if (id == R.id.nav_g11) {
+            changeFragment("2", "Grade 11");
+        } else if (id == R.id.nav_g10) {
+            changeFragment("3", "Grade 10");
+        } else if (id == R.id.nav_g9) {
+            changeFragment("4", "Grade 9");
+        } else if (id == R.id.nav_g8) {
+            changeFragment("5", "Grade 8");
+        } else if (id == R.id.nav_g7) {
+            changeFragment("6", "Grade 7");
+        } else if (id == R.id.nav_g6) {
+            changeFragment("7", "Grade 6");
+        } else if (id == R.id.nav_g5) {
+            changeFragment("8", "Grade 5");
+        } else if (id == R.id.nav_g4) {
+            changeFragment("11", "Grade 4");
+        } else if (id == R.id.nav_g3) {
+            changeFragment("12", "Grade 3");
+        } else if (id == R.id.nav_g2) {
+            changeFragment("13", "Grade 2");
+        } else if (id == R.id.nav_g1) {
+            changeFragment("14", "Grade 1");
+        } else if (id == R.id.nav_g12t) {
+            changeFragment("9", "Grade 12 T. Guide");
+        } else if (id == R.id.nav_g11t) {
+            changeFragment("10", "Grade 11 T. Guide");
+        }else if (id == R.id.nav_share) {
                 Intent intent4 = new Intent("android.intent.action.SEND");
                 intent4.setType("text/plain");
                 intent4.putExtra("android.intent.extra.TEXT", getString(R.string.share_link_pre) + " " + getString(R.string.app_name) + " " + getString(R.string.share_link_center) + " " + "https://play.google.com/store/apps/details?id="+getPackageName() + " "+ getString(R.string.share_link_pos));
                 startActivity(Intent.createChooser(intent4, "SHARE VIA"));
-//                  }else if(item.getItemId() == 51){// Share app (apk)
-//                      shareApp(MainActivity.this,"titleTezt", "messageTezt", "subjectTezt");
-                  }else if(item.getItemId() == 56){//Rate us
+
+        } else if (id == R.id.nav_rate) {
             Toast.makeText(MainActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
             rateApp();
-                  }else if(item.getItemId() == 57){//More app
+            return true;
+        } else if (id == R.id.nav_store) {
             Toast.makeText(MainActivity.this, "More apps by us :)", Toast.LENGTH_SHORT).show();
             openUrl("https://play.google.com/store/apps/developer?id=Herma%20plc");
-                  }else if(item.getItemId() == 58){//About
+            return true;
+        } else if (id == R.id.nav_about) {
             startActivity(new Intent(getApplicationContext(), About_us.class));
-                  }else if(item.getItemId() == 59){//Exit
-                      finish();
-                      System.exit(0);
-                  }
-
-                drawerLayout.closeDrawers();
-                return true;
-            }
-        };
-
-        navigationView.setNavigationItemSelectedListener(item_click_listener);
-        mDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout, toolbar,R.string.app_name,
-                R.string.app_name);
-        drawerLayout.setDrawerListener(mDrawerToggle);
-        mDrawerToggle.syncState();
-
+            return true;
+        } else if (id == R.id.nav_exit) {
+            System.exit(0);
+            return true;
+        }
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
     public void changeFragment(String grade, String title){
         Fragmentbundle = new Bundle();
@@ -421,23 +424,31 @@ public class MainActivity extends AppCompatActivity {
         mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.replace(R.id.containerView,bookFragment).commit();
         setTitle(title);
-    }
 
-    public void shareApp(Context context, String chooserTitle,
-                                String message, String messageSubject) {
-        ApplicationInfo app = getApplicationContext().getApplicationInfo();
-        String filePath = app.sourceDir;
-
-        Intent intent = new Intent(Intent.ACTION_SEND);
-
-        // MIME of .apk is "application/vnd.android.package-archive".
-        // but Bluetooth does not accept this. Let's use "*/*" instead.
-        intent.setType("*/*");
-
-
-        // Append file and send Intent
-        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
-        startActivity(Intent.createChooser(intent, "Share app via"));
+//        System.out.println("shared graded is " + grade);
+//        SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPref.edit();
+//        editor.putString("choosedGrade", grade);
+//        editor.putString("choosedGradeT", title);
+//        editor.apply();
 
     }
+
+//    public void shareApp(Context context, String chooserTitle,
+//                                String message, String messageSubject) {
+//        ApplicationInfo app = getApplicationContext().getApplicationInfo();
+//        String filePath = app.sourceDir;
+//
+//        Intent intent = new Intent(Intent.ACTION_SEND);
+//
+//        // MIME of .apk is "application/vnd.android.package-archive".
+//        // but Bluetooth does not accept this. Let's use "*/*" instead.
+//        intent.setType("*/*");
+//
+//
+//        // Append file and send Intent
+//        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
+//        startActivity(Intent.createChooser(intent, "Share app via"));
+//
+//    }
 }

@@ -9,12 +9,18 @@ android {
         applicationId "com.herma.apps.textbooks"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 20
-        versionName "2.9.4"
+        versionCode 23
+        versionName "2.9.7"
         multiDexEnabled true
+
+        ndk {
+            debugSymbolLevel 'FULL'
+        }
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    ndkVersion "23.0.7123448"
 
     buildTypes {
         release {

@@ -35,6 +35,7 @@ public class SplashActivity extends AppCompatActivity {
                 SharedPreferences sharedPref = SplashActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
                 String choosedP = sharedPref.getString("choosedP", null);
                 String choosedGrade = sharedPref.getString("choosedGrade", null);
+                String choosedGradeT = sharedPref.getString("choosedGradeT", "Grade 12");
 
 //                if(choosedGrade == null || choosedGrade.equals(null) || choosedGrade.equals("")){
 //                    Intent intent = new Intent(SplashActivity.this, ChooseCountry.class);
@@ -43,7 +44,8 @@ public class SplashActivity extends AppCompatActivity {
 //                }else{
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     intent.putExtra("choosedP", choosedP);
-                    intent.putExtra("choosedGrade", choosedGrade);
+                intent.putExtra("choosedGrade", choosedGrade);
+                intent.putExtra("choosedGradeT", choosedGradeT);
                     startActivity(intent);
                     finish();
 //                }

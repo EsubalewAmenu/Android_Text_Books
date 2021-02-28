@@ -3,4 +3,93 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_g12"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/menu_g12" />
+        <item
+            android:id="@+id/nav_g11"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/menu_g11" />
+        <item
+            android:id="@+id/nav_g10"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/menu_g10" />
+        <item
+            android:id="@+id/nav_g9"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/menu_g9" />
+        <item
+            android:id="@+id/nav_g8"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/menu_g8" />
+        <item
+            android:id="@+id/nav_g7"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/menu_g7" />
+        <item
+            android:id="@+id/nav_g6"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/menu_g6" />
+        <item
+            android:id="@+id/nav_g5"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/menu_g5" />
+        <item
+            android:id="@+id/nav_g4"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/menu_g4" />
+        <item
+            android:id="@+id/nav_g3"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/menu_g3" />
+        <item
+            android:id="@+id/nav_g2"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/menu_g2" />
+        <item
+            android:id="@+id/nav_g1"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/menu_g1" />
+        <item
+            android:id="@+id/nav_g12t"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/menu_g12t" />
+        <item
+            android:id="@+id/nav_g11t"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/menu_g11t" />
+    </group>
+
+    <item android:title="@string/communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/menu_share" />
+        </menu>
+    </item>
+
+    <item android:title="@string/about">
+        <menu>
+            <item
+                android:id="@+id/nav_rate"
+                android:icon="@android:drawable/star_big_on"
+                android:title="@string/action_rate" />
+            <item
+                android:id="@+id/nav_store"
+                android:icon="@android:drawable/ic_dialog_dialer"
+                android:title="@string/action_store" />
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@android:drawable/ic_dialog_info"
+                android:title="@string/about" />
+            <item
+                android:id="@+id/nav_exit"
+                android:icon="@android:drawable/ic_delete"
+                android:title="@string/exit" />
+        </menu>
+    </item>
+
 </menu>
