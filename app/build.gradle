@@ -3,14 +3,14 @@ plugins {
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     defaultConfig {
         applicationId "com.herma.apps.textbooks"
         minSdkVersion 16
-        targetSdkVersion 29
-        versionCode 23
-        versionName "2.9.7"
+        targetSdkVersion 30
+        versionCode 24
+        versionName "2.9.8"
         multiDexEnabled true
 
         ndk {
