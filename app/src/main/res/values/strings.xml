@@ -1,9 +1,15 @@
 <resources>
 
-    <string name="adReaderInt">ca-app-pub-8011674951494696/4934737105</string>
-    <string name="adHome">ca-app-pub-8011674951494696/8312993039</string>
-    <string name="adChapter">ca-app-pub-8011674951494696/7079802411</string>
-    <string name="adReader">ca-app-pub-8011674951494696/3605507555</string>
+    <string name="adReaderInt">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="adHome">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="adChapter">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="adReader">cca-app-pub-3940256099942544/6300978111</string>
+
+
+<!--    <string name="adReaderInt">ca-app-pub-8011674951494696/4934737105</string>-->
+<!--    <string name="adHome">ca-app-pub-8011674951494696/8312993039</string>-->
+<!--    <string name="adChapter">ca-app-pub-8011674951494696/7079802411</string>-->
+<!--    <string name="adReader">ca-app-pub-8011674951494696/3605507555</string>-->
 
     <string name="app_name">1_12 Text Books</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -17,10 +23,11 @@
 
     <string name="downloading">በማውረዳ ላይ/Downloading...</string>
     <string name="download">አውርድ/Download</string>
+    <string name="browserDownload">በብሮውዘር አውርድ</string>
     <string name="cancel">ተወው</string>
     <string name="no_file">ፋይሉ የሎትም።</string>
     <string name="no_file_desc_pre">\'</string>
-    <string name="no_file_desc_pos">\' የሚለውን ከጓደኛዎ \'Herma/books\' ፎልደር ውስጥ ይውሰዱ ወይም ከዚሁ ያውርዱ/download\n\n(ለማውረድ Wi-Fi እንዲጠቀሙ እንመክራለን ወይም ኔትዎርክ በማይጨናነቅበት ሰአት ያውርዱ)</string>
+    <string name="no_file_desc_pos">\' የሚለውን ከጓደኛዎ \'Herma/books\' ፎልደር ውስጥ ይውሰዱ ወይም ከዚሁ ያውርዱ/download\n\n(ለማውረድ Wi-Fi እንዲጠቀሙ እንመክራለን ወይም ኔትዎርክ በማይጨናነቅበት ሰአት ያውርዱ)\n\nደካማ ኮኔክሽን ከሆነ ያሎት በብሮውዘር ያውርዱ። (ካወረዱ ቡሃላ "Herma/books" ፎልደር ውስጥ ያስቀምጡት።)</string>
     <string name="try_later">"No/Slow internet connection! Please try later"</string>
 
     <string name="share_link_pre">Hey! Have you downloaded </string>

@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.text.method.ScrollingMovementMethod;
@@ -104,6 +105,15 @@ ProgressDialog progressBar;
             text.setText(context.getResources().getString(R.string.no_file) + context.getResources().getString(R.string.no_file_desc_pre)+fileName+context.getResources().getString(R.string.no_file_desc_pos));
         else
             text.setText(context.getResources().getString(message));
+
+        Button btnDownloadBrowser = (Button) myDialog.findViewById(R.id.btnDownloadBrowser);
+        btnDownloadBrowser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(WEBSITE + "/consol/chap?cnt=eth&name="+fileName));
+                context.startActivity(browserIntent);
+            }
+        });
 
         Button btnDownload = (Button) myDialog.findViewById(R.id.btnDownload);
         btnDownload.setText(context.getResources().getString(yesBtn));
