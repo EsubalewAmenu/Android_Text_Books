@@ -11,7 +11,8 @@
         android:layout_height="50.0dip" android:text="@string/app_name" android:layout_below="@+id/imageView6"
         android:layout_alignParentLeft="true" android:layout_alignParentRight="true" />
 
-    <ScrollView android:id="@+id/scrollView3" android:layout_width="fill_parent" android:layout_height="250.0dip"
+    <ScrollView
+        android:layout_width="fill_parent" android:layout_height="250.0dip"
         android:layout_marginTop="20.0dip" android:layout_below="@+id/textView11"
         android:layout_alignParentLeft="true">
 

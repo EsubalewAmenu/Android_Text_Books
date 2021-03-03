@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.github.barteksc.pdfviewer.PDFView;
+import com.github.barteksc.pdfviewer.listener.OnRenderListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
@@ -33,6 +34,7 @@ public class ReadActivity extends AppCompatActivity {
 
     private AdView mAdView;
     private InterstitialAd mInterstitialAd;
+    File f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +54,71 @@ public class ReadActivity extends AppCompatActivity {
 
             String filePath = "/storage/emulated/0/Herma/books/";
 
+
+            MobileAds.initialize(this, new OnInitializationCompleteListener() {
+                @Override
+                public void onInitializationComplete(InitializationStatus initializationStatus) {
+                }
+            });
+
             try {
                 this.setTitle(getIntent().getStringExtra("chapterName") + " (" + getIntent().getStringExtra("subject") + ")");
                 if(new Commons(ReadActivity.this).dec(filePath, getIntent().getStringExtra("fileName")+".pdf",  getIntent().getStringExtra("p"))) {
-                    File f = new File(ReadActivity.this.getFilesDir()+"nor.pdf");
-                    pdfView.fromFile(f).load();
+                    f = new File(ReadActivity.this.getFilesDir()+"nor.pdf");
+                    pdfView.fromFile(f)
+                            .onRender(new OnRenderListener() {
+                                @Override
+                                public void onInitiallyRendered(int nbPages, float pageWidth, float pageHeight) {
+
+                            mAdView = findViewById(R.id.adView);
+                            AdRequest adRequest = new AdRequest.Builder().build();
+                            mAdView.loadAd(adRequest);
+
+                            InterstitialAd.load(getApplicationContext(), getString(R.string.adReaderInt), adRequest, new InterstitialAdLoadCallback() {
+                                @Override
+                                public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                                    // The mInterstitialAd reference will be null until
+                                    // an ad is loaded.
+                                    mInterstitialAd = interstitialAd;
+                                        mInterstitialAd.show(ReadActivity.this);
+                                }
+
+                                @Override
+                                public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                                    // Handle the error
+                                    mInterstitialAd = null;
+                                }
+                            });
+
+
+                        }
+                    }).load();
+
+
+
+//                    mAdView = findViewById(R.id.adView);
+//                    AdRequest adRequest = new AdRequest.Builder().build();
+//                    mAdView.loadAd(adRequest);
+//
+//                    InterstitialAd.load(getApplicationContext(), getString(R.string.adReaderInt), adRequest, new InterstitialAdLoadCallback() {
+//                        @Override
+//                        public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+//                            // The mInterstitialAd reference will be null until
+//                            // an ad is loaded.
+//                            mInterstitialAd = interstitialAd;
+//                            if (mInterstitialAd != null) {
+//                                mInterstitialAd.show(ReadActivity.this);
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+//                            // Handle the error
+//                            mInterstitialAd = null;
+//                        }
+//                    });
+
+
                 }
             } catch (Exception e) {e.printStackTrace();}
 
@@ -65,37 +127,8 @@ public class ReadActivity extends AppCompatActivity {
 
         /////////////
 
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
 
-        mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-/////////////////////////
-//        AdRequest inAdRequest = new AdRequest.Builder().build();
-
-
-        InterstitialAd.load(this, getString(R.string.adReaderInt), adRequest, new InterstitialAdLoadCallback() {
-            @Override
-            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                // The mInterstitialAd reference will be null until
-                // an ad is loaded.
-                mInterstitialAd = interstitialAd;
-                if (mInterstitialAd != null) {
-                    mInterstitialAd.show(ReadActivity.this);
-                }
-            }
-
-            @Override
-            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                // Handle the error
-                mInterstitialAd = null;
-            }
-        });
-    }
+        }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -108,9 +141,6 @@ public class ReadActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
-            case android.R.id.home: // handle back arrow click here
-                finish(); // close this activity and return to preview activity (if there is any)
-                return true;
             case R.id.action_rate:
                 Toast.makeText(ReadActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
                 rateApp();
