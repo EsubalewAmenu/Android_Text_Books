@@ -24,7 +24,7 @@
     <string name="cancel">ተወው</string>
     <string name="no_file">ፋይሉ የሎትም።</string>
     <string name="no_file_desc_pre">\'</string>
-    <string name="no_file_desc_pos">\' የሚለውን ከጓደኛዎ \'Herma/books\' ፎልደር ውስጥ ይውሰዱ ወይም ከዚሁ ያውርዱ\n\n(ለማውረድ Wi-Fi እንዲጠቀሙ እንመክራለን ወይም ኔትዎርክ በማይጨናነቅበት ሰአት ያውርዱ)\n\nደካማ ኮኔክሽን ከሆነ ያሎት በብሮውዘር ያውርዱ። (ካወረዱ ቡሃላ "Herma/books" ፎልደር ውስጥ ያስቀምጡት።)</string>
+    <string name="no_file_desc_pos">\' የሚለውን ከጓደኛዎ \'Herma/books\' ፎልደር ውስጥ ይውሰዱ ወይም ከዚሁ ያውርዱ\n\nለማውረድ Wi-Fi እንዲጠቀሙ እንመክራለን ወይም ኔትዎርክ በማይጨናነቅበት ሰአት ያውርዱ\n\nደካማ ኮኔክሽን ከሆነ ያሎት በብሮውዘር ያውርዱ። (ካወረዱ ቡሃላ \'Herma/books\' ፎልደር ውስጥ ያስቀምጡት።)</string>
     <string name="try_later">"No/Slow internet connection! Please try later"</string>
 
     <string name="share_link_pre">Hey! Have you downloaded </string>

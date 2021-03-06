@@ -7,6 +7,7 @@ package com.herma.apps.textbooks.common;
  */
 
 import android.app.Dialog;
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Environment;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Pair;
 import android.view.View;
@@ -110,8 +112,20 @@ ProgressDialog progressBar;
         btnDownloadBrowser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(WEBSITE + "/consol/chap?cnt=eth&name="+fileName));
-                context.startActivity(browserIntent);
+
+////                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(WEBSITE + "/consol/chap?cnt=eth&name="+fileName));
+////                context.startActivity(browserIntent);
+//                System.out.println("just clicked...");
+                Uri uri = Uri.parse(WEBSITE + "/consol/chap?cnt=eth&name="+fileName); // Path where you want to download file.
+                DownloadManager.Request request = new DownloadManager.Request(uri);
+                request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI);  // Tell on which network you want to download file.
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);  // This will show notification on top when downloading the file.
+                request.setTitle(fileName); // Title for notification.
+                request.setVisibleInDownloadsUi(true);
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);//uri.getLastPathSegment());  // Storage directory path
+                ((DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE)).enqueue(request); // This will start downloading
+
+                myDialog.dismiss();
             }
         });
 
@@ -120,6 +134,8 @@ ProgressDialog progressBar;
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             public void onClick(View v) {
+
+//                System.out.println("download clicked");
 
                 progressBar = new ProgressDialog(context);
                 progressBar.setMessage(context.getResources().getString(processHeader));
@@ -148,6 +164,7 @@ ProgressDialog progressBar;
         btnCancel.setText(context.getResources().getString(noBtn));
         btnCancel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+//                System.out.println("cancel clicked");
                 if (serviceType.equals("first")) {
                     System.exit(0);
                 }
