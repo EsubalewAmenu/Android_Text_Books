@@ -388,6 +388,10 @@ public class MainActivity extends AppCompatActivity
             changeFragment("9", "Grade 12 T. Guide");
         } else if (id == R.id.nav_g11t) {
             changeFragment("10", "Grade 11 T. Guide");
+        } else if (id == R.id.nav_g10t) {
+            changeFragment("15", "Grade 10 T. Guide");
+        } else if (id == R.id.nav_g9t) {
+            changeFragment("16", "Grade 9 T. Guide");
         }else if (id == R.id.nav_share) {
                 Intent intent4 = new Intent("android.intent.action.SEND");
                 intent4.setType("text/plain");

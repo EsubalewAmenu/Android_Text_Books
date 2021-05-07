@@ -154,6 +154,7 @@ public class ChaptersActivity extends AppCompatActivity {
     public void forGranted(Item item){
         fName = item.fileName;
         fEn = item.en;
+String FILEPATH = "/storage/emulated/0/Herma/books/";
 
         File chapterFile = new File("/storage/emulated/0/Herma/books/" + fName);
         if (chapterFile.exists()) {
@@ -165,6 +166,11 @@ public class ChaptersActivity extends AppCompatActivity {
             chaptersIntent.putExtra("subject", getIntent().getStringExtra("name"));
             startActivity(chaptersIntent);
         } else {
+//////////////////////////////
+                        File booksDirectory = new File(FILEPATH);
+                        if(!booksDirectory.exists()) System.out.println(booksDirectory.mkdirs());
+//////////////////////////////
+
             new Commons(ChaptersActivity.this).messageDialog(ChaptersActivity.this, "d", R.string.no_file, 1234, fName, fEn, R.string.download, R.string.cancel, R.string.downloading, item.chapName, getIntent().getStringExtra("name"));
         }
     }

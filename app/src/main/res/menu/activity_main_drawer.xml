@@ -60,6 +60,14 @@
             android:id="@+id/nav_g11t"
             android:icon="@android:drawable/ic_dialog_dialer"
             android:title="@string/menu_g11t" />
+        <item
+            android:id="@+id/nav_g10t"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/menu_g10t" />
+        <item
+            android:id="@+id/nav_g9t"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/menu_g9t" />
     </group>
 
     <item android:title="@string/communicate">
