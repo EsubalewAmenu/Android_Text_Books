@@ -25,6 +25,7 @@ import com.herma.apps.textbooks.common.DB;
 import com.herma.apps.textbooks.common.Item;
 import com.herma.apps.textbooks.ui.about.About_us;
 import com.herma.apps.textbooks.ui.fragment.BookFragment;
+import com.herma.apps.textbooks.ui.fragment.PaymentsFragment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -391,6 +392,18 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_g10t) {
             changeFragment("15", "Grade 10 T. Guide");
         } else if (id == R.id.nav_g9t) {
+            changeFragment("16", "Grade 9 T. Guide");
+        }else if (id == R.id.nav_payments) {
+            Fragmentbundle = new Bundle();
+            //0
+            PaymentsFragment paymentsFragment = new PaymentsFragment();
+//            Fragmentbundle.putString("phone", phone);
+//            bookFragment.setArguments(Fragmentbundle);
+            mFragmentManager = getSupportFragmentManager();
+            mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.replace(R.id.containerView,paymentsFragment).commit();
+            setTitle(R.string.action_payments);
+
             changeFragment("16", "Grade 9 T. Guide");
         }else if (id == R.id.nav_share) {
                 Intent intent4 = new Intent("android.intent.action.SEND");

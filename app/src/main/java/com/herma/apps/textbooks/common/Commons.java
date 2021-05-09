@@ -55,7 +55,7 @@ public class Commons {
 
     Context context;
     DB db;
-    final String WEBSITE = "https://datascienceplc.com/apps";
+    public final String WEBSITE = "https://datascienceplc.com/apps";
 ProgressDialog progressBar;
 
     /** A numeric constant for request code */
@@ -365,4 +365,7 @@ ProgressDialog progressBar;
         }
         return true;
     }
+
+
+
 }

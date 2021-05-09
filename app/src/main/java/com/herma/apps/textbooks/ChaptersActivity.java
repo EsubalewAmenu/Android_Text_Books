@@ -167,8 +167,10 @@ String FILEPATH = "/storage/emulated/0/Herma/books/";
             startActivity(chaptersIntent);
         } else {
 //////////////////////////////
-                        File booksDirectory = new File(FILEPATH);
-                        if(!booksDirectory.exists()) System.out.println(booksDirectory.mkdirs());
+try {
+    File booksDirectory = new File(FILEPATH);
+    if (!booksDirectory.exists()) System.out.println(booksDirectory.mkdirs());
+}catch (Exception kl){System.out.println("Exception on ChaptersActivity mkdirs " + kl);}
 //////////////////////////////
 
             new Commons(ChaptersActivity.this).messageDialog(ChaptersActivity.this, "d", R.string.no_file, 1234, fName, fEn, R.string.download, R.string.cancel, R.string.downloading, item.chapName, getIntent().getStringExtra("name"));
