@@ -1,8 +1,10 @@
 package com.herma.apps.textbooks;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -173,6 +175,10 @@ public class ReadActivity extends AppCompatActivity {
 
     private void requestPhoneNuber() {
 
+
+        SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+        String storedPhone = sharedPref.getString("storedPhone", null);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(ReadActivity.this);
         builder.setTitle(R.string.insert_phone_eg);
 
@@ -180,6 +186,9 @@ public class ReadActivity extends AppCompatActivity {
         final EditText input = new EditText(getApplicationContext());
 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_PHONE);
+
+        input.setText(storedPhone);
+
         builder.setView(input);
 
 // Set up the buttons
@@ -191,6 +200,13 @@ public class ReadActivity extends AppCompatActivity {
                 if ((input.getText().toString()).matches("^09\\d{8}")) {
                     btnGiftReward.setVisibility(View.INVISIBLE);
                     endReward(input.getText().toString());
+
+                    ////////////
+                    SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("storedPhone", input.getText().toString());
+                    editor.apply();
+                    //////////////
                 } else requestPhoneNuber();
 
                 System.out.println("inserted phone is " + input.getText().toString());
@@ -359,6 +375,7 @@ public class ReadActivity extends AppCompatActivity {
         rewardClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                btnGiftReward.setVisibility(View.VISIBLE);
                 e.printStackTrace();
             }
             @Override

@@ -82,10 +82,6 @@
     <item android:title="@string/about">
         <menu>
             <item
-                android:id="@+id/nav_payments"
-                android:icon="@android:drawable/star_big_on"
-                android:title="@string/action_payments" />
-            <item
                 android:id="@+id/nav_rate"
                 android:icon="@android:drawable/star_big_on"
                 android:title="@string/action_rate" />
