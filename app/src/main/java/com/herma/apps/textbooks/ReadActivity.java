@@ -55,7 +55,7 @@ public class ReadActivity extends AppCompatActivity {
     private AdView mAdView;
     private InterstitialAd mInterstitialAd;
     File f;
-    String rewardId = "";
+    String rewardId = "", storedPhone = "0";
 
     TextView txtTimerValue;
     ImageButton btnGiftReward;
@@ -106,13 +106,16 @@ public class ReadActivity extends AppCompatActivity {
                                             // The mInterstitialAd reference will be null until
                                             // an ad is loaded.
 
-                                            System.out.println("request seconds remaining: isTheirReward");
+//                                            System.out.println("request seconds remaining: isTheirReward");
+
+                                            SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+                                            storedPhone = sharedPref.getString("storedPhone", "0");
 
                                             isTheirReward();
 
 //                                    rewardCountdown(0.2);
 
-                                            System.out.println("passed seconds remaining: isTheirReward");
+//                                            System.out.println("passed seconds remaining: isTheirReward");
 
                                             mInterstitialAd = interstitialAd;
                                             mInterstitialAd.show(ReadActivity.this);
@@ -128,30 +131,6 @@ public class ReadActivity extends AppCompatActivity {
 
                                 }
                             }).load();
-
-
-
-//                    mAdView = findViewById(R.id.adView);
-//                    AdRequest adRequest = new AdRequest.Builder().build();
-//                    mAdView.loadAd(adRequest);
-//
-//                    InterstitialAd.load(getApplicationContext(), getString(R.string.adReaderInt), adRequest, new InterstitialAdLoadCallback() {
-//                        @Override
-//                        public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-//                            // The mInterstitialAd reference will be null until
-//                            // an ad is loaded.
-//                            mInterstitialAd = interstitialAd;
-//                            if (mInterstitialAd != null) {
-//                                mInterstitialAd.show(ReadActivity.this);
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-//                            // Handle the error
-//                            mInterstitialAd = null;
-//                        }
-//                    });
 
 
                 }
@@ -175,9 +154,6 @@ public class ReadActivity extends AppCompatActivity {
 
     private void requestPhoneNuber() {
 
-
-        SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-        String storedPhone = sharedPref.getString("storedPhone", null);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ReadActivity.this);
         builder.setTitle(R.string.insert_phone_eg);
@@ -209,7 +185,7 @@ public class ReadActivity extends AppCompatActivity {
                     //////////////
                 } else requestPhoneNuber();
 
-                System.out.println("inserted phone is " + input.getText().toString());
+//                System.out.println("inserted phone is " + input.getText().toString());
 
             }
         });
@@ -325,7 +301,7 @@ public class ReadActivity extends AppCompatActivity {
                 .header("email", "api@datascienceplc.com")//public user
                 .header("password", "public-password")
                 .header("Authorization", "Basic YXBpQGRhdGFzY2llbmNlcGxjLmNvbTpwdWJsaWMtcGFzc3dvcmQ=")
-                .url(new Commons(this).WEBSITE + "/reward/api/items/start_reward?phone=1")
+                .url(new Commons(this).WEBSITE + "/reward/api/items/start_reward?phone=" + storedPhone)
                 .build();
         rewardClient.newCall(request).enqueue(new Callback() {
             @Override
@@ -363,7 +339,7 @@ public class ReadActivity extends AppCompatActivity {
 
     public void endReward(String _phone){
 
-        System.out.println("endReward() reward done!");
+//        System.out.println("endReward() reward done!");
         OkHttpClient rewardClient = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -402,10 +378,10 @@ public class ReadActivity extends AppCompatActivity {
                                     builder = new AlertDialog.Builder(ReadActivity.this);
 //                                    $result->amount.$result->currency_code." ሽልማትዎን መዝግበናል። እኛጋር ያልዎት ከ 2 ብር ከበለጠ ወደስልኮ እንልካለን። ስላነበቡ_እናመሰግናለን!"
                                     builder.setMessage(reader.getString("display_message")) .setTitle("REWARDED!")
-                                            .setCancelable(false)
+                                            .setCancelable(true)
                                             .setPositiveButton(R.string.እሺ, new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog, int id) {
-                                                    finish();
+//                                                    finish();
                                                 }
                                             });
 
