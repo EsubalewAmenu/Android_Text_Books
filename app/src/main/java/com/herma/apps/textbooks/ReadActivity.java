@@ -318,7 +318,7 @@ public class ReadActivity extends AppCompatActivity {
 
                             try {
                                 JSONObject reader = new JSONObject(myResponse);
-                                if((reader.getString("success")).equals("true") && (reader.getString("message")).equals("START")){
+                                if((reader.getString("success")).equals("true") && (reader.getString("message")).equals("STARTT")){
                                     rewardId = reader.getString("id");
                                     rewardCountdown(reader.getDouble("min"));
 
