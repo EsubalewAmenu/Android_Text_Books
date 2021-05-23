@@ -76,6 +76,10 @@
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
                 android:title="@string/menu_share" />
+            <item
+                android:id="@+id/nav_ad_free"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/menu_ad_free" />
         </menu>
     </item>
 

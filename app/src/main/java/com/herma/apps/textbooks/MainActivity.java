@@ -25,6 +25,7 @@ import com.herma.apps.textbooks.common.DB;
 import com.herma.apps.textbooks.common.Item;
 import com.herma.apps.textbooks.ui.about.About_us;
 import com.herma.apps.textbooks.ui.fragment.BookFragment;
+import com.herma.apps.textbooks.ui.fragment.PremiumFragment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -397,6 +398,18 @@ public class MainActivity extends AppCompatActivity
                 intent4.setType("text/plain");
                 intent4.putExtra("android.intent.extra.TEXT", getString(R.string.share_link_pre) + " " + getString(R.string.app_name) + " " + getString(R.string.share_link_center) + " " + "https://play.google.com/store/apps/details?id="+getPackageName() + " "+ getString(R.string.share_link_pos));
                 startActivity(Intent.createChooser(intent4, "SHARE VIA"));
+
+        } else if (id == R.id.nav_ad_free) {
+
+//            Fragmentbundle = new Bundle();
+            PremiumFragment premiumFragment = new PremiumFragment();
+//            Fragmentbundle.putString("choosedGrade", grade);
+//            Fragmentbundle.putString("title", title);
+//            premiumFragment.setArguments(Fragmentbundle);
+            mFragmentManager = getSupportFragmentManager();
+            mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.replace(R.id.containerView,premiumFragment).commit();
+            setTitle(R.string.menu_ad_free);
 
         } else if (id == R.id.nav_rate) {
             Toast.makeText(MainActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
