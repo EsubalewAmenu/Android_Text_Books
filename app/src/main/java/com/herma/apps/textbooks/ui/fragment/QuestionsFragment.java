@@ -18,10 +18,13 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -55,6 +58,8 @@ public class QuestionsFragment extends Fragment
     ProgressBar unseenProgressBar;
     private FragmentActivity mContext;
 
+    EditText etOutOf;
+    Spinner spGrade, spSubject;
 
     private boolean screenVisible = false;
 
@@ -70,7 +75,7 @@ public class QuestionsFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.content_main, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_question_home, container, false);
 
         Button questionnaireButton = rootView.findViewById(R.id.questionnaireButton);
         resultButton = rootView.findViewById(R.id.resultButton);
@@ -84,6 +89,25 @@ public class QuestionsFragment extends Fragment
         unseenProgressBar=(ProgressBar) rootView.findViewById(R.id.unseenProgressBar); // initiate the progress bar
         unseenProgressBar.setMax(100); // 100 maximum value for the progress bar
 
+
+        etOutOf = (EditText) rootView.findViewById(R.id.etOutOf);
+
+        spGrade = (Spinner) rootView.findViewById(R.id.spGrade);
+        spSubject = (Spinner) rootView.findViewById(R.id.spSubject);
+
+//        https://datascienceplc.com/apps/manager/api/items/get_for_books?what=init
+
+        String[] stringsGrades = { "Grade 12", "Grade 11", "Grade 10"};
+        String[] stringsSubjecs = { "Bio", "Phy", "Geo"};
+
+
+        ArrayAdapter aa = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item, stringsGrades);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spGrade.setAdapter(aa);
+
+        aa = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item, stringsSubjecs);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spSubject.setAdapter(aa);
 
 
 //        open("read", "full.hrm");
@@ -114,9 +138,9 @@ public class QuestionsFragment extends Fragment
             resultButton.setVisibility(View.GONE);
             txtScore.setVisibility(View.GONE);
 
-//                    Intent questions = new Intent(getActivity(), QuestionActivity.class);
-//                    questions.putExtra("type", "rand");
-//                    startActivityForResult(questions, QUESTIONNAIRE_REQUEST);
+                    Intent questions = new Intent(getActivity(), QuestionActivity.class);
+                    questions.putExtra("type", "rand");
+                    startActivityForResult(questions, QUESTIONNAIRE_REQUEST);
 
         });
 
