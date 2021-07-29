@@ -13,3 +13,8 @@
 // delete subject file
 
 //send subject units
+
+// reward user when invite others through phone
+	//  verify phone with yegara sms
+
+// desktop app (through c# if possible)

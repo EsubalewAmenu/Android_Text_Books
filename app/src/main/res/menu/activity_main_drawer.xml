@@ -68,6 +68,10 @@
             android:id="@+id/nav_g9t"
             android:icon="@android:drawable/ic_dialog_dialer"
             android:title="@string/menu_g9t" />
+        <item
+            android:id="@+id/nav_questions"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/menu_questions" />
     </group>
 
     <item android:title="@string/communicate">
@@ -76,10 +80,10 @@
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
                 android:title="@string/menu_share" />
-            <item
-                android:id="@+id/nav_ad_free"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/menu_ad_free" />
+<!--            <item-->
+<!--                android:id="@+id/nav_ad_free"-->
+<!--                android:icon="@drawable/ic_menu_share"-->
+<!--                android:title="@string/menu_ad_free" />-->
         </menu>
     </item>
 

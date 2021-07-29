@@ -80,6 +80,8 @@ public class ReadActivity extends AppCompatActivity {
 
             String filePath = "/storage/emulated/0/Herma/books/";
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+                filePath = getFilesDir().getPath() + "/Herma/books/";
 
             MobileAds.initialize(this, new OnInitializationCompleteListener() {
                 @Override
@@ -318,7 +320,11 @@ public class ReadActivity extends AppCompatActivity {
 
                             try {
                                 JSONObject reader = new JSONObject(myResponse);
-                                if((reader.getString("success")).equals("true") && (reader.getString("message")).equals("STARTT")){
+
+
+//                                    System.out.println("myResponse = " + myResponse);
+
+                                if((reader.getString("success")).equals("true") && (reader.getString("message")).equals("START")){
                                     rewardId = reader.getString("id");
                                     rewardCountdown(reader.getDouble("min"));
 

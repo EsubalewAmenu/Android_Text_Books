@@ -4,12 +4,15 @@
     <string name="adHome">ca-app-pub-3940256099942544/6300978111</string>
     <string name="adChapter">ca-app-pub-3940256099942544/6300978111</string>
     <string name="adReader">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+
 
 
 <!--    <string name="adReaderInt">ca-app-pub-8011674951494696/4934737105</string>-->
 <!--    <string name="adHome">ca-app-pub-8011674951494696/8312993039</string>-->
 <!--    <string name="adChapter">ca-app-pub-8011674951494696/7079802411</string>-->
 <!--    <string name="adReader">ca-app-pub-8011674951494696/3605507555</string>-->
+<!--    <string name="admob_app_id">ca-app-pub-8011674951494696~8662393111</string>-->
 
     <string name="app_name">1_12 Text Books</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -60,6 +63,15 @@
     <string name="insert_phone_eg">የሚሸለሙበትን የኢትዮጵያ ስልክ ቁጥር ያስገቡ (ለምሳሌ:- 0911299708)</string>
     <string name="እሺ">OK</string>
     <string name="menu_ad_free">ፕሪሚየም</string>
+    <string name="action_delete_subject">Delete Subject files</string>
+    <string name="Delete">delete</string>
+    <string name="yes">Yes</string>
+    <string name="menu_questions">Questions</string>
+
+    <string name="intro"> ከ 5,500+ በላይ የመንጃ ፈተና አጋዥ ጥያቄዎች ለእርስዎ....</string>
+    <string name="start_questionnaire">ፈተናውን ጀምር</string>
+    <string name="show_result">ውጤቴን አሳየኝ</string>
+    <string name="about_short">*Free* apps from DataScience P.L.C.\nEmail: apps@datascienceplc.com</string>
 
 
 </resources>

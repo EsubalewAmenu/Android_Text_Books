@@ -10,6 +10,7 @@ import android.app.Dialog;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,6 +18,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.Settings;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Pair;
 import android.view.View;
@@ -25,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 
 import com.herma.apps.textbooks.ChaptersActivity;
 import com.herma.apps.textbooks.R;
@@ -38,6 +41,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.spec.KeySpec;
+import java.util.ArrayList;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -94,6 +98,7 @@ ProgressDialog progressBar;
 //        textView.setTextColor(Color.BLACK);
 //        snackbar.show();
 //    }
+
     public void messageDialog(final Context context, final String serviceType, int title, int message, final String fileName, final String fEn, int yesBtn, int noBtn, final int processHeader, String chapterName, String subject) {
         cchapterName = chapterName; csubject = subject;
         final Dialog myDialog = new Dialog(context);
@@ -144,17 +149,17 @@ ProgressDialog progressBar;
                 progressBar.setCancelable(false);
 
                 progressBar.show();
-                    if (serviceType.equals("d")) {
-                        try {
-                            AsyncDownloader asyncDownloader = new AsyncDownloader();
-                            String downloadUrl = WEBSITE + "/consol/chap?cnt=eth&name=";
-                            asyncDownloader.execute(downloadUrl, fileName, fEn);
+                if (serviceType.equals("d")) {
+                    try {
+                        AsyncDownloader asyncDownloader = new AsyncDownloader();
+                        String downloadUrl = WEBSITE + "/consol/chap?cnt=eth&name=";
+                        asyncDownloader.execute(downloadUrl, fileName, fEn);
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            Toast.makeText(context, "not Downloaded!/n pls check your connection or try later!", Toast.LENGTH_SHORT).show();
-                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(context, "not Downloaded!/n pls check your connection or try later!", Toast.LENGTH_SHORT).show();
                     }
+                }
 
                 myDialog.dismiss();
             }
@@ -176,6 +181,49 @@ ProgressDialog progressBar;
 
 
         myDialog.show();
+
+    }
+    public void deleteSubjectDialog(final Context context, ArrayList<Item> arrayList) {
+
+        String tempFile;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+            tempFile = context.getFilesDir().getPath() + "/Herma/books/";
+        else tempFile = "/storage/emulated/0/Herma/books/";
+
+        String filePath = tempFile;
+
+
+        new AlertDialog.Builder(context)
+                .setTitle("Delete Subject files")
+                .setMessage("Are you sure you want to delete files?")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Continue with delete operation
+
+                        for(int i = 0; i<arrayList.size(); i++) {
+                            System.out.println("delete is " + arrayList.get(i).chapName + " " + arrayList.get(i).fileName);
+
+                            try {
+                                File file = file = new File(filePath + arrayList.get(i).fileName);
+                                if (file.exists()) file.delete();
+                            } catch (Exception ds) {
+                            }
+                        }
+
+                        Toast.makeText(context, "You can download again at anytime :)", Toast.LENGTH_LONG).show();
+
+
+                    }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+
 
     }
 
@@ -213,10 +261,14 @@ ProgressDialog progressBar;
                         BufferedInputStream input = new BufferedInputStream(inputStream);
                         // create a File object for the parent directory
                         String FILEPATH = "/storage/emulated/0/Herma/books/";
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+                            FILEPATH = context.getFilesDir().getPath() + "/Herma/books/";
+
                         File booksDirectory = new File(FILEPATH);
 // have the object build the directory structure, if needed.
 
-                        if(!booksDirectory.exists()) System.out.println(booksDirectory.mkdirs());
+                        if (!booksDirectory.exists()) System.out.println(booksDirectory.mkdirs());
 
                         file = new File(FILEPATH + params[1]);
 //                        File file = new File(FILEPATH + params[1]);

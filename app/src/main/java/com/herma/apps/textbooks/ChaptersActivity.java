@@ -10,6 +10,8 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -44,6 +46,8 @@ public class ChaptersActivity extends AppCompatActivity {
     int MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE = 90;
 
     private AdView mAdView;
+
+    String FILEPATH = "/storage/emulated/0/Herma/books/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +97,7 @@ public class ChaptersActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.chapters, menu);
         return true;
     }
     @Override
@@ -104,6 +108,12 @@ public class ChaptersActivity extends AppCompatActivity {
             case android.R.id.home: // handle back arrow click here
                 finish(); // close this activity and return to preview activity (if there is any)
                 return true;
+            case R.id.action_delete_subject:
+
+                new Commons(ChaptersActivity.this).deleteSubjectDialog(ChaptersActivity.this, arrayList);
+
+                return true;
+
             case R.id.action_rate:
                 Toast.makeText(ChaptersActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
                 rateApp();
@@ -133,7 +143,24 @@ public class ChaptersActivity extends AppCompatActivity {
 
     }
     public  boolean isStoragePermissionGranted(Item item) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+
+            FILEPATH = getFilesDir().getPath()+"/Herma/books/";
+//
+//            if (checkSelfPermission(Manifest.permission.MANAGE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED) {
+//                System.out.println("Permission is granted for version R");
+                forGranted(item);
+                return true;
+//            } else {
+//                Toast.makeText(ChaptersActivity.this, "Storage Permission is revoked for version R", Toast.LENGTH_SHORT).show();
+////                ActivityCompat.requestPermissions(this, new String[]{Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION}, MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE);
+////                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE);
+//                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE}, MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE);
+//
+//                return false;
+//            }
+        }
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
                 System.out.println("Permission is granted");
@@ -154,9 +181,8 @@ public class ChaptersActivity extends AppCompatActivity {
     public void forGranted(Item item){
         fName = item.fileName;
         fEn = item.en;
-String FILEPATH = "/storage/emulated/0/Herma/books/";
 
-        File chapterFile = new File("/storage/emulated/0/Herma/books/" + fName);
+        File chapterFile = new File(FILEPATH + fName);
         if (chapterFile.exists()) {
 
             Intent chaptersIntent = new Intent(ChaptersActivity.this, ReadActivity.class);
