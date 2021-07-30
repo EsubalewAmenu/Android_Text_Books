@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -73,6 +74,8 @@ public class QuestionsFragment extends Fragment {
     Spinner spGrade, spSubject, spChapter;
     HashMap<String, String> chapMap;
 
+    LinearLayout linearLayoutGrade, linearLayoutSubject, linearLayoutUnit, linearLayoutOutof;
+
     private boolean screenVisible = false;
 
 //    int countAll = 1, unseen = 10;
@@ -106,6 +109,10 @@ public class QuestionsFragment extends Fragment {
         spSubject = (Spinner) rootView.findViewById(R.id.spSubject);
         spChapter = (Spinner) rootView.findViewById(R.id.spChapter);
 
+        linearLayoutGrade = (LinearLayout) rootView.findViewById(R.id.linearLayoutGrade);
+        linearLayoutSubject = (LinearLayout) rootView.findViewById(R.id.linearLayoutSubject);
+        linearLayoutUnit = (LinearLayout) rootView.findViewById(R.id.linearLayoutUnit);
+        linearLayoutOutof = (LinearLayout) rootView.findViewById(R.id.linearLayoutOutof);
 
         services();
 
@@ -186,7 +193,7 @@ public class QuestionsFragment extends Fragment {
 //            stringsGrades = new String[datas.length()];
 
             HashMap<String, String> gradeMap = new LinkedHashMap<>();
-
+linearLayoutGrade.setVisibility(View.VISIBLE);
             for (int i = 0; i < datas.length(); i++) {
 
                 JSONObject c = datas.getJSONObject(i);
@@ -223,7 +230,7 @@ public class QuestionsFragment extends Fragment {
 
                         JSONArray datas = jsonObj.getJSONArray("que_service");
 //            stringsGrades = new String[datas.length()];
-
+linearLayoutSubject.setVisibility(View.VISIBLE);
                         HashMap<String, String> subjectMap = new LinkedHashMap<>();
                         JSONObject c;
                         for (int i = 0; i < datas.length(); i++) {
@@ -249,7 +256,8 @@ public class QuestionsFragment extends Fragment {
 
                                     JSONArray datas = jsonObj.getJSONArray("chap");
 //            stringsGrades = new String[datas.length()];
-
+linearLayoutUnit.setVisibility(View.VISIBLE);
+linearLayoutOutof.setVisibility(View.VISIBLE);
                                     chapMap = new LinkedHashMap<>();
                                     JSONObject c;
                                     for (int i = 0; i < datas.length(); i++) {

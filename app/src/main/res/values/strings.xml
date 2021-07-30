@@ -60,7 +60,7 @@
     <string name="communicate">Communicate</string>
     <string name="cancel_phone">ለጊዜው መሸለም አልፈለጉም። መሸለም ከፈለጉ ድጋሚ ማንበብ ይችላሉ።</string>
     <string name="insert_phone">አስገባ</string>
-    <string name="insert_phone_eg">የሚሸለሙበትን የኢትዮጵያ ስልክ ቁጥር ያስገቡ (ለምሳሌ:- 0911299708)</string>
+    <string name="insert_phone_eg">የሚሸለሙበትን የኢትዮጵያ ስልክ ቁጥር ያስገቡ (ለምሳሌ:- 0923481783)</string>
     <string name="እሺ">OK</string>
     <string name="menu_ad_free">ፕሪሚየም</string>
     <string name="action_delete_subject">Delete Subject files</string>
@@ -68,15 +68,16 @@
     <string name="yes">Yes</string>
     <string name="menu_questions">Questions</string>
 
-    <string name="intro"> ከ 5,500+ በላይ የመንጃ ፈተና አጋዥ ጥያቄዎች ለእርስዎ....</string>
-    <string name="start_questionnaire">ፈተናውን ጀምር</string>
+    <string name="intro"> አፕሊኬሽናችን የተሟላ አይደለም። የመልመጃ ጥያቄዎች/Worksheet ክነ መልሱ (ከተቻለ ማብራሪያም) ካልዎት በማሟላት ለማገዝ ከፈለጉ \n Telegram @ethio_textbooks 0923481783</string>
+    <string name="start_questionnaire">ምልመጃውን ጀምር</string>
     <string name="show_result">ውጤቴን አሳየኝ</string>
     <string name="about_short">*Free* apps from DataScience P.L.C.\nEmail: apps@datascienceplc.com</string>
-    <string name="test_exam">የመልመጃ ፈተና</string>
+    <string name="test_exam">የመልመጃ ጥያቄዎች</string>
     <string name="answer">መልሶች</string>
     <string name="previous">የከዚ በፊት</string>
     <string name="finish">ጨርስ</string>
     <string name="next">ቀጣይ</string>
+    <string name="show_answer">መልሱን እዛው አሳይ</string>
 
 
 </resources>
