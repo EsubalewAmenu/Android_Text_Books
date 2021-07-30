@@ -73,6 +73,10 @@
     <string name="show_result">ውጤቴን አሳየኝ</string>
     <string name="about_short">*Free* apps from DataScience P.L.C.\nEmail: apps@datascienceplc.com</string>
     <string name="test_exam">የመልመጃ ፈተና</string>
+    <string name="answer">መልሶች</string>
+    <string name="previous">የከዚ በፊት</string>
+    <string name="finish">ጨርስ</string>
+    <string name="next">ቀጣይ</string>
 
 
 </resources>

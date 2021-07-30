@@ -18,6 +18,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,22 +33,31 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 //import androidx.preference.PreferenceManager;
 
+import com.herma.apps.textbooks.QuestionActivity;
 import com.herma.apps.textbooks.R;
 //import com.herma.apps.textbooks.adapter.Common;
 //import com.herma.apps.textbooks.questions.AnswersActivity;
 //import com.herma.apps.textbooks.questions.DB;
 //import com.herma.apps.textbooks.questions.QuestionActivity;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * This fragment provide the RadioButton/Single Options.
  */
-public class QuestionsFragment extends Fragment
-{
+public class QuestionsFragment extends Fragment {
     private static final int QUESTIONNAIRE_REQUEST = 2018;
     Button resultButton;
     public String[] answerKey, response, current_questions, queId;
@@ -59,22 +69,21 @@ public class QuestionsFragment extends Fragment
     private FragmentActivity mContext;
 
     EditText etOutOf;
-    Spinner spGrade, spSubject;
+    Spinner spGrade, spSubject, spChapter;
+    HashMap<String, String> chapMap;
 
     private boolean screenVisible = false;
 
-    int countAll = 0, unseen=0;
+    int countAll = 0, unseen = 0;
 
     WebView youtubeWebView;
 
-    public QuestionsFragment()
-    {
+    public QuestionsFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_question_home, container, false);
 
         Button questionnaireButton = rootView.findViewById(R.id.questionnaireButton);
@@ -86,7 +95,7 @@ public class QuestionsFragment extends Fragment
 
         youtubeWebView = (WebView) rootView.findViewById(R.id.youtube_web_view);
 
-        unseenProgressBar=(ProgressBar) rootView.findViewById(R.id.unseenProgressBar); // initiate the progress bar
+        unseenProgressBar = (ProgressBar) rootView.findViewById(R.id.unseenProgressBar); // initiate the progress bar
         unseenProgressBar.setMax(100); // 100 maximum value for the progress bar
 
 
@@ -94,21 +103,10 @@ public class QuestionsFragment extends Fragment
 
         spGrade = (Spinner) rootView.findViewById(R.id.spGrade);
         spSubject = (Spinner) rootView.findViewById(R.id.spSubject);
-
-//        https://datascienceplc.com/apps/manager/api/items/get_for_books?what=init
-
-        String[] stringsGrades = { "Grade 12", "Grade 11", "Grade 10"};
-        String[] stringsSubjecs = { "Bio", "Phy", "Geo"};
+        spChapter = (Spinner) rootView.findViewById(R.id.spChapter);
 
 
-        ArrayAdapter aa = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item, stringsGrades);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spGrade.setAdapter(aa);
-
-        aa = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item, stringsSubjecs);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spSubject.setAdapter(aa);
-
+        services();
 
 //        open("read", "full.hrm");
 //
@@ -138,9 +136,18 @@ public class QuestionsFragment extends Fragment
             resultButton.setVisibility(View.GONE);
             txtScore.setVisibility(View.GONE);
 
-                    Intent questions = new Intent(getActivity(), QuestionActivity.class);
-                    questions.putExtra("type", "rand");
-                    startActivityForResult(questions, QUESTIONNAIRE_REQUEST);
+//            System.out.println("spChapter.getSelectedItem()" + spChapter.getSelectedItem());
+//            System.out.println("spChapter.getSelectedItem()" + chapMap.get(spChapter.getSelectedItem()));
+
+//            https://datascienceplc.com/apps/manager/api/items/get_for_books?what=q&no_of_q=1&chapter=1
+
+            String ques = "{\"success\":true,\"error\":false,\"ques\":[{\"id\":\"4567\",\"question\":\"sample question\",\"a\":\"choose a\",\"b\":\"choose b\",\"c\":\"choose c\",\"d\":\"choose d\",\"e\":null,\"f\":null,\"ans\":\"b\",\"desc\":\"desc\"},{\"id\":\"4568\",\"question\":\"12que\",\"a\":\"a\",\"b\":\" ds\",\"c\":\"sdf\",\"d\":\"asdf\",\"e\":\"asdf\",\"f\":\"sdf\",\"ans\":\"c\",\"desc\":null}]}";
+
+            Intent questions = new Intent(getActivity(), QuestionActivity.class);
+            questions.putExtra("chap_name", spChapter.getSelectedItem()+"");
+            questions.putExtra("chap_no", chapMap.get(spChapter.getSelectedItem()));
+            questions.putExtra("que", ques);
+            startActivityForResult(questions, QUESTIONNAIRE_REQUEST);
 
         });
 
@@ -161,26 +168,144 @@ public class QuestionsFragment extends Fragment
 
 
     }
-    public void examResult(){
+
+    public void services() {
+        //        https://datascienceplc.com/apps/manager/api/items/get_for_books?what=init
+
+        String que_service = "{\"success\":true,\"error\":false,\"que_service\":[{\"id\":\"1\",\"grade\":\"12\",\"subject\":\"Biology\",\"chapter_name\":\"Unit\",\"chap\":[{\"id\":\"4567\",\"chapter\":\"1\"}]},{\"id\":\"2\",\"grade\":\"12\",\"subject\":\"Physics\",\"chapter_name\":\"Unit\",\"chap\":[]}]}";
+//        String[] stringsGrades;// = { "Grade 12", "Grade 11", "Grade 10"};
+//        String[] stringsSubjecs;// = { "Bio", "Phy", "Geo"};
+
+        try {
+            // Getting JSON Array node
+            JSONObject jsonObj = new JSONObject(que_service);
+
+            JSONArray datas = jsonObj.getJSONArray("que_service");
+//            stringsGrades = new String[datas.length()];
+
+            HashMap<String, String> gradeMap = new LinkedHashMap<>();
+
+            for (int i = 0; i < datas.length(); i++) {
+
+                JSONObject c = datas.getJSONObject(i);
+
+
+//                    stringsGrades[i] = " Grade "+c.getString("grade");
+
+//                gradeMap.put(i+"", c.getString("subject"));
+                gradeMap.put(c.getString("grade"), " Grade " + c.getString("grade"));
+
+            }
+
+//            if(datas.length() == 0 ){
+//                verif_customer_rewards = new String[1];
+//                verif_customer_rewards[0] = "No customer to pay";
+//
+//            } else btnorder_reward.setVisibility(View.VISIBLE);
+
+//            ArrayAdapter adapter = new ArrayAdapter<String>(getContext(),
+//                    R.layout.activity_listview, verif_customer_rewards);
+//
+//            listView.setAdapter(adapter);
+
+
+            ArrayAdapter aa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, gradeMap.values().toArray());
+            aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spGrade.setAdapter(aa);
+            spGrade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                    try {
+                        JSONObject jsonObj = new JSONObject(que_service);
+
+                        JSONArray datas = jsonObj.getJSONArray("que_service");
+//            stringsGrades = new String[datas.length()];
+
+                        HashMap<String, String> subjectMap = new LinkedHashMap<>();
+                        JSONObject c;
+                        for (int i = 0; i < datas.length(); i++) {
+
+                            c = datas.getJSONObject(i);
+
+                            if ((" Grade " + c.getString("grade")).equals(spGrade.getSelectedItem().toString()))
+                                subjectMap.put(c.getString("subject"), c.getString("chap"));
+
+                        }
+
+                        ArrayAdapter chapArray = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, subjectMap.keySet().toArray());
+                        chapArray.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spSubject.setAdapter(chapArray);
+                        spSubject.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                                try {
+
+                                    JSONObject jsonObj = new JSONObject("{\"chap\":" + subjectMap.get(spSubject.getSelectedItem()) + "}");
+
+
+                                    JSONArray datas = jsonObj.getJSONArray("chap");
+//            stringsGrades = new String[datas.length()];
+
+                                    chapMap = new LinkedHashMap<>();
+                                    JSONObject c;
+                                    for (int i = 0; i < datas.length(); i++) {
+
+                                        c = datas.getJSONObject(i);
+                                        chapMap.put(("Unit " + c.getString("chapter")), c.getString("chapter"));
+                                    }
+
+                                    ArrayAdapter chapArray = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, chapMap.keySet().toArray());
+                                    chapArray.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spChapter.setAdapter(chapArray);
+
+
+                                } catch (Exception kl) {
+                                    System.out.println("some exception on chap" + kl);
+                                }
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+
+                    } catch (Exception lk) {
+                        System.out.println("some exception on grade");
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+        } catch (final JSONException e) {
+        }
+    }
+
+    public void examResult() {
 
         int score = 0;
 
-        if (answerKey.length > 0)
-        {
+        if (answerKey.length > 0) {
             for (int i = 0; i < answerKey.length; i++) {
-                if(answerKey[i].equals("***"+response[i]))
+                if (answerKey[i].equals("***" + response[i]))
                     score++;
             }
         }
 
-        int perc = (100*score)/answerKey.length;
+        int perc = (100 * score) / answerKey.length;
 
         String rank;
-        if(perc >= 74) {rank = "አልፈዋል!";
+        if (perc >= 74) {
+            rank = "አልፈዋል!";
             txtScore.setBackgroundColor(Color.GREEN);
 
-        }
-        else {
+        } else {
             rank = "አላለፉም!";
             txtScore.setBackgroundColor(Color.RED);
             txtScore.setTextColor(Color.WHITE);
@@ -189,10 +314,10 @@ public class QuestionsFragment extends Fragment
         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getActivity());
         int tot_score = pre.getInt("tot_score", 0);
         int tot_asked = pre.getInt("tot_asked", 0);
-        pre.edit().putInt("tot_score", (tot_score+score)).apply();
-        pre.edit().putInt("tot_asked", (tot_asked+answerKey.length)).apply();
+        pre.edit().putInt("tot_score", (tot_score + score)).apply();
+        pre.edit().putInt("tot_asked", (tot_asked + answerKey.length)).apply();
 
-        int totPerc = (100*(score+tot_score))/(answerKey.length+tot_asked);
+        int totPerc = (100 * (score + tot_score)) / (answerKey.length + tot_asked);
 
 
         percentAnsQue.setText("እስካሁን ከተጠየቁት የመለሱት ፡ " + totPerc + "%");
@@ -200,7 +325,7 @@ public class QuestionsFragment extends Fragment
         resultButton.setVisibility(View.VISIBLE);
         txtScore.setVisibility(View.VISIBLE);
 
-        txtScore.setText("ውጤት : " + score+"/"+answerKey.length + " (" + perc + "%) " + rank+"\nየፈጀብዎት ጊዜ :- "+ timer);
+        txtScore.setText("ውጤት : " + score + "/" + answerKey.length + " (" + perc + "%) " + rank + "\nየፈጀብዎት ጊዜ :- " + timer);
 //        if(perc <74)
 //            imgBadge.setImageResource(R.drawable.badge_null);
 //        else if(perc < 77)
@@ -230,31 +355,28 @@ public class QuestionsFragment extends Fragment
 //        Toast.makeText(getActivity(), "Completed!!", Toast.LENGTH_LONG).show();
 
     }
+
     /*This method get called only when the fragment get visible, and here states of Radio Button(s) retained*/
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser)
-    {
+    public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
-        if (isVisibleToUser)
-        {
+        if (isVisibleToUser) {
             screenVisible = true;
 
         }
     }
 
-    private String getTheStateOfRadioBox(String[] data)
-    {
+    private String getTheStateOfRadioBox(String[] data) {
         return "";//appDatabase.getQuestionChoicesDao().isChecked(data[0], data[1]);
     }
+
     @Override
-    public void onActivityCreated(Bundle savedInstanceState)
-    {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
 //        mContext = getActivity();
-        if (getArguments() != null)
-        {
+        if (getArguments() != null) {
 //        }
         }
     }
@@ -340,11 +462,10 @@ public class QuestionsFragment extends Fragment
 //        alertDialog.show();
 //
 //    }
+    public void youtubeEmbededPlay(String url, String play_open) {
 
-    public void youtubeEmbededPlay(String url, String play_open){
 
-
-        if(play_open.equalsIgnoreCase("p")){
+        if (play_open.equalsIgnoreCase("p")) {
             youtubeWebView.setVisibility(View.VISIBLE);
             youtubeWebView.setWebViewClient(new WebViewClient() {
                 @Override
@@ -357,7 +478,7 @@ public class QuestionsFragment extends Fragment
             webSettings.setLoadWithOverviewMode(true);
             webSettings.setUseWideViewPort(true);
             youtubeWebView.loadUrl(url);
-        } else{
+        } else {
             youtubeWebView.setVisibility(View.VISIBLE);
             youtubeWebView.setWebViewClient(new WebViewClient() {
                 @Override
@@ -375,6 +496,6 @@ public class QuestionsFragment extends Fragment
 //            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
 //            startActivity(launchBrowser);
 
-    }
+        }
     }
 }

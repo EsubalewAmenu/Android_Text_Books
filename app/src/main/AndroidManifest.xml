@@ -47,6 +47,12 @@
         <activity
             android:name=".ui.about.Describe"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".QuestionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AnswersActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

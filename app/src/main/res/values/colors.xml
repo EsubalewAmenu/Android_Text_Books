@@ -6,4 +6,8 @@
 
     <color name="divider">#cacaca</color>
     <color name="red">#FF0450</color>
+
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="grey">#585858</color>
+
 </resources>

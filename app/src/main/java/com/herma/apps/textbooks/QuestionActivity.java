@@ -14,6 +14,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.style.RelativeSizeSpan;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +25,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -35,6 +37,11 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 
 //import com.herma.apps.drivertraining.MainActivity;
 import com.herma.apps.textbooks.R;
+import com.herma.apps.textbooks.common.questions.RadioBoxesFragment;
+import com.herma.apps.textbooks.common.questions.ViewPagerAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 //import com.herma.apps.drivertraining.questions.adaptersj.ViewPagerAdapter;
 //import com.herma.apps.drivertraining.questions.fragments.CheckBoxesFragment;
 //import com.herma.apps.drivertraining.questions.fragments.RadioBoxesFragment;
@@ -106,19 +113,19 @@ try{
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-8011674951494696/2410308247");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
-                }
-            }
-        });
+//        mInterstitialAd = new InterstitialAd(this);
+//        mInterstitialAd.setAdUnitId(getString(R.string.adReaderInt));
+//        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+//
+//        mInterstitialAd.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdLoaded() {
+//                // Code to be executed when an ad finishes loading.
+//                if (mInterstitialAd.isLoaded()) {
+//                    mInterstitialAd.show();
+//                }
+//            }
+//        });
     }
     private void toolBarInit()
     {
@@ -135,35 +142,63 @@ try{
     /*This method decides how many Question-Screen(s) will be created and
     what kind of (Multiple/Single choices) each Screen will be.*/
     private void parsingData() {
-        open("read", "full.hrm");
 
         if (getIntent().getExtras() != null) {
 
-            int start = getIntent().getIntExtra("start", 0);
-            String type = getIntent().getStringExtra("type");
-            packege = getIntent().getStringExtra("packege");
+            int chap_id = getIntent().getIntExtra("chap_id", 0);
+            String que = getIntent().getStringExtra("que");
+            String chap_name = getIntent().getStringExtra("chap_name");
 
 
-            if(type.equalsIgnoreCase("fixed")){
+            try {
 
-            questionsWithAnswer = db.getSelectArray("*", "que", "id > " +start+ " and id <=  "+(start+per_exam));
+                JSONObject jsonObj = new JSONObject(que);
 
-        } else if(type.equalsIgnoreCase("rand")){// ORDER BY RANDOM()  ORDER BY random
-                Cursor c = db.doExcute("SELECT MIN(seen) FROM que");
-                int max = 0;
-                if(c.moveToFirst()) max = c.getInt(0);
-                do{
-        questionsWithAnswer = db.getSelectArray("*", "que",  "seen >= (SELECT MIN(seen) FROM que) and seen <=" + max + " order by random() limit " + per_exam);//and id <=  "+(start+per_exam));
-                    max++;
-                }while(questionsWithAnswer.length!=per_exam);
 
-            }
+                JSONArray datas = jsonObj.getJSONArray("ques");
+
+                questionsWithAnswer = new String[datas.length()][10];
+
+                JSONObject c;
+                for (int i = 0; i < datas.length(); i++) {
+
+                    c = datas.getJSONObject(i);
+                    questionsWithAnswer[i][0] = c.getString("id");
+                    questionsWithAnswer[i][1] = c.getString("question");
+                    questionsWithAnswer[i][2] = c.getString("a");
+                    questionsWithAnswer[i][3] = c.getString("b");
+                    questionsWithAnswer[i][4] = c.getString("c");
+                    questionsWithAnswer[i][5] = c.getString("d");
+                    questionsWithAnswer[i][6] = c.getString("e");
+                    questionsWithAnswer[i][7] = c.getString("f");
+                    questionsWithAnswer[i][8] = c.getString("ans");
+                    questionsWithAnswer[i][9] = c.getString("desc");
+//                    questionsWithAnswer[i][] = c.getString("");
+
+//                    chapMap.put(("Unit " + c.getString("chapter")), c.getString("chapter"));
+                }
+
+
+//            if(type.equalsIgnoreCase("fixed")){
+//
+//            questionsWithAnswer = db.getSelectArray("*", "que", "id > " +start+ " and id <=  "+(start+per_exam));
+//
+//        } else if(type.equalsIgnoreCase("rand")){// ORDER BY RANDOM()  ORDER BY random
+//                Cursor c = db.doExcute("SELECT MIN(seen) FROM que");
+//                int max = 0;
+//                if(c.moveToFirst()) max = c.getInt(0);
+//                do{
+//        questionsWithAnswer = db.getSelectArray("*", "que",  "seen >= (SELECT MIN(seen) FROM que) and seen <=" + max + " order by random() limit " + per_exam);//and id <=  "+(start+per_exam));
+//                    max++;
+//                }while(questionsWithAnswer.length!=per_exam);
+//
+//            }
 
         queId = new String[questionsWithAnswer.length];
         answerKey = new String[questionsWithAnswer.length];
         response = new String[questionsWithAnswer.length];
         questions = new String[questionsWithAnswer.length];
-        db.close();
+//        db.close();
 
         totalQuestions = (questionsWithAnswer.length)+"";
 
@@ -171,20 +206,25 @@ try{
         setTextWithSpan(questionPosition);
 
 
+
+            } catch (Exception kl) {
+                System.out.println("some exception on chap" + kl);
+            }
+
         for (int i = 0; i < (questionsWithAnswer.length); i++)
         {
             queId[i] = questionsWithAnswer[i][0];
-            if (questionsWithAnswer[i][6].equals("CheckBox"))
-            {
-                CheckBoxesFragment checkBoxesFragment = new CheckBoxesFragment();
-                Bundle checkBoxBundle = new Bundle();
-                checkBoxBundle.putInt("page_position", i);
-                checkBoxBundle.putStringArray("question", questionsWithAnswer[i]);
-                checkBoxesFragment.setArguments(checkBoxBundle);
-                fragmentArrayList.add(checkBoxesFragment);
-            }
+//            if (questionsWithAnswer[i][6].equals("CheckBox"))
+//            {
+//                CheckBoxesFragment checkBoxesFragment = new CheckBoxesFragment();
+//                Bundle checkBoxBundle = new Bundle();
+//                checkBoxBundle.putInt("page_position", i);
+//                checkBoxBundle.putStringArray("question", questionsWithAnswer[i]);
+//                checkBoxesFragment.setArguments(checkBoxBundle);
+//                fragmentArrayList.add(checkBoxesFragment);
+//            }
 
-            if (questionsWithAnswer[i][6].equals("R"))
+            if (true)//questionsWithAnswer[i][6].equals("R"))
             {
                 RadioBoxesFragment radioBoxesFragment = new RadioBoxesFragment();
                 Bundle radioButtonBundle = new Bundle();
@@ -205,8 +245,8 @@ try{
 
 
         //timer
-            startTime = SystemClock.uptimeMillis();
-            customHandler.postDelayed(updateTimerThread, 0);
+//            startTime = SystemClock.uptimeMillis();
+//            customHandler.postDelayed(updateTimerThread, 0);
 
     }
     }
@@ -238,26 +278,26 @@ try{
     }
 
 
-    private Runnable updateTimerThread = new Runnable() {
-
-        public void run() {
-
-            timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
-
-            updatedTime = timeSwapBuff + timeInMilliseconds;
-
-            secs = (int) (updatedTime / 1000);
-            mins = secs / 60;
-            secs = secs % 60;
-            int milliseconds = (int) (updatedTime % 1000);
-            timerValue.setText("" + mins + ":"
-                    + String.format("%02d", secs)
-//                    + ":"+ String.format("%03d", milliseconds)
-            );
-            customHandler.postDelayed(this, 0);
-        }
-
-    };
+//    private Runnable updateTimerThread = new Runnable() {
+//
+//        public void run() {
+//
+//            timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
+//
+//            updatedTime = timeSwapBuff + timeInMilliseconds;
+//
+//            secs = (int) (updatedTime / 1000);
+//            mins = secs / 60;
+//            secs = secs % 60;
+//            int milliseconds = (int) (updatedTime % 1000);
+//            timerValue.setText("" + mins + ":"
+//                    + String.format("%02d", secs)
+////                    + ":"+ String.format("%03d", milliseconds)
+//            );
+//            customHandler.postDelayed(this, 0);
+//        }
+//
+//    };
 
 //    public void open(String write, String db_name) {
 //
