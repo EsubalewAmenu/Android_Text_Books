@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity
 
     private AdView mAdView;
 
+    QuestionsFragment questionsFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,6 +176,36 @@ public class MainActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        int QUESTIONNAIRE_REQUEST = 2018;
+
+
+//        if (requestCode == QUESTIONNAIRE_REQUEST)
+//        {
+        if (resultCode == RESULT_OK) {
+
+
+            questionsFragment.queId = data.getStringArrayExtra("queId");
+            questionsFragment.timer = data.getStringExtra("timer");
+            questionsFragment.current_questions = data.getStringArrayExtra("questions");
+            questionsFragment.answerKey = data.getStringArrayExtra("answerKey");
+            questionsFragment.response = data.getStringArrayExtra("response");
+
+            questionsFragment.responseShouldBe = data.getStringArrayExtra("responseShouldBe");
+
+            questionsFragment.packege = data.getStringExtra("packege");
+
+//            questionsFragment.questionsWithAnswer = data.getStringArrayExtra("questionsWithAnswer");
+
+            questionsFragment.examResult();
+
+//            fragmentViewPager.setCurrentItem(0);
+        }
+
+    }
+
     public ArrayList getData(Context context, String choosedGrade) {
 
         open(context,"read", "books.hrm");
@@ -398,7 +430,7 @@ public class MainActivity extends AppCompatActivity
 
 //            Fragmentbundle = new Bundle();
             //0
-            QuestionsFragment questionsFragment = new QuestionsFragment();
+             questionsFragment = new QuestionsFragment();
 //            Fragmentbundle.putString("choosedGrade", grade);
 //            Fragmentbundle.putString("title", "Worksheet");
 //            questionsFragment.setArguments(Fragmentbundle);

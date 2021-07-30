@@ -83,12 +83,13 @@ public class RadioBoxesFragment extends Fragment
 
 
 
-//                returnIntent.putExtra("timer", "" + ((QuestionActivity)mContext).mins + ":"
-//                        + String.format("%02d", ((QuestionActivity)mContext).secs));
+                returnIntent.putExtra("timer", "" + ((QuestionActivity)mContext).mins + ":"
+                        + String.format("%02d", ((QuestionActivity)mContext).secs));
 
                 returnIntent.putExtra("answerKey", ((QuestionActivity) mContext).answerKey);
                 returnIntent.putExtra("queId", ((QuestionActivity) mContext).queId);
                 returnIntent.putExtra("response", ((QuestionActivity) mContext).response);
+                returnIntent.putExtra("responseShouldBe", ((QuestionActivity) mContext).responseShouldBe);
                 returnIntent.putExtra("questions", ((QuestionActivity) mContext).questions);
                 returnIntent.putExtra("packege", ((QuestionActivity) mContext).packege);
                 returnIntent.putExtra("questionsWithAnswer", ((QuestionActivity) mContext).questionsWithAnswer);
@@ -194,14 +195,22 @@ public class RadioBoxesFragment extends Fragment
 //                    if (((QuestionActivity)mContext).mRewardedVideoAd.isLoaded()) {
 //                        ((QuestionActivity)mContext).mRewardedVideoAd.show();
 //                    }
-System.out.println("answer is " + ((QuestionActivity) mContext).answerKey[(currentPagePosition) ]);
-                System.out.println(choices.get(Integer.parseInt(cbPosition)));
+                    int __ans = (((QuestionActivity) mContext).answerKey[(currentPagePosition) - 1]).charAt(0);
+
+//                    System.out.println("currentPagePosition "+currentPagePosition+"  "+cbPosition+"  answer is " + ((QuestionActivity) mContext).answerKey[(currentPagePosition) - 1]);
+//                System.out.println(choices.get(Integer.parseInt(cbPosition)) + " and idgn " + ((QuestionActivity) mContext).answerKey[(currentPagePosition) - 1]);
+//                    System.out.println(choices.get((__ans-65)) + " and correct " + ((QuestionActivity) mContext).answerKey[(currentPagePosition) - 1]);
+//                System.out.println("int is " + Integer.parseInt(cbPosition) + " "+ __ans + "  " + (char) __ans);
                     if(true){//((QuestionActivity) mContext).show_answer.equalsIgnoreCase("y")) {
-                        if (((QuestionActivity) mContext).answerKey[(currentPagePosition) - 1].equals(("***" + choices.get(Integer.parseInt(cbPosition)))))
+//                        if (((QuestionActivity) mContext).answerKey[(currentPagePosition) - 1].equals(("***" + choices.get(Integer.parseInt(cbPosition)))))
+                        if(Integer.parseInt(cbPosition) == (__ans-65))
                             Toast.makeText(mContext, "ትክክል!", Toast.LENGTH_SHORT).show();
                         else
                             Toast.makeText(mContext, "ስህተት!", Toast.LENGTH_SHORT).show();
                     }
+
+
+                    ((QuestionActivity)mContext).responseShouldBe[(currentPagePosition)-1] = choices.get((__ans-65));
 
 
 
@@ -265,21 +274,22 @@ System.out.println("answer is " + ((QuestionActivity) mContext).answerKey[(curre
 //        List<AnswerOptions> choices = radioButtonTypeQuestion.getAnswerOptions();
         choices = new ArrayList<String>();
 
-        for(int i=2; i<6; i++)
-            if(radioButtonTypeQuestion[i]!=null && radioButtonTypeQuestion[i]!="") {
+        for(int i=2; i<8; i++)
+            if(!radioButtonTypeQuestion[i].equals("null")){//radioButtonTypeQuestion[i]!=null && !radioButtonTypeQuestion[i].equals(null)) {
 
                 ((QuestionActivity) mContext).questions[getArguments().getInt("page_position")] = radioButtonTypeQuestion[1];
 
-
-                if(radioButtonTypeQuestion[i].startsWith("***")) {
-                    ((QuestionActivity) mContext).answerKey[getArguments().getInt("page_position")] = radioButtonTypeQuestion[i];
-                    choices.add(radioButtonTypeQuestion[i].substring(3));
-//                    choices.add("#"+radioButtonTypeQuestion[0]+" "+radioButtonTypeQuestion[i].substring(3));
-                } else{
+//                System.out.println("radioButtonTypeQuestion[i] choices is" + radioButtonTypeQuestion[i]+"/");
                     choices.add(radioButtonTypeQuestion[i]);
-                }
             }
+///////////////
 
+//        System.out.println("radioButtonTypeQuestion[i] answer is " + radioButtonTypeQuestion[8]);
+
+            ((QuestionActivity) mContext).answerKey[getArguments().getInt("page_position")] = radioButtonTypeQuestion[8];
+//            choices.add(radioButtonTypeQuestion[i].substring(3));
+
+        ////////////////////////
 
 
         radioButtonArrayList.clear();

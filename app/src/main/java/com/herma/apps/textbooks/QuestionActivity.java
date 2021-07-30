@@ -57,7 +57,7 @@ public class QuestionActivity extends AppCompatActivity
     private ViewPager questionsViewPager;
 //    DB db;
     public String[][] questionsWithAnswer;
-    public String[] answerKey, response, questions, queId;
+    public String[] answerKey, response, responseShouldBe, questions, queId;
 
     long startTime = 0L;
     private Handler customHandler = new Handler();
@@ -197,6 +197,7 @@ try{
         queId = new String[questionsWithAnswer.length];
         answerKey = new String[questionsWithAnswer.length];
         response = new String[questionsWithAnswer.length];
+        responseShouldBe  = new String[questionsWithAnswer.length];
         questions = new String[questionsWithAnswer.length];
 //        db.close();
 
@@ -245,8 +246,8 @@ try{
 
 
         //timer
-//            startTime = SystemClock.uptimeMillis();
-//            customHandler.postDelayed(updateTimerThread, 0);
+            startTime = SystemClock.uptimeMillis();
+            customHandler.postDelayed(updateTimerThread, 0);
 
     }
     }
@@ -278,26 +279,26 @@ try{
     }
 
 
-//    private Runnable updateTimerThread = new Runnable() {
-//
-//        public void run() {
-//
-//            timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
-//
-//            updatedTime = timeSwapBuff + timeInMilliseconds;
-//
-//            secs = (int) (updatedTime / 1000);
-//            mins = secs / 60;
-//            secs = secs % 60;
-//            int milliseconds = (int) (updatedTime % 1000);
-//            timerValue.setText("" + mins + ":"
-//                    + String.format("%02d", secs)
-////                    + ":"+ String.format("%03d", milliseconds)
-//            );
-//            customHandler.postDelayed(this, 0);
-//        }
-//
-//    };
+    private Runnable updateTimerThread = new Runnable() {
+
+        public void run() {
+
+            timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
+
+            updatedTime = timeSwapBuff + timeInMilliseconds;
+
+            secs = (int) (updatedTime / 1000);
+            mins = secs / 60;
+            secs = secs % 60;
+            int milliseconds = (int) (updatedTime % 1000);
+            timerValue.setText("" + mins + ":"
+                    + String.format("%02d", secs)
+//                    + ":"+ String.format("%03d", milliseconds)
+            );
+            customHandler.postDelayed(this, 0);
+        }
+
+    };
 
 //    public void open(String write, String db_name) {
 //

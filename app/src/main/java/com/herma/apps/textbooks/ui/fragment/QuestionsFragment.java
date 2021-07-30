@@ -33,6 +33,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 //import androidx.preference.PreferenceManager;
 
+import com.herma.apps.textbooks.AnswersActivity;
 import com.herma.apps.textbooks.QuestionActivity;
 import com.herma.apps.textbooks.R;
 //import com.herma.apps.textbooks.adapter.Common;
@@ -60,9 +61,9 @@ import java.util.List;
 public class QuestionsFragment extends Fragment {
     private static final int QUESTIONNAIRE_REQUEST = 2018;
     Button resultButton;
-    public String[] answerKey, response, current_questions, queId;
+    public String[] answerKey, response, responseShouldBe, current_questions, queId;
     public String timer, packege;
-    String[][] questionsWithAnswer;
+    public String[][] questionsWithAnswer;
     TextView txtScore, doneQuestions, percentAnsQue;
     ImageView imgBadge;
     ProgressBar unseenProgressBar;
@@ -74,7 +75,7 @@ public class QuestionsFragment extends Fragment {
 
     private boolean screenVisible = false;
 
-    int countAll = 0, unseen = 0;
+//    int countAll = 1, unseen = 10;
 
     WebView youtubeWebView;
 
@@ -141,7 +142,7 @@ public class QuestionsFragment extends Fragment {
 
 //            https://datascienceplc.com/apps/manager/api/items/get_for_books?what=q&no_of_q=1&chapter=1
 
-            String ques = "{\"success\":true,\"error\":false,\"ques\":[{\"id\":\"4567\",\"question\":\"sample question\",\"a\":\"choose a\",\"b\":\"choose b\",\"c\":\"choose c\",\"d\":\"choose d\",\"e\":null,\"f\":null,\"ans\":\"b\",\"desc\":\"desc\"},{\"id\":\"4568\",\"question\":\"12que\",\"a\":\"a\",\"b\":\" ds\",\"c\":\"sdf\",\"d\":\"asdf\",\"e\":\"asdf\",\"f\":\"sdf\",\"ans\":\"c\",\"desc\":null}]}";
+            String ques = "{\"success\":true,\"error\":false,\"ques\":[{\"id\":\"4567\",\"question\":\"sample question\",\"a\":\"choose a\",\"b\":\"choose b\",\"c\":\"choose c\",\"d\":\"choose d\",\"e\":null,\"f\":null,\"ans\":\"A\",\"desc\":\"desc\"},{\"id\":\"4568\",\"question\":\"12que\",\"a\":\"a\",\"b\":\" ds\",\"c\":\"sdf\",\"d\":\"asdf\",\"e\":\"asdf\",\"f\":\"sdf\",\"ans\":\"C\",\"desc\":null}]}";
 
             Intent questions = new Intent(getActivity(), QuestionActivity.class);
             questions.putExtra("chap_name", spChapter.getSelectedItem()+"");
@@ -152,14 +153,15 @@ public class QuestionsFragment extends Fragment {
         });
 
         resultButton.setOnClickListener(v -> {
-//            Intent questions = new Intent(getActivity(), AnswersActivity.class);
-//
-//            questions.putExtra("queId", queId);
-//            questions.putExtra("answerKey", answerKey);
-//            questions.putExtra("response", response);
-//            questions.putExtra("questions", current_questions);
+            Intent questions = new Intent(getActivity(), AnswersActivity.class);
 
-//            startActivity(questions);
+            questions.putExtra("queId", queId);
+            questions.putExtra("answerKey", answerKey);
+            questions.putExtra("response", response);
+            questions.putExtra("responseShouldBe", responseShouldBe);
+            questions.putExtra("questions", current_questions);
+
+            startActivity(questions);
         });
 
 //        youtubeEmbeded();
@@ -293,39 +295,43 @@ public class QuestionsFragment extends Fragment {
 
         if (answerKey.length > 0) {
             for (int i = 0; i < answerKey.length; i++) {
-                if (answerKey[i].equals("***" + response[i]))
+//                System.out.println("answerKey:"+answerKey[i]+"***" + response[i]+" should be " + responseShouldBe[i]);
+//                System.out.println(current_questions[i]);
+//                if (answerKey[i].equals("***" + response[i]))
+                if (responseShouldBe[i].equals(response[i]))
                     score++;
             }
         }
 
         int perc = (100 * score) / answerKey.length;
 
-        String rank;
+//        String rank;
         if (perc >= 74) {
-            rank = "አልፈዋል!";
+//            rank = "አልፈዋል!";
             txtScore.setBackgroundColor(Color.GREEN);
 
         } else {
-            rank = "አላለፉም!";
+//            rank = "አላለፉም!";
             txtScore.setBackgroundColor(Color.RED);
             txtScore.setTextColor(Color.WHITE);
         }
 
-        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        int tot_score = pre.getInt("tot_score", 0);
-        int tot_asked = pre.getInt("tot_asked", 0);
-        pre.edit().putInt("tot_score", (tot_score + score)).apply();
-        pre.edit().putInt("tot_asked", (tot_asked + answerKey.length)).apply();
+//        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//        int tot_score = pre.getInt("tot_score", 0);
+//        int tot_asked = pre.getInt("tot_asked", 0);
+//        pre.edit().putInt("tot_score", (tot_score + score)).apply();
+//        pre.edit().putInt("tot_asked", (tot_asked + answerKey.length)).apply();
 
-        int totPerc = (100 * (score + tot_score)) / (answerKey.length + tot_asked);
+//        int totPerc = (100 * (score + tot_score)) / (answerKey.length + tot_asked);
 
 
-        percentAnsQue.setText("እስካሁን ከተጠየቁት የመለሱት ፡ " + totPerc + "%");
+//        percentAnsQue.setText("እስካሁን ከተጠየቁት የመለሱት ፡ " + totPerc + "%");
 
         resultButton.setVisibility(View.VISIBLE);
         txtScore.setVisibility(View.VISIBLE);
 
-        txtScore.setText("ውጤት : " + score + "/" + answerKey.length + " (" + perc + "%) " + rank + "\nየፈጀብዎት ጊዜ :- " + timer);
+        txtScore.setText("ውጤት : " + score + "/" + answerKey.length + " (" + perc + "%) \nየፈጀብዎት ጊዜ :- " + timer);
+//        txtScore.setText("ውጤት : " + score + "/" + answerKey.length + " (" + perc + "%) " + rank + "\nየፈጀብዎት ጊዜ :- " + timer);
 //        if(perc <74)
 //            imgBadge.setImageResource(R.drawable.badge_null);
 //        else if(perc < 77)
@@ -414,11 +420,6 @@ public class QuestionsFragment extends Fragment {
 //        return true;
 //    }
 
-    /**
-     * Show a dialog when there is no internet connection
-     *
-     * @param isOnline true if connected to the network
-     */
 //    private void showNetworkDialog(final boolean isOnline, int title, int message, String packege) {
 //
 //        // Create an AlertDialog.Builder
