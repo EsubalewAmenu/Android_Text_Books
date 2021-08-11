@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity
         final Cursor subjectsCursor = db.getSelect("*", "books", "grade='" + gradeCursor.getString(2) + "' and gtype='" + gradeCursor.getString(3) + "'");
         if (subjectsCursor.moveToFirst()) {
             do {
-                arrayList.add(new Item(subjectsCursor.getString(2), subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
+                arrayList.add(new Item("", subjectsCursor.getString(2), subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
             } while (subjectsCursor.moveToNext());
         }
         return arrayList;

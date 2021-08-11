@@ -99,7 +99,7 @@ ProgressDialog progressBar;
 //        snackbar.show();
 //    }
 
-    public void messageDialog(final Context context, final String serviceType, int title, int message, final String fileName, final String fEn, int yesBtn, int noBtn, final int processHeader, String chapterName, String subject) {
+    public void messageDialog(final Context context, final String serviceType, int title, int message, String fileName, final String fEn, int yesBtn, int noBtn, final int processHeader, String chapterName, String subject, String grade, String chapterID, boolean is_short) {
         cchapterName = chapterName; csubject = subject;
         final Dialog myDialog = new Dialog(context);
         myDialog.setContentView(R.layout.custom_dialog_box);
@@ -108,26 +108,35 @@ ProgressDialog progressBar;
 
         TextView text = (TextView) myDialog.findViewById(R.id.custom_title);
         text.setMovementMethod(ScrollingMovementMethod.getInstance());
+
+        System.out.println(" print from common is serviceType" + serviceType + " fEn " + fEn + " chapterName " + chapterName + " subject " + subject + " grade " + grade + " chapterID " + chapterID);
+        if(is_short){
+            fileName = "Sh " + grade + " " + subject + " " + chapterName;
+        }
         if(message==1234)
             text.setText(context.getResources().getString(R.string.no_file) + context.getResources().getString(R.string.no_file_desc_pre)+fileName+context.getResources().getString(R.string.no_file_desc_pos));
         else
             text.setText(context.getResources().getString(message));
 
         Button btnDownloadBrowser = (Button) myDialog.findViewById(R.id.btnDownloadBrowser);
+        String finalFileName = fileName;
         btnDownloadBrowser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-////                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(WEBSITE + "/consol/chap?cnt=eth&name="+fileName));
-////                context.startActivity(browserIntent);
-//                System.out.println("just clicked...");
-                Uri uri = Uri.parse(WEBSITE + "/consol/chap?cnt=eth&name="+fileName); // Path where you want to download file.
+//                Uri uri = Uri.parse(WEBSITE + "/consol/chap?cnt=eth&name="+ finalFileName); // Path where you want to download file.
+                Uri uri;
+                if(is_short){
+                    uri = Uri.parse(WEBSITE + "/manager/api/items/get_for_books?cnt=eth&name="+ chapterID + "&what=short"); // Path where you want to download file.
+                } else
+                uri = Uri.parse(WEBSITE + "/manager/api/items/get_for_books?cnt=eth&name="+ finalFileName + "&what=txt"); // Path where you want to download file.
+
                 DownloadManager.Request request = new DownloadManager.Request(uri);
                 request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI);  // Tell on which network you want to download file.
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);  // This will show notification on top when downloading the file.
-                request.setTitle(fileName); // Title for notification.
+                request.setTitle(finalFileName); // Title for notification.
                 request.setVisibleInDownloadsUi(true);
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);//uri.getLastPathSegment());  // Storage directory path
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, finalFileName);//uri.getLastPathSegment());  // Storage directory path
                 ((DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE)).enqueue(request); // This will start downloading
 
                 myDialog.dismiss();
@@ -136,6 +145,7 @@ ProgressDialog progressBar;
 
         Button btnDownload = (Button) myDialog.findViewById(R.id.btnDownload);
         btnDownload.setText(context.getResources().getString(yesBtn));
+        String finalFileName1 = fileName;
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             public void onClick(View v) {
@@ -152,8 +162,17 @@ ProgressDialog progressBar;
                 if (serviceType.equals("d")) {
                     try {
                         AsyncDownloader asyncDownloader = new AsyncDownloader();
-                        String downloadUrl = WEBSITE + "/consol/chap?cnt=eth&name=";
-                        asyncDownloader.execute(downloadUrl, fileName, fEn);
+                        String downloadUrl;// = WEBSITE + "/consol/chap?cnt=eth&name=";
+
+                        if (is_short) {
+
+                                    downloadUrl = WEBSITE + "/manager/api/items/get_for_books?cnt=eth&what=short&name=";//+ finalFileName; // Path where you want to download file.
+                            asyncDownloader.execute(downloadUrl, chapterID, fEn);
+
+                        } else{
+                            downloadUrl = WEBSITE + "/manager/api/items/get_for_books?cnt=eth&what=txt&name=";//+ finalFileName; // Path where you want to download file.
+                        asyncDownloader.execute(downloadUrl, finalFileName1, fEn);
+                    }
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -247,11 +266,18 @@ ProgressDialog progressBar;
             System.out.println("URL is " + URL);
             Request request = new Request.Builder().url(URL)
                     .addHeader("X-CSRFToken", "csrftoken")
+                    .addHeader("email", "bloger_api@datascienceplc.com")//public user
+                    .addHeader("password", "public-password")
+                    .addHeader("Authorization", "Basic YmxvZ2VyX2FwaUBkYXRhc2NpZW5jZXBsYy5jb206cHVibGljLXBhc3N3b3Jk")
                     .addHeader("Content-Type", "application/pdf").build();
 
             Call call = httpClient.newCall(request);
             try {
                 Response response = call.execute();
+
+                System.out.println("request : is ");
+                System.out.println(request);
+
                 if (response.code() == 200) {
                     InputStream inputStream = null;
                     try {

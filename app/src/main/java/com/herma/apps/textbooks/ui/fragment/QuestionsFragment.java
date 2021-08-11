@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,8 +36,10 @@ import androidx.fragment.app.FragmentActivity;
 //import androidx.preference.PreferenceManager;
 
 import com.herma.apps.textbooks.AnswersActivity;
+import com.herma.apps.textbooks.ChaptersActivity;
 import com.herma.apps.textbooks.QuestionActivity;
 import com.herma.apps.textbooks.R;
+import com.herma.apps.textbooks.common.Item;
 //import com.herma.apps.textbooks.adapter.Common;
 //import com.herma.apps.textbooks.questions.AnswersActivity;
 //import com.herma.apps.textbooks.questions.DB;
@@ -56,12 +59,18 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 /**
  * This fragment provide the RadioButton/Single Options.
  */
 public class QuestionsFragment extends Fragment {
     private static final int QUESTIONNAIRE_REQUEST = 2018;
-    Button resultButton;
+    Button resultButton, openNotesBtn;
     public String[] answerKey, response, responseShouldBe, current_questions, queId;
     public String timer, packege;
     public String[][] questionsWithAnswer;
@@ -72,15 +81,21 @@ public class QuestionsFragment extends Fragment {
 
     EditText etOutOf;
     Spinner spGrade, spSubject, spChapter;
-    HashMap<String, String> chapMap;
+    HashMap<String, String> gradeMap, chapMap;//, schapMap;
 
-    LinearLayout linearLayoutGrade, linearLayoutSubject, linearLayoutUnit, linearLayoutOutof;
+    LinearLayout linearLayoutGrade, linearLayoutSubject, linearLayoutUnit,
+            linearLayoutsGrade, linearLayoutsSubject;//, linearLayoutsUnit;
+    Spinner sspGrade, sspSubject;//, sspChapter;
+
+    String ssChaps = "", en = "";
 
     private boolean screenVisible = false;
 
 //    int countAll = 1, unseen = 10;
 
     WebView youtubeWebView;
+
+    OkHttpClient client = new OkHttpClient();
 
     public QuestionsFragment() {
         // Required empty public constructor
@@ -91,6 +106,8 @@ public class QuestionsFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_question_home, container, false);
 
         Button questionnaireButton = rootView.findViewById(R.id.questionnaireButton);
+        openNotesBtn = rootView.findViewById(R.id.shortnoteButton);
+
         resultButton = rootView.findViewById(R.id.resultButton);
         txtScore = (TextView) rootView.findViewById(R.id.txtScore);
         doneQuestions = (TextView) rootView.findViewById(R.id.doneQuestions);
@@ -112,50 +129,63 @@ public class QuestionsFragment extends Fragment {
         linearLayoutGrade = (LinearLayout) rootView.findViewById(R.id.linearLayoutGrade);
         linearLayoutSubject = (LinearLayout) rootView.findViewById(R.id.linearLayoutSubject);
         linearLayoutUnit = (LinearLayout) rootView.findViewById(R.id.linearLayoutUnit);
-        linearLayoutOutof = (LinearLayout) rootView.findViewById(R.id.linearLayoutOutof);
+        ////
 
-        services();
+        sspGrade = (Spinner) rootView.findViewById(R.id.sspGrade);
+        sspSubject = (Spinner) rootView.findViewById(R.id.sspSubject);
+//        sspChapter = (Spinner) rootView.findViewById(R.id.sspChapter);
 
-//        open("read", "full.hrm");
-//
-//
-//        try{ Cursor c = db.doExcute("SELECT COUNT(*) FROM que;");
-//        if(c.moveToFirst()) countAll = c.getInt(0); }catch (Exception lk){countAll = 0;}
-//
-//        try{Cursor cc = db.doExcute("SELECT COUNT(*) FROM que where seen=0;");
-//        if(cc.moveToFirst()) unseen = cc.getInt(0);}catch (Exception lk){unseen = countAll;}
-//db.close();
-//    int seenPer = 100-((unseen*100)/countAll);
-//
-//        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getActivity());
-//        int tot_score = pre.getInt("tot_score", 0);
-//        int tot_asked = pre.getInt("tot_asked", 0);
-//
-//        int totPerc = 0;
-//        try{ totPerc = (100*tot_score)/tot_asked; }catch (Exception lk){}
+        linearLayoutsGrade = (LinearLayout) rootView.findViewById(R.id.linearLayoutsGrade);
+        linearLayoutsSubject = (LinearLayout) rootView.findViewById(R.id.linearLayoutsSubject);
+//        linearLayoutsUnit = (LinearLayout) rootView.findViewById(R.id.linearLayoutsUnit);
 
-//        unseenProgressBar.setProgress(seenPer);
-//        doneQuestions.setText("(ከጠቅላላው) እስካሁን የሰሩት ፡ " + seenPer + "%");
-//        percentAnsQue.setText("እስካሁን ከተጠየቁት የመለሱት ፡ " + totPerc + "%");
+        doGetRequestInit("https://datascienceplc.com/apps/manager/api/items/get_for_books?what=init");
 
-//        getActivity().setTitle(R.string.exam_questions);
+        //        https://datascienceplc.com/apps/manager/api/items/get_for_books?what=init
+
+//  //        String response = "{\"success\":true,\"error\":false,\"que_service\":[{\"id\":\"1\",\"grade\":\"12\",\"subject\":\"Biology\",\"chapter_name\":\"Unit\",\"chap\":[{\"id\":\"4567\",\"chapter\":\"1\"}]},{\"id\":\"2\",\"grade\":\"12\",\"subject\":\"Physics\",\"chapter_name\":\"Unit\",\"chap\":[]}]}";
+
+//        String response = "{\"success\":true,\"error\":false,\"que_service\":[{\"id\":\"1\",\"grade\":\"12\",\"subject\":\"Biology\",\"chapter_name\":\"Unit\",\"chap\":[{\"id\":\"4567\",\"chapter\":\"1\"}]},{\"id\":\"2\",\"grade\":\"12\",\"subject\":\"Physics\",\"chapter_name\":\"Unit\",\"chap\":[]}],\"short_services\":[{\"id\":\"4567\",\"grade\":\"12\",\"subject\":\"Biology\",\"en\":\"\",\"chap\":[]},{\"id\":\"4568\",\"grade\":\"12\",\"subject\":\"Physics\",\"en\":\"\",\"chap\":[{\"id\":\"4567\",\"chaptername\":\"1\",\"file_url\":\"fgdhh\"},{\"id\":\"4568\",\"chaptername\":\"2\",\"file_url\":\"ghjfh\"}]}]}";
+
 
         questionnaireButton.setOnClickListener(v -> {
             resultButton.setVisibility(View.GONE);
             txtScore.setVisibility(View.GONE);
 
-//            System.out.println("spChapter.getSelectedItem()" + spChapter.getSelectedItem());
-//            System.out.println("spChapter.getSelectedItem()" + chapMap.get(spChapter.getSelectedItem()));
+            System.out.println("spChapter.getSelectedItem()" + spChapter.getSelectedItem());
+            System.out.println("spChapter.getSelectedItem()" + chapMap.get(spChapter.getSelectedItem()));
+            System.out.println("spChapter.getSelectedItem()" + spGrade.getSelectedItem());
+            System.out.println("spChapter.getSelectedItem()" + gradeMap.get(spGrade.getSelectedItem()));
 
 //            https://datascienceplc.com/apps/manager/api/items/get_for_books?what=q&no_of_q=1&chapter=1
 
-            String ques = "{\"success\":true,\"error\":false,\"ques\":[{\"id\":\"4567\",\"question\":\"sample question\",\"a\":\"choose a\",\"b\":\"choose b\",\"c\":\"choose c\",\"d\":\"choose d\",\"e\":null,\"f\":null,\"ans\":\"A\",\"desc\":\"desc\"},{\"id\":\"4568\",\"question\":\"12que\",\"a\":\"a\",\"b\":\" ds\",\"c\":\"sdf\",\"d\":\"asdf\",\"e\":\"asdf\",\"f\":\"sdf\",\"ans\":\"C\",\"desc\":null}]}";
+            String ques = doGetRequestQuestions("https://datascienceplc.com/apps/manager/api/items/get_for_books?what=q&no_of_q=1&chapter=1");
+
+//            String ques = "{\"success\":true,\"error\":false,\"ques\":[{\"id\":\"4567\",\"question\":\"sample question\",\"a\":\"choose a\",\"b\":\"choose b\",\"c\":\"choose c\",\"d\":\"choose d\",\"e\":null,\"f\":null,\"ans\":\"A\",\"desc\":\"desc\"},{\"id\":\"4568\",\"question\":\"12que\",\"a\":\"a\",\"b\":\" ds\",\"c\":\"sdf\",\"d\":\"asdf\",\"e\":\"asdf\",\"f\":\"sdf\",\"ans\":\"C\",\"desc\":null}]}";
 
             Intent questions = new Intent(getActivity(), QuestionActivity.class);
             questions.putExtra("chap_name", spChapter.getSelectedItem()+"");
             questions.putExtra("chap_no", chapMap.get(spChapter.getSelectedItem()));
             questions.putExtra("que", ques);
             startActivityForResult(questions, QUESTIONNAIRE_REQUEST);
+
+        });
+
+        openNotesBtn.setOnClickListener(v -> {
+System.out.println( en + " spSubject.getSelectedItemId() "+ spSubject.getSelectedItem() + spGrade.getSelectedItem());
+            Intent chaptersIntent = new Intent(getContext(), ChaptersActivity.class);
+            chaptersIntent.putExtra("unitsArrayList", ssChaps);
+            chaptersIntent.putExtra("subject", (String) spSubject.getSelectedItem());
+            chaptersIntent.putExtra("grade", (String) spGrade.getSelectedItem());
+            chaptersIntent.putExtra("p", en);
+//            chaptersIntent.putExtra("title", "title");
+            getActivity().startActivity(chaptersIntent);
+
+//            Intent questions = new Intent(getActivity(), QuestionActivity.class);
+//            questions.putExtra("chap_name", spChapter.getSelectedItem()+"");
+//            questions.putExtra("chap_no", chapMap.get(spChapter.getSelectedItem()));
+//            questions.putExtra("que", ques);
+//            startActivityForResult(questions, QUESTIONNAIRE_REQUEST);
 
         });
 
@@ -177,23 +207,93 @@ public class QuestionsFragment extends Fragment {
 
 
     }
+    // code request code here
+    String doGetRequestQuestions(String url) {
+        try {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
 
-    public void services() {
-        //        https://datascienceplc.com/apps/manager/api/items/get_for_books?what=init
+            Request request = new Request.Builder()
+                    .url(url)
+                    .addHeader("email", "bloger_api@datascienceplc.com")//public user
+                    .addHeader("password", "public-password")
+                    .addHeader("Authorization", "Basic YmxvZ2VyX2FwaUBkYXRhc2NpZW5jZXBsYy5jb206cHVibGljLXBhc3N3b3Jk")
+                    .build();
 
-        String que_service = "{\"success\":true,\"error\":false,\"que_service\":[{\"id\":\"1\",\"grade\":\"12\",\"subject\":\"Biology\",\"chapter_name\":\"Unit\",\"chap\":[{\"id\":\"4567\",\"chapter\":\"1\"}]},{\"id\":\"2\",\"grade\":\"12\",\"subject\":\"Physics\",\"chapter_name\":\"Unit\",\"chap\":[]}]}";
-//        String[] stringsGrades;// = { "Grade 12", "Grade 11", "Grade 10"};
-//        String[] stringsSubjecs;// = { "Bio", "Phy", "Geo"};
+            Response response = null;
+
+            response = client.newCall(request).execute();
+
+            if (response.code() == 200) {
+
+                String resp = response.body().string();
+
+                System.out.println("Questions response.body().string() " + resp);
+
+                return resp;
+            } else
+                return "failed";
+
+        } catch (IOException e) {
+
+            System.out.println("Exception on doGetRequest " + e);
+            e.printStackTrace();
+            return "failed";
+        }
+
+    }
+
+    // code request code here
+    void doGetRequestInit(String url) {
+        try {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .addHeader("email", "bloger_api@datascienceplc.com")//public user
+                    .addHeader("password", "public-password")
+                    .addHeader("Authorization", "Basic YmxvZ2VyX2FwaUBkYXRhc2NpZW5jZXBsYy5jb206cHVibGljLXBhc3N3b3Jk")
+                    .build();
+
+            Response response = null;
+
+            response = client.newCall(request).execute();
+
+            if (response.code() == 200) {
+
+                String resp = response.body().string();
+
+                System.out.println("res response.body().string() " + resp);
+
+
+
+                questionServices(resp);
+
+                shortnoteServices(resp);
+
+            }
+
+        } catch (IOException e) {
+
+            System.out.println("Exception on doGetRequest " + e);
+            e.printStackTrace();
+        }
+
+    }
+
+    public void shortnoteServices(String shortnote_services) {
 
         try {
             // Getting JSON Array node
-            JSONObject jsonObj = new JSONObject(que_service);
+            JSONObject jsonObj = new JSONObject(shortnote_services);
 
-            JSONArray datas = jsonObj.getJSONArray("que_service");
+            JSONArray datas = jsonObj.getJSONArray("short_services");
 //            stringsGrades = new String[datas.length()];
 
+
             HashMap<String, String> gradeMap = new LinkedHashMap<>();
-linearLayoutGrade.setVisibility(View.VISIBLE);
+            linearLayoutsGrade.setVisibility(View.VISIBLE);
             for (int i = 0; i < datas.length(); i++) {
 
                 JSONObject c = datas.getJSONObject(i);
@@ -202,7 +302,121 @@ linearLayoutGrade.setVisibility(View.VISIBLE);
 //                    stringsGrades[i] = " Grade "+c.getString("grade");
 
 //                gradeMap.put(i+"", c.getString("subject"));
-                gradeMap.put(c.getString("grade"), " Grade " + c.getString("grade"));
+                gradeMap.put(" Grade " + c.getString("grade"), c.getString("grade"));
+//                System.out.println(c.getString("grade")+ " Grade " + c.getString("grade"));
+
+            }
+
+            ArrayAdapter aa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, gradeMap.keySet().toArray());
+            aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sspGrade.setAdapter(aa);
+            sspGrade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                    try {
+                        JSONObject jsonObj = new JSONObject(shortnote_services);
+
+                        JSONArray datas = jsonObj.getJSONArray("short_services");
+//            stringsGrades = new String[datas.length()];
+                        linearLayoutsSubject.setVisibility(View.VISIBLE);
+                        HashMap<String, String> subjectMap = new LinkedHashMap<>();
+                        JSONObject c;
+                        for (int i = 0; i < datas.length(); i++) {
+
+                            c = datas.getJSONObject(i);
+
+                            if ((" Grade " + c.getString("grade")).equals(sspGrade.getSelectedItem().toString())) {
+                                subjectMap.put(c.getString("subject"), c.getString("chap"));
+                                en = c.getString("en");
+                                System.out.println("en is :" + en);
+                            }
+
+                        }
+
+
+                        ArrayAdapter chapArray = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, subjectMap.keySet().toArray());
+                        chapArray.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        sspSubject.setAdapter(chapArray);
+                        sspSubject.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                                try {
+
+                                    ssChaps = "{\"chap\":" + subjectMap.get(sspSubject.getSelectedItem()) + "}";
+
+//                                    JSONObject jsonObj = new JSONObject("{\"chap\":" + subjectMap.get(sspSubject.getSelectedItem()) + "}");
+
+//                                    JSONArray datas = jsonObj.getJSONArray("chap");
+////            stringsGrades = new String[datas.length()];
+////                                    linearLayoutsUnit.setVisibility(View.VISIBLE);
+//                                    schapMap = new LinkedHashMap<>();
+//                                    JSONObject c;
+//
+//                                    unitsArrayList = new ArrayList<>();
+//
+//                                    for (int i = 0; i < datas.length(); i++) {
+//
+//                                        c = datas.getJSONObject(i);
+//                                        schapMap.put(("Unit " + c.getString("chaptername")), c.getString("chaptername"));
+//                                        System.out.println(("Unit " + c.getString("chaptername"))+ c.getString("chaptername"));
+//
+//                                        unitsArrayList.add(new Item(c.getString("chaptername"), c.getString("file_url"), "en", R.drawable.icon, "#000000"));
+//                                    }
+
+//                                    ArrayAdapter chapArray = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, schapMap.keySet().toArray());
+//                                    chapArray.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                                    sspChapter.setAdapter(chapArray);
+
+
+                                } catch (Exception kl) {
+                                    System.out.println("some exception on chap" + kl);
+                                }
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+
+                    } catch (Exception lk) {
+                        System.out.println("some exception on grade");
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+        } catch (final JSONException e) {
+            System.out.println("some exception on main short note" + e);
+        }
+    }
+
+    public void questionServices(String que_service) {
+
+        try {
+            // Getting JSON Array node
+            JSONObject jsonObj = new JSONObject(que_service);
+
+            JSONArray datas = jsonObj.getJSONArray("que_service");
+//            stringsGrades = new String[datas.length()];
+
+            gradeMap = new LinkedHashMap<>();
+            linearLayoutGrade.setVisibility(View.VISIBLE);
+            for (int i = 0; i < datas.length(); i++) {
+
+                JSONObject c = datas.getJSONObject(i);
+
+
+//                    stringsGrades[i] = " Grade "+c.getString("grade");
+
+//                gradeMap.put(i+"", c.getString("subject"));
+                gradeMap.put(" Grade " + c.getString("grade"), c.getString("grade"));
 
             }
 
@@ -218,7 +432,7 @@ linearLayoutGrade.setVisibility(View.VISIBLE);
 //            listView.setAdapter(adapter);
 
 
-            ArrayAdapter aa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, gradeMap.values().toArray());
+            ArrayAdapter aa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, gradeMap.keySet().toArray());
             aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spGrade.setAdapter(aa);
             spGrade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -230,7 +444,7 @@ linearLayoutGrade.setVisibility(View.VISIBLE);
 
                         JSONArray datas = jsonObj.getJSONArray("que_service");
 //            stringsGrades = new String[datas.length()];
-linearLayoutSubject.setVisibility(View.VISIBLE);
+                        linearLayoutSubject.setVisibility(View.VISIBLE);
                         HashMap<String, String> subjectMap = new LinkedHashMap<>();
                         JSONObject c;
                         for (int i = 0; i < datas.length(); i++) {
@@ -256,8 +470,7 @@ linearLayoutSubject.setVisibility(View.VISIBLE);
 
                                     JSONArray datas = jsonObj.getJSONArray("chap");
 //            stringsGrades = new String[datas.length()];
-linearLayoutUnit.setVisibility(View.VISIBLE);
-linearLayoutOutof.setVisibility(View.VISIBLE);
+                                    linearLayoutUnit.setVisibility(View.VISIBLE);
                                     chapMap = new LinkedHashMap<>();
                                     JSONObject c;
                                     for (int i = 0; i < datas.length(); i++) {
@@ -507,4 +720,6 @@ linearLayoutOutof.setVisibility(View.VISIBLE);
 
         }
     }
+
+
 }

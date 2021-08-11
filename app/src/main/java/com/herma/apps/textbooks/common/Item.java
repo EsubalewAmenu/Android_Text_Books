@@ -8,11 +8,12 @@ package com.herma.apps.textbooks.common;
 
 public class Item {
 
-    public String chapName, fileName, en;
+    public String chapterID, chapName, fileName, en;
     public int drawable;
     public String color;
 
-    public Item(String chapName, String fileName, String en, int drawable, String color ) {
+    public Item(String chapterID, String chapName, String fileName, String en, int drawable, String color ) {
+        this.chapterID = chapterID;
         this.chapName = chapName;
         this.fileName = fileName;
         this.en = en;

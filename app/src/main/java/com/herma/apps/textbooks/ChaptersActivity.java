@@ -33,6 +33,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -48,6 +52,8 @@ public class ChaptersActivity extends AppCompatActivity {
     private AdView mAdView;
 
     String FILEPATH = "/storage/emulated/0/Herma/books/";
+
+    boolean is_short;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +72,21 @@ public class ChaptersActivity extends AppCompatActivity {
 
 
         if (getIntent().getExtras() != null) {
-            this.setTitle(getIntent().getStringExtra("name") + "(" + getIntent().getStringExtra("title")+")");
-            setData(getIntent().getStringExtra("subj"),  getIntent().getStringExtra("p"));
+
+            if(getIntent().getStringExtra("unitsArrayList") != null){
+
+                try {
+                    this.setTitle(getIntent().getStringExtra("subject") + "(" + getIntent().getStringExtra("grade")+")");
+                    setFromShort(getIntent().getStringExtra("unitsArrayList"));
+                    is_short = true;
+                } catch (JSONException e) { System.out.println("JSONException on chapters parsing ");e.printStackTrace(); }
+
+            }
+            else{
+                this.setTitle(getIntent().getStringExtra("name") + "(" + getIntent().getStringExtra("title")+")");
+                setData(getIntent().getStringExtra("subj"),  getIntent().getStringExtra("p"));
+                is_short = false;
+                }
         }
 
         MainAdapter adapter = new MainAdapter(ChaptersActivity.this, arrayList, new MainAdapter.ItemListener() {
@@ -131,13 +150,28 @@ public class ChaptersActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+public void setFromShort(String shortArrayList) throws JSONException {
 
+                                        JSONObject jsonObj = new JSONObject(shortArrayList);
+
+                                    JSONArray datas = jsonObj.getJSONArray("chap");
+                                    JSONObject c;
+
+    arrayList = new ArrayList<>();
+
+                                    for (int i = 0; i < datas.length(); i++) {
+
+                                        c = datas.getJSONObject(i);
+                                        arrayList.add(new Item(c.getString("id"), c.getString("chaptername"), c.getString("file_url"), "en", R.drawable.icon, "#000000"));
+                                    }
+
+}
     public void setData(String subj, String p){
         open(getApplicationContext(),"read", "books.hrm");
         final Cursor subjectsCursor = db.getSelect("*", "chapters", "subject_id='" + subj + "'");
         if (subjectsCursor.moveToFirst()) {
             do {
-                arrayList.add(new Item(subjectsCursor.getString(2) , subjectsCursor.getString(3), p, R.drawable.icon, "#000000"));
+                arrayList.add(new Item("", subjectsCursor.getString(2) , subjectsCursor.getString(3), p, R.drawable.icon, "#000000"));
             } while (subjectsCursor.moveToNext());
         }
 
@@ -199,7 +233,10 @@ try {
 }catch (Exception kl){System.out.println("Exception on ChaptersActivity mkdirs " + kl);}
 //////////////////////////////
 
-            new Commons(ChaptersActivity.this).messageDialog(ChaptersActivity.this, "d", R.string.no_file, 1234, fName, fEn, R.string.download, R.string.cancel, R.string.downloading, item.chapName, getIntent().getStringExtra("name"));
+                    if(is_short){
+            new Commons(ChaptersActivity.this).messageDialog(ChaptersActivity.this, "d", R.string.no_file, 1234, fName, fEn, R.string.download, R.string.cancel, R.string.downloading, item.chapName, getIntent().getStringExtra("subject") , getIntent().getStringExtra("grade"), item.chapterID, is_short);
+        }else
+            new Commons(ChaptersActivity.this).messageDialog(ChaptersActivity.this, "d", R.string.no_file, 1234, fName, fEn, R.string.download, R.string.cancel, R.string.downloading, item.chapName, getIntent().getStringExtra("name"), "", "", is_short);
         }
     }
     public void open(Context context, String write, String db_name) {
