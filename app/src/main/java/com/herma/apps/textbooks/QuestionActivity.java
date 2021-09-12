@@ -69,9 +69,11 @@ public class QuestionActivity extends AppCompatActivity
     public int mins, secs;
     TextView timerValue;
 
-    int per_exam;
+//    int per_exam;
 
-    public String show_answer, packege;
+    public boolean show_answer;
+
+    public String packege;
     TextView tvAds;
 
     private InterstitialAd mInterstitialAd;
@@ -84,11 +86,11 @@ public class QuestionActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
 
-        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(QuestionActivity.this);
-        show_answer = pre.getString("show_answer", "anon");
-try{
-        per_exam = Integer.parseInt(pre.getString("no_of_que", "anon"));
-    }catch (Exception klk) { per_exam = 50; }
+//        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(QuestionActivity.this);
+//        show_answer = pre.getString("show_answer", "anon");
+//try{
+//        per_exam = Integer.parseInt(pre.getString("no_of_que", "anon"));
+//    }catch (Exception klk) { per_exam = 50; }
 
         toolBarInit();
 
@@ -148,6 +150,7 @@ try{
             int chap_id = getIntent().getIntExtra("chap_id", 0);
             String que = getIntent().getStringExtra("que");
             String chap_name = getIntent().getStringExtra("chap_name");
+            show_answer = getIntent().getBooleanExtra("showAnswer", true);
 
 
             try {

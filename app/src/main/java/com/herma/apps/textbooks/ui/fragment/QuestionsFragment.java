@@ -22,6 +22,7 @@ import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -29,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
@@ -79,7 +81,7 @@ public class QuestionsFragment extends Fragment {
     ProgressBar unseenProgressBar;
     private FragmentActivity mContext;
 
-    EditText etOutOf;
+    EditText etOutOf; CheckBox show_answer;
     Spinner spGrade, spSubject, spChapter;
     HashMap<String, String> gradeMap, chapMap;//, schapMap;
 
@@ -89,6 +91,7 @@ public class QuestionsFragment extends Fragment {
 
     String ssChaps = "", en = "";
 
+
     private boolean screenVisible = false;
 
 //    int countAll = 1, unseen = 10;
@@ -96,6 +99,8 @@ public class QuestionsFragment extends Fragment {
     WebView youtubeWebView;
 
     OkHttpClient client = new OkHttpClient();
+
+    Button questionnaireButton;
 
     public QuestionsFragment() {
         // Required empty public constructor
@@ -105,7 +110,7 @@ public class QuestionsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_question_home, container, false);
 
-        Button questionnaireButton = rootView.findViewById(R.id.questionnaireButton);
+        questionnaireButton = rootView.findViewById(R.id.questionnaireButton);
         openNotesBtn = rootView.findViewById(R.id.shortnoteButton);
 
         resultButton = rootView.findViewById(R.id.resultButton);
@@ -121,6 +126,7 @@ public class QuestionsFragment extends Fragment {
 
 
         etOutOf = (EditText) rootView.findViewById(R.id.etOutOf);
+        show_answer = (CheckBox) rootView.findViewById(R.id.show_answer);
 
         spGrade = (Spinner) rootView.findViewById(R.id.spGrade);
         spSubject = (Spinner) rootView.findViewById(R.id.spSubject);
@@ -139,7 +145,23 @@ public class QuestionsFragment extends Fragment {
         linearLayoutsSubject = (LinearLayout) rootView.findViewById(R.id.linearLayoutsSubject);
 //        linearLayoutsUnit = (LinearLayout) rootView.findViewById(R.id.linearLayoutsUnit);
 
-        doGetRequestInit("https://datascienceplc.com/apps/manager/api/items/get_for_books?what=init");
+
+                SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String que_service_sting = pre.getString("que_service", "");
+
+        if(que_service_sting.equals( "" ) )
+            Toast.makeText(getActivity(), "Please connect to internet & restart the app!", Toast.LENGTH_SHORT).show();
+
+
+
+        show_answer.setChecked(pre.getBoolean("show_answer", true));
+//        pre.edit().putInt("tot_score", (tot_score + score)).apply();
+//        pre.edit().putInt("tot_asked", (tot_asked + answerKey.length)).apply();
+
+        questionServices(que_service_sting);
+//        shortnoteServices(que_service_sting);
+
+//        doGetRequestInit("https://datascienceplc.com/apps/manager/api/items/get_for_books?what=init");
 
         //        https://datascienceplc.com/apps/manager/api/items/get_for_books?what=init
 
@@ -152,27 +174,39 @@ public class QuestionsFragment extends Fragment {
             resultButton.setVisibility(View.GONE);
             txtScore.setVisibility(View.GONE);
 
-            System.out.println("spChapter.getSelectedItem()" + spChapter.getSelectedItem());
-            System.out.println("spChapter.getSelectedItem()" + chapMap.get(spChapter.getSelectedItem()));
-            System.out.println("spChapter.getSelectedItem()" + spGrade.getSelectedItem());
-            System.out.println("spChapter.getSelectedItem()" + gradeMap.get(spGrade.getSelectedItem()));
+//            System.out.println("spChapter.getSelectedItem()" + spChapter.getSelectedItem());
+//            System.out.println("spChapter.getSelectedItem()" + chapMap.get(spChapter.getSelectedItem()));
+//            System.out.println("spChapter.getSelectedItem()" + spGrade.getSelectedItem());
+//            System.out.println("spChapter.getSelectedItem()" + gradeMap.get(spGrade.getSelectedItem()));
 
 //            https://datascienceplc.com/apps/manager/api/items/get_for_books?what=q&no_of_q=1&chapter=1
 
-            String ques = doGetRequestQuestions("https://datascienceplc.com/apps/manager/api/items/get_for_books?what=q&no_of_q=1&chapter=1");
-
+            String ques = doGetRequestQuestions("https://datascienceplc.com/apps/manager/api/items/get_for_books?what=q&no_of_q="
+                    + etOutOf.getText().toString() + "&chapter=" + chapMap.get(spChapter.getSelectedItem())  + "&grade=" + gradeMap.get(spGrade.getSelectedItem()) );
+System.out.println("String ques =  " + ques);
 //            String ques = "{\"success\":true,\"error\":false,\"ques\":[{\"id\":\"4567\",\"question\":\"sample question\",\"a\":\"choose a\",\"b\":\"choose b\",\"c\":\"choose c\",\"d\":\"choose d\",\"e\":null,\"f\":null,\"ans\":\"A\",\"desc\":\"desc\"},{\"id\":\"4568\",\"question\":\"12que\",\"a\":\"a\",\"b\":\" ds\",\"c\":\"sdf\",\"d\":\"asdf\",\"e\":\"asdf\",\"f\":\"sdf\",\"ans\":\"C\",\"desc\":null}]}";
 
-            Intent questions = new Intent(getActivity(), QuestionActivity.class);
-            questions.putExtra("chap_name", spChapter.getSelectedItem()+"");
-            questions.putExtra("chap_no", chapMap.get(spChapter.getSelectedItem()));
-            questions.putExtra("que", ques);
-            startActivityForResult(questions, QUESTIONNAIRE_REQUEST);
+            if(ques.equals("failed")){
+
+                Toast.makeText(getActivity(), "Please check your internet!", Toast.LENGTH_SHORT).show();
+
+            }else {
+                Intent questions = new Intent(getActivity(), QuestionActivity.class);
+                questions.putExtra("chap_name", spChapter.getSelectedItem() + "");
+                questions.putExtra("chap_no", chapMap.get(spChapter.getSelectedItem()));
+                questions.putExtra("showAnswer", show_answer.isChecked());
+                questions.putExtra("outof", etOutOf.getText().toString());
+                questions.putExtra("que", ques);
+                startActivityForResult(questions, QUESTIONNAIRE_REQUEST);
+            }
+
+        pre.edit().putBoolean("show_answer", show_answer.isChecked()).apply();
+
 
         });
 
         openNotesBtn.setOnClickListener(v -> {
-System.out.println( en + " spSubject.getSelectedItemId() "+ spSubject.getSelectedItem() + spGrade.getSelectedItem());
+//System.out.println( en + " spSubject.getSelectedItemId() "+ spSubject.getSelectedItem() + spGrade.getSelectedItem());
             Intent chaptersIntent = new Intent(getContext(), ChaptersActivity.class);
             chaptersIntent.putExtra("unitsArrayList", ssChaps);
             chaptersIntent.putExtra("subject", (String) spSubject.getSelectedItem());
@@ -228,7 +262,7 @@ System.out.println( en + " spSubject.getSelectedItemId() "+ spSubject.getSelecte
 
                 String resp = response.body().string();
 
-                System.out.println("Questions response.body().string() " + resp);
+//                System.out.println("Questions response.body().string() " + resp);
 
                 return resp;
             } else
@@ -242,45 +276,49 @@ System.out.println( en + " spSubject.getSelectedItemId() "+ spSubject.getSelecte
         }
 
     }
-
-    // code request code here
-    void doGetRequestInit(String url) {
-        try {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-
-            Request request = new Request.Builder()
-                    .url(url)
-                    .addHeader("email", "bloger_api@datascienceplc.com")//public user
-                    .addHeader("password", "public-password")
-                    .addHeader("Authorization", "Basic YmxvZ2VyX2FwaUBkYXRhc2NpZW5jZXBsYy5jb206cHVibGljLXBhc3N3b3Jk")
-                    .build();
-
-            Response response = null;
-
-            response = client.newCall(request).execute();
-
-            if (response.code() == 200) {
-
-                String resp = response.body().string();
-
-                System.out.println("res response.body().string() " + resp);
-
-
-
-                questionServices(resp);
-
-                shortnoteServices(resp);
-
-            }
-
-        } catch (IOException e) {
-
-            System.out.println("Exception on doGetRequest " + e);
-            e.printStackTrace();
-        }
-
-    }
+//
+//    // code request code here
+//    void doGetRequestInit(String url) {
+//        try {
+//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//            StrictMode.setThreadPolicy(policy);
+//
+//            Request request = new Request.Builder()
+//                    .url(url)
+//                    .addHeader("email", "bloger_api@datascienceplc.com")//public user
+//                    .addHeader("password", "public-password")
+//                    .addHeader("Authorization", "Basic YmxvZ2VyX2FwaUBkYXRhc2NpZW5jZXBsYy5jb206cHVibGljLXBhc3N3b3Jk")
+//                    .build();
+//
+//            Response response = null;
+//
+//            response = client.newCall(request).execute();
+//
+//            if (response.code() == 200) {
+//
+//                String resp = response.body().string();
+//
+////                System.out.println("res response.body().string() " + resp);
+//
+//                SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getActivity());
+////                String que_service_sting = pre.getString("que_service", null);
+////        int tot_asked = pre.getInt("tot_asked", 0);
+//        pre.edit().putString("que_service", resp ).apply();
+////        pre.edit().putInt("tot_asked", (tot_asked + answerKey.length)).apply();
+//
+//
+////                questionServices(resp);
+////                shortnoteServices(resp);
+//
+//            }
+//
+//        } catch (IOException e) {
+//
+//            System.out.println("Exception on doGetRequest " + e);
+//            e.printStackTrace();
+//        }
+//
+//    }
 
     public void shortnoteServices(String shortnote_services) {
 
@@ -294,6 +332,8 @@ System.out.println( en + " spSubject.getSelectedItemId() "+ spSubject.getSelecte
 
             HashMap<String, String> gradeMap = new LinkedHashMap<>();
             linearLayoutsGrade.setVisibility(View.VISIBLE);
+
+
             for (int i = 0; i < datas.length(); i++) {
 
                 JSONObject c = datas.getJSONObject(i);
@@ -329,7 +369,7 @@ System.out.println( en + " spSubject.getSelectedItemId() "+ spSubject.getSelecte
                             if ((" Grade " + c.getString("grade")).equals(sspGrade.getSelectedItem().toString())) {
                                 subjectMap.put(c.getString("subject"), c.getString("chap"));
                                 en = c.getString("en");
-                                System.out.println("en is :" + en);
+//                                System.out.println("en is :" + en);
                             }
 
                         }
@@ -392,7 +432,7 @@ System.out.println( en + " spSubject.getSelectedItemId() "+ spSubject.getSelecte
                 }
             });
 
-        } catch (final JSONException e) {
+        } catch (final Exception e) {
             System.out.println("some exception on main short note" + e);
         }
     }
@@ -402,12 +442,15 @@ System.out.println( en + " spSubject.getSelectedItemId() "+ spSubject.getSelecte
         try {
             // Getting JSON Array node
             JSONObject jsonObj = new JSONObject(que_service);
-
+//System.out.println("response array is " + que_service );
             JSONArray datas = jsonObj.getJSONArray("que_service");
 //            stringsGrades = new String[datas.length()];
 
             gradeMap = new LinkedHashMap<>();
             linearLayoutGrade.setVisibility(View.VISIBLE);
+            questionnaireButton.setVisibility(View.VISIBLE);
+            show_answer.setVisibility(View.VISIBLE);
+
             for (int i = 0; i < datas.length(); i++) {
 
                 JSONObject c = datas.getJSONObject(i);
@@ -416,7 +459,7 @@ System.out.println( en + " spSubject.getSelectedItemId() "+ spSubject.getSelecte
 //                    stringsGrades[i] = " Grade "+c.getString("grade");
 
 //                gradeMap.put(i+"", c.getString("subject"));
-                gradeMap.put(" Grade " + c.getString("grade"), c.getString("grade"));
+                gradeMap.put(" Grade " + c.getString("grade"), c.getString("id"));
 
             }
 
@@ -506,7 +549,7 @@ System.out.println( en + " spSubject.getSelectedItemId() "+ spSubject.getSelecte
                 }
             });
 
-        } catch (final JSONException e) {
+        } catch (Exception e) {
         }
     }
 
