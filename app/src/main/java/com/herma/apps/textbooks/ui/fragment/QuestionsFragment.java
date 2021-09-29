@@ -1,5 +1,6 @@
 package com.herma.apps.textbooks.ui.fragment;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -37,10 +39,20 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 //import androidx.preference.PreferenceManager;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.herma.apps.textbooks.AnswersActivity;
 import com.herma.apps.textbooks.ChaptersActivity;
+import com.herma.apps.textbooks.MainActivity;
 import com.herma.apps.textbooks.QuestionActivity;
 import com.herma.apps.textbooks.R;
+import com.herma.apps.textbooks.SplashActivity;
 import com.herma.apps.textbooks.common.Item;
 //import com.herma.apps.textbooks.adapter.Common;
 //import com.herma.apps.textbooks.questions.AnswersActivity;
@@ -60,12 +72,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * This fragment provide the RadioButton/Single Options.
@@ -98,7 +106,8 @@ public class QuestionsFragment extends Fragment {
 
     WebView youtubeWebView;
 
-    OkHttpClient client = new OkHttpClient();
+    String url = "https://datascienceplc.com/apps/manager/api/items/get_for_books?what=q&no_of_q=";
+    public RequestQueue queue;
 
     Button questionnaireButton;
 
@@ -174,31 +183,27 @@ public class QuestionsFragment extends Fragment {
             resultButton.setVisibility(View.GONE);
             txtScore.setVisibility(View.GONE);
 
-//            System.out.println("spChapter.getSelectedItem()" + spChapter.getSelectedItem());
-//            System.out.println("spChapter.getSelectedItem()" + chapMap.get(spChapter.getSelectedItem()));
-//            System.out.println("spChapter.getSelectedItem()" + spGrade.getSelectedItem());
-//            System.out.println("spChapter.getSelectedItem()" + gradeMap.get(spGrade.getSelectedItem()));
 
-//            https://datascienceplc.com/apps/manager/api/items/get_for_books?what=q&no_of_q=1&chapter=1
+            doApiCall( etOutOf.getText().toString() + "&chapter=" + chapMap.get(spChapter.getSelectedItem())  + "&grade=" + gradeMap.get(spGrade.getSelectedItem()) );
 
-            String ques = doGetRequestQuestions("https://datascienceplc.com/apps/manager/api/items/get_for_books?what=q&no_of_q="
-                    + etOutOf.getText().toString() + "&chapter=" + chapMap.get(spChapter.getSelectedItem())  + "&grade=" + gradeMap.get(spGrade.getSelectedItem()) );
-System.out.println("String ques =  " + ques);
+//            String ques = doGetRequestQuestions("https://datascienceplc.com/apps/manager/api/items/get_for_books?what=q&no_of_q="
+//                    + etOutOf.getText().toString() + "&chapter=" + chapMap.get(spChapter.getSelectedItem())  + "&grade=" + gradeMap.get(spGrade.getSelectedItem()) );
+//System.out.println("String ques =  " + ques);
 //            String ques = "{\"success\":true,\"error\":false,\"ques\":[{\"id\":\"4567\",\"question\":\"sample question\",\"a\":\"choose a\",\"b\":\"choose b\",\"c\":\"choose c\",\"d\":\"choose d\",\"e\":null,\"f\":null,\"ans\":\"A\",\"desc\":\"desc\"},{\"id\":\"4568\",\"question\":\"12que\",\"a\":\"a\",\"b\":\" ds\",\"c\":\"sdf\",\"d\":\"asdf\",\"e\":\"asdf\",\"f\":\"sdf\",\"ans\":\"C\",\"desc\":null}]}";
 
-            if(ques.equals("failed")){
-
-                Toast.makeText(getActivity(), "Please check your internet!", Toast.LENGTH_SHORT).show();
-
-            }else {
-                Intent questions = new Intent(getActivity(), QuestionActivity.class);
-                questions.putExtra("chap_name", spChapter.getSelectedItem() + "");
-                questions.putExtra("chap_no", chapMap.get(spChapter.getSelectedItem()));
-                questions.putExtra("showAnswer", show_answer.isChecked());
-                questions.putExtra("outof", etOutOf.getText().toString());
-                questions.putExtra("que", ques);
-                startActivityForResult(questions, QUESTIONNAIRE_REQUEST);
-            }
+//            if(ques.equals("failed")){
+//
+//                Toast.makeText(getActivity(), "Please check your internet!", Toast.LENGTH_SHORT).show();
+//
+//            }else {
+//                Intent questions = new Intent(getActivity(), QuestionActivity.class);
+//                questions.putExtra("chap_name", spChapter.getSelectedItem() + "");
+//                questions.putExtra("chap_no", chapMap.get(spChapter.getSelectedItem()));
+//                questions.putExtra("showAnswer", show_answer.isChecked());
+//                questions.putExtra("outof", etOutOf.getText().toString());
+//                questions.putExtra("que", ques);
+//                startActivityForResult(questions, QUESTIONNAIRE_REQUEST);
+//            }
 
         pre.edit().putBoolean("show_answer", show_answer.isChecked()).apply();
 
@@ -241,41 +246,97 @@ System.out.println("String ques =  " + ques);
 
 
     }
-    // code request code here
-    String doGetRequestQuestions(String url) {
-        try {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
 
-            Request request = new Request.Builder()
-                    .url(url)
-                    .addHeader("email", "bloger_api@datascienceplc.com")//public user
-                    .addHeader("password", "public-password")
-                    .addHeader("Authorization", "Basic YmxvZ2VyX2FwaUBkYXRhc2NpZW5jZXBsYy5jb206cHVibGljLXBhc3N3b3Jk")
-                    .build();
 
-            Response response = null;
+    private void doApiCall(String param) {
+        new Handler().postDelayed(new Runnable() {
 
-            response = client.newCall(request).execute();
+            @Override
+            public void run() {
 
-            if (response.code() == 200) {
+                queue = Volley.newRequestQueue(getContext());
 
-                String resp = response.body().string();
 
-//                System.out.println("Questions response.body().string() " + resp);
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url + param ,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
 
-                return resp;
-            } else
-                return "failed";
+//                                System.out.println(response);
 
-        } catch (IOException e) {
+                                Intent questions = new Intent(getActivity(), QuestionActivity.class);
+                                questions.putExtra("chap_name", spChapter.getSelectedItem() + "");
+                                questions.putExtra("chap_no", chapMap.get(spChapter.getSelectedItem()));
+                                questions.putExtra("showAnswer", show_answer.isChecked());
+                                questions.putExtra("outof", etOutOf.getText().toString());
+                                questions.putExtra("que", response);
+                                startActivityForResult(questions, QUESTIONNAIRE_REQUEST);
+                            }
 
-            System.out.println("Exception on doGetRequest " + e);
-            e.printStackTrace();
-            return "failed";
-        }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getActivity(), "Please check your internet!", Toast.LENGTH_SHORT).show();
+                    }
 
+                })
+                {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<>();
+                        params.put("email", "bloger_api@datascienceplc.com");//public user
+                        params.put("password", "public-password");
+                        params.put("Authorization", "Basic YmxvZ2VyX2FwaUBkYXRhc2NpZW5jZXBsYy5jb206cHVibGljLXBhc3N3b3Jk");
+                        return params;
+                    }
+                };
+
+                stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                        10000,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+                stringRequest.setTag(this);
+// Add the request to the RequestQueue.
+                queue.add(stringRequest);
+            }
+        }, 1500);
     }
+    // code request code here
+//    String doGetRequestQuestions(String url) {
+//        try {
+//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//            StrictMode.setThreadPolicy(policy);
+//
+//            Request request = new Request.Builder()
+//                    .url(url)
+//                    .addHeader("email", "bloger_api@datascienceplc.com")//public user
+//                    .addHeader("password", "public-password")
+//                    .addHeader("Authorization", "Basic YmxvZ2VyX2FwaUBkYXRhc2NpZW5jZXBsYy5jb206cHVibGljLXBhc3N3b3Jk")
+//                    .build();
+//
+//            Response response = null;
+//
+//            response = client.newCall(request).execute();
+//
+//            if (response.code() == 200) {
+//
+//                String resp = response.body().string();
+//
+////                System.out.println("Questions response.body().string() " + resp);
+//
+//                return resp;
+//            } else
+//                return "failed";
+//
+//        } catch (IOException e) {
+//
+//            System.out.println("Exception on doGetRequest " + e);
+//            e.printStackTrace();
+//            return "failed";
+//        }
+//
+//    }
 //
 //    // code request code here
 //    void doGetRequestInit(String url) {
