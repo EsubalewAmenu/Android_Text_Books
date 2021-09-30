@@ -126,18 +126,22 @@ ProgressDialog progressBar;
 
 //                Uri uri = Uri.parse(WEBSITE + "/consol/chap?cnt=eth&name="+ finalFileName); // Path where you want to download file.
                 Uri uri;
-                if(is_short){
-                    uri = Uri.parse(WEBSITE + "/manager/api/items/get_for_books?cnt=eth&name="+ chapterID + "&what=short"); // Path where you want to download file.
-                } else
-                uri = Uri.parse(WEBSITE + "/manager/api/items/get_for_books?cnt=eth&name="+ finalFileName + "&what=txt"); // Path where you want to download file.
+//                if(is_short){
+//                    uri = Uri.parse(WEBSITE + "/manager/api/items/get_for_books?cnt=eth&name="+ chapterID + "&what=short"); // Path where you want to download file.
+//                } else
+//                uri = Uri.parse(WEBSITE + "/manager/api/items/get_for_books?cnt=eth&name="+ finalFileName + "&what=txt"); // Path where you want to download file.
+//
+//                DownloadManager.Request request = new DownloadManager.Request(uri);
+//                request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI);  // Tell on which network you want to download file.
+//                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);  // This will show notification on top when downloading the file.
+//                request.setTitle(finalFileName); // Title for notification.
+//                request.setVisibleInDownloadsUi(true);
+//                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, finalFileName);//uri.getLastPathSegment());  // Storage directory path
+//                ((DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE)).enqueue(request); // This will start downloading
 
-                DownloadManager.Request request = new DownloadManager.Request(uri);
-                request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI);  // Tell on which network you want to download file.
-                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);  // This will show notification on top when downloading the file.
-                request.setTitle(finalFileName); // Title for notification.
-                request.setVisibleInDownloadsUi(true);
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, finalFileName);//uri.getLastPathSegment());  // Storage directory path
-                ((DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE)).enqueue(request); // This will start downloading
+                        uri = Uri.parse("https://t.me/Ethio_books_bot");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    context.startActivity(intent);
 
                 myDialog.dismiss();
             }

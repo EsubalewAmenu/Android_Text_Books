@@ -9,6 +9,8 @@ import android.database.SQLException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -184,7 +186,21 @@ public class QuestionsFragment extends Fragment {
             txtScore.setVisibility(View.GONE);
 
 
+            questionnaireButton.setText("Loading...");
+            questionnaireButton.setEnabled(false);
+
+
+            if (!isOnline()) {
+                System.out.println("Please check your internet!");
+                Toast.makeText(getActivity(), "Please check your internet!", Toast.LENGTH_SHORT).show();
+
+
+                questionnaireButton.setText("Start");
+                questionnaireButton.setEnabled(true);
+
+            } else
             doApiCall( etOutOf.getText().toString() + "&chapter=" + chapMap.get(spChapter.getSelectedItem())  + "&grade=" + gradeMap.get(spGrade.getSelectedItem()) );
+
 
 //            String ques = doGetRequestQuestions("https://datascienceplc.com/apps/manager/api/items/get_for_books?what=q&no_of_q="
 //                    + etOutOf.getText().toString() + "&chapter=" + chapMap.get(spChapter.getSelectedItem())  + "&grade=" + gradeMap.get(spGrade.getSelectedItem()) );
@@ -248,6 +264,21 @@ public class QuestionsFragment extends Fragment {
     }
 
 
+    /**
+     * Check if there is the network connectivity
+     *
+     * @return true if connected to the network
+     */
+    public boolean isOnline() {
+        // Get a reference to the ConnectivityManager to check the state of network connectivity
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Get details on the currently active default data network
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
     private void doApiCall(String param) {
         new Handler().postDelayed(new Runnable() {
 
@@ -271,11 +302,20 @@ public class QuestionsFragment extends Fragment {
                                 questions.putExtra("outof", etOutOf.getText().toString());
                                 questions.putExtra("que", response);
                                 startActivityForResult(questions, QUESTIONNAIRE_REQUEST);
+
+                                questionnaireButton.setText("Start");
+                                questionnaireButton.setEnabled(true);
+
                             }
 
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+
+                        questionnaireButton.setText("Start");
+                        questionnaireButton.setEnabled(true);
+
+                        System.out.println("some error! " + error);
                         Toast.makeText(getActivity(), "Please check your internet!", Toast.LENGTH_SHORT).show();
                     }
 
@@ -824,6 +864,7 @@ public class QuestionsFragment extends Fragment {
 
         }
     }
+
 
 
 }

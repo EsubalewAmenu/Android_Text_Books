@@ -23,18 +23,18 @@
 
     <string name="downloading">በማውረዳ ላይ/Downloading...</string>
     <string name="download">አውርድ/Download</string>
-    <string name="browserDownload">በብሮውዘር አውርድ</string>
+    <string name="browserDownload">ከTelegram አውርድ</string>
     <string name="cancel">ተወው</string>
     <string name="no_file">ፋይሉ የሎትም።</string>
     <string name="no_file_desc_pre">\'</string>
-    <string name="no_file_desc_pos">\' የሚለውን ከጓደኛዎ \'Herma/books\' ፎልደር ውስጥ ይውሰዱ ወይም ከዚሁ ያውርዱ\n\nለማውረድ Wi-Fi እንዲጠቀሙ እንመክራለን ወይም ኔትዎርክ በማይጨናነቅበት ሰአት ያውርዱ\n\nደካማ ኮኔክሽን ከሆነ ያሎት በብሮውዘር ያውርዱ። (ካወረዱ ቡሃላ \'Herma/books\' ፎልደር ውስጥ ያስቀምጡት።)</string>
+    <string name="no_file_desc_pos">\' የሚለውን ከጓደኛዎ \'Herma/books\' ፎልደር ውስጥ ይውሰዱ ወይም ከዚሁ ያውርዱ\n\nለማውረድ Wi-Fi እንዲጠቀሙ እንመክራለን ወይም ኔትዎርክ በማይጨናነቅበት ሰአት ያውርዱ\n\nደካማ ኮኔክሽን ከሆነ ያሎት ከTelegram ያውርዱና \'Herma/books\' ፎልደር ውስጥ ያስቀምጡት።</string>
     <string name="try_later">"No/Slow internet connection! Please try later"</string>
 
     <string name="share_link_pre">Hey! Have you downloaded </string>
     <string name="share_link_center"> app? Download the app here </string>
     <string name="share_link_pos"> and you will forever be happy just like me because the app has the most important thing ever.</string>
 
-    <string name="app_description">ይህ አፕሊኬሽን ከ 1-12ተኛ ክፍል ያሉ የመማሪያ መፃሕፍትን አካቶ የያዘ ነው። ለተማሪዎች እና ለመምህራን በጣም ጠቃሚ እንደሆነ ይታመናል። በነፃ መጠቀምም ሆነ ዋውረድ/Download ማድረግ ይቻላል! ይህ አፕ የወረቀቱን መፅሐፎች መስልካችን ላይ በቀላሉ እንድንገለገልበት ተደርጎ የተሰራ ስለሆነ በየትኛውም ቦታ እና ጊዜ መጠቀም የሚያስችል ነው።</string>
+    <string name="app_description">ይህ አፕሊኬሽን ከ 1-12ተኛ ክፍል ያሉ የመማሪያ መፃሕፍትን አካቶ የያዘ ነው። ለተማሪዎች እና ለመምህራን በጣም ጠቃሚ እንደሆነ ይታመናል። በነፃ መጠቀምም ሆነ ማውረድ/Download ማድረግ ይቻላል! ይህ አፕ የወረቀቱን መፅሐፎች መስልካችን ላይ በቀላሉ እንድንገለገልበት ተደርጎ የተሰራ ስለሆነ በየትኛውም ቦታ እና ጊዜ መጠቀም የሚያስችል ነው።</string>
     <string name="about">ስለ</string>
     <string name="menu_share">Tell a friend (Link)</string>
     <string name="action_rate">አስተያየቶን ይስጡን</string>
