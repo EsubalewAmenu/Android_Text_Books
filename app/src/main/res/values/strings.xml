@@ -3,7 +3,9 @@
     <string name="adReaderInt">ca-app-pub-3940256099942544/1033173712</string>
     <string name="adHome">ca-app-pub-3940256099942544/6300978111</string>
     <string name="adChapter">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="adQuestions">ca-app-pub-3940256099942544/6300978111</string>
     <string name="adReader">ca-app-pub-3940256099942544/6300978111</string>
+
     <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
 
 
@@ -11,6 +13,7 @@
 <!--    <string name="adReaderInt">ca-app-pub-8011674951494696/4934737105</string>-->
 <!--    <string name="adHome">ca-app-pub-8011674951494696/8312993039</string>-->
 <!--    <string name="adChapter">ca-app-pub-8011674951494696/7079802411</string>-->
+<!--    <string name="adQuestions">ca-app-pub-8011674951494696/4170948875</string>-->
 <!--    <string name="adReader">ca-app-pub-8011674951494696/3605507555</string>-->
 <!--    <string name="admob_app_id">ca-app-pub-8011674951494696~8662393111</string>-->
 
@@ -68,7 +71,7 @@
     <string name="yes">Yes</string>
     <string name="menu_questions">Questions</string>
 
-    <string name="intro"> መልመጃችን የተሟላ አይደለም። የመልመጃ ጥያቄዎች/Worksheet ከነ መልሱ (ከተቻለ ማብራሪያም) ካልዎት በማሟላት ለማገዝ ከፈለጉ \n Telegram @ethio_textbooks 0923481783</string>
+    <string name="intro"> የመልመጃ ጥያቄዎችን አሟልተን esknchers betgst    ይጠብቁ\n Telegram @ethio_textbooks 0923481783</string>
     <string name="start_questionnaire">መልመጃውን ጀምር</string>
     <string name="show_result">ውጤቴን አሳየኝ</string>
     <string name="about_short">*Free* apps from DataScience P.L.C.\nEmail: apps@datascienceplc.com</string>
@@ -79,6 +82,12 @@
     <string name="next">ቀጣይ</string>
     <string name="show_answer">መልሱን እዛው አሳይ</string>
     <string name="open_shortnote">Open note</string>
+
+    <string name="app_restart">This is your first time. Please connect to internet and restart the app!</string>
+    <string name="thanks_for_activated">Thank you! please restart the app</string>
+    <string name="wrong_code">Wrong or expired code used</string>
+    <string name="check_your_internet">Please check you internet or try again later</string>
+    <string name="premium_intro">Describ the advante of premium in short and provide click here link to the web</string>
 
 
 </resources>

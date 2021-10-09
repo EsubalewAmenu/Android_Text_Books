@@ -99,37 +99,46 @@ public class ReadActivity extends AppCompatActivity {
                                 public void onInitiallyRendered(int nbPages, float pageWidth, float pageHeight) {
 
                                     mAdView = findViewById(R.id.adView);
-                                    AdRequest adRequest = new AdRequest.Builder().build();
-                                    mAdView.loadAd(adRequest);
 
-                                    InterstitialAd.load(getApplicationContext(), getString(R.string.adReaderInt), adRequest, new InterstitialAdLoadCallback() {
-                                        @Override
-                                        public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                                            // The mInterstitialAd reference will be null until
-                                            // an ad is loaded.
+
+                                    if(new Commons(getApplicationContext()).showGoogleAd( 1)) {
+
+                                        AdRequest adRequest = new AdRequest.Builder().build();
+                                        mAdView.loadAd(adRequest);
+
+
+                                        InterstitialAd.load(getApplicationContext(), getString(R.string.adReaderInt), adRequest, new InterstitialAdLoadCallback() {
+                                            @Override
+                                            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                                                // The mInterstitialAd reference will be null until
+                                                // an ad is loaded.
 
 //                                            System.out.println("request seconds remaining: isTheirReward");
 
-                                            SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-                                            storedPhone = sharedPref.getString("storedPhone", "0");
+                                                SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+                                                storedPhone = sharedPref.getString("storedPhone", "0");
 
-                                            isTheirReward();
+                                                isTheirReward();
 
 //                                    rewardCountdown(0.2);
 
 //                                            System.out.println("passed seconds remaining: isTheirReward");
 
-                                            mInterstitialAd = interstitialAd;
-                                            mInterstitialAd.show(ReadActivity.this);
-                                        }
+                                                mInterstitialAd = interstitialAd;
+                                                mInterstitialAd.show(ReadActivity.this);
+                                            }
 
-                                        @Override
-                                        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                                            // Handle the error
-                                            mInterstitialAd = null;
-                                        }
-                                    });
+                                            @Override
+                                            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                                                // Handle the error
+                                                mInterstitialAd = null;
+                                            }
+                                        });
 
+
+                                    }else{
+                                        mAdView.setVisibility(View.GONE);
+                                    }
 
                                 }
                             }).load();

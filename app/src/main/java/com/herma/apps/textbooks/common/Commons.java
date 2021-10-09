@@ -6,18 +6,21 @@ package com.herma.apps.textbooks.common;
  * Email esubalew.a2009@gmail.com/
  */
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Pair;
@@ -40,8 +43,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.security.spec.KeySpec;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -49,6 +56,12 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -109,7 +122,7 @@ ProgressDialog progressBar;
         TextView text = (TextView) myDialog.findViewById(R.id.custom_title);
         text.setMovementMethod(ScrollingMovementMethod.getInstance());
 
-        System.out.println(" print from common is serviceType" + serviceType + " fEn " + fEn + " chapterName " + chapterName + " subject " + subject + " grade " + grade + " chapterID " + chapterID);
+//        System.out.println(" print from common is serviceType" + serviceType + " fEn " + fEn + " chapterName " + chapterName + " subject " + subject + " grade " + grade + " chapterID " + chapterID);
         if(is_short){
             fileName = "Sh " + grade + " " + subject + " " + chapterName;
         }
@@ -267,7 +280,7 @@ ProgressDialog progressBar;
 
             OkHttpClient httpClient = new OkHttpClient();
 
-            System.out.println("URL is " + URL);
+//            System.out.println("URL is " + URL);
             Request request = new Request.Builder().url(URL)
                     .addHeader("X-CSRFToken", "csrftoken")
                     .addHeader("email", "bloger_api@datascienceplc.com")//public user
@@ -279,8 +292,8 @@ ProgressDialog progressBar;
             try {
                 Response response = call.execute();
 
-                System.out.println("request : is ");
-                System.out.println(request);
+//                System.out.println("request : is ");
+//                System.out.println(request);
 
                 if (response.code() == 200) {
                     InputStream inputStream = null;
@@ -449,5 +462,71 @@ ProgressDialog progressBar;
     }
 
 
+    public boolean showGoogleAd(int licenseLevel){
 
+        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(context);
+        String license_type = pre.getString("license_type", "");
+        String out_date = pre.getString("out_date", "");
+        String last_update = pre.getString("last_update", "");
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date last_updateDate = sdf.parse(last_update);
+            Date out_dateDate = sdf.parse(out_date);
+
+
+            if( !license_type.equals("") )
+            {
+                if(Integer.parseInt(license_type) < licenseLevel || last_updateDate.compareTo(out_dateDate) > 0 ){ // if expired
+                    System.out.println("isshow ad yes and prevent license_type="+license_type +" out_date="+out_date+" last_update="+last_update);
+                    return true;
+                }else {
+                    System.out.println("isshow ad no license accepted license_type=" + license_type + " out_date=" + out_date + " last_update=" + last_update);
+                    return false;
+                }
+            }else{ // if not licensed
+                System.out.println("isshow ad yes no license provided license_type="+license_type);
+                return true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("isshow ad yes no license provided license_type="+license_type);
+            return true;
+        }
+    }
+
+//    comment this method when production
+    /**
+     * Enables https connections
+     */
+    @SuppressLint("TrulyRandom")
+    public static void handleSSLHandshake() {
+        try {
+            TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+                public X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[0];
+                }
+
+                @Override
+                public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                }
+
+                @Override
+                public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                }
+            }};
+
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, new SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String arg0, SSLSession arg1) {
+                    return true;
+                }
+            });
+        } catch (Exception ignored) {
+        }
+    }
 }

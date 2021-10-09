@@ -80,15 +80,15 @@
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
                 android:title="@string/menu_share" />
-<!--            <item-->
-<!--                android:id="@+id/nav_ad_free"-->
-<!--                android:icon="@drawable/ic_menu_share"-->
-<!--                android:title="@string/menu_ad_free" />-->
         </menu>
     </item>
 
     <item android:title="@string/about">
         <menu>
+                        <item
+                            android:id="@+id/nav_ad_free"
+                            android:icon="@android:drawable/star_big_on"
+                            android:title="@string/menu_ad_free" />
             <item
                 android:id="@+id/nav_rate"
                 android:icon="@android:drawable/star_big_on"

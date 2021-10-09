@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
@@ -110,8 +111,15 @@ public class ChaptersActivity extends AppCompatActivity {
         });
 
         mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+
+
+        if(new Commons(getApplicationContext()).showGoogleAd( 2)) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+        }else{
+            mAdView.setVisibility(View.GONE);
+        }
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

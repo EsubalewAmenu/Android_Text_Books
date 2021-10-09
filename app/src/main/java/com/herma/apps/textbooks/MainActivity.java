@@ -10,8 +10,10 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
@@ -20,6 +22,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.navigation.NavigationView;
+import com.herma.apps.textbooks.common.Commons;
 import com.herma.apps.textbooks.common.MainAdapter;
 import com.herma.apps.textbooks.common.DB;
 import com.herma.apps.textbooks.common.Item;
@@ -38,7 +41,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -127,8 +134,17 @@ public class MainActivity extends AppCompatActivity
         });
 
         mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+
+
+        if(new Commons(getApplicationContext()).showGoogleAd( 2)) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+        }else{
+            mAdView.setVisibility(View.GONE);
+        }
+
+
+
     }
     @Override
     public void onBackPressed() {
@@ -445,17 +461,17 @@ public class MainActivity extends AppCompatActivity
                 intent4.putExtra("android.intent.extra.TEXT", getString(R.string.share_link_pre) + " " + getString(R.string.app_name) + " " + getString(R.string.share_link_center) + " " + "https://play.google.com/store/apps/details?id="+getPackageName() + " "+ getString(R.string.share_link_pos));
                 startActivity(Intent.createChooser(intent4, "SHARE VIA"));
 
-//        } else if (id == R.id.nav_ad_free) {
-//
-////            Fragmentbundle = new Bundle();
-//            PremiumFragment premiumFragment = new PremiumFragment();
-////            Fragmentbundle.putString("choosedGrade", grade);
-////            Fragmentbundle.putString("title", title);
-////            premiumFragment.setArguments(Fragmentbundle);
-//            mFragmentManager = getSupportFragmentManager();
-//            mFragmentTransaction = mFragmentManager.beginTransaction();
-//            mFragmentTransaction.replace(R.id.containerView,premiumFragment).commit();
-//            setTitle(R.string.menu_ad_free);
+        } else if (id == R.id.nav_ad_free) {
+
+//            Fragmentbundle = new Bundle();
+            PremiumFragment premiumFragment = new PremiumFragment();
+//            Fragmentbundle.putString("choosedGrade", grade);
+//            Fragmentbundle.putString("title", title);
+//            premiumFragment.setArguments(Fragmentbundle);
+            mFragmentManager = getSupportFragmentManager();
+            mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.replace(R.id.containerView,premiumFragment).commit();
+            setTitle(R.string.menu_ad_free);
 
         } else if (id == R.id.nav_rate) {
             Toast.makeText(MainActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();

@@ -168,14 +168,14 @@ public class QuestionActivity extends AppCompatActivity
                     c = datas.getJSONObject(i);
                     questionsWithAnswer[i][0] = c.getString("id");
                     questionsWithAnswer[i][1] = c.getString("question");
-                    questionsWithAnswer[i][2] = c.getString("a");
-                    questionsWithAnswer[i][3] = c.getString("b");
-                    questionsWithAnswer[i][4] = c.getString("c");
-                    questionsWithAnswer[i][5] = c.getString("d");
-                    questionsWithAnswer[i][6] = c.getString("e");
-                    questionsWithAnswer[i][7] = c.getString("f");
-                    questionsWithAnswer[i][8] = c.getString("ans");
-                    questionsWithAnswer[i][9] = c.getString("desc");
+                    questionsWithAnswer[i][2] = c.getString("ans_a");
+                    questionsWithAnswer[i][3] = c.getString("ans_b");
+                    questionsWithAnswer[i][4] = c.getString("ans_c");
+                    questionsWithAnswer[i][5] = c.getString("ans_d");
+                    questionsWithAnswer[i][6] = c.getString("ans_e");
+                    questionsWithAnswer[i][7] = c.getString("ans_f");
+                    questionsWithAnswer[i][8] = c.getString("correct_ans");
+                    questionsWithAnswer[i][9] = c.getString("details");
 //                    questionsWithAnswer[i][] = c.getString("");
 
 //                    chapMap.put(("Unit " + c.getString("chapter")), c.getString("chapter"));

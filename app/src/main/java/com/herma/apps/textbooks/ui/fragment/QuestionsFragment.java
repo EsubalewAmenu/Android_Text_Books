@@ -71,6 +71,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -86,12 +87,13 @@ public class QuestionsFragment extends Fragment {
     public String[] answerKey, response, responseShouldBe, current_questions, queId;
     public String timer, packege;
     public String[][] questionsWithAnswer;
-    TextView txtScore, doneQuestions, percentAnsQue;
+    TextView txtScore, doneQuestions, percentAnsQue, textView2;
     ImageView imgBadge;
     ProgressBar unseenProgressBar;
     private FragmentActivity mContext;
 
-    EditText etOutOf; CheckBox show_answer;
+    EditText etOutOf;
+    CheckBox show_answer;
     Spinner spGrade, spSubject, spChapter;
     HashMap<String, String> gradeMap, chapMap;//, schapMap;
 
@@ -107,8 +109,9 @@ public class QuestionsFragment extends Fragment {
 //    int countAll = 1, unseen = 10;
 
     WebView youtubeWebView;
+    String url = new SplashActivity().BASEAPI + "ds_questions/v1/questions/";
+//    String url = "https://datascienceplc.com/apps/manager/api/items/get_for_books?what=q&no_of_q=";
 
-    String url = "https://datascienceplc.com/apps/manager/api/items/get_for_books?what=q&no_of_q=";
     public RequestQueue queue;
 
     Button questionnaireButton;
@@ -121,10 +124,17 @@ public class QuestionsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_question_home, container, false);
 
+//        new SplashActivity().handleSSLHandshake();
+
+        isHasTobeUpdated();
+
         questionnaireButton = rootView.findViewById(R.id.questionnaireButton);
         openNotesBtn = rootView.findViewById(R.id.shortnoteButton);
 
         resultButton = rootView.findViewById(R.id.resultButton);
+
+        textView2 = (TextView) rootView.findViewById(R.id.textView2);
+
         txtScore = (TextView) rootView.findViewById(R.id.txtScore);
         doneQuestions = (TextView) rootView.findViewById(R.id.doneQuestions);
         percentAnsQue = (TextView) rootView.findViewById(R.id.percentAnsQue);
@@ -157,13 +167,15 @@ public class QuestionsFragment extends Fragment {
 //        linearLayoutsUnit = (LinearLayout) rootView.findViewById(R.id.linearLayoutsUnit);
 
 
-                SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String que_service_sting = pre.getString("que_service", "");
 
-        if(que_service_sting.equals( "" ) )
-            Toast.makeText(getActivity(), "Please connect to internet & restart the app!", Toast.LENGTH_SHORT).show();
+        System.out.println("print head is " + que_service_sting);
 
-
+        if (que_service_sting.equals("")) {
+//            Toast.makeText(getActivity(), "Please connect to internet & restart the app!", Toast.LENGTH_SHORT).show();
+            textView2.setText( getString(R.string.app_restart ) );
+        }
 
         show_answer.setChecked(pre.getBoolean("show_answer", true));
 //        pre.edit().putInt("tot_score", (tot_score + score)).apply();
@@ -199,29 +211,12 @@ public class QuestionsFragment extends Fragment {
                 questionnaireButton.setEnabled(true);
 
             } else
-            doApiCall( etOutOf.getText().toString() + "&chapter=" + chapMap.get(spChapter.getSelectedItem())  + "&grade=" + gradeMap.get(spGrade.getSelectedItem()) );
+                doApiCall(etOutOf.getText().toString() + "/" + chapMap.get(spChapter.getSelectedItem()) + "/" + gradeMap.get(spGrade.getSelectedItem()));
+//            doApiCall( etOutOf.getText().toString() + "&chapter=" + chapMap.get(spChapter.getSelectedItem())  + "&grade=" + gradeMap.get(spGrade.getSelectedItem()) );
 
+//            https://localhost:8082/wp/ds/wp-json/ds_questions/v1/questions/20/1/1
 
-//            String ques = doGetRequestQuestions("https://datascienceplc.com/apps/manager/api/items/get_for_books?what=q&no_of_q="
-//                    + etOutOf.getText().toString() + "&chapter=" + chapMap.get(spChapter.getSelectedItem())  + "&grade=" + gradeMap.get(spGrade.getSelectedItem()) );
-//System.out.println("String ques =  " + ques);
-//            String ques = "{\"success\":true,\"error\":false,\"ques\":[{\"id\":\"4567\",\"question\":\"sample question\",\"a\":\"choose a\",\"b\":\"choose b\",\"c\":\"choose c\",\"d\":\"choose d\",\"e\":null,\"f\":null,\"ans\":\"A\",\"desc\":\"desc\"},{\"id\":\"4568\",\"question\":\"12que\",\"a\":\"a\",\"b\":\" ds\",\"c\":\"sdf\",\"d\":\"asdf\",\"e\":\"asdf\",\"f\":\"sdf\",\"ans\":\"C\",\"desc\":null}]}";
-
-//            if(ques.equals("failed")){
-//
-//                Toast.makeText(getActivity(), "Please check your internet!", Toast.LENGTH_SHORT).show();
-//
-//            }else {
-//                Intent questions = new Intent(getActivity(), QuestionActivity.class);
-//                questions.putExtra("chap_name", spChapter.getSelectedItem() + "");
-//                questions.putExtra("chap_no", chapMap.get(spChapter.getSelectedItem()));
-//                questions.putExtra("showAnswer", show_answer.isChecked());
-//                questions.putExtra("outof", etOutOf.getText().toString());
-//                questions.putExtra("que", ques);
-//                startActivityForResult(questions, QUESTIONNAIRE_REQUEST);
-//            }
-
-        pre.edit().putBoolean("show_answer", show_answer.isChecked()).apply();
+            pre.edit().putBoolean("show_answer", show_answer.isChecked()).apply();
 
 
         });
@@ -288,7 +283,7 @@ public class QuestionsFragment extends Fragment {
                 queue = Volley.newRequestQueue(getContext());
 
 
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, url + param ,
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url + param,
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -319,8 +314,7 @@ public class QuestionsFragment extends Fragment {
                         Toast.makeText(getActivity(), "Please check your internet!", Toast.LENGTH_SHORT).show();
                     }
 
-                })
-                {
+                }) {
                     @Override
                     public Map<String, String> getHeaders() throws AuthFailureError {
                         Map<String, String> params = new HashMap<>();
@@ -563,19 +557,6 @@ public class QuestionsFragment extends Fragment {
                 gradeMap.put(" Grade " + c.getString("grade"), c.getString("id"));
 
             }
-
-//            if(datas.length() == 0 ){
-//                verif_customer_rewards = new String[1];
-//                verif_customer_rewards[0] = "No customer to pay";
-//
-//            } else btnorder_reward.setVisibility(View.VISIBLE);
-
-//            ArrayAdapter adapter = new ArrayAdapter<String>(getContext(),
-//                    R.layout.activity_listview, verif_customer_rewards);
-//
-//            listView.setAdapter(adapter);
-
-
             ArrayAdapter aa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, gradeMap.keySet().toArray());
             aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spGrade.setAdapter(aa);
@@ -608,7 +589,7 @@ public class QuestionsFragment extends Fragment {
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                                 try {
-
+                                    System.out.println("{\"chap\":" + subjectMap.get(spSubject.getSelectedItem()) + "}");
                                     JSONObject jsonObj = new JSONObject("{\"chap\":" + subjectMap.get(spSubject.getSelectedItem()) + "}");
 
 
@@ -769,6 +750,7 @@ public class QuestionsFragment extends Fragment {
 //            throw sqle;
 //        }
 //    }
+
     /**
      * Check if there is the network connectivity
      *
@@ -828,43 +810,127 @@ public class QuestionsFragment extends Fragment {
 //        alertDialog.show();
 //
 //    }
-    public void youtubeEmbededPlay(String url, String play_open) {
+//    public void youtubeEmbededPlay(String url, String play_open) {
+//
+//
+//        if (play_open.equalsIgnoreCase("p")) {
+//            youtubeWebView.setVisibility(View.VISIBLE);
+//            youtubeWebView.setWebViewClient(new WebViewClient() {
+//                @Override
+//                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//                    return false;
+//                }
+//            });
+//            WebSettings webSettings = youtubeWebView.getSettings();
+//            webSettings.setJavaScriptEnabled(true);
+//            webSettings.setLoadWithOverviewMode(true);
+//            webSettings.setUseWideViewPort(true);
+//            youtubeWebView.loadUrl(url);
+//        } else {
+//            youtubeWebView.setVisibility(View.VISIBLE);
+//            youtubeWebView.setWebViewClient(new WebViewClient() {
+//                @Override
+//                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//                    return false;
+//                }
+//            });
+//            WebSettings webSettings = youtubeWebView.getSettings();
+//            webSettings.setJavaScriptEnabled(true);
+//            webSettings.setLoadWithOverviewMode(true);
+//            webSettings.setUseWideViewPort(true);
+//            youtubeWebView.loadUrl(url);
+//
+////            Uri uriUrl = Uri.parse(url);
+////            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+////            startActivity(launchBrowser);
+//
+//        }
+//    }
+    private void doApiCall() {
+//        new Handler().postDelayed(new Runnable() {
+//
+//            @Override
+//            public void run() {
+
+        String url_subjects = new SplashActivity().BASEAPI + "ds_questions/v1/available/subjects";
+
+        queue = Volley.newRequestQueue(getContext());
 
 
-        if (play_open.equalsIgnoreCase("p")) {
-            youtubeWebView.setVisibility(View.VISIBLE);
-            youtubeWebView.setWebViewClient(new WebViewClient() {
-                @Override
-                public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                    return false;
-                }
-            });
-            WebSettings webSettings = youtubeWebView.getSettings();
-            webSettings.setJavaScriptEnabled(true);
-            webSettings.setLoadWithOverviewMode(true);
-            webSettings.setUseWideViewPort(true);
-            youtubeWebView.loadUrl(url);
-        } else {
-            youtubeWebView.setVisibility(View.VISIBLE);
-            youtubeWebView.setWebViewClient(new WebViewClient() {
-                @Override
-                public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                    return false;
-                }
-            });
-            WebSettings webSettings = youtubeWebView.getSettings();
-            webSettings.setJavaScriptEnabled(true);
-            webSettings.setLoadWithOverviewMode(true);
-            webSettings.setUseWideViewPort(true);
-            youtubeWebView.loadUrl(url);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url_subjects,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        String resp = response;
+                        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getContext());
+                        pre.edit().putString("que_service", resp).apply();
 
-//            Uri uriUrl = Uri.parse(url);
-//            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
-//            startActivity(launchBrowser);
+                        pre.edit().putString("updated_at", (new Date()).toString()).apply();
 
-        }
+                        System.out.println(" (new Date()).toString() updated_at" + (new Date()).toString());
+
+//                                System.out.println("main resp is " + resp);
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                System.out.println("main resp is error " + error);
+
+            }
+
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("email", "bloger_api@datascienceplc.com");//public user
+                params.put("password", "public-password");
+                params.put("Authorization", "Basic YmxvZ2VyX2FwaUBkYXRhc2NpZW5jZXBsYy5jb206cHVibGljLXBhc3N3b3Jk");
+                return params;
+            }
+        };
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        stringRequest.setTag(this);
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+//            }
+//        }, 1500);
     }
 
+    private void isHasTobeUpdated() {
 
+        try
+
+    {
+        Date now = new Date();
+
+        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getContext());
+        Date updated_at = new Date(pre.getString("updated_at", "Oct 05 06:33:29 GMT+03:00 2020"));
+
+        System.out.println(" (new Date()).toString() updated_at" + now);
+        System.out.println(" (new Date()).toString() updated_at" + updated_at);
+
+        long diff = now.getTime() - updated_at.getTime();
+        long diffDays = diff / (24 * 60 * 60 * 1000);
+
+        System.out.println(" (new Date()).toString() updated_at" + diffDays);
+
+
+        if (diffDays > 7 || diffDays < 7) // not less than or grater than
+            doApiCall();
+
+    }catch(
+    Exception df)
+
+    {
+        doApiCall();
+    }
+}
 
 }
