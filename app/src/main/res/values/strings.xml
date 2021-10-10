@@ -1,21 +1,22 @@
 <resources>
 
-    <string name="adReaderInt">ca-app-pub-3940256099942544/1033173712</string>
-    <string name="adHome">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="adChapter">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="adQuestions">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="adReader">ca-app-pub-3940256099942544/6300978111</string>
+<!--    <string name="adReaderInt">ca-app-pub-3940256099942544/1033173712</string>-->
+<!--    <string name="adHome">ca-app-pub-3940256099942544/6300978111</string>-->
+<!--    <string name="adChapter">ca-app-pub-3940256099942544/6300978111</string>-->
+<!--    <string name="adQuestions">ca-app-pub-3940256099942544/6300978111</string>-->
+<!--    <string name="adReader">ca-app-pub-3940256099942544/6300978111</string>-->
 
-    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+<!--    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>-->
 
 
 
-<!--    <string name="adReaderInt">ca-app-pub-8011674951494696/4934737105</string>-->
-<!--    <string name="adHome">ca-app-pub-8011674951494696/8312993039</string>-->
-<!--    <string name="adChapter">ca-app-pub-8011674951494696/7079802411</string>-->
-<!--    <string name="adQuestions">ca-app-pub-8011674951494696/4170948875</string>-->
-<!--    <string name="adReader">ca-app-pub-8011674951494696/3605507555</string>-->
-<!--    <string name="admob_app_id">ca-app-pub-8011674951494696~8662393111</string>-->
+    <string name="adReaderInt">ca-app-pub-8011674951494696/4934737105</string>
+    <string name="adHome">ca-app-pub-8011674951494696/8312993039</string>
+    <string name="adChapter">ca-app-pub-8011674951494696/7079802411</string>
+    <string name="adQuestions">ca-app-pub-8011674951494696/4170948875</string>
+    <string name="adReader">ca-app-pub-8011674951494696/3605507555</string>
+
+    <string name="admob_app_id">ca-app-pub-8011674951494696~8662393111</string>
 
     <string name="app_name">1_12 Text Books</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -65,13 +66,13 @@
     <string name="insert_phone">አስገባ</string>
     <string name="insert_phone_eg">የሚሸለሙበትን የኢትዮጵያ ስልክ ቁጥር ያስገቡ (ለምሳሌ:- 0923481783)</string>
     <string name="እሺ">OK</string>
-    <string name="menu_ad_free">ፕሪሚየም</string>
+    <string name="menu_ad_free">ልዩ ተጠቃሚ</string>
     <string name="action_delete_subject">Delete Subject files</string>
     <string name="Delete">delete</string>
     <string name="yes">Yes</string>
-    <string name="menu_questions">Questions</string>
+    <string name="menu_questions">Worksheet</string>
 
-    <string name="intro"> የመልመጃ ጥያቄዎችን አሟልተን esknchers betgst    ይጠብቁ\n Telegram @ethio_textbooks 0923481783</string>
+    <string name="questions_intro">እባክዎን የመልመጃ ጥያቄዎቹ አሟልተን አስክናጠናቅቅ ያሉትን አየተጠቀሙ በትዕግስት ይጠብቁን።\n Telegram @ethio_textbooks 0923481783</string>
     <string name="start_questionnaire">መልመጃውን ጀምር</string>
     <string name="show_result">ውጤቴን አሳየኝ</string>
     <string name="about_short">*Free* apps from DataScience P.L.C.\nEmail: apps@datascienceplc.com</string>
@@ -83,11 +84,23 @@
     <string name="show_answer">መልሱን እዛው አሳይ</string>
     <string name="open_shortnote">Open note</string>
 
-    <string name="app_restart">This is your first time. Please connect to internet and restart the app!</string>
-    <string name="thanks_for_activated">Thank you! please restart the app</string>
-    <string name="wrong_code">Wrong or expired code used</string>
-    <string name="check_your_internet">Please check you internet or try again later</string>
-    <string name="premium_intro">Describ the advante of premium in short and provide click here link to the web</string>
+    <string name="app_restart">ጥያቄዎችን ለማንበብ ሲመጡ ይሄ የመጀመሪያዎ ነው። እባክዎን ኢንተርኔት መኖሩን ያረጋግጡና እንደገና ይሞክሩ የሚለውን ይጫኑ።</string>
+    <string name="thanks_for_activated">እናመሰግናለን! እባክዎን አፕልኬሽኑን ዘግተው ይክፈቱት።</string>
+    <string name="wrong_code">የተሳሳተ ወይም ጊዜው ያለፈበት ኮድ ተጠቅመዋል።</string>
+    <string name="check_your_internet">እባክዎን ኢንተርኔት መኖሩን ያረጋግጡ ወይም ትንሽ ቆይተው ይሞክሩ።</string>
+    <string name="premium_intro">በልዩ ተጠቃሚነት ከተመዘገቡ የጎግል ማስታወቂያ አይመጣቦትም። ለበለጠ መረጃ እዚህ ይጫኑ</string>
+    <string name="try_again">እንደገና ይሞክሩ</string>
+    <string name="loading">በመክፈት ላይ...</string>
+    <string name="your_name">የእርስዎ ስም</string>
+    <string name="phone">ስልክ ቁጥር</string>
+    <string name="code">ኮድ</string>
+    <string name="active">መዝግብ</string>
+    <string name="your_license_type">የልዩ ተጠቃሚነት አይነት : </string>
+    <string name="paid_date">የከፈሉበት ቀን : </string>
+    <string name="out_date">የሚያበቃበት ቀን : </string>
+    <string name="license_out_dated">የልዩ ተጠቃሚነት ጊዜዎ አልፏል! እባክዎን ያድሱ።</string>
+    <string name="license_not_out_dated">የልዩ ተጠቃሚነት ጊዜዎ አላለፈም። ስለተመዘገቡ እናመሰግናለን።</string>
+    <string name="not_registed">በልዩ ተጠቃሚነት አልተመዘገቡም። እባክዎን ይመዝገቡ።</string>
 
 
 </resources>

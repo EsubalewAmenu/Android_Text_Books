@@ -21,20 +21,22 @@
             android:layout_centerHorizontal="true"
             android:layout_alignParentLeft="false"
             android:layout_alignParentStart="false"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
             >
 
             <TextView
+                android:id="@+id/tvPremium"
                 android:textStyle="bold"
                 android:layout_gravity="left|right|center_horizontal|center_vertical|fill_horizontal|center|fill|start|end"
                 android:layout_weight="1.0"
                 android:layout_width="match_parent"
+                android:autoLink="web"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
                 android:text="@string/premium_intro"
 
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp"
                 android:textAllCaps="false"
                 android:textSize="18sp"/>
 
@@ -60,13 +62,9 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-<!--            <TextView-->
-<!--                android:id="@+id/tvMac"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Your id is 32534"/>-->
 
     <TextView
+        android:layout_gravity="left|right|center_horizontal|center_vertical|fill_horizontal|center|fill|start|end"
         android:layout_width = "wrap_content"
         android:layout_height = "wrap_content"
         android:text = "Your id is 32534"
@@ -82,7 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Payer name"
+                android:hint="@string/your_name"
                 android:inputType="textPersonName" />
 
             <EditText
@@ -90,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Phone"
+                android:hint="@string/phone"
                 android:inputType="phone" />
 
             <EditText
@@ -98,15 +96,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Code"
-                android:inputType="number" />
+                android:hint="@string/code"
+                android:inputType="text" />
 
 
-            <Button
-                android:id="@+id/btnUpdate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Activate" />
+    <Button
+        android:id="@+id/btnUpdate"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="30dp"
+        android:text="@string/active"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        />
+
+
+    <TextView
+        android:id="@+id/tvShow_license"
+        android:textStyle="bold"
+        android:layout_gravity="left|right|center_horizontal|center_vertical|fill_horizontal|center|fill|start|end"
+        android:layout_weight="1.0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Show users current license"
+        android:layout_centerVertical="true"
+        android:textAllCaps="false"
+        android:textSize="18sp"/>
+
+
+
 </LinearLayout>
 
         </LinearLayout>

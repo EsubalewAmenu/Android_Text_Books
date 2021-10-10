@@ -21,6 +21,8 @@
             android:layout_centerHorizontal="true"
             android:layout_alignParentLeft="false"
             android:layout_alignParentStart="false"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
             >
 
             <TextView
@@ -31,13 +33,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
-                android:text="@string/intro"
-
+                android:text="@string/questions_intro"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp"
                 android:textAllCaps="false"
                 android:textSize="18sp"/>
+
+
+            <Button
+                android:id="@+id/btnQuetionRetry"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/try_again"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                android:visibility="invisible"
+                />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -129,7 +141,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="22dp"
-                    android:text="Unit?"/>
+                    android:text="Unit/Chapter?"/>
 
                 <Spinner
                     android:id="@+id/spChapter"
@@ -137,6 +149,16 @@
                     android:layout_height="wrap_content"
                     android:textSize="22dp" />
 
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/linearLayoutOutOf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="invisible"
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -170,8 +192,6 @@
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp"
                 android:text="@string/start_questionnaire"
                 android:textAllCaps="false"
                 android:textSize="18sp"
@@ -185,8 +205,6 @@
                 android:textStyle="bold"
 
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp"
                 android:textAllCaps="false"
                 android:textSize="18sp"
                 android:visibility="gone"
@@ -198,8 +216,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp"
                 android:text="@string/show_result"
                 android:textAllCaps="false"
                 android:textSize="18sp"
@@ -280,8 +296,6 @@
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp"
                 android:text="@string/open_shortnote"
                 android:textAllCaps="false"
                 android:textSize="18sp"

@@ -43,7 +43,7 @@ import javax.net.ssl.X509TrustManager;
 
 public class SplashActivity extends AppCompatActivity {
 
-    public String BASEAPI = "https://datascienceplc.com/wp-json/DSACTIVATOR/v1/register?service_id=1";
+    public String BASEAPI = "https://datascienceplc.com/wp-json/";
 //    public String BASEAPI = "https://192.168.8.101:8082/wp/ds/wp-json/";
 
 //    String url = BASEAPI + "available/subjects";

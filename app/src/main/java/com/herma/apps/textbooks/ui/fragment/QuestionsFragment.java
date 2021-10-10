@@ -83,7 +83,7 @@ import java.util.Map;
  */
 public class QuestionsFragment extends Fragment {
     private static final int QUESTIONNAIRE_REQUEST = 2018;
-    Button resultButton, openNotesBtn;
+    Button resultButton, openNotesBtn, btnQuetionRetry;
     public String[] answerKey, response, responseShouldBe, current_questions, queId;
     public String timer, packege;
     public String[][] questionsWithAnswer;
@@ -97,7 +97,7 @@ public class QuestionsFragment extends Fragment {
     Spinner spGrade, spSubject, spChapter;
     HashMap<String, String> gradeMap, chapMap;//, schapMap;
 
-    LinearLayout linearLayoutGrade, linearLayoutSubject, linearLayoutUnit,
+    LinearLayout linearLayoutGrade, linearLayoutSubject, linearLayoutUnit, linearLayoutOutOf,
             linearLayoutsGrade, linearLayoutsSubject;//, linearLayoutsUnit;
     Spinner sspGrade, sspSubject;//, sspChapter;
 
@@ -129,6 +129,8 @@ public class QuestionsFragment extends Fragment {
         isHasTobeUpdated();
 
         questionnaireButton = rootView.findViewById(R.id.questionnaireButton);
+        btnQuetionRetry = rootView.findViewById(R.id.btnQuetionRetry);
+
         openNotesBtn = rootView.findViewById(R.id.shortnoteButton);
 
         resultButton = rootView.findViewById(R.id.resultButton);
@@ -156,6 +158,8 @@ public class QuestionsFragment extends Fragment {
         linearLayoutGrade = (LinearLayout) rootView.findViewById(R.id.linearLayoutGrade);
         linearLayoutSubject = (LinearLayout) rootView.findViewById(R.id.linearLayoutSubject);
         linearLayoutUnit = (LinearLayout) rootView.findViewById(R.id.linearLayoutUnit);
+        linearLayoutOutOf = (LinearLayout) rootView.findViewById(R.id.linearLayoutOutOf);
+
         ////
 
         sspGrade = (Spinner) rootView.findViewById(R.id.sspGrade);
@@ -175,6 +179,7 @@ public class QuestionsFragment extends Fragment {
         if (que_service_sting.equals("")) {
 //            Toast.makeText(getActivity(), "Please connect to internet & restart the app!", Toast.LENGTH_SHORT).show();
             textView2.setText( getString(R.string.app_restart ) );
+            btnQuetionRetry.setVisibility(View.VISIBLE);
         }
 
         show_answer.setChecked(pre.getBoolean("show_answer", true));
@@ -184,21 +189,21 @@ public class QuestionsFragment extends Fragment {
         questionServices(que_service_sting);
 //        shortnoteServices(que_service_sting);
 
-//        doGetRequestInit("https://datascienceplc.com/apps/manager/api/items/get_for_books?what=init");
 
-        //        https://datascienceplc.com/apps/manager/api/items/get_for_books?what=init
-
-//  //        String response = "{\"success\":true,\"error\":false,\"que_service\":[{\"id\":\"1\",\"grade\":\"12\",\"subject\":\"Biology\",\"chapter_name\":\"Unit\",\"chap\":[{\"id\":\"4567\",\"chapter\":\"1\"}]},{\"id\":\"2\",\"grade\":\"12\",\"subject\":\"Physics\",\"chapter_name\":\"Unit\",\"chap\":[]}]}";
-
-//        String response = "{\"success\":true,\"error\":false,\"que_service\":[{\"id\":\"1\",\"grade\":\"12\",\"subject\":\"Biology\",\"chapter_name\":\"Unit\",\"chap\":[{\"id\":\"4567\",\"chapter\":\"1\"}]},{\"id\":\"2\",\"grade\":\"12\",\"subject\":\"Physics\",\"chapter_name\":\"Unit\",\"chap\":[]}],\"short_services\":[{\"id\":\"4567\",\"grade\":\"12\",\"subject\":\"Biology\",\"en\":\"\",\"chap\":[]},{\"id\":\"4568\",\"grade\":\"12\",\"subject\":\"Physics\",\"en\":\"\",\"chap\":[{\"id\":\"4567\",\"chaptername\":\"1\",\"file_url\":\"fgdhh\"},{\"id\":\"4568\",\"chaptername\":\"2\",\"file_url\":\"ghjfh\"}]}]}";
-
+        btnQuetionRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnQuetionRetry.setEnabled(false);
+                doApiCall();
+            }
+        });
 
         questionnaireButton.setOnClickListener(v -> {
             resultButton.setVisibility(View.GONE);
             txtScore.setVisibility(View.GONE);
 
 
-            questionnaireButton.setText("Loading...");
+            questionnaireButton.setText(getString(R.string.loading) );
             questionnaireButton.setEnabled(false);
 
 
@@ -207,7 +212,7 @@ public class QuestionsFragment extends Fragment {
                 Toast.makeText(getActivity(), "Please check your internet!", Toast.LENGTH_SHORT).show();
 
 
-                questionnaireButton.setText("Start");
+                questionnaireButton.setText(getString(R.string.start_questionnaire));
                 questionnaireButton.setEnabled(true);
 
             } else
@@ -298,7 +303,7 @@ public class QuestionsFragment extends Fragment {
                                 questions.putExtra("que", response);
                                 startActivityForResult(questions, QUESTIONNAIRE_REQUEST);
 
-                                questionnaireButton.setText("Start");
+                                questionnaireButton.setText(getString(R.string.start_questionnaire));
                                 questionnaireButton.setEnabled(true);
 
                             }
@@ -307,7 +312,7 @@ public class QuestionsFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        questionnaireButton.setText("Start");
+                        questionnaireButton.setText(getString(R.string.start_questionnaire) );
                         questionnaireButton.setEnabled(true);
 
                         System.out.println("some error! " + error);
@@ -596,6 +601,7 @@ public class QuestionsFragment extends Fragment {
                                     JSONArray datas = jsonObj.getJSONArray("chap");
 //            stringsGrades = new String[datas.length()];
                                     linearLayoutUnit.setVisibility(View.VISIBLE);
+                                    linearLayoutOutOf.setVisibility(View.VISIBLE);
                                     chapMap = new LinkedHashMap<>();
                                     JSONObject c;
                                     for (int i = 0; i < datas.length(); i++) {
@@ -867,6 +873,11 @@ public class QuestionsFragment extends Fragment {
 
                         pre.edit().putString("updated_at", (new Date()).toString()).apply();
 
+                        btnQuetionRetry.setVisibility(View.GONE);
+
+                        questionServices(resp);
+                        textView2.setText( getString(R.string.questions_intro ) );
+
                         System.out.println(" (new Date()).toString() updated_at" + (new Date()).toString());
 
 //                                System.out.println("main resp is " + resp);
@@ -875,6 +886,9 @@ public class QuestionsFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                Toast.makeText(getContext(), getString(R.string.check_your_internet), Toast.LENGTH_SHORT).show();
+                btnQuetionRetry.setEnabled(true);
 
                 System.out.println("main resp is error " + error);
 
@@ -912,9 +926,6 @@ public class QuestionsFragment extends Fragment {
 
         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getContext());
         Date updated_at = new Date(pre.getString("updated_at", "Oct 05 06:33:29 GMT+03:00 2020"));
-
-        System.out.println(" (new Date()).toString() updated_at" + now);
-        System.out.println(" (new Date()).toString() updated_at" + updated_at);
 
         long diff = now.getTime() - updated_at.getTime();
         long diffDays = diff / (24 * 60 * 60 * 1000);

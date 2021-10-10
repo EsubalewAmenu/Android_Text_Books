@@ -2,12 +2,14 @@ package com.herma.apps.textbooks.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,21 +30,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.herma.apps.textbooks.R;
-import com.herma.apps.textbooks.ReadActivity;
 import com.herma.apps.textbooks.SplashActivity;
-import com.herma.apps.textbooks.common.Commons;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
 
 import javax.net.ssl.HostnameVerifier;
@@ -52,19 +50,14 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-
 public class PremiumFragment extends Fragment {
 
 
     Button btnUpdate;
 
     EditText etName, etPhone, etCode;
-    TextView tvMac;
+    TextView tvMac, tvShow_license, tvPremium;
 
-    @SuppressLint("WifiManagerLeak")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_premium, container, false);
@@ -76,39 +69,33 @@ public class PremiumFragment extends Fragment {
         etPhone = (EditText) root.findViewById(R.id.etPhone);
 
         tvMac = (TextView) root.findViewById(R.id.tvMac);
+        tvShow_license = (TextView) root.findViewById(R.id.tvShow_license);
+        tvPremium = (TextView) root.findViewById(R.id.tvPremium);
 
-        final String macAddr, androidId;
-        UUID deviceUuid;
+        tvPremium.setMovementMethod(LinkMovementMethod.getInstance());
+        tvPremium.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                browserIntent.setData(Uri.parse("http://datascienceplc.com/services?textbooks"));
+                startActivity(browserIntent);
+            }
+        });
 
-//        String macAddress;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+//        String deviceUuid = UUID.randomUUID().toString().substring(0,6).toUpperCase();
+        String deviceUuid = Settings.Secure.getString(getContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID).substring(0,6).toUpperCase();
+        tvMac.setText("ID : " + deviceUuid);
 
-            WifiManager wifiMan = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
-            WifiInfo wifiInf = wifiMan.getConnectionInfo();
+//        handleSSLHandshake();
 
-            macAddr = wifiInf.getMacAddress();
-            androidId = "" + android.provider.Settings.Secure.getString(getActivity().getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-
-            deviceUuid = new UUID(androidId.hashCode(), macAddr.hashCode());
-
-        }
-        else {
-            androidId = "" + android.provider.Settings.Secure.getString(getActivity().getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-            deviceUuid = new UUID(androidId.hashCode(), new Random(999999).nextLong() );
-        }
-
-
-        tvMac.setText("Your id is :" + deviceUuid.toString().substring(0,6));
-
-        handleSSLHandshake();
-
+        showUsersLicense();
 
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 //                String _phone = "0923481783", _mac = "MMAC", _license_code="5335", _name="Grains";
-                String _phone = etPhone.getText().toString(), _mac = deviceUuid.toString().substring(0,6),
+                String _phone = etPhone.getText().toString(), _mac = deviceUuid,
                         _license_code = etCode.getText().toString(), _name = etName.getText().toString();
 
                 System.out.println("print daata " + _phone+ _mac+ _license_code+ _name);
@@ -120,6 +107,46 @@ public class PremiumFragment extends Fragment {
         return root;
     }
 
+    public void showUsersLicense(){
+
+
+                try {
+                    SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    String license_type = pre.getString("license_type", "");
+                    String paid_date = pre.getString("paid_date", "");
+                    String out_date = pre.getString("out_date", "");
+                    String last_update = pre.getString("last_update", "");
+
+                    String newLine = System.getProperty("line.separator");
+
+                    String show = newLine;
+
+                    if (!license_type.equals("")) {
+
+                        if(license_type.equals("1"))  show += getString(R.string.your_license_type) + "Silver";
+                        else if(license_type.equals("2"))  show += getString(R.string.your_license_type) + "Gold";
+
+                        show += newLine + getString(R.string.paid_date) + paid_date;
+                        show += newLine + getString(R.string.out_date) + out_date;
+
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+                        Date last_updateDate = sdf.parse(last_update);
+                        Date out_dateDate = sdf.parse(out_date);
+
+                        if (last_updateDate.compareTo(out_dateDate) > 0) { // if expired
+                            show += newLine + newLine + getString(R.string.license_out_dated);
+                        } else {
+                            show += newLine + newLine + getString(R.string.license_not_out_dated);
+                        }
+                        tvShow_license.setText(show);
+                    } else { // if not licensed
+                        tvShow_license.setText(R.string.not_registed);
+                    }
+
+                }catch (Exception lk) {System.out.println("Exeption from premiumFragment " + lk); }
+    }
     private void makePremiumAPI(String _phone, String _mac, String _license_code, String _name) {
         new Handler().postDelayed(new Runnable() {
 
@@ -161,16 +188,19 @@ public class PremiumFragment extends Fragment {
 
                                     String license_code = jsonObj.getString("license_code");
                                     String license_type = jsonObj.getString("license_type");
-                                    String out_date = jsonObj.getString("out_date");
+                                            String paid_date = jsonObj.getString("paid_date");
+                                            String out_date = jsonObj.getString("out_date");
                                             String last_update = jsonObj.getString("last_update");
                                     //
-                                            System.out.println("license_code "+license_code + " license_type="+license_type+" out_date="+out_date+" last_update="+last_update);
+                                            System.out.println("license_code "+license_code + " license_type="+license_type+" paid_date="+paid_date+" out_date="+out_date+" last_update="+last_update);
 
                                             SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getContext());
                                             pre.edit().putString("license_type", license_type ).apply();
+                                            pre.edit().putString("paid_date", paid_date ).apply();
                                             pre.edit().putString("out_date", out_date ).apply();
                                             pre.edit().putString("last_update", last_update ).apply();
 
+                                            showUsersLicense();
 
                                             Toast.makeText(getContext(), getString(R.string.thanks_for_activated), Toast.LENGTH_SHORT).show();
 

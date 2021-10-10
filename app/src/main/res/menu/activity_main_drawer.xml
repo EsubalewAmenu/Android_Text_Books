@@ -70,7 +70,7 @@
             android:title="@string/menu_g9t" />
         <item
             android:id="@+id/nav_questions"
-            android:icon="@android:drawable/ic_dialog_dialer"
+            android:icon="@drawable/questions"
             android:title="@string/menu_questions" />
     </group>
 
@@ -87,7 +87,7 @@
         <menu>
                         <item
                             android:id="@+id/nav_ad_free"
-                            android:icon="@android:drawable/star_big_on"
+                            android:icon="@drawable/premium"
                             android:title="@string/menu_ad_free" />
             <item
                 android:id="@+id/nav_rate"
