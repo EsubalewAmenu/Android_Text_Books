@@ -1,14 +1,12 @@
 package com.herma.apps.textbooks.ui.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +56,9 @@ public class PremiumFragment extends Fragment {
     EditText etName, etPhone, etCode;
     TextView tvMac, tvShow_license, tvPremium;
 
+    String license_type, paid_date, out_date, last_update, deviceUuid;
+
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_premium, container, false);
@@ -76,14 +77,26 @@ public class PremiumFragment extends Fragment {
         tvPremium.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setData(Uri.parse("http://datascienceplc.com/services?textbooks"));
+                browserIntent.setData(Uri.parse("http://datascienceplc.com/services?activation=textbooks"));
                 startActivity(browserIntent);
             }
         });
 
-//        String deviceUuid = UUID.randomUUID().toString().substring(0,6).toUpperCase();
-        String deviceUuid = Settings.Secure.getString(getContext().getContentResolver(),
-                Settings.Secure.ANDROID_ID).substring(0,6).toUpperCase();
+        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getContext());
+        license_type = pre.getString("license_type", "");
+        paid_date = pre.getString("paid_date", "");
+        out_date = pre.getString("out_date", "");
+        last_update = pre.getString("last_update", "");
+
+        deviceUuid = pre.getString("deviceUuid", "");
+
+        if(deviceUuid.equals("")) {
+            deviceUuid = UUID.randomUUID().toString().substring(0, 6).toUpperCase();
+
+            pre.edit().putString("deviceUuid", deviceUuid ).apply();
+
+        }
+
         tvMac.setText("ID : " + deviceUuid);
 
 //        handleSSLHandshake();
@@ -98,9 +111,12 @@ public class PremiumFragment extends Fragment {
                 String _phone = etPhone.getText().toString(), _mac = deviceUuid,
                         _license_code = etCode.getText().toString(), _name = etName.getText().toString();
 
-                System.out.println("print daata " + _phone+ _mac+ _license_code+ _name);
-                makePremiumAPI(_phone, _mac, _license_code, _name);
-
+                if(_phone.equals("") || _license_code.equals("") || _mac.equals("") || _name.equals("") ){
+                    Toast.makeText(getContext(), getString(R.string.fill_the_form), Toast.LENGTH_SHORT).show();
+                }else {
+                    System.out.println("print daata " + _phone + _mac + _license_code + _name);
+                    makePremiumAPI(_phone, _mac, _license_code, _name);
+                }
             }
         });
 
@@ -111,11 +127,6 @@ public class PremiumFragment extends Fragment {
 
 
                 try {
-                    SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getContext());
-                    String license_type = pre.getString("license_type", "");
-                    String paid_date = pre.getString("paid_date", "");
-                    String out_date = pre.getString("out_date", "");
-                    String last_update = pre.getString("last_update", "");
 
                     String newLine = System.getProperty("line.separator");
 
@@ -186,11 +197,11 @@ public class PremiumFragment extends Fragment {
 
                                             jsonObj = new JSONObject(jsonObj.getString("activator"));
 
-                                    String license_code = jsonObj.getString("license_code");
-                                    String license_type = jsonObj.getString("license_type");
-                                            String paid_date = jsonObj.getString("paid_date");
-                                            String out_date = jsonObj.getString("out_date");
-                                            String last_update = jsonObj.getString("last_update");
+                                            String license_code = jsonObj.getString("license_code");
+                                    license_type = jsonObj.getString("license_type");
+                                            paid_date = jsonObj.getString("paid_date");
+                                             out_date = jsonObj.getString("out_date");
+                                            last_update = jsonObj.getString("last_update");
                                     //
                                             System.out.println("license_code "+license_code + " license_type="+license_type+" paid_date="+paid_date+" out_date="+out_date+" last_update="+last_update);
 
@@ -202,11 +213,11 @@ public class PremiumFragment extends Fragment {
 
                                             showUsersLicense();
 
-                                            Toast.makeText(getContext(), getString(R.string.thanks_for_activated), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), getString(R.string.thanks_for_activated), Toast.LENGTH_LONG).show();
 
                                         }else
                                         {
-                                            Toast.makeText(getContext(), getString( R.string.wrong_code ), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), getString( R.string.wrong_code ), Toast.LENGTH_LONG).show();
 //                                            System.out.println("activator is not correct");
                                         }
 

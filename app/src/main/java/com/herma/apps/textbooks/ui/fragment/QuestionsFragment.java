@@ -137,9 +137,10 @@ public class QuestionsFragment extends Fragment {
 
         textView2 = (TextView) rootView.findViewById(R.id.textView2);
 
+
         txtScore = (TextView) rootView.findViewById(R.id.txtScore);
         doneQuestions = (TextView) rootView.findViewById(R.id.doneQuestions);
-        percentAnsQue = (TextView) rootView.findViewById(R.id.percentAnsQue);
+//        percentAnsQue = (TextView) rootView.findViewById(R.id.percentAnsQue);
         imgBadge = (ImageView) rootView.findViewById(R.id.imgBadge);
 
         youtubeWebView = (WebView) rootView.findViewById(R.id.youtube_web_view);
@@ -180,6 +181,14 @@ public class QuestionsFragment extends Fragment {
 //            Toast.makeText(getActivity(), "Please connect to internet & restart the app!", Toast.LENGTH_SHORT).show();
             textView2.setText( getString(R.string.app_restart ) );
             btnQuetionRetry.setVisibility(View.VISIBLE);
+        }else{
+            textView2.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                    browserIntent.setData(Uri.parse("https://t.me/ethio_textbooks"));
+                    startActivity(browserIntent);
+                }
+            });
         }
 
         show_answer.setChecked(pre.getBoolean("show_answer", true));
@@ -193,8 +202,13 @@ public class QuestionsFragment extends Fragment {
         btnQuetionRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnQuetionRetry.setEnabled(false);
-                doApiCall();
+
+                if(isOnline()) {
+                    btnQuetionRetry.setEnabled(false);
+                    doApiCall();
+                }else
+                Toast.makeText(getContext(), getString(R.string.check_your_internet), Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -887,10 +901,10 @@ public class QuestionsFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                Toast.makeText(getContext(), getString(R.string.check_your_internet), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), getString(R.string.check_your_internet), Toast.LENGTH_SHORT).show();
                 btnQuetionRetry.setEnabled(true);
 
-                System.out.println("main resp is error " + error);
+//                System.out.println("main resp is error " + error);
 
             }
 

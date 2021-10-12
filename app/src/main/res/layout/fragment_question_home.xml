@@ -34,6 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
                 android:text="@string/questions_intro"
+                android:autoLink="web"
                 android:layout_centerVertical="true"
                 android:textAllCaps="false"
                 android:textSize="18sp"/>
@@ -74,14 +75,6 @@
                     android:progressDrawable="@drawable/custom_progress" />
 
             </LinearLayout>
-            <TextView
-                android:id="@+id/percentAnsQue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:textAllCaps="false"
-                android:textSize="18sp"/>
-
 
             <LinearLayout
                 android:id="@+id/linearLayoutGrade"
@@ -95,13 +88,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="22dp"
-                    android:text="What Grade are you?"/>
+                    android:text="Grade : "/>
 
                 <Spinner
                     android:id="@+id/spGrade"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="22dp" />
+                    android:textSize="22dp"
+
+                    />
 
 
             </LinearLayout>
@@ -118,13 +113,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="22dp"
-                    android:text="Subject?"/>
+                    android:text="Subject : " />
 
                 <Spinner
                     android:id="@+id/spSubject"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="22dp" />
+                    android:textSize="22dp"
+                    />
 
 
             </LinearLayout>
@@ -141,13 +137,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="22dp"
-                    android:text="Unit/Chapter?"/>
+                    android:text="Unit/Chapter : "/>
 
                 <Spinner
                     android:id="@+id/spChapter"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="22dp" />
+                    android:textSize="22dp"
+                    />
 
             </LinearLayout>
 
@@ -164,7 +161,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="22dp"
-                    android:text="Take Out of "/>
+                    android:text="Take Out of  : "/>
 
                 <EditText
                     android:id="@+id/etOutOf"

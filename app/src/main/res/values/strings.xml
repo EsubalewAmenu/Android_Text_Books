@@ -72,7 +72,7 @@
     <string name="yes">Yes</string>
     <string name="menu_questions">Worksheet</string>
 
-    <string name="questions_intro">እባክዎን የመልመጃ ጥያቄዎቹ አሟልተን አስክናጠናቅቅ ያሉትን አየተጠቀሙ በትዕግስት ይጠብቁን።\n Telegram @ethio_textbooks 0923481783</string>
+    <string name="questions_intro">እባክዎን የመልመጃ ጥያቄዎቹ አሟልተን አስክናጠናቅቅ ያሉትን አየተጠቀሙ በትዕግስት ይጠብቁን።\n\nTelegram @ethio_textbooks 0923481783</string>
     <string name="start_questionnaire">መልመጃውን ጀምር</string>
     <string name="show_result">ውጤቴን አሳየኝ</string>
     <string name="about_short">*Free* apps from DataScience P.L.C.\nEmail: apps@datascienceplc.com</string>
@@ -84,7 +84,7 @@
     <string name="show_answer">መልሱን እዛው አሳይ</string>
     <string name="open_shortnote">Open note</string>
 
-    <string name="app_restart">ጥያቄዎችን ለማንበብ ሲመጡ ይሄ የመጀመሪያዎ ነው። እባክዎን ኢንተርኔት መኖሩን ያረጋግጡና እንደገና ይሞክሩ የሚለውን ይጫኑ።</string>
+    <string name="app_restart">ጥያቄዎችን ለመለማመድ ሲመጡ ይሄ የመጀመሪያዎ ነው። እባክዎን ኢንተርኔት መኖሩን ያረጋግጡና \"እንደገና ይሞክሩ\" የሚለውን ይጫኑ።</string>
     <string name="thanks_for_activated">እናመሰግናለን! እባክዎን አፕልኬሽኑን ዘግተው ይክፈቱት።</string>
     <string name="wrong_code">የተሳሳተ ወይም ጊዜው ያለፈበት ኮድ ተጠቅመዋል።</string>
     <string name="check_your_internet">እባክዎን ኢንተርኔት መኖሩን ያረጋግጡ ወይም ትንሽ ቆይተው ይሞክሩ።</string>
@@ -99,8 +99,9 @@
     <string name="paid_date">የከፈሉበት ቀን : </string>
     <string name="out_date">የሚያበቃበት ቀን : </string>
     <string name="license_out_dated">የልዩ ተጠቃሚነት ጊዜዎ አልፏል! እባክዎን ያድሱ።</string>
-    <string name="license_not_out_dated">የልዩ ተጠቃሚነት ጊዜዎ አላለፈም። ስለተመዘገቡ እናመሰግናለን።</string>
+    <string name="license_not_out_dated">አፕልኬሽኑን ከስልኮ ላይ ካጠፉት ልዩ ተጠቃሚነት ዋጋ አይኖረውም።\nስለተመዘገቡ እናመሰግናለን።</string>
     <string name="not_registed">በልዩ ተጠቃሚነት አልተመዘገቡም። እባክዎን ይመዝገቡ።</string>
+    <string name="fill_the_form">እባክዎን በቅድምያ ከላይ ያሉትን ይሙሉ።</string>
 
 
 </resources>
