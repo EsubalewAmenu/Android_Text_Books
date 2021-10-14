@@ -217,8 +217,8 @@ ProgressDialog progressBar;
 
 
         new AlertDialog.Builder(context)
-                .setTitle("Delete Subject files")
-                .setMessage("Are you sure you want to delete files?")
+                .setTitle("እርግጠኛ ኖት?")
+                .setMessage("የዚህን የትምህርት አይነት ምዕራፎች ማጥፋት ይፈልጋሉ?")
 
                 // Specifying a listener allows you to take an action before dismissing the dialog.
                 // The dialog is automatically dismissed when a dialog button is clicked.
@@ -236,14 +236,14 @@ ProgressDialog progressBar;
                             }
                         }
 
-                        Toast.makeText(context, "You can download again at anytime :)", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context,  R.string.you_can_download_again, Toast.LENGTH_LONG).show();
 
 
                     }
                 })
 
                 // A null listener allows the button to dismiss the dialog and take no further action.
-                .setNegativeButton(android.R.string.no, null)
+                .setNegativeButton(R.string.cancel, null)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
 

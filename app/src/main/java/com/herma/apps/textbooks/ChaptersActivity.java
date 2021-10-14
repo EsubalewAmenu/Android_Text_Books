@@ -1,8 +1,11 @@
 package com.herma.apps.textbooks;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -22,6 +25,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.herma.apps.textbooks.common.FileUtils;
 import com.herma.apps.textbooks.common.MainAdapter;
 import com.herma.apps.textbooks.common.Commons;
 import com.herma.apps.textbooks.common.DB;
@@ -39,6 +43,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class ChaptersActivity extends AppCompatActivity {
@@ -55,6 +64,8 @@ public class ChaptersActivity extends AppCompatActivity {
     String FILEPATH = "/storage/emulated/0/Herma/books/";
 
     boolean is_short;
+
+    private static final int MY_RESULT_CODE_FILECHOOSER = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +145,18 @@ public class ChaptersActivity extends AppCompatActivity {
         switch (id) {
             case android.R.id.home: // handle back arrow click here
                 finish(); // close this activity and return to preview activity (if there is any)
+                return true;
+            case R.id.action_insert_subject:
+
+
+                Intent chooseFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                chooseFileIntent.setType("*/*");
+                // Only return URIs that can be opened with ContentResolver
+                chooseFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
+
+                chooseFileIntent = Intent.createChooser(chooseFileIntent, "Choose a file");
+                startActivityForResult(chooseFileIntent, MY_RESULT_CODE_FILECHOOSER);
+
                 return true;
             case R.id.action_delete_subject:
 
@@ -293,4 +316,160 @@ try {
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case MY_RESULT_CODE_FILECHOOSER:
+                if (resultCode == Activity.RESULT_OK ) {
+                    if(data != null)  {
+                        Uri fileUri = data.getData();
+//                        Log.i(LOG_TAG, "Uri: " + fileUri);
+
+                        String filePath = null;
+                        try {
+//                            System.out.println("filePath fileUri is " + fileUri);
+                            System.out.println("filePath is " + filePath);
+
+                            filePath = FileUtils.getPath(getApplicationContext(), fileUri);
+
+//                             copy to FILEPATH + fName
+                            File fileSource = new File(filePath);
+                            File fileDest = new File(FILEPATH + fName);
+
+                            copyChapter(fileSource, fileDest);
+
+                        } catch (Exception e) {
+                            System.out.println("Error: " + e);
+                            Toast.makeText(getApplicationContext(), "Error: " + e, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void copyChapter(File src, File dst) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("እርግጠኛ ኖት?");
+        builder.setMessage("\"" + src.getName() + "\" ማስገባት ይፈልጋሉ?");
+
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing but close the dialog
+
+
+                try {
+                    final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+                    if(isKitKat){
+                        try (InputStream in = new FileInputStream(src)) {
+                            try (OutputStream out = new FileOutputStream(dst)) {
+                                // Transfer bytes from in to out
+                                byte[] buf = new byte[1024];
+                                int len;
+                                while ((len = in.read(buf)) > 0) {
+                                    out.write(buf, 0, len);
+                                }
+                            }
+                        }
+                    }else {
+                        InputStream in = new FileInputStream(src);
+                        try {
+                            OutputStream out = new FileOutputStream(dst);
+                            try {
+                                // Transfer bytes from in to out
+                                byte[] buf = new byte[1024];
+                                int len;
+                                while ((len = in.read(buf)) > 0) {
+                                    out.write(buf, 0, len);
+                                }
+                            } finally {
+                                out.close();
+                            }
+                        } finally {
+                            in.close();
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                // Do nothing
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+//    public void copyChapter(File src, File dst) throws Exception {
+//        System.out.println("print from 0");
+//
+//        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                switch (which){
+//                    case DialogInterface.BUTTON_POSITIVE:
+//                        //Yes button clicked
+//                        System.out.println("print from 1");
+//                        try {
+//                        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+//                        if(isKitKat){
+//                                try (InputStream in = new FileInputStream(src)) {
+//                                    try (OutputStream out = new FileOutputStream(dst)) {
+//                                        // Transfer bytes from in to out
+//                                        byte[] buf = new byte[1024];
+//                                        int len;
+//                                        while ((len = in.read(buf)) > 0) {
+//                                            out.write(buf, 0, len);
+//                                        }
+//                                    }
+//                                }
+//                        }else {
+//                            InputStream in = new FileInputStream(src);
+//                            try {
+//                                OutputStream out = new FileOutputStream(dst);
+//                                try {
+//                                    // Transfer bytes from in to out
+//                                    byte[] buf = new byte[1024];
+//                                    int len;
+//                                    while ((len = in.read(buf)) > 0) {
+//                                        out.write(buf, 0, len);
+//                                    }
+//                                } finally {
+//                                    out.close();
+//                                }
+//                            } finally {
+//                                in.close();
+//                            }
+//                        }
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                        break;
+//
+//                    case DialogInterface.BUTTON_NEGATIVE:
+//                        //No button clicked
+//                        break;
+//                }
+//            }
+//        };
+//
+//
+//    }
+
 }

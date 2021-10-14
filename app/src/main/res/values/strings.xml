@@ -30,10 +30,10 @@
     <string name="downloading">በማውረዳ ላይ/Downloading...</string>
     <string name="download">አውርድ/Download</string>
     <string name="browserDownload">ከTelegram አውርድ</string>
-    <string name="cancel">ተወው</string>
+    <string name="cancel">አይ, ተወው</string>
     <string name="no_file">ፋይሉ የሎትም።</string>
     <string name="no_file_desc_pre">\'</string>
-    <string name="no_file_desc_pos">\' የሚለውን ከጓደኛዎ \'Herma/books\' ፎልደር ውስጥ ይውሰዱ ወይም ከዚሁ ያውርዱ\n\nለማውረድ Wi-Fi እንዲጠቀሙ እንመክራለን ወይም ኔትዎርክ በማይጨናነቅበት ሰአት ያውርዱ\n\nደካማ ኮኔክሽን ከሆነ ያሎት ከTelegram ያውርዱና \'Herma/books\' ፎልደር ውስጥ ያስቀምጡት።</string>
+    <string name="no_file_desc_pos">\' የሚለውን ለማውረድ Wi-Fi እንዲጠቀሙ እንመክራለን ወይም ኔትዎርክ በማይጨናነቅበት ሰአት ያውርዱ\n\nደካማ ኮኔክሽን ከሆነ ያሎት ከTelegram ያውርዱና ከላይ ያለውን 3 ነጠብጣብ ነክተው \"ምዕራፍ አስገባ\" የሚለውን ይምረጡ።</string>
     <string name="try_later">"No/Slow internet connection! Please try later"</string>
 
     <string name="share_link_pre">Hey! Have you downloaded </string>
@@ -69,9 +69,9 @@
     <string name="insert_phone_eg">የሚሸለሙበትን የኢትዮጵያ ስልክ ቁጥር ያስገቡ (ለምሳሌ:- 0923481783)</string>
     <string name="እሺ">OK</string>
     <string name="menu_ad_free">ልዩ ተጠቃሚ</string>
-    <string name="action_delete_subject">Delete Subject files</string>
+    <string name="action_delete_subject">ምራፎቹን አጥፋ</string>
     <string name="Delete">delete</string>
-    <string name="yes">Yes</string>
+    <string name="yes">አዎ</string>
     <string name="menu_questions">Worksheet</string>
 
     <string name="questions_intro">እባክዎን የመልመጃ ጥያቄዎቹን አሟልተን አስክናጠናቅቅ ያሉትን አየተጠቀሙ በትዕግስት ይጠብቁን።\n\nTelegram @ethio_textbooks 0923481783</string>
@@ -104,6 +104,8 @@
     <string name="license_not_out_dated">አፕልኬሽኑን ከስልኮ ላይ ካጠፉት ልዩ ተጠቃሚነት ዋጋ አይኖረውም።\nስለተመዘገቡ እናመሰግናለን።</string>
     <string name="not_registed">በልዩ ተጠቃሚነት አልተመዘገቡም። እባክዎን ይመዝገቡ።</string>
     <string name="fill_the_form">እባክዎን በቅድምያ ከላይ ያሉትን ይሙሉ።</string>
+    <string name="action_insert_subject">ምዕራፍ አስገባ</string>
+    <string name="you_can_download_again">በማንኛውም ጊዜ እንደገና ማውረድ ይችላሉ :)</string>
 
 
 </resources>
