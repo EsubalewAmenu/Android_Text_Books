@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity
 //    NavigationView.OnNavigationItemSelectedListener item_click_listener;
 //    ActionBarDrawerToggle mDrawerToggle;
 //    ArrayList<String> menuItemsArray;
-    int choosedGrade = 1, closeCounter = 1;
+    String choosedGrade = "1"; int closeCounter = 1;
 
     FragmentManager mFragmentManager;
     FragmentTransaction mFragmentTransaction;
@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity
     private AdView mAdView;
 
     QuestionsFragment questionsFragment;
+
+    SharedPreferences pre;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,30 +104,18 @@ public class MainActivity extends AppCompatActivity
 //        try { grades = getGradesFromDB(MainActivity.this);} catch (Exception e) { e.printStackTrace(); }
 
 
-        if (getIntent().getExtras() != null) {
-//            spin.setSelection(getIntent().getIntExtra("choosedGrade", 0)-1);
-            p = getIntent().getStringExtra("choosedP");
-            choosedGrade = getIntent().getIntExtra("choosedGrade", 1);
-            choosedGradeT = getIntent().getStringExtra("choosedGradeT");
-        }
+//        if (getIntent().getExtras() != null) {
+////            spin.setSelection(getIntent().getIntExtra("choosedGrade", 0)-1);
+//            p = getIntent().getStringExtra("choosedP");
+//            choosedGrade = getIntent().getIntExtra("choosedGrade", 1);
+//            choosedGradeT = getIntent().getStringExtra("choosedGradeT");
+//        }
+
+        pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        choosedGrade = pre.getString("choosedGrade", "1");
+        choosedGradeT = pre.getString("choosedGradeT", "");
 
         changeFragment(choosedGrade+"", choosedGradeT);
-
-
-//        menuItemsArray = new ArrayList<String>();
-
-//        try {
-//            gradeMap = getSubjectsFromDB(MainActivity.this, selectedGrade);
-//
-//            for (Map.Entry<String, String> entry : gradeMap.entrySet()) {
-//                menuItemsArray.add(entry.getKey());
-//            }
-//
-//        } catch (Exception e) {e.printStackTrace();}
-//        setMenuItems(menuItemsArray);
-
-
-        /////////////
 
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
@@ -232,7 +222,7 @@ public class MainActivity extends AppCompatActivity
 
         ArrayList arrayList = new ArrayList<>();
 
-        final Cursor subjectsCursor = db.getSelect("*", "books", "grade='" + gradeCursor.getString(2) + "' and gtype='" + gradeCursor.getString(3) + "'");
+        final Cursor subjectsCursor = db.getSelect("*", "books", "grade='" + gradeCursor.getString(2) + "' and gtype='" + gradeCursor.getString(3) + "' ORDER BY name ASC");
         if (subjectsCursor.moveToFirst()) {
             do {
                 arrayList.add(new Item("", subjectsCursor.getString(2), subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
@@ -455,6 +445,10 @@ public class MainActivity extends AppCompatActivity
             mFragmentTransaction.replace(R.id.containerView, questionsFragment).commit();
             setTitle("Worksheet");
 
+
+//            pre.edit().putString("choosedGrade", "17" ).apply();
+//            pre.edit().putString("choosedGradeT", "Worksheet").apply();
+
         }else if (id == R.id.nav_share) {
                 Intent intent4 = new Intent("android.intent.action.SEND");
                 intent4.setType("text/plain");
@@ -504,12 +498,8 @@ public class MainActivity extends AppCompatActivity
         mFragmentTransaction.replace(R.id.containerView,bookFragment).commit();
         setTitle(title);
 
-//        System.out.println("shared graded is " + grade);
-//        SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPref.edit();
-//        editor.putString("choosedGrade", grade);
-//        editor.putString("choosedGradeT", title);
-//        editor.apply();
+        pre.edit().putString("choosedGrade", grade ).apply();
+        pre.edit().putString("choosedGradeT", title).apply();
 
     }
 

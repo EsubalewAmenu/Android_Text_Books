@@ -1,6 +1,6 @@
 <resources>
 
-    <!--    <string name="adQuestionsInt">ca-app-pub-3940256099942544/1033173712</string>-->
+<!--        <string name="adQuestionsInt">ca-app-pub-3940256099942544/1033173712</string>-->
 <!--    <string name="adReaderInt">ca-app-pub-3940256099942544/1033173712</string>-->
 <!--    <string name="adHome">ca-app-pub-3940256099942544/6300978111</string>-->
 <!--    <string name="adChapter">ca-app-pub-3940256099942544/6300978111</string>-->
@@ -43,7 +43,7 @@
     <string name="app_description">ይህ አፕሊኬሽን ከ 1-12ተኛ ክፍል ያሉ የመማሪያ መፃሕፍትን አካቶ የያዘ ነው። ለተማሪዎች እና ለመምህራን በጣም ጠቃሚ እንደሆነ ይታመናል። በነፃ መጠቀምም ሆነ ማውረድ/Download ማድረግ ይቻላል! ይህ አፕ የወረቀቱን መፅሐፎች መስልካችን ላይ በቀላሉ እንድንገለገልበት ተደርጎ የተሰራ ስለሆነ በየትኛውም ቦታ እና ጊዜ መጠቀም የሚያስችል ነው።</string>
     <string name="about">ስለ</string>
     <string name="menu_share">Tell a friend (Link)</string>
-    <string name="action_rate">አስተያየቶን ይስጡን</string>
+    <string name="action_rate">አስተያየቶን ይስጡን (5 Star)</string>
     <string name="action_store">ሌሎች አፖች</string>
     <string name="exit">ዝጋ</string>
     <string name="pls_wait">እባክዎን ትንሽ ይጠብቁ...\n\nTelegram:-@ethio_textbooks</string>
@@ -74,7 +74,7 @@
     <string name="yes">Yes</string>
     <string name="menu_questions">Worksheet</string>
 
-    <string name="questions_intro">እባክዎን የመልመጃ ጥያቄዎቹ አሟልተን አስክናጠናቅቅ ያሉትን አየተጠቀሙ በትዕግስት ይጠብቁን።\n\nTelegram @ethio_textbooks 0923481783</string>
+    <string name="questions_intro">እባክዎን የመልመጃ ጥያቄዎቹን አሟልተን አስክናጠናቅቅ ያሉትን አየተጠቀሙ በትዕግስት ይጠብቁን።\n\nTelegram @ethio_textbooks 0923481783</string>
     <string name="start_questionnaire">መልመጃውን ጀምር</string>
     <string name="show_result">ውጤቴን አሳየኝ</string>
     <string name="about_short">*Free* apps from DataScience P.L.C.\nEmail: apps@datascienceplc.com</string>
@@ -90,7 +90,7 @@
     <string name="thanks_for_activated">እናመሰግናለን! እባክዎን አፕልኬሽኑን ዘግተው ይክፈቱት።</string>
     <string name="wrong_code">የተሳሳተ ወይም ጊዜው ያለፈበት ኮድ ተጠቅመዋል።</string>
     <string name="check_your_internet">እባክዎን ኢንተርኔት መኖሩን ያረጋግጡ ወይም ትንሽ ቆይተው ይሞክሩ።</string>
-    <string name="premium_intro">በልዩ ተጠቃሚነት ከተመዘገቡ የጎግል ማስታወቂያ አይመጣቦትም። ለበለጠ መረጃ እዚህ ይጫኑ</string>
+    <string name="premium_intro">በልዩ ተጠቃሚነት ከተመዘገቡ የጎግል ማስታወቂያ አይመጣቦትም። ለበለጠ መረጃ እዚህ ይጫኑ።\n\nTelegram @ethio_textbooks 0923481783</string>
     <string name="try_again">እንደገና ይሞክሩ</string>
     <string name="loading">በመክፈት ላይ...</string>
     <string name="your_name">የእርስዎ ስም</string>

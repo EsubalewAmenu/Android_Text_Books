@@ -176,7 +176,7 @@ public void setFromShort(String shortArrayList) throws JSONException {
 }
     public void setData(String subj, String p){
         open(getApplicationContext(),"read", "books.hrm");
-        final Cursor subjectsCursor = db.getSelect("*", "chapters", "subject_id='" + subj + "'");
+        final Cursor subjectsCursor = db.getSelect("*", "chapters", "subject_id='" + subj + "' ORDER BY chaptername ASC");
         if (subjectsCursor.moveToFirst()) {
             do {
                 arrayList.add(new Item("", subjectsCursor.getString(2) , subjectsCursor.getString(3), p, R.drawable.icon, "#000000"));
