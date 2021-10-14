@@ -1,53 +1,37 @@
 package com.herma.apps.textbooks;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
-import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
 import android.text.style.RelativeSizeSpan;
-import android.widget.ArrayAdapter;
+import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-//import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-
-//import com.herma.apps.drivertraining.MainActivity;
-import com.herma.apps.textbooks.R;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.google.android.gms.ads.MobileAds;
+import com.herma.apps.textbooks.common.Commons;
 import com.herma.apps.textbooks.common.questions.RadioBoxesFragment;
 import com.herma.apps.textbooks.common.questions.ViewPagerAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-//import com.herma.apps.drivertraining.questions.adaptersj.ViewPagerAdapter;
-//import com.herma.apps.drivertraining.questions.fragments.CheckBoxesFragment;
-//import com.herma.apps.drivertraining.questions.fragments.RadioBoxesFragment;
-
-//import static com.herma.apps.drivertraining.MainActivity.Ads;
-
 public class QuestionActivity extends AppCompatActivity
 {
     final ArrayList<Fragment> fragmentArrayList = new ArrayList<>();
@@ -112,22 +96,30 @@ public class QuestionActivity extends AppCompatActivity
         });
 
         mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
 
-//        mInterstitialAd = new InterstitialAd(this);
-//        mInterstitialAd.setAdUnitId(getString(R.string.adReaderInt));
-//        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-//
-//        mInterstitialAd.setAdListener(new AdListener() {
-//            @Override
-//            public void onAdLoaded() {
-//                // Code to be executed when an ad finishes loading.
-//                if (mInterstitialAd.isLoaded()) {
-//                    mInterstitialAd.show();
-//                }
-//            }
-//        });
+        if(new Commons(getApplicationContext()).showGoogleAd( 1)) {
+
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+            InterstitialAd.load(this,getString(R.string.adQuestionsInt), adRequest,
+                    new InterstitialAdLoadCallback() {
+                        @Override
+                        public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+
+                            mInterstitialAd = interstitialAd;
+                            mInterstitialAd.show(QuestionActivity.this);
+                        }
+
+                        @Override
+                        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                            // Handle the error
+                            mInterstitialAd = null;
+                        }
+                    });
+
+        }else{
+            mAdView.setVisibility(View.GONE);
+        }
     }
     private void toolBarInit()
     {

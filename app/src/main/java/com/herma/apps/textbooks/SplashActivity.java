@@ -67,9 +67,6 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-
-        new Commons(getApplicationContext()).handleSSLHandshake();
-
 //
                 getLastUpdated();
 //
