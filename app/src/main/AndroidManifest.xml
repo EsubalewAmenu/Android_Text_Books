@@ -16,19 +16,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
 
-        android:name="androidx.multidex.MultiDexApplication" >
+        android:name="androidx.multidex.MultiDexApplication"
+
+        android:hardwareAccelerated="true">
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_app_id"/>
 
-        <activity
+        <activity android:hardwareAccelerated="true"
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
+        <activity android:hardwareAccelerated="true"
             android:name=".ReadActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
+        <activity android:hardwareAccelerated="true"
             android:name=".ChaptersActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -47,7 +49,7 @@
         <activity
             android:name=".ui.about.Describe"
             android:screenOrientation="portrait" />
-        <activity
+        <activity android:hardwareAccelerated="true"
             android:name=".QuestionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>

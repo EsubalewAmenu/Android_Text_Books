@@ -6,6 +6,7 @@ package com.herma.apps.textbooks.common;
  * Email esubalew.a2009@gmail.com/
  */
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -19,15 +20,21 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.method.ScrollingMovementMethod;
+import android.util.DisplayMetrics;
 import android.util.Pair;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.herma.apps.textbooks.R;
 import com.herma.apps.textbooks.ReadActivity;
 
@@ -516,4 +523,41 @@ ProgressDialog progressBar;
 //        } catch (Exception ignored) {
 //        }
 //    }
+
+
+    public void loadBanner(AdView adView, String AD_UNIT_ID, FrameLayout adContainerView, Display display) {
+        // Create an ad request.
+        adView = new AdView(context);
+        adView.setAdUnitId(AD_UNIT_ID);
+        adContainerView.removeAllViews();
+        adContainerView.addView(adView);
+
+        AdSize adSize = getAdSize(adContainerView, display);
+        adView.setAdSize(adSize);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        // Start loading the ad in the background.
+        adView.loadAd(adRequest);
+    }
+
+    private AdSize getAdSize(FrameLayout adContainerView, Display display) {
+        // Determine the screen width (less decorations) to use for the ad width.
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float density = outMetrics.density;
+
+        float adWidthPixels = adContainerView.getWidth();
+
+        // If the ad hasn't been laid out, default to the full screen width.
+        if (adWidthPixels == 0) {
+            adWidthPixels = outMetrics.widthPixels;
+        }
+
+        int adWidth = (int) (adWidthPixels / density);
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, adWidth);
+    }
+
+
 }

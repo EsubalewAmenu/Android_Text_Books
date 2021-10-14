@@ -10,6 +10,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -61,6 +62,7 @@ public class QuestionActivity extends AppCompatActivity
     TextView tvAds;
 
     private InterstitialAd mInterstitialAd;
+    private FrameLayout adContainerView;
     private AdView mAdView;
 
     @SuppressLint("MissingPermission")
@@ -95,12 +97,22 @@ public class QuestionActivity extends AppCompatActivity
             }
         });
 
-        mAdView = findViewById(R.id.adView);
+//        mAdView = findViewById(R.id.adView);
+        adContainerView = findViewById(R.id.ad_view_container);
+
+
+        AdRequest adRequest = new AdRequest.Builder().build();
 
         if(new Commons(getApplicationContext()).showGoogleAd( 1)) {
 
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
+//            mAdView.loadAd(adRequest);
+            adContainerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    new Commons(getApplicationContext()).loadBanner(mAdView, getString(R.string.adQuestions), adContainerView, getWindowManager().getDefaultDisplay());
+                }
+            });
+
             InterstitialAd.load(this,getString(R.string.adQuestionsInt), adRequest,
                     new InterstitialAdLoadCallback() {
                         @Override

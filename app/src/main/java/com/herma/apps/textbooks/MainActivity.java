@@ -1,5 +1,6 @@
 package com.herma.apps.textbooks;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -11,13 +12,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
@@ -76,6 +81,7 @@ public class MainActivity extends AppCompatActivity
     String choosedGradeT = "", //selectedGrade = "0",
             p = "";
 
+    private FrameLayout adContainerView;
     private AdView mAdView;
 
     QuestionsFragment questionsFragment;
@@ -123,19 +129,59 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        mAdView = findViewById(R.id.adView);
+        adContainerView = findViewById(R.id.ad_view_container);
 
+        AdRequest adRequest = new AdRequest.Builder().build();
 
         if(new Commons(getApplicationContext()).showGoogleAd( 2)) {
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
+            System.out.println("poiug yesss" );
+
+            // Since we're loading the banner based on the adContainerView size, we need to wait until this
+            // view is laid out before we can get the width.
+            adContainerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    new Commons(getApplicationContext()).loadBanner(mAdView, getString(R.string.adHome), adContainerView, getWindowManager().getDefaultDisplay());
+                }
+            });
+
+
         }else{
+            System.out.println("poiug no " );
             mAdView.setVisibility(View.GONE);
         }
 
 
 
     }
+
+    /** Called when leaving the activity */
+    @Override
+    public void onPause() {
+        if (mAdView != null) {
+            mAdView.pause();
+        }
+        super.onPause();
+    }
+
+    /** Called when returning to the activity */
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mAdView != null) {
+            mAdView.resume();
+        }
+    }
+
+    /** Called before the activity is destroyed */
+    @Override
+    public void onDestroy() {
+        if (mAdView != null) {
+            mAdView.destroy();
+        }
+        super.onDestroy();
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

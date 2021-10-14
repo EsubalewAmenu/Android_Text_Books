@@ -18,6 +18,7 @@ import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
@@ -59,6 +60,7 @@ public class ChaptersActivity extends AppCompatActivity {
     public String fName, fEn;
     int MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE = 90;
 
+    private FrameLayout adContainerView;
     private AdView mAdView;
 
     String FILEPATH = "/storage/emulated/0/Herma/books/";
@@ -121,12 +123,22 @@ public class ChaptersActivity extends AppCompatActivity {
             }
         });
 
-        mAdView = findViewById(R.id.adView);
+//        mAdView = findViewById(R.id.adView);
+        adContainerView = findViewById(R.id.ad_view_container);
 
+        AdRequest adRequest = new AdRequest.Builder().build();
 
         if(new Commons(getApplicationContext()).showGoogleAd( 2)) {
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
+//            mAdView.loadAd(adRequest);
+            // Since we're loading the banner based on the adContainerView size, we need to wait until this
+            // view is laid out before we can get the width.
+            adContainerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    new Commons(getApplicationContext()).loadBanner(mAdView, getString(R.string.adChapter), adContainerView, getWindowManager().getDefaultDisplay());
+                }
+            });
+
         }else{
             mAdView.setVisibility(View.GONE);
         }

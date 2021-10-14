@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +53,7 @@ public class ReadActivity extends AppCompatActivity {
 
     PDFView pdfView;
 
+    private FrameLayout adContainerView;
     private AdView mAdView;
     private InterstitialAd mInterstitialAd;
     File f;
@@ -98,13 +100,21 @@ public class ReadActivity extends AppCompatActivity {
                                 @Override
                                 public void onInitiallyRendered(int nbPages, float pageWidth, float pageHeight) {
 
-                                    mAdView = findViewById(R.id.adView);
+//                                    mAdView = findViewById(R.id.adView);
+                                    adContainerView = findViewById(R.id.ad_view_container);
 
+                                    AdRequest adRequest = new AdRequest.Builder().build();
 
                                     if(new Commons(getApplicationContext()).showGoogleAd( 1)) {
 
-                                        AdRequest adRequest = new AdRequest.Builder().build();
-                                        mAdView.loadAd(adRequest);
+//                                        mAdView.loadAd(adRequest);
+
+                                        adContainerView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                new Commons(getApplicationContext()).loadBanner(mAdView, getString(R.string.adReader), adContainerView, getWindowManager().getDefaultDisplay());
+                                            }
+                                        });
 
 
                                         InterstitialAd.load(getApplicationContext(), getString(R.string.adReaderInt), adRequest, new InterstitialAdLoadCallback() {

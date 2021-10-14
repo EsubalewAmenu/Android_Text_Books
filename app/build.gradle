@@ -9,8 +9,8 @@ android {
         applicationId "com.herma.apps.textbooks"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 40
-        versionName "3.2.3"
+        versionCode 41
+        versionName "3.2.4"
         multiDexEnabled true
 
         ndk {
@@ -46,7 +46,7 @@ dependencies {
 
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
-    implementation 'com.google.android.gms:play-services-ads:19.7.0'
+    implementation 'com.google.android.gms:play-services-ads:20.4.0'
 
 
     implementation "androidx.multidex:multidex:2.0.1"

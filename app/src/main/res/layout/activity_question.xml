@@ -73,14 +73,21 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <com.google.android.gms.ads.AdView
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adView"
+
+    <FrameLayout
+        android:id="@+id/ad_view_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/adQuestions">
-    </com.google.android.gms.ads.AdView>
+        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true" />
+<!--    <com.google.android.gms.ads.AdView-->
+<!--        xmlns:ads="http://schemas.android.com/apk/res-auto"-->
+<!--        android:id="@+id/adView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        ads:adSize="SMART_BANNER"-->
+<!--        ads:adUnitId="@string/adQuestions">-->
+<!--    </com.google.android.gms.ads.AdView>-->
 
     <TextView
         android:id="@+id/tvAds"
