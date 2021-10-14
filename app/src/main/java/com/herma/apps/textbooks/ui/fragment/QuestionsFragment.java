@@ -103,6 +103,8 @@ public class QuestionsFragment extends Fragment {
 
     String ssChaps = "", en = "";
 
+    String selectedSubject ="";
+
 
     private boolean screenVisible = false;
 
@@ -229,10 +231,10 @@ public class QuestionsFragment extends Fragment {
                 questionnaireButton.setText(getString(R.string.start_questionnaire));
                 questionnaireButton.setEnabled(true);
 
-            } else
-                doApiCall(etOutOf.getText().toString() + "/" + chapMap.get(spChapter.getSelectedItem()) + "/" + gradeMap.get(spGrade.getSelectedItem()));
-//            doApiCall( etOutOf.getText().toString() + "&chapter=" + chapMap.get(spChapter.getSelectedItem())  + "&grade=" + gradeMap.get(spGrade.getSelectedItem()) );
-
+            } else {
+//                System.out.println(" params will be on doApiCall " + selectedSubject+ "=id " +chapMap.get(spChapter.getSelectedItem()) + "/" + gradeMap.get(spGrade.getSelectedItem()) + " SDK " + spGrade.getSelectedItem());
+                doApiCall(etOutOf.getText().toString() + "/" + chapMap.get(spChapter.getSelectedItem()) + "/" + selectedSubject );//gradeMap.get(spGrade.getSelectedItem()));
+            }
 //            https://localhost:8082/wp/ds/wp-json/ds_questions/v1/questions/20/1/1
 
             pre.edit().putBoolean("show_answer", show_answer.isChecked()).apply();
@@ -301,13 +303,14 @@ public class QuestionsFragment extends Fragment {
 
                 queue = Volley.newRequestQueue(getContext());
 
+System.out.println("main link is " + url + param);
 
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, url + param,
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
 
-//                                System.out.println(response);
+                                System.out.println("response is " + response);
 
                                 Intent questions = new Intent(getActivity(), QuestionActivity.class);
                                 questions.putExtra("chap_name", spChapter.getSelectedItem() + "");
@@ -434,129 +437,129 @@ public class QuestionsFragment extends Fragment {
 //
 //    }
 
-    public void shortnoteServices(String shortnote_services) {
-
-        try {
-            // Getting JSON Array node
-            JSONObject jsonObj = new JSONObject(shortnote_services);
-
-            JSONArray datas = jsonObj.getJSONArray("short_services");
-//            stringsGrades = new String[datas.length()];
-
-
-            HashMap<String, String> gradeMap = new LinkedHashMap<>();
-            linearLayoutsGrade.setVisibility(View.VISIBLE);
-
-
-            for (int i = 0; i < datas.length(); i++) {
-
-                JSONObject c = datas.getJSONObject(i);
-
-
-//                    stringsGrades[i] = " Grade "+c.getString("grade");
-
-//                gradeMap.put(i+"", c.getString("subject"));
-                gradeMap.put(" Grade " + c.getString("grade"), c.getString("grade"));
-//                System.out.println(c.getString("grade")+ " Grade " + c.getString("grade"));
-
-            }
-
-            ArrayAdapter aa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, gradeMap.keySet().toArray());
-            aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sspGrade.setAdapter(aa);
-            sspGrade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                    try {
-                        JSONObject jsonObj = new JSONObject(shortnote_services);
-
-                        JSONArray datas = jsonObj.getJSONArray("short_services");
-//            stringsGrades = new String[datas.length()];
-                        linearLayoutsSubject.setVisibility(View.VISIBLE);
-                        HashMap<String, String> subjectMap = new LinkedHashMap<>();
-                        JSONObject c;
-                        for (int i = 0; i < datas.length(); i++) {
-
-                            c = datas.getJSONObject(i);
-
-                            if ((" Grade " + c.getString("grade")).equals(sspGrade.getSelectedItem().toString())) {
-                                subjectMap.put(c.getString("subject"), c.getString("chap"));
-                                en = c.getString("en");
-//                                System.out.println("en is :" + en);
-                            }
-
-                        }
-
-
-                        ArrayAdapter chapArray = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, subjectMap.keySet().toArray());
-                        chapArray.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        sspSubject.setAdapter(chapArray);
-                        sspSubject.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                                try {
-
-                                    ssChaps = "{\"chap\":" + subjectMap.get(sspSubject.getSelectedItem()) + "}";
-
-//                                    JSONObject jsonObj = new JSONObject("{\"chap\":" + subjectMap.get(sspSubject.getSelectedItem()) + "}");
-
-//                                    JSONArray datas = jsonObj.getJSONArray("chap");
+//    public void shortnoteServices(String shortnote_services) {
+//
+//        try {
+//            // Getting JSON Array node
+//            JSONObject jsonObj = new JSONObject(shortnote_services);
+//
+//            JSONArray datas = jsonObj.getJSONArray("short_services");
 ////            stringsGrades = new String[datas.length()];
-////                                    linearLayoutsUnit.setVisibility(View.VISIBLE);
-//                                    schapMap = new LinkedHashMap<>();
-//                                    JSONObject c;
 //
-//                                    unitsArrayList = new ArrayList<>();
 //
-//                                    for (int i = 0; i < datas.length(); i++) {
+//            HashMap<String, String> gradeMap = new LinkedHashMap<>();
+//            linearLayoutsGrade.setVisibility(View.VISIBLE);
 //
-//                                        c = datas.getJSONObject(i);
-//                                        schapMap.put(("Unit " + c.getString("chaptername")), c.getString("chaptername"));
-//                                        System.out.println(("Unit " + c.getString("chaptername"))+ c.getString("chaptername"));
 //
-//                                        unitsArrayList.add(new Item(c.getString("chaptername"), c.getString("file_url"), "en", R.drawable.icon, "#000000"));
-//                                    }
-
-//                                    ArrayAdapter chapArray = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, schapMap.keySet().toArray());
-//                                    chapArray.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//                                    sspChapter.setAdapter(chapArray);
-
-
-                                } catch (Exception kl) {
-                                    System.out.println("some exception on chap" + kl);
-                                }
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-
-                    } catch (Exception lk) {
-                        System.out.println("some exception on grade");
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-
-        } catch (final Exception e) {
-            System.out.println("some exception on main short note" + e);
-        }
-    }
+//            for (int i = 0; i < datas.length(); i++) {
+//
+//                JSONObject c = datas.getJSONObject(i);
+//
+//
+////                    stringsGrades[i] = " Grade "+c.getString("grade");
+//
+////                gradeMap.put(i+"", c.getString("subject"));
+//                gradeMap.put(" Grade " + c.getString("grade"), c.getString("grade"));
+////                System.out.println(c.getString("grade")+ " Grade " + c.getString("grade"));
+//
+//            }
+//
+//            ArrayAdapter aa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, gradeMap.keySet().toArray());
+//            aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//            sspGrade.setAdapter(aa);
+//            sspGrade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                @Override
+//                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//
+//                    try {
+//                        JSONObject jsonObj = new JSONObject(shortnote_services);
+//
+//                        JSONArray datas = jsonObj.getJSONArray("short_services");
+////            stringsGrades = new String[datas.length()];
+//                        linearLayoutsSubject.setVisibility(View.VISIBLE);
+//                        HashMap<String, String> subjectMap = new LinkedHashMap<>();
+//                        JSONObject c;
+//                        for (int i = 0; i < datas.length(); i++) {
+//
+//                            c = datas.getJSONObject(i);
+//
+//                            if ((" Grade " + c.getString("grade")).equals(sspGrade.getSelectedItem().toString())) {
+//                                subjectMap.put(c.getString("subject"), c.getString("chap"));
+//                                en = c.getString("en");
+//                                System.out.println("en is :" + en);
+//                            }
+//
+//                        }
+//
+//
+//                        ArrayAdapter chapArray = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, subjectMap.keySet().toArray());
+//                        chapArray.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                        sspSubject.setAdapter(chapArray);
+//                        sspSubject.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                            @Override
+//                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//
+//                                try {
+//
+//                                    ssChaps = "{\"chap\":" + subjectMap.get(sspSubject.getSelectedItem()) + "}";
+//
+////                                    JSONObject jsonObj = new JSONObject("{\"chap\":" + subjectMap.get(sspSubject.getSelectedItem()) + "}");
+//
+////                                    JSONArray datas = jsonObj.getJSONArray("chap");
+//////            stringsGrades = new String[datas.length()];
+//////                                    linearLayoutsUnit.setVisibility(View.VISIBLE);
+////                                    schapMap = new LinkedHashMap<>();
+////                                    JSONObject c;
+////
+////                                    unitsArrayList = new ArrayList<>();
+////
+////                                    for (int i = 0; i < datas.length(); i++) {
+////
+////                                        c = datas.getJSONObject(i);
+////                                        schapMap.put(("Unit " + c.getString("chaptername")), c.getString("chaptername"));
+////                                        System.out.println(("Unit " + c.getString("chaptername"))+ c.getString("chaptername"));
+////
+////                                        unitsArrayList.add(new Item(c.getString("chaptername"), c.getString("file_url"), "en", R.drawable.icon, "#000000"));
+////                                    }
+//
+////                                    ArrayAdapter chapArray = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, schapMap.keySet().toArray());
+////                                    chapArray.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+////                                    sspChapter.setAdapter(chapArray);
+//
+//
+//                                } catch (Exception kl) {
+//                                    System.out.println("some exception on chap" + kl);
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onNothingSelected(AdapterView<?> parent) {
+//
+//                            }
+//                        });
+//
+//                    } catch (Exception lk) {
+//                        System.out.println("some exception on grade");
+//                    }
+//                }
+//
+//                @Override
+//                public void onNothingSelected(AdapterView<?> parent) {
+//
+//                }
+//            });
+//
+//        } catch (final Exception e) {
+//            System.out.println("some exception on main short note" + e);
+//        }
+//    }
 
     public void questionServices(String que_service) {
 
         try {
             // Getting JSON Array node
             JSONObject jsonObj = new JSONObject(que_service);
-//System.out.println("response array is " + que_service );
+System.out.println("response array is " + que_service );
             JSONArray datas = jsonObj.getJSONArray("que_service");
 //            stringsGrades = new String[datas.length()];
 
@@ -574,6 +577,10 @@ public class QuestionsFragment extends Fragment {
 
 //                gradeMap.put(i+"", c.getString("subject"));
                 gradeMap.put(" Grade " + c.getString("grade"), c.getString("id"));
+
+//                System.out.println(" Grade " + c.getString("grade") + " c.getString(id) " + c.getString("id") + "  " +
+//                        gradeMap.get(spGrade.getSelectedItem())+" new " + spGrade.getSelectedItem() );
+//
 
             }
             ArrayAdapter aa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, gradeMap.keySet().toArray());
@@ -595,9 +602,11 @@ public class QuestionsFragment extends Fragment {
 
                             c = datas.getJSONObject(i);
 
-                            if ((" Grade " + c.getString("grade")).equals(spGrade.getSelectedItem().toString()))
-                                subjectMap.put(c.getString("subject"), c.getString("chap"));
-
+                            if ((" Grade " + c.getString("grade")).equals(spGrade.getSelectedItem().toString())) {
+                                subjectMap.put(c.getString("subject"), c.getString("id")+c.getString("chap"));
+//                                System.out.println(" params will be dslkfj " + c.getString("id") +"=id " + c.getString("subject") + " " + c.getString("chap"));
+//                                System.out.println(" params will be on subjectMap" + chapMap.get(spChapter.getSelectedItem()) + "/" + gradeMap.get(spGrade.getSelectedItem()) );
+                            }
                         }
 
                         ArrayAdapter chapArray = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, subjectMap.keySet().toArray());
@@ -608,9 +617,12 @@ public class QuestionsFragment extends Fragment {
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                                 try {
-                                    System.out.println("{\"chap\":" + subjectMap.get(spSubject.getSelectedItem()) + "}");
-                                    JSONObject jsonObj = new JSONObject("{\"chap\":" + subjectMap.get(spSubject.getSelectedItem()) + "}");
+                                    selectedSubject = (subjectMap.get(spSubject.getSelectedItem())).substring(0, (subjectMap.get(spSubject.getSelectedItem())).indexOf("["));
 
+                                    String chapsValue = (subjectMap.get(spSubject.getSelectedItem())).substring((subjectMap.get(spSubject.getSelectedItem())).indexOf("["));
+
+                                    System.out.println("{\"chap\":" + chapsValue + "}");
+                                    JSONObject jsonObj = new JSONObject("{\"chap\":" + chapsValue + "}");
 
                                     JSONArray datas = jsonObj.getJSONArray("chap");
 //            stringsGrades = new String[datas.length()];
@@ -622,6 +634,10 @@ public class QuestionsFragment extends Fragment {
 
                                         c = datas.getJSONObject(i);
                                         chapMap.put(("Unit " + c.getString("chapter")), c.getString("chapter"));
+
+                                        System.out.println("Unit " + c.getString("chapter") + c.getString("chapter"));
+                                        System.out.println(" params will be on chapMap " + chapMap.get(spChapter.getSelectedItem()) + "/" + gradeMap.get(spGrade.getSelectedItem()) );
+
                                     }
 
                                     ArrayAdapter chapArray = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, chapMap.keySet().toArray());
@@ -639,6 +655,7 @@ public class QuestionsFragment extends Fragment {
 
                             }
                         });
+
 
                     } catch (Exception lk) {
                         System.out.println("some exception on grade");
