@@ -130,7 +130,7 @@ public class QuestionActivity extends AppCompatActivity
                     });
 
         }else{
-            mAdView.setVisibility(View.GONE);
+            adContainerView.setVisibility(View.GONE);
         }
     }
     private void toolBarInit()

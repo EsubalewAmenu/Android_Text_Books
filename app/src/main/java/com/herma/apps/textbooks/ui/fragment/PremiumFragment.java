@@ -113,7 +113,8 @@ public class PremiumFragment extends Fragment {
                 if(_phone.equals("") || _license_code.equals("") || _mac.equals("") || _name.equals("") ){
                     Toast.makeText(getContext(), getString(R.string.fill_the_form), Toast.LENGTH_SHORT).show();
                 }else {
-                    System.out.println("print daata " + _phone + _mac + _license_code + _name);
+                    btnUpdate.setEnabled(false);
+//                    System.out.println("print daata " + _phone + _mac + _license_code + _name);
                     makePremiumAPI(_phone, _mac, _license_code, _name);
                 }
             }
@@ -165,12 +166,6 @@ public class PremiumFragment extends Fragment {
 
                 RequestQueue queue = Volley.newRequestQueue(getContext());
 
-//
-//
-//                String BASEURL = "https://192.168.8.101:8082/wp/ds/api/DSACTIVATOR/v1/";
-//                String BASEURL = "https://192.168.8.101:8082/wp/ds/wp-json/DSACTIVATOR/v1/";
-
-//                String BASEURL = "https://datascienceplc.com/wp-json/DSACTIVATOR/v1/";
 
                 String url = "DSACTIVATOR/v1/register?service_id=1";
 
@@ -182,7 +177,7 @@ public class PremiumFragment extends Fragment {
                             @Override
                             public void onResponse(String response) {
                                 if (response != null) {
-                                    System.out.println(" response is " + response);
+//                                    System.out.println(" response is " + response);
 //        response is {"success":true,"error":false,"activator":{"license_code":"5335","license_type":"1","out_date":"2021-09-22"}}
 
                                     try {
@@ -218,12 +213,14 @@ public class PremiumFragment extends Fragment {
                                         {
                                             Toast.makeText(getContext(), getString( R.string.wrong_code ), Toast.LENGTH_LONG).show();
 //                                            System.out.println("activator is not correct");
+                                            btnUpdate.setEnabled(true);
                                         }
 
 
                                     } catch (final JSONException e) {
                                         Toast.makeText(getContext(), getString(R.string.check_your_internet ), Toast.LENGTH_SHORT).show();
                                         System.out.println("Exception is " + e);
+                                        btnUpdate.setEnabled(true);
                                     }
 
                                 }

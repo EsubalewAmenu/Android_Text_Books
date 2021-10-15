@@ -147,7 +147,7 @@ public class ReadActivity extends AppCompatActivity {
 
 
                                     }else{
-                                        mAdView.setVisibility(View.GONE);
+                                        adContainerView.setVisibility(View.GONE);
                                     }
 
                                 }

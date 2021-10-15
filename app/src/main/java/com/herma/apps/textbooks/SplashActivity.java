@@ -43,11 +43,7 @@ import javax.net.ssl.X509TrustManager;
 
 public class SplashActivity extends AppCompatActivity {
 
-    public String BASEAPI = "https://datascienceplc.com/wp-json/";
-//    public String BASEAPI = "https://192.168.8.101:8082/wp/ds/wp-json/";
-
-//    String url = BASEAPI + "available/subjects";
-//    String url = "https://datascienceplc.com/apps/manager/api/items/get_for_books?what=init";
+    public String BASEAPI = "https://datascienceplc.com/api/";
     public RequestQueue queue;
 
 
@@ -103,7 +99,7 @@ public class SplashActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(String response) {
                                     if (response != null) {
-//                                        System.out.println(" response is " + response);
+//                                        System.out.println(" adf response is " + response);
 //        response is {"success":true,"error":false,"activator":{"license_code":"5335","license_type":"1","out_date":"2021-09-22"}}
 
                                         try {
@@ -118,6 +114,7 @@ public class SplashActivity extends AppCompatActivity {
                                                 SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                                 pre.edit().putString("last_update", jsonObj.getString("last_update") ).apply();
 
+//                                                System.out.println(" adf response is " + jsonObj.getString("last_update"));
                                             }
 
                                         } catch (final JSONException e) {

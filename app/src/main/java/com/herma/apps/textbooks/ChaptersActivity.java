@@ -140,7 +140,7 @@ public class ChaptersActivity extends AppCompatActivity {
             });
 
         }else{
-            mAdView.setVisibility(View.GONE);
+            adContainerView.setVisibility(View.GONE);
         }
 
     }

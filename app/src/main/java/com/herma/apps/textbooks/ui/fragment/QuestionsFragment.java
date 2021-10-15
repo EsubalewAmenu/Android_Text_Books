@@ -235,7 +235,6 @@ public class QuestionsFragment extends Fragment {
 //                System.out.println(" params will be on doApiCall " + selectedSubject+ "=id " +chapMap.get(spChapter.getSelectedItem()) + "/" + gradeMap.get(spGrade.getSelectedItem()) + " SDK " + spGrade.getSelectedItem());
                 doApiCall(etOutOf.getText().toString() + "/" + chapMap.get(spChapter.getSelectedItem()) + "/" + selectedSubject );//gradeMap.get(spGrade.getSelectedItem()));
             }
-//            https://localhost:8082/wp/ds/wp-json/ds_questions/v1/questions/20/1/1
 
             pre.edit().putBoolean("show_answer", show_answer.isChecked()).apply();
 
@@ -303,14 +302,14 @@ public class QuestionsFragment extends Fragment {
 
                 queue = Volley.newRequestQueue(getContext());
 
-System.out.println("main link is " + url + param);
+//System.out.println("main link is " + url + param);
 
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, url + param,
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
 
-                                System.out.println("response is " + response);
+//                                System.out.println("response is " + response);
 
                                 Intent questions = new Intent(getActivity(), QuestionActivity.class);
                                 questions.putExtra("chap_name", spChapter.getSelectedItem() + "");
@@ -332,7 +331,7 @@ System.out.println("main link is " + url + param);
                         questionnaireButton.setText(getString(R.string.start_questionnaire) );
                         questionnaireButton.setEnabled(true);
 
-                        System.out.println("some error! " + error);
+//                        System.out.println("some error! " + error);
                         Toast.makeText(getActivity(), "Please check your internet!", Toast.LENGTH_SHORT).show();
                     }
 
@@ -559,7 +558,7 @@ System.out.println("main link is " + url + param);
         try {
             // Getting JSON Array node
             JSONObject jsonObj = new JSONObject(que_service);
-System.out.println("response array is " + que_service );
+//System.out.println("response array is " + que_service );
             JSONArray datas = jsonObj.getJSONArray("que_service");
 //            stringsGrades = new String[datas.length()];
 
@@ -621,7 +620,7 @@ System.out.println("response array is " + que_service );
 
                                     String chapsValue = (subjectMap.get(spSubject.getSelectedItem())).substring((subjectMap.get(spSubject.getSelectedItem())).indexOf("["));
 
-                                    System.out.println("{\"chap\":" + chapsValue + "}");
+//                                    System.out.println("{\"chap\":" + chapsValue + "}");
                                     JSONObject jsonObj = new JSONObject("{\"chap\":" + chapsValue + "}");
 
                                     JSONArray datas = jsonObj.getJSONArray("chap");
@@ -635,8 +634,8 @@ System.out.println("response array is " + que_service );
                                         c = datas.getJSONObject(i);
                                         chapMap.put(("Unit " + c.getString("chapter")), c.getString("chapter"));
 
-                                        System.out.println("Unit " + c.getString("chapter") + c.getString("chapter"));
-                                        System.out.println(" params will be on chapMap " + chapMap.get(spChapter.getSelectedItem()) + "/" + gradeMap.get(spGrade.getSelectedItem()) );
+//                                        System.out.println("Unit " + c.getString("chapter") + c.getString("chapter"));
+//                                        System.out.println(" params will be on chapMap " + chapMap.get(spChapter.getSelectedItem()) + "/" + gradeMap.get(spGrade.getSelectedItem()) );
 
                                     }
 

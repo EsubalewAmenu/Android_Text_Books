@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity
 
         pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         choosedGrade = pre.getString("choosedGrade", "1");
-        choosedGradeT = pre.getString("choosedGradeT", "");
+        choosedGradeT = pre.getString("choosedGradeT", "Grade 12");
 
         changeFragment(choosedGrade+"", choosedGradeT);
 
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity
         AdRequest adRequest = new AdRequest.Builder().build();
 
         if(new Commons(getApplicationContext()).showGoogleAd( 2)) {
-            System.out.println("poiug yesss" );
+//            System.out.println("poiug yesss" );
 
             // Since we're loading the banner based on the adContainerView size, we need to wait until this
             // view is laid out before we can get the width.
@@ -147,8 +147,8 @@ public class MainActivity extends AppCompatActivity
 
 
         }else{
-            System.out.println("poiug no " );
-            mAdView.setVisibility(View.GONE);
+//            System.out.println("poiug no " );
+            adContainerView.setVisibility(View.GONE);
         }
 
 

@@ -464,8 +464,9 @@ ProgressDialog progressBar;
         String last_update = pre.getString("last_update", "");
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date last_updateDate = null;
         try {
-            Date last_updateDate = sdf.parse(last_update);
+            last_updateDate = sdf.parse(last_update);
             Date out_dateDate = sdf.parse(out_date);
 
 
@@ -475,17 +476,17 @@ ProgressDialog progressBar;
                     System.out.println("isshow ad yes and prevent license_type="+license_type +" out_date="+out_date+" last_update="+last_update);
                     return true;
                 }else {
-                    System.out.println("isshow ad no license accepted license_type=" + license_type + " out_date=" + out_date + " last_update=" + last_update);
+//                    System.out.println("isshow ad no license accepted license_type=" + license_type + " out_date=" + out_date + " last_update=" + last_update);
                     return false;
                 }
             }else{ // if not licensed
-                System.out.println("isshow ad yes no license provided license_type="+license_type);
+//                System.out.println("isshow ad yes no license provided license_type="+license_type);
                 return true;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("isshow ad yes no license provided license_type="+license_type);
+            System.out.println(last_updateDate +" isshow ad yes no license provided license_type="+license_type);
             return true;
         }
     }
