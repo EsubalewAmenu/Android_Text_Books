@@ -107,8 +107,8 @@ public class PremiumFragment extends Fragment {
             public void onClick(View v) {
 
 //                String _phone = "0923481783", _mac = "MMAC", _license_code="5335", _name="Grains";
-                String _phone = etPhone.getText().toString(), _mac = deviceUuid,
-                        _license_code = etCode.getText().toString(), _name = etName.getText().toString();
+                String _phone = etPhone.getText().toString().trim(), _mac = deviceUuid,
+                        _license_code = etCode.getText().toString().trim(), _name = etName.getText().toString().trim();
 
                 if(_phone.equals("") || _license_code.equals("") || _mac.equals("") || _name.equals("") ){
                     Toast.makeText(getContext(), getString(R.string.fill_the_form), Toast.LENGTH_SHORT).show();

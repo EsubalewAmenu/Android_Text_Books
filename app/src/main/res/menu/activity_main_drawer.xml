@@ -68,14 +68,22 @@
             android:id="@+id/nav_g9t"
             android:icon="@android:drawable/ic_dialog_dialer"
             android:title="@string/menu_g9t" />
-        <item
-            android:id="@+id/nav_questions"
-            android:icon="@drawable/questions"
-            android:title="@string/menu_questions" />
     </group>
 
-    <item android:title="@string/communicate">
+    <item android:title="@string/others">
         <menu>
+            <item
+                android:id="@+id/nav_questions"
+                android:icon="@drawable/questions"
+                android:title="@string/menu_questions" />
+            <item
+                android:id="@+id/nav_ad_reward"
+                android:icon="@drawable/premium"
+                android:title="@string/menu_ad_reward" />
+            <item
+                android:id="@+id/nav_ad_free"
+                android:icon="@drawable/premium"
+                android:title="@string/menu_ad_free" />
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
@@ -85,10 +93,6 @@
 
     <item android:title="@string/about">
         <menu>
-                        <item
-                            android:id="@+id/nav_ad_free"
-                            android:icon="@drawable/premium"
-                            android:title="@string/menu_ad_free" />
             <item
                 android:id="@+id/nav_rate"
                 android:icon="@android:drawable/star_big_on"
