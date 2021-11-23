@@ -41,7 +41,7 @@ public class DB extends SQLiteOpenHelper {
 	private final Context myContext;
 
 	public DB(Context context, String db_name) {
-		super(context, db_name, null, 1);
+		super(context, db_name, null, 2);
 		DB_PATH = context.getFilesDir().getPath()+"/";
 		DB_NAME = db_name;
 		this.myContext = context;
@@ -125,6 +125,14 @@ public class DB extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+		try {
+			File file = file = new File(DB_PATH + DB_NAME);
+			if (file.exists()) file.delete();
+			System.out.println("db delete is deleted");
+		} catch (Exception ds) {
+			System.out.println("db delete is on exception " +ds);
+		}
 	}
 ///////////////////////////////////////////////////////////////////////////////////
 public Cursor getSelect(String select, String from, String where) {
