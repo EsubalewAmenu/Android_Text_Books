@@ -96,6 +96,8 @@ public class MainActivity extends AppCompatActivity
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        db = new DB(getApplicationContext());
+
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
 
@@ -261,8 +263,9 @@ public class MainActivity extends AppCompatActivity
 
     public ArrayList getData(Context context, String choosedGrade) {
 
-        open(context,"read", "books.hrm");
+//        open(context,"read", "books.hrm");
 
+        db = new DB(context);
         // get if textbook or teacher guide
         final Cursor gradeCursor = db.getSelect("*", "grade", "id="+choosedGrade);
         gradeCursor.moveToFirst();
@@ -292,22 +295,22 @@ public class MainActivity extends AppCompatActivity
 //
 //        return dbGrades;
 //    }
-    public Map<String, String> getSubjectsFromDB(Context context, String grade) throws Exception {
-
-        Map<String, String> dbSubjects = new HashMap<>();
-
-        open(context,"read", "books.hrm");
-        final Cursor gradeCursor = db.getSelect("*", "grade", "1");
-        if (gradeCursor.moveToFirst()) {
-            do {
-                dbSubjects.put(gradeCursor.getString(1), gradeCursor.getInt(0)+"");
-//                dbGrades.add(new String[]{gradeCursor.getString(1), gradeCursor.getString(2), gradeCursor.getString(3)});//grade name, num, p
-            } while (gradeCursor.moveToNext());
-        }
-
-
-        return dbSubjects;
-    }
+//    public Map<String, String> getSubjectsFromDB(Context context, String grade) throws Exception {
+//
+//        Map<String, String> dbSubjects = new HashMap<>();
+//
+////        open(context,"read", "books.hrm");
+//        final Cursor gradeCursor = db.getSelect("*", "grade", "1");
+//        if (gradeCursor.moveToFirst()) {
+//            do {
+//                dbSubjects.put(gradeCursor.getString(1), gradeCursor.getInt(0)+"");
+////                dbGrades.add(new String[]{gradeCursor.getString(1), gradeCursor.getString(2), gradeCursor.getString(3)});//grade name, num, p
+//            } while (gradeCursor.moveToNext());
+//        }
+//
+//
+//        return dbSubjects;
+//    }
     public MainAdapter setData(final Context context, ArrayList arrayList, String a){
 
         MainAdapter adapter = new MainAdapter(context, arrayList, new MainAdapter.ItemListener() {
@@ -327,23 +330,23 @@ public class MainActivity extends AppCompatActivity
         });
         return adapter;
     }
-    public void open(Context context, String write, String db_name) {
-
-        db = new DB(context, db_name);
-        try {
-            if (write.equals("write"))
-                db.writeDataBase();
-            else
-                db.createDataBase();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            db.openDataBase();
-        } catch (SQLException sqle) {
-            throw sqle;
-        }
-    }
+//    public void open(Context context, String write, String db_name) {
+//
+//        db = new DB(context, db_name);
+//        try {
+//            if (write.equals("write"))
+//                db.writeDataBase();
+//            else
+//                db.createDataBase();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            db.openDataBase();
+//        } catch (SQLException sqle) {
+//            throw sqle;
+//        }
+//    }
     private void rateApp() {
         try {
             Intent rateIntent = rateIntentForUrl("market://details");
@@ -514,13 +517,13 @@ public class MainActivity extends AppCompatActivity
             mFragmentTransaction.replace(R.id.containerView,premiumFragment).commit();
             setTitle(R.string.menu_ad_free);
 
-        } else if (id == R.id.nav_ad_reward) {
-
-            RewardFragment rewardFragment = new RewardFragment();
-            mFragmentManager = getSupportFragmentManager();
-            mFragmentTransaction = mFragmentManager.beginTransaction();
-            mFragmentTransaction.replace(R.id.containerView,rewardFragment).commit();
-            setTitle(R.string.menu_ad_reward);
+//        } else if (id == R.id.nav_ad_reward) {
+//
+//            RewardFragment rewardFragment = new RewardFragment();
+//            mFragmentManager = getSupportFragmentManager();
+//            mFragmentTransaction = mFragmentManager.beginTransaction();
+//            mFragmentTransaction.replace(R.id.containerView,rewardFragment).commit();
+//            setTitle(R.string.menu_ad_reward);
 
         } else if (id == R.id.nav_rate) {
             Toast.makeText(MainActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();

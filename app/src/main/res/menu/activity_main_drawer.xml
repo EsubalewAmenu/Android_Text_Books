@@ -76,10 +76,10 @@
                 android:id="@+id/nav_questions"
                 android:icon="@drawable/questions"
                 android:title="@string/menu_questions" />
-            <item
-                android:id="@+id/nav_ad_reward"
-                android:icon="@drawable/premium"
-                android:title="@string/menu_ad_reward" />
+<!--            <item-->
+<!--                android:id="@+id/nav_ad_reward"-->
+<!--                android:icon="@drawable/premium"-->
+<!--                android:title="@string/menu_ad_reward" />-->
             <item
                 android:id="@+id/nav_ad_free"
                 android:icon="@drawable/premium"

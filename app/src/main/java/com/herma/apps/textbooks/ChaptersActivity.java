@@ -210,7 +210,8 @@ public void setFromShort(String shortArrayList) throws JSONException {
 
 }
     public void setData(String subj, String p){
-        open(getApplicationContext(),"read", "books.hrm");
+//        open(getApplicationContext(),"read", "books.hrm");
+        db = new DB(getApplicationContext());
         final Cursor subjectsCursor = db.getSelect("*", "chapters", "subject_id='" + subj + "' ORDER BY chaptername ASC");
         if (subjectsCursor.moveToFirst()) {
             do {
@@ -282,23 +283,23 @@ try {
             new Commons(ChaptersActivity.this).messageDialog(ChaptersActivity.this, "d", R.string.no_file, 1234, fName, fEn, R.string.download, R.string.cancel, R.string.downloading, item.chapName, getIntent().getStringExtra("name"), "", "", is_short);
         }
     }
-    public void open(Context context, String write, String db_name) {
-
-        db = new DB(context, db_name);
-        try {
-            if (write.equals("write"))
-                db.writeDataBase();
-            else
-                db.createDataBase();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            db.openDataBase();
-        } catch (SQLException sqle) {
-            throw sqle;
-        }
-    }
+//    public void open(Context context, String write, String db_name) {
+//
+//        db = new DB(context, db_name);
+//        try {
+//            if (write.equals("write"))
+//                db.writeDataBase();
+//            else
+//                db.createDataBase();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            db.openDataBase();
+//        } catch (SQLException sqle) {
+//            throw sqle;
+//        }
+//    }
     private void rateApp() {
         try {
             Intent rateIntent = rateIntentForUrl("market://details");

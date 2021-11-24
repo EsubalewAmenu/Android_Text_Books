@@ -22,7 +22,6 @@ public class BookFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private ArrayList<Item> arrayList;
-    DB db;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
