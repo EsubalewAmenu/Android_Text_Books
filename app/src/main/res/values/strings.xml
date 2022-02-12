@@ -19,10 +19,9 @@
     <string name="adChapter">ca-app-pub-8011674951494696/7079802411</string>
     <string name="adQuestions">ca-app-pub-8011674951494696/4170948875</string>
     <string name="adReader">ca-app-pub-8011674951494696/3605507555</string>
-        <string name="adReward">ca-app-pub-8011674951494696/2726130955</string>
+    <string name="adReward">ca-app-pub-8011674951494696/2726130955</string>
 
     <string name="admob_app_id">ca-app-pub-8011674951494696~8662393111</string>
-
 
 
     <string name="app_name">1_12 Text Books</string>

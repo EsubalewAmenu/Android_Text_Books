@@ -9,6 +9,14 @@
     android:orientation="vertical">
 
 
+    <TextView
+        android:id="@+id/tvAds"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|center_horizontal"
+        android:singleLine="true"
+        android:ellipsize = "marquee"
+        />
     <FrameLayout
         android:id="@+id/ad_view_container"
         android:layout_width="match_parent"
