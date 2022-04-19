@@ -75,7 +75,7 @@ public class Commons {
 
     Context context;
     DB db;
-    public final String WEBSITE = "https://datascienceplc.com/apps";
+    public final String WEBSITE = "https://datascienceplc.com/api";
 ProgressDialog progressBar;
 
     /** A numeric constant for request code */
@@ -186,11 +186,13 @@ ProgressDialog progressBar;
 
                         if (is_short) {
 
-                                    downloadUrl = WEBSITE + "/manager/api/items/get_for_books?cnt=eth&what=short&name=";//+ finalFileName; // Path where you want to download file.
+                            downloadUrl = WEBSITE + "/ds_bm/v1/get_et_book/";//+ finalFileName; // Path where you want to download file.
+//                            downloadUrl = WEBSITE + "/manager/api/items/get_for_books?cnt=eth&what=short&name=";//+ finalFileName; // Path where you want to download file.
                             asyncDownloader.execute(downloadUrl, chapterID, fEn);
 
                         } else{
-                            downloadUrl = WEBSITE + "/manager/api/items/get_for_books?cnt=eth&what=txt&name=";//+ finalFileName; // Path where you want to download file.
+//                            downloadUrl = WEBSITE + "/manager/api/items/get_for_books?cnt=eth&what=txt&name=";//+ finalFileName; // Path where you want to download file.
+                            downloadUrl = WEBSITE + "/ds_bm/v1/get_et_book/";//+ finalFileName; // Path where you want to download file.
                         asyncDownloader.execute(downloadUrl, finalFileName1, fEn);
                     }
 

@@ -31,7 +31,7 @@
     <string name="nav_header_subtitle">apps@datascienceplc.com</string>
     <string name="nav_header_desc">Navigation header</string>
 
-    <string name="downloading">በማውረዳ ላይ/Downloading...</string>
+    <string name="downloading">በማውረድ ላይ/Downloading...</string>
     <string name="download">አውርድ/Download</string>
     <string name="browserDownload">ከTelegram አውርድ</string>
     <string name="cancel">አይ, ተወው</string>
