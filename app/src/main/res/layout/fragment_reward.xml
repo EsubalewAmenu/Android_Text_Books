@@ -52,21 +52,12 @@
         android:layout_gravity="left|right|center_horizontal|center_vertical|fill_horizontal|center|fill|start|end"
         android:layout_width = "wrap_content"
         android:layout_height = "wrap_content"
-        android:text = "Current reward 0.5"
+        android:text = "Current reward 0.25"
         android:id = "@+id/tvCurrentReward"
         android:layout_below = "@+id/textview"
         android:layout_centerHorizontal = "true"
         style="@style/Widget.AppCompat.Button.Colored"
         android:textSize = "35dp" />
-
-
-    <EditText
-                android:id="@+id/etName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/your_name"
-                android:inputType="textPersonName" />
 
             <EditText
                 android:id="@+id/etPhone"
@@ -77,21 +68,25 @@
                 android:inputType="phone" />
 
 
-    <Button
-        android:id="@+id/btnStartReward"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        android:layout_marginStart="30dp"
-        android:text="@string/startReward"
-        android:textSize="18sp"
-        />
+<!--    <Button-->
+<!--        android:id="@+id/btnStartReward"-->
+<!--        style="@style/Widget.AppCompat.Button.Colored"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginEnd="30dp"-->
+<!--        android:layout_marginStart="30dp"-->
+<!--        android:text="@string/startReward"-->
+<!--        android:textSize="18sp"-->
+<!--        />-->
 
 
 
 </LinearLayout>
 
+            <FrameLayout
+                android:id="@+id/reward_ad_view_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

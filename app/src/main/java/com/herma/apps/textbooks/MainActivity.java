@@ -541,13 +541,13 @@ public class MainActivity extends AppCompatActivity
             mFragmentTransaction.replace(R.id.containerView,premiumFragment).commit();
             setTitle(R.string.menu_ad_free);
 
-//        } else if (id == R.id.nav_ad_reward) {
-//
-//            RewardFragment rewardFragment = new RewardFragment();
-//            mFragmentManager = getSupportFragmentManager();
-//            mFragmentTransaction = mFragmentManager.beginTransaction();
-//            mFragmentTransaction.replace(R.id.containerView,rewardFragment).commit();
-//            setTitle(R.string.menu_ad_reward);
+        } else if (id == R.id.nav_ad_reward) {
+
+            RewardFragment rewardFragment = new RewardFragment();
+            mFragmentManager = getSupportFragmentManager();
+            mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.replace(R.id.containerView,rewardFragment).commit();
+            setTitle(R.string.menu_ad_reward);
 
         } else if (id == R.id.nav_rate) {
             Toast.makeText(MainActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();

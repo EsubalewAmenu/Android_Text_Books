@@ -20,7 +20,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    ndkVersion "23.0.7123448"
+    ndkVersion "24.0.8215888"
 
     buildTypes {
         release {

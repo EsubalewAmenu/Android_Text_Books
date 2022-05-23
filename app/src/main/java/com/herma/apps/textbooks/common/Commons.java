@@ -518,7 +518,7 @@ ProgressDialog progressBar;
         adView.loadAd(adRequest);
     }
 
-    private AdSize getAdSize(FrameLayout adContainerView, Display display) {
+    public AdSize getAdSize(FrameLayout adContainerView, Display display) {
         // Determine the screen width (less decorations) to use for the ad width.
         DisplayMetrics outMetrics = new DisplayMetrics();
         display.getMetrics(outMetrics);

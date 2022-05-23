@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
@@ -51,12 +55,14 @@ public class RewardFragment extends Fragment {
 
     Button btnStartReward;
 
-    EditText etName, etPhone ;
+    EditText etPhone ;
     TextView tvReward, tvCurrentReward ;
 String phoneString, nameString;
 
-    private RewardedAd mRewardedAd;
+//    private RewardedAd mRewardedAd;
     public RequestQueue queue;
+    private FrameLayout rewardAdContainerView;
+    private AdView rewardAdView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -64,7 +70,6 @@ String phoneString, nameString;
 
         btnStartReward = (Button) root.findViewById(R.id.btnStartReward);
 
-        etName = (EditText) root.findViewById(R.id.etName);
         etPhone = (EditText) root.findViewById(R.id.etPhone);
 
         tvReward = (TextView) root.findViewById(R.id.tvReward);
@@ -90,7 +95,6 @@ String phoneString, nameString;
         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getContext());
         phoneString = pre.getString("phone", "");
         nameString = pre.getString("name", "") ;
-        etName.setText(nameString);
         etPhone.setText(phoneString);
 
 
@@ -102,18 +106,82 @@ String phoneString, nameString;
         });
 
 
-        btnStartReward.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        btnStartReward.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//              phoneString = etPhone.getText().toString().trim();
+//
+//                if(phoneString.equals("")  ){
+//                    Toast.makeText(getContext(), getString(R.string.fill_the_form), Toast.LENGTH_SHORT).show();
+//                }else {
+//                    showUsersReward();
+////                    showUsersWaitingTime();
+//                }
+//            }
+//        });
 
-              phoneString = etPhone.getText().toString().trim();
+        rewardAdContainerView = root.findViewById(R.id.reward_ad_view_container);
+
+        // Since we're loading the banner based on the adContainerView size, we need to wait until this
+        // view is laid out before we can get the width.
+//        rewardAdContainerView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                new Commons(getContext()).loadBanner(rewardAdView, getString(R.string.adHome), rewardAdContainerView, getActivity().getWindowManager().getDefaultDisplay());
+//            }
+//        });
+
+        // Create an ad request.
+        rewardAdView = new AdView(getContext());
+        rewardAdView.setAdUnitId(getString(R.string.adHome));
+        rewardAdContainerView.removeAllViews();
+        rewardAdContainerView.addView(rewardAdView);
+
+        AdSize adSize = new Commons(getContext()).getAdSize(rewardAdContainerView, getActivity().getWindowManager().getDefaultDisplay());
+        rewardAdView.setAdSize(adSize);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        // Start loading the ad in the background.
+        rewardAdView.loadAd(adRequest);
+
+        rewardAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError adError) {
+                // Code to be executed when an ad request fails.
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+                System.out.println("ad clicked by the user");
+
+                phoneString = etPhone.getText().toString().trim();
 
                 if(phoneString.equals("")  ){
                     Toast.makeText(getContext(), getString(R.string.fill_the_form), Toast.LENGTH_SHORT).show();
                 }else {
-                    showUsersReward();
+//                    showUsersReward();
 //                    showUsersWaitingTime();
                 }
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
             }
         });
 
@@ -122,43 +190,43 @@ String phoneString, nameString;
         return root;
     }
 
-    public void showUsersReward(){
-
-//        Toast.makeText(getContext(), "Show reward here", Toast.LENGTH_SHORT).show();
-
-
-        AdRequest adRequest = new AdRequest.Builder().build();
-
-        RewardedAd.load(getContext(), getString(R.string.adReward),
-                adRequest, new RewardedAdLoadCallback() {
-                    @Override
-                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                        // Handle the error.
-                        Log.d("showUsersReward", loadAdError.getMessage());
-                        mRewardedAd = null;
-                    }
-
-                    @Override
-                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
-                        mRewardedAd = rewardedAd;
-                        Log.d("showUsersReward", "Ad was loaded.");
-                        if (mRewardedAd != null) {
-                            Activity activityContext = getActivity();
-                            mRewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
-                                @Override
-                                public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                                    // Handle the reward.
-                                    Log.d("showUsersReward", "The user earned the reward.");
-                                    int rewardAmount = rewardItem.getAmount();
-                                    String rewardType = rewardItem.getType();
-                                }
-                            });
-                        } else {
-                            Log.d("showUsersReward", "The rewarded ad wasn't ready yet.");
-                        }
-                    }
-                });
-    }
+//    public void showUsersReward(){
+//
+////        Toast.makeText(getContext(), "Show reward here", Toast.LENGTH_SHORT).show();
+//
+//
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//
+//        RewardedAd.load(getContext(), getString(R.string.adReward),
+//                adRequest, new RewardedAdLoadCallback() {
+//                    @Override
+//                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+//                        // Handle the error.
+//                        Log.d("showUsersReward", loadAdError.getMessage());
+//                        mRewardedAd = null;
+//                    }
+//
+//                    @Override
+//                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
+//                        mRewardedAd = rewardedAd;
+//                        Log.d("showUsersReward", "Ad was loaded.");
+//                        if (mRewardedAd != null) {
+//                            Activity activityContext = getActivity();
+//                            mRewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
+//                                @Override
+//                                public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+//                                    // Handle the reward.
+//                                    Log.d("showUsersReward", "The user earned the reward.");
+//                                    int rewardAmount = rewardItem.getAmount();
+//                                    String rewardType = rewardItem.getType();
+//                                }
+//                            });
+//                        } else {
+//                            Log.d("showUsersReward", "The rewarded ad wasn't ready yet.");
+//                        }
+//                    }
+//                });
+//    }
 
     private void doApiCall() {
 //        new Handler().postDelayed(new Runnable() {
