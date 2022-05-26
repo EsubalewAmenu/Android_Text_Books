@@ -53,7 +53,7 @@ import java.util.Map;
 public class RewardFragment extends Fragment {
 
 
-    Button btnStartReward;
+//    Button btnStartReward;
 
     EditText etPhone ;
     TextView tvReward, tvCurrentReward ;
@@ -68,7 +68,7 @@ String phoneString, nameString;
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_reward, container, false);
 
-        btnStartReward = (Button) root.findViewById(R.id.btnStartReward);
+//        btnStartReward = (Button) root.findViewById(R.id.btnStartReward);
 
         etPhone = (EditText) root.findViewById(R.id.etPhone);
 
