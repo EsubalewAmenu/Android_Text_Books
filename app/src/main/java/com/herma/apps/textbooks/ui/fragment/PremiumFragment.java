@@ -241,9 +241,8 @@ public class PremiumFragment extends Fragment {
                     @Override
                     public Map<String, String> getHeaders() throws AuthFailureError {
                         Map<String, String> params = new HashMap<>();
-                        params.put("email", "bloger_api@datascienceplc.com");//public user
-                        params.put("password", "public-password");
-                        params.put("Authorization", "Basic YmxvZ2VyX2FwaUBkYXRhc2NpZW5jZXBsYy5jb206cHVibGljLXBhc3N3b3Jk");
+                        params.put("username", SplashActivity.USERNAME);
+                        params.put("password", SplashActivity.PAZZWORD);
                         return params;
                     }
                 };

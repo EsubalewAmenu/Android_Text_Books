@@ -57,7 +57,7 @@ public class RewardFragment extends Fragment {
 
     EditText etPhone ;
     TextView tvReward, tvCurrentReward ;
-String phoneString, nameString;
+String phoneString;//, nameString;
 
 //    private RewardedAd mRewardedAd;
     public RequestQueue queue;
@@ -94,7 +94,7 @@ String phoneString, nameString;
 
         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getContext());
         phoneString = pre.getString("phone", "");
-        nameString = pre.getString("name", "") ;
+//        nameString = pre.getString("name", "") ;
         etPhone.setText(phoneString);
 
 
@@ -173,6 +173,9 @@ String phoneString, nameString;
                 if(phoneString.equals("")  ){
                     Toast.makeText(getContext(), getString(R.string.fill_the_form), Toast.LENGTH_SHORT).show();
                 }else {
+
+                    saveRewardApiCall();
+
 //                    showUsersReward();
 //                    showUsersWaitingTime();
                 }
@@ -252,7 +255,62 @@ String phoneString, nameString;
                         System.out.println(" response is " + response );
 
 
-                Toast.makeText(getContext(), "response on logcat", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "response on logcat", Toast.LENGTH_SHORT).show();
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Toast.makeText(getContext(), "reward resp is error " + error, Toast.LENGTH_SHORT).show();
+
+                System.out.println("reward resp url is  " + url_subjects);
+                System.out.println("reward resp is error " + error);
+
+            }
+
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", SplashActivity.USERNAME);
+                params.put("password", SplashActivity.PAZZWORD);
+                return params;
+            }
+        };
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        stringRequest.setTag(this);
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+//            }
+//        }, 1500);
+    }
+
+    private void saveRewardApiCall() {
+        String url_subjects = new SplashActivity().BASEAPI + "ds_rewards/v1/app_ad_clicked";
+
+        queue = Volley.newRequestQueue(getContext());
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url_subjects,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        String resp = response;
+//                        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getContext());
+//                        pre.edit().putString("que_service", resp).apply();
+//
+//                        pre.edit().putString("updated_at", (new Date()).toString()).apply();
+
+                        System.out.println("app_ad_clicked response is " + response );
+
+
+                        Toast.makeText(getContext(), "response on logcat", Toast.LENGTH_SHORT).show();
                     }
 
                 }, new Response.ErrorListener() {

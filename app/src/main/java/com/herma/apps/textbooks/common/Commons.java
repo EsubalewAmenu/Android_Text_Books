@@ -38,6 +38,7 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.herma.apps.textbooks.R;
 import com.herma.apps.textbooks.ReadActivity;
+import com.herma.apps.textbooks.SplashActivity;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -288,9 +289,8 @@ ProgressDialog progressBar;
 //            System.out.println("URL is " + URL);
             Request request = new Request.Builder().url(URL)
                     .addHeader("X-CSRFToken", "csrftoken")
-                    .addHeader("email", "bloger_api@datascienceplc.com")//public user
-                    .addHeader("password", "public-password")
-                    .addHeader("Authorization", "Basic YmxvZ2VyX2FwaUBkYXRhc2NpZW5jZXBsYy5jb206cHVibGljLXBhc3N3b3Jk")
+                    .addHeader("username", SplashActivity.USERNAME)
+                    .addHeader("password", SplashActivity.PAZZWORD)
                     .addHeader("Content-Type", "application/pdf").build();
 
             Call call = httpClient.newCall(request);

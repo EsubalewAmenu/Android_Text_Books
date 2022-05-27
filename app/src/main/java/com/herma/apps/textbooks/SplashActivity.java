@@ -46,6 +46,7 @@ public class SplashActivity extends AppCompatActivity {
     public String BASEAPI = "https://datascienceplc.com/api/";
 //    public String BASEAPI = "https://192.168.8.101:8082/wp/ds/api/";
     public RequestQueue queue;
+    public static String USERNAME = "public-api-user", PAZZWORD = "public-api-password";
 
 
     private static int SPLASH_SCREEN_TIME_OUT = 1100;
@@ -134,9 +135,8 @@ public class SplashActivity extends AppCompatActivity {
                         @Override
                         public Map<String, String> getHeaders() throws AuthFailureError {
                             Map<String, String> params = new HashMap<>();
-                            params.put("email", "bloger_api@datascienceplc.com");//public user
-                            params.put("password", "public-password");
-                            params.put("Authorization", "Basic YmxvZ2VyX2FwaUBkYXRhc2NpZW5jZXBsYy5jb206cHVibGljLXBhc3N3b3Jk");
+                            params.put("username", USERNAME);
+                            params.put("password", PAZZWORD);
                             return params;
                         }
                     };

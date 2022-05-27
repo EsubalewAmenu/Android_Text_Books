@@ -319,9 +319,8 @@ public class ReadActivity extends AppCompatActivity {
         OkHttpClient rewardClient = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .header("email", "api@datascienceplc.com")//public user
-                .header("password", "public-password")
-                .header("Authorization", "Basic YXBpQGRhdGFzY2llbmNlcGxjLmNvbTpwdWJsaWMtcGFzc3dvcmQ=")
+                .header("username", SplashActivity.USERNAME)
+        .header("password", SplashActivity.PAZZWORD)
                 .url(new Commons(this).WEBSITE + "/reward/api/items/start_reward?phone=" + storedPhone)
                 .build();
         rewardClient.newCall(request).enqueue(new Callback() {
@@ -368,9 +367,8 @@ public class ReadActivity extends AppCompatActivity {
         OkHttpClient rewardClient = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .header("email", "api@datascienceplc.com")//public user
-                .header("password", "public-password")
-                .header("Authorization", "Basic YXBpQGRhdGFzY2llbmNlcGxjLmNvbTpwdWJsaWMtcGFzc3dvcmQ=")
+                .header("username", SplashActivity.USERNAME)
+                .header("password", SplashActivity.PAZZWORD)
                 .url(new Commons(this).WEBSITE + "/reward/api/items/end_reward?phone=" + _phone + "&id=" + rewardId )
                 .build();
         rewardClient.newCall(request).enqueue(new Callback() {
