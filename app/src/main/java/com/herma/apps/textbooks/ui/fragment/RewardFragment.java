@@ -174,7 +174,10 @@ String phoneString;//, nameString;
                     Toast.makeText(getContext(), getString(R.string.fill_the_form), Toast.LENGTH_SHORT).show();
                 }else {
 
-                    saveRewardApiCall();
+                        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getContext());
+                        pre.edit().putString("phone", phoneString).apply();
+
+                    saveRewardApiCall(phoneString, rewardAdView.getAdUnitId());
 
 //                    showUsersReward();
 //                    showUsersWaitingTime();
@@ -291,8 +294,8 @@ String phoneString;//, nameString;
 //        }, 1500);
     }
 
-    private void saveRewardApiCall() {
-        String url_subjects = new SplashActivity().BASEAPI + "ds_rewards/v1/app_ad_clicked";
+    private void saveRewardApiCall(String _phone, String _unit_id) {
+        String url_subjects = new SplashActivity().BASEAPI + "ds_rewards/v1/app_ad_clicked?phone="+_phone+"&unit_id="+_unit_id;
 
         queue = Volley.newRequestQueue(getContext());
 
@@ -328,9 +331,8 @@ String phoneString;//, nameString;
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("email", "bloger_api@datascienceplc.com");//public user
-                params.put("password", "public-password");
-                params.put("Authorization", "Basic YmxvZ2VyX2FwaUBkYXRhc2NpZW5jZXBsYy5jb206cHVibGljLXBhc3N3b3Jk");
+                params.put("username", SplashActivity.USERNAME);
+                params.put("password", SplashActivity.PAZZWORD);
                 return params;
             }
         };
