@@ -295,7 +295,7 @@ String phoneString;//, nameString;
     }
 
     private void saveRewardApiCall(String _phone, String _unit_id) {
-        String url_subjects = new SplashActivity().BASEAPI + "ds_rewards/v1/app_ad_clicked?phone="+_phone+"&unit_id="+_unit_id;
+        String url_subjects = new SplashActivity().BASEAPI + "ds_rewards/v1/app_ad_clicked";
 
         queue = Volley.newRequestQueue(getContext());
 

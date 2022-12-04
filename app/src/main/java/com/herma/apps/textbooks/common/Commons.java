@@ -47,6 +47,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.security.spec.KeySpec;
@@ -60,17 +63,6 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
-import okhttp3.Call;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class Commons {
 
@@ -136,33 +128,6 @@ ProgressDialog progressBar;
             text.setText(context.getResources().getString(message));
 
         Button btnDownloadBrowser = (Button) myDialog.findViewById(R.id.btnDownloadBrowser);
-        String finalFileName = fileName;
-        btnDownloadBrowser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-//                Uri uri = Uri.parse(WEBSITE + "/consol/chap?cnt=eth&name="+ finalFileName); // Path where you want to download file.
-                Uri uri;
-//                if(is_short){
-//                    uri = Uri.parse(WEBSITE + "/manager/api/items/get_for_books?cnt=eth&name="+ chapterID + "&what=short"); // Path where you want to download file.
-//                } else
-//                uri = Uri.parse(WEBSITE + "/manager/api/items/get_for_books?cnt=eth&name="+ finalFileName + "&what=txt"); // Path where you want to download file.
-//
-//                DownloadManager.Request request = new DownloadManager.Request(uri);
-//                request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI);  // Tell on which network you want to download file.
-//                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);  // This will show notification on top when downloading the file.
-//                request.setTitle(finalFileName); // Title for notification.
-//                request.setVisibleInDownloadsUi(true);
-//                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, finalFileName);//uri.getLastPathSegment());  // Storage directory path
-//                ((DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE)).enqueue(request); // This will start downloading
-
-                        uri = Uri.parse("https://t.me/Ethio_books_bot");
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    context.startActivity(intent);
-
-                myDialog.dismiss();
-            }
-        });
 
         Button btnDownload = (Button) myDialog.findViewById(R.id.btnDownload);
         btnDownload.setText(context.getResources().getString(yesBtn));
@@ -270,124 +235,112 @@ ProgressDialog progressBar;
     }
 
     ///////////////////////////////////////////////////////////////
-    public class AsyncDownloader extends AsyncTask<String, Long, Pair<String, byte[]>> {
-        private String URL;
+    public class AsyncDownloader extends AsyncTask<String, Integer, String> {
+//        private String URL;
         public String fName, fEn;
-        File file;
+//        File file;
 
+
+        InputStream input = null;
+        OutputStream output = null;
+        HttpURLConnection connection = null;
 
         @Override
-        protected Pair<String, byte[]> doInBackground(String... params) {
+        protected String doInBackground(String... params) {
 
-            URL = params[0]+params[1];
+//            URL = params[0]+params[1];
 
             fName = params[1];
             fEn = params[2];
 
-            OkHttpClient httpClient = new OkHttpClient();
-
-//            System.out.println("URL is " + URL);
-            Request request = new Request.Builder().url(URL)
-                    .addHeader("X-CSRFToken", "csrftoken")
-                    .addHeader("username", SplashActivity.USERNAME)
-                    .addHeader("password", SplashActivity.PAZZWORD)
-                    .addHeader("Content-Type", "application/pdf").build();
-
-            Call call = httpClient.newCall(request);
             try {
-                Response response = call.execute();
+                URL url = new URL(params[0]+params[1]);
+                connection = (HttpURLConnection) url.openConnection();
 
-//                System.out.println("request : is ");
-//                System.out.println(request);
+                connection.setRequestProperty ("username", SplashActivity.USERNAME);
+                connection.setRequestProperty ("password", SplashActivity.PAZZWORD);
+                connection.setRequestProperty ("Content-Type", "application/pdf");
+                connection.setUseCaches(false);
+//            connection.setDoInput(true);
+//            connection.setDoOutput(true);
 
-                if (response.code() == 200) {
-                    InputStream inputStream = null;
-                    try {
-                        inputStream = response.body().byteStream();
+                connection.connect();
 
-                        //added
-                        BufferedInputStream input = new BufferedInputStream(inputStream);
-                        // create a File object for the parent directory
-                        String FILEPATH = "/storage/emulated/0/Herma/books/";
-
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
-                            FILEPATH = context.getFilesDir().getPath() + "/Herma/books/";
-
-                        File booksDirectory = new File(FILEPATH);
-// have the object build the directory structure, if needed.
-
-                        if (!booksDirectory.exists()) System.out.println(booksDirectory.mkdirs());
-
-                        file = new File(FILEPATH + params[1]);
-//                        File file = new File(FILEPATH + params[1]);
-
-                        OutputStream output = new FileOutputStream(file);
-
-                        byte[] buff = new byte[1024];
-
-                        long downloaded = 0;
-                        long target = response.body().contentLength();
-                        publishProgress(0L, target);
-
-
-                        while (true) {
-                            int count = input.read(buff);
-                            if (count == -1) {
-                                break;
-                            }
-                            downloaded += count;
-                            publishProgress(downloaded, target);
-
-                            //write buff
-                            output.write(buff, 0, count);
-
-                            if (isCancelled()) {
-                                return null;//false;
-                            }
-                        }
-
-                        output.flush();
-                        output.close();
-                        input.close();
-
-                        Pair<String, byte[]> pair = new Pair<>(params[1], buff);
-
-                        return pair;//downloaded == target;
-
-                    } catch (IOException ignore) {
-                        System.out.println("on try exception is ignore " + ignore);
-//                        System.out.println("Not downloaded " ); // b/c of permission
-                        return null;//false;
-                    } finally {
-                        if (inputStream != null) {
-                            inputStream.close();
-
-                        }
-                    }
-                } else {
-                    return null;//false;
+                // expect HTTP 200 OK, so we don't mistakenly save error report
+                // instead of the file
+                if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    return "Server returned HTTP " + connection.getResponseCode()
+                            + " " + connection.getResponseMessage();
                 }
-            } catch (IOException e) {
+
+                // this will be useful to display download percentage
+                // might be -1: server did not report the length
+                int fileLength = connection.getContentLength();
+
+                // download the file
+                input = connection.getInputStream();
+
+                String FILEPATH = context.getFilesDir().getPath() + "/Herma/books/";
+
+                output = new FileOutputStream(FILEPATH+fName);
+
+                byte data[] = new byte[4096];
+                long total = 0;
+                int count;
+                while ((count = input.read(data)) != -1) {
+                    // allow canceling with back button
+                    if (isCancelled()) {
+                        input.close();
+                        return null;
+                    }
+                    total += count;
+                    // publishing the progress....
+                    if (fileLength > 0) // only if total length is known
+                        publishProgress((int) (total * 100 / fileLength));
+                    output.write(data, 0, count);
+                }
+
+            } catch (UnknownHostException e) {
+
+                return "Can't download. Please check your connection!";
+            }catch (Exception e) {
                 e.printStackTrace();
-                return null;//false;
+                return "Unknown error! Please try again ";
+            } finally {
+                try {
+                    if (output != null)
+                        output.close();
+                    if (input != null)
+                        input.close();
+                } catch (IOException ignored) {
+                }
+
+                if (connection != null)
+                    connection.disconnect();
             }
+            return null;
         }
 
         @Override
-        protected void onProgressUpdate(Long... values) {
-            progressBar.setMax(values[1].intValue());
-            progressBar.setProgress(values[0].intValue());
+        protected void onProgressUpdate(Integer... progress) {
+            super.onProgressUpdate(progress);
+            // if we get here, length is known, now set indeterminate to false
+            progressBar.setIndeterminate(false);
+            progressBar.setMax(100);
+            progressBar.setProgress(progress[0]);
         }
 
         @Override
-        protected void onPostExecute(Pair<String, byte[]> pair) {
+        protected void onPostExecute(String result) {
 
-
-            try {
-                if (pair.second != null && pair.second.length > 0) {
-
-//                    byte[] bytes = pair.second;
-
+            progressBar.dismiss();
+            if (result != null) {
+                Toast.makeText(context, "Download error: " + result, Toast.LENGTH_LONG).show();
+                try {
+//                    if (file.exists()) file.delete();
+                } catch (Exception ds) {
+                }
+            }else {
                     Intent chaptersIntent = new Intent(context, ReadActivity.class);
                     chaptersIntent.putExtra("fileName", fName);
                     chaptersIntent.putExtra("p", fEn);
@@ -397,35 +350,8 @@ ProgressDialog progressBar;
 
 
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(context, context.getResources().getString(R.string.try_later), Toast.LENGTH_SHORT).show();
-                        try{if (file.exists())file.delete();}catch (Exception ds){}
-            }
-            progressBar.dismiss();
-////        textViewStatus.setText(result ? "Downloaded" : "Failed");
         }
     }
-//    public void open(Context context, String write, String db_name) {
-//
-//        db = new DB(context, db_name);
-//        try {
-//            if (write.equals("write"))
-//                db.writeDataBase();
-//            else
-//                db.createDataBase();
-//        } catch (IOException ioe) {
-//            throw new Error("Unable to create database");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            db.openDataBase();
-//        } catch (SQLException sqle) {
-//            throw sqle;
-//        }
-//    }
-
     public boolean dec(String filePath, String fileName, String p) {
         try {
             byte[] salt = {69, 121, 101, 45, 62, 118, 101, 114, 69, 121, 101, 45, 62, 118, 101, 114};

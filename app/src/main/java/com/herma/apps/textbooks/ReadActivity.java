@@ -43,12 +43,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
 public class ReadActivity extends AppCompatActivity {
 
     PDFView pdfView;
@@ -228,7 +222,7 @@ public class ReadActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.read, menu);
         return true;
     }
     @Override
@@ -315,116 +309,116 @@ public class ReadActivity extends AppCompatActivity {
 
 
     public void isTheirReward(){
-
-        OkHttpClient rewardClient = new OkHttpClient();
-
-        Request request = new Request.Builder()
-                .header("username", SplashActivity.USERNAME)
-        .header("password", SplashActivity.PAZZWORD)
-                .url(new Commons(this).WEBSITE + "/reward/api/items/start_reward?phone=" + storedPhone)
-                .build();
-        rewardClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String myResponse = response.body().string();
-                    ReadActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            try {
-                                JSONObject reader = new JSONObject(myResponse);
-
-
-//                                    System.out.println("myResponse = " + myResponse);
-
-                                if((reader.getString("success")).equals("true") && (reader.getString("message")).equals("START")){
-                                    rewardId = reader.getString("id");
-                                    rewardCountdown(reader.getDouble("min"));
-
-//                                    System.out.println("rewardId = " + rewardId);
-                                }
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                    });
-                }
-            }
-        });
-
+//
+//        OkHttpClient rewardClient = new OkHttpClient();
+//
+//        Request request = new Request.Builder()
+//                .header("username", SplashActivity.USERNAME)
+//        .header("password", SplashActivity.PAZZWORD)
+//                .url(new Commons(this).WEBSITE + "/reward/api/items/start_reward?phone=" + storedPhone)
+//                .build();
+//        rewardClient.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                e.printStackTrace();
+//            }
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                if (response.isSuccessful()) {
+//                    final String myResponse = response.body().string();
+//                    ReadActivity.this.runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                            try {
+//                                JSONObject reader = new JSONObject(myResponse);
+//
+//
+////                                    System.out.println("myResponse = " + myResponse);
+//
+//                                if((reader.getString("success")).equals("true") && (reader.getString("message")).equals("START")){
+//                                    rewardId = reader.getString("id");
+//                                    rewardCountdown(reader.getDouble("min"));
+//
+////                                    System.out.println("rewardId = " + rewardId);
+//                                }
+//
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                        }
+//                    });
+//                }
+//            }
+//        });
+//
     }
 
     public void endReward(String _phone){
-
-//        System.out.println("endReward() reward done!");
-        OkHttpClient rewardClient = new OkHttpClient();
-
-        Request request = new Request.Builder()
-                .header("username", SplashActivity.USERNAME)
-                .header("password", SplashActivity.PAZZWORD)
-                .url(new Commons(this).WEBSITE + "/reward/api/items/end_reward?phone=" + _phone + "&id=" + rewardId )
-                .build();
-        rewardClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                btnGiftReward.setVisibility(View.VISIBLE);
-                e.printStackTrace();
-            }
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String myResponse = response.body().string();
-                    ReadActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-//                            System.out.println("endReward() reward done!");
-//                            {"success":true,"error":false,"message":"REWARDED","amount":"0.50000000","currency_code":"ETB"}
 //
-//                            System.out.println("seconds remaining: " + myResponse);
-
-
-                            try {
-                                JSONObject reader = new JSONObject(myResponse);
-                                if((reader.getString("success")).equals("true") && (reader.getString("message")).equals("REWARDED")){
-
-
-                                    System.out.println("display_message = " + reader.getString("display_message"));
-
-                                    AlertDialog.Builder builder;
-                                    builder = new AlertDialog.Builder(ReadActivity.this);
-//                                    $result->amount.$result->currency_code." ሽልማትዎን መዝግበናል። እኛጋር ያልዎት ከ 2 ብር ከበለጠ ወደስልኮ እንልካለን። ስላነበቡ_እናመሰግናለን!"
-                                    builder.setMessage(reader.getString("display_message")) .setTitle("REWARDED!")
-                                            .setCancelable(true)
-                                            .setPositiveButton(R.string.እሺ, new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int id) {
-//                                                    finish();
-                                                }
-                                            });
-
-                                    //Creating dialog box
-                                    AlertDialog alert = builder.create();
-                                    //Setting the title manually
-//                                    alert.setTitle("AlertDialogExample");
-                                    alert.show();
-
-                                }
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                    });
-                }
-            }
-        });
-
+////        System.out.println("endReward() reward done!");
+//        OkHttpClient rewardClient = new OkHttpClient();
+//
+//        Request request = new Request.Builder()
+//                .header("username", SplashActivity.USERNAME)
+//                .header("password", SplashActivity.PAZZWORD)
+//                .url(new Commons(this).WEBSITE + "/reward/api/items/end_reward?phone=" + _phone + "&id=" + rewardId )
+//                .build();
+//        rewardClient.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                btnGiftReward.setVisibility(View.VISIBLE);
+//                e.printStackTrace();
+//            }
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                if (response.isSuccessful()) {
+//                    final String myResponse = response.body().string();
+//                    ReadActivity.this.runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+////                            System.out.println("endReward() reward done!");
+////                            {"success":true,"error":false,"message":"REWARDED","amount":"0.50000000","currency_code":"ETB"}
+////
+////                            System.out.println("seconds remaining: " + myResponse);
+//
+//
+//                            try {
+//                                JSONObject reader = new JSONObject(myResponse);
+//                                if((reader.getString("success")).equals("true") && (reader.getString("message")).equals("REWARDED")){
+//
+//
+//                                    System.out.println("display_message = " + reader.getString("display_message"));
+//
+//                                    AlertDialog.Builder builder;
+//                                    builder = new AlertDialog.Builder(ReadActivity.this);
+////                                    $result->amount.$result->currency_code." ሽልማትዎን መዝግበናል። እኛጋር ያልዎት ከ 2 ብር ከበለጠ ወደስልኮ እንልካለን። ስላነበቡ_እናመሰግናለን!"
+//                                    builder.setMessage(reader.getString("display_message")) .setTitle("REWARDED!")
+//                                            .setCancelable(true)
+//                                            .setPositiveButton(R.string.እሺ, new DialogInterface.OnClickListener() {
+//                                                public void onClick(DialogInterface dialog, int id) {
+////                                                    finish();
+//                                                }
+//                                            });
+//
+//                                    //Creating dialog box
+//                                    AlertDialog alert = builder.create();
+//                                    //Setting the title manually
+////                                    alert.setTitle("AlertDialogExample");
+//                                    alert.show();
+//
+//                                }
+//
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                        }
+//                    });
+//                }
+//            }
+//        });
+//
     }
 }
