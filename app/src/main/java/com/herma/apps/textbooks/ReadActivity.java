@@ -230,6 +230,9 @@ public class ReadActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             case R.id.action_rate:
                 Toast.makeText(ReadActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
                 rateApp();
