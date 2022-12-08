@@ -192,17 +192,11 @@ ProgressDialog progressBar;
     }
     public void deleteSubjectDialog(final Context context, ArrayList<Item> arrayList) {
 
-        String tempFile;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
-            tempFile = context.getFilesDir().getPath() + "/Herma/books/";
-        else tempFile = "/storage/emulated/0/Herma/books/";
-
-        String filePath = tempFile;
-
+        String filePath = context.getFilesDir().getPath() + "/Herma/books/";
 
         new AlertDialog.Builder(context)
-                .setTitle("እርግጠኛ ኖት?")
-                .setMessage("የዚህን የትምህርት አይነት ምዕራፎች ማጥፋት ይፈልጋሉ?")
+                .setTitle("Are you sure")
+                .setMessage("Do you want to delete this subject units?")
 
                 // Specifying a listener allows you to take an action before dismissing the dialog.
                 // The dialog is automatically dismissed when a dialog button is clicked.

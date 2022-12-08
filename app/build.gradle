@@ -20,7 +20,12 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    ndkVersion "24.0.8215888"
+    bundle {
+        storeArchive {
+            enable = false
+        }
+    }
+    ndkVersion "25.1.8937393"
 
     buildTypes {
         release {

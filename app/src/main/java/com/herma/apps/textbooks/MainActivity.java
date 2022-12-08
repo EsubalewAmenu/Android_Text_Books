@@ -506,6 +506,10 @@ public class MainActivity extends AppCompatActivity
             changeFragment("15", "Grade 10 T. Guide");
         } else if (id == R.id.nav_g9t) {
             changeFragment("16", "Grade 9 T. Guide");
+        } else if (id == R.id.nav_g8t) {
+            changeFragment("17", "Grade 8 T. Guide");
+        } else if (id == R.id.nav_g7t) {
+            changeFragment("18", "Grade 7 T. Guide");
         } else if (id == R.id.nav_questions) {
 
 //            Fragmentbundle = new Bundle();
@@ -541,14 +545,17 @@ public class MainActivity extends AppCompatActivity
             mFragmentTransaction.replace(R.id.containerView,premiumFragment).commit();
             setTitle(R.string.menu_ad_free);
 
-        } else if (id == R.id.nav_ad_reward) {
+//        } else if (id == R.id.nav_ad_reward) {
+//
+//            RewardFragment rewardFragment = new RewardFragment();
+//            mFragmentManager = getSupportFragmentManager();
+//            mFragmentTransaction = mFragmentManager.beginTransaction();
+//            mFragmentTransaction.replace(R.id.containerView,rewardFragment).commit();
+//            setTitle(R.string.menu_ad_reward);
 
-            RewardFragment rewardFragment = new RewardFragment();
-            mFragmentManager = getSupportFragmentManager();
-            mFragmentTransaction = mFragmentManager.beginTransaction();
-            mFragmentTransaction.replace(R.id.containerView,rewardFragment).commit();
-            setTitle(R.string.menu_ad_reward);
-
+        } else if (id == R.id.nav_college_books) {
+            openUrl("https://play.google.com/store/apps/details?id=com.herma.apps.collegebooks&hl=en_US&gl=US");
+            return true;
         } else if (id == R.id.nav_rate) {
             Toast.makeText(MainActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
             rateApp();
