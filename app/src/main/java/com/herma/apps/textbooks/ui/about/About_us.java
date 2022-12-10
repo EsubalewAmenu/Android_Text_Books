@@ -23,7 +23,7 @@ public class About_us extends AppCompatActivity {
         setContentView(R.layout.about);
         ((Button) findViewById(R.id.telegram)).setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                About_us.this.startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://t.me/pakist_textbooks")));
+                About_us.this.startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://t.me/ethio_textbooks")));
             }
         });
         ((Button) findViewById(R.id.moreap)).setOnClickListener(new OnClickListener() {
