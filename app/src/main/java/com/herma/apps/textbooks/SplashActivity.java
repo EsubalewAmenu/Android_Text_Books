@@ -43,7 +43,7 @@ import javax.net.ssl.X509TrustManager;
 
 public class SplashActivity extends AppCompatActivity {
 
-    public String BASEAPI = "https://datascienceplc.com/api/";
+    public static String BASEAPI = "https://datascienceplc.com/api/";
 //    public String BASEAPI = "https://192.168.8.101:8082/wp/ds/api/";
     public RequestQueue queue;
     public static String USERNAME = "public-api-user", PAZZWORD = "public-api-password";

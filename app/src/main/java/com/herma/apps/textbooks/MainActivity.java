@@ -617,14 +617,11 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void run() {
-                String url ="https://datascienceplc.com/apps/manager/api/items/blog/ad?";
 
                 RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 // Request a string response from the provided URL.
 
-                final int random = new Random().nextInt((99999 - 1) + 1) + 1;
-
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, url+"v=1.0&app_id=745&company_id=1&rand="+random,
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, SplashActivity.BASEAPI+"DSSERVICE/v1/ad/1-12-textbooks/1",
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -632,7 +629,10 @@ public class MainActivity extends AppCompatActivity
                                     try {
                                         // Getting JSON Array node
                                         JSONObject jsonObj = new JSONObject(response);
-                                        Ads = jsonObj.getString("ads");
+
+                                        System.out.println("response code is " + jsonObj.getString("code"));
+
+                                        Ads = jsonObj.getString("ad");
 
                                         if(jsonObj.has("font")) Ads_font = jsonObj.getInt("font");
 //                                        System.out.println("ads is " + Ads);
@@ -654,16 +654,7 @@ public class MainActivity extends AppCompatActivity
                         tvAds.setVisibility(View.GONE);
                     }
 
-                })
-                {
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        Map<String, String> params = new HashMap<>();
-                        params.put("username", SplashActivity.USERNAME);
-                        params.put("password", SplashActivity.PAZZWORD);
-                        return params;
-                    }
-                };
+                });
 
                 stringRequest.setRetryPolicy(new DefaultRetryPolicy(
                         10000,
