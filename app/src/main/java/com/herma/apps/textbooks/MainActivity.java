@@ -627,19 +627,16 @@ public class MainActivity extends AppCompatActivity
                             public void onResponse(String response) {
                                 if (response != null) {
                                     try {
+                                        System.out.println(response);
                                         // Getting JSON Array node
                                         JSONObject jsonObj = new JSONObject(response);
 
                                         System.out.println("response code is " + jsonObj.getString("code"));
-
-                                        Ads = jsonObj.getString("ad");
-
-                                        if(jsonObj.has("font")) Ads_font = jsonObj.getInt("font");
-//                                        System.out.println("ads is " + Ads);
-
-                                        if(jsonObj.has("open_ad")) {
-                                            if(jsonObj.getString("open_ad").equalsIgnoreCase("my"))
-                                            { setAd(); myB = true; }else tvAds.setVisibility(View.GONE);
+                                        if(jsonObj.getInt("code") == 200 ){
+                                            Ads = jsonObj.getString("ad");
+                                            if(Ads != null){
+                                                setAd(); myB = true;
+                                            }else tvAds.setVisibility(View.GONE);
                                         }else tvAds.setVisibility(View.GONE);
 
                                     } catch (final JSONException e) { tvAds.setVisibility(View.GONE); }
