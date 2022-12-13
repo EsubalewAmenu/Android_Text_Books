@@ -380,7 +380,7 @@ ProgressDialog progressBar;
             fos.flush();
             fos.close();
         }catch (Exception lkj) {
-            try{ File file = file = new File(filePath + fileName.substring(0, fileName.length() - 4));
+            try{ File file = new File(filePath + fileName.substring(0, fileName.length() - 4));
                 if (file.exists())file.delete();}catch (Exception ds){}
         }
         return true;

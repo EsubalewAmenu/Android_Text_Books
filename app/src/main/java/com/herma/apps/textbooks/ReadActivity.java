@@ -74,10 +74,7 @@ public class ReadActivity extends AppCompatActivity {
 
         if (getIntent().getExtras() != null) {
 
-            String filePath = "/storage/emulated/0/Herma/books/";
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
-                filePath = getFilesDir().getPath() + "/Herma/books/";
+            String filePath = getFilesDir().getPath() + "/Herma/books/";
 
             MobileAds.initialize(this, new OnInitializationCompleteListener() {
                 @Override
