@@ -4,38 +4,38 @@ import org.json.JSONArray;
 
 public class PostItem {
 
-  private String courseName, courseDepartment, courseEn;
-  private JSONArray courseChapters;
+  private String subjectName, subjectGrade, subjectEn;
+  private JSONArray subjectChapters;
 
-  public String getCourseName() {
-    return courseName;
+  public String getSubjectName() {
+    return subjectName;
   }
 
-  public void setCourseName(String courseName) {
-    this.courseName = courseName;
+  public void setSubjectName(String subjectName) {
+    this.subjectName = subjectName;
   }
 
-  public String getCourseDepartment() {
-    return courseDepartment;
+  public String getSubjectGrade() {
+    return subjectGrade;
   }
 
-  public void setCourseDepartment(String courseDepartment) {
-    this.courseDepartment = courseDepartment;
+  public void setSubjectGrade(String subjectGrade) {
+    this.subjectGrade = subjectGrade;
   }
 
-  public JSONArray getCourseChapters() {
-    return courseChapters;
+  public JSONArray getSubjectChapters() {
+    return subjectChapters;
   }
 
-  public void setCourseChapters(JSONArray courseChapters) {
-    this.courseChapters = courseChapters;
+  public void setSubjectChapters(JSONArray subjectChapters) {
+    this.subjectChapters = subjectChapters;
   }
 
-  public String getCourseEn() {
-    return courseEn;
+  public String getSubjectEn() {
+    return subjectEn;
   }
 
-  public void setCourseEn(String courseEn) {
-    this.courseEn = courseEn;
+  public void setSubjectEn(String subjectEn) {
+    this.subjectEn = subjectEn;
   }
 }

@@ -300,10 +300,10 @@ System.out.println("Error on sys:"+error);
                 JSONObject c = datas.getJSONObject(i);
                 ////////////////////////////////////////
                 postItem = new PostItem();
-                postItem.setCourseName(c.getString("name").trim());
-                postItem.setCourseDepartment(c.getString("category").trim());
-                postItem.setCourseEn(c.getString("en").trim());
-                postItem.setCourseChapters(c.getJSONArray("chapters"));
+                postItem.setSubjectName(c.getString("name").trim());
+                postItem.setSubjectGrade(c.getString("category").trim());
+                postItem.setSubjectEn(c.getString("en").trim());
+                postItem.setSubjectChapters(c.getJSONArray("chapters"));
 //                                                postItem.setWriterName(c.getJSONObject("blogwriter").getString("writername"));
                 items.add(postItem);
             }

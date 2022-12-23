@@ -101,7 +101,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
       mPostItems.remove(position);
       notifyItemRemoved(position);
     }else {
-      System.out.println(item.getCourseName());
+      System.out.println(item.getSubjectName());
     }
 
   }
@@ -139,9 +139,9 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
       try{
       final PostItem item = (PostItem) mPostItems.get(position);
 
-        textViewTitle.setText(item.getCourseName().trim());
-        textViewDescription.setText(item.getCourseChapters().length() + " Units");
-        txtPublished_at.setText("   " + item.getCourseDepartment());
+        textViewTitle.setText(item.getSubjectName().trim());
+        textViewDescription.setText(item.getSubjectChapters().length() + " Units");
+        txtPublished_at.setText("   " + item.getSubjectGrade());
 
 //       another option
       itemView.setOnClickListener(new View.OnClickListener() {
@@ -149,10 +149,10 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         public void onClick(View v) {
           Intent intent = new Intent(viewGroup.getContext(), ChaptersActivity.class);
 
-          intent.putExtra("book_name", item.getCourseName());
-          intent.putExtra("courseDepartment", item.getCourseDepartment());
-          intent.putExtra("courseChapters", item.getCourseChapters().toString());
-          intent.putExtra("courseEn", item.getCourseEn());
+          intent.putExtra("book_name", item.getSubjectName());
+          intent.putExtra("courseDepartment", item.getSubjectGrade());
+          intent.putExtra("courseChapters", item.getSubjectChapters().toString());
+          intent.putExtra("courseEn", item.getSubjectEn());
 
           viewGroup.getContext().startActivity(intent);
         }
