@@ -116,5 +116,10 @@
     <string name="college_books">College Books (App link)</string>
     <string name="add_books">Add Book</string>
 
+    <string name="no_network_title">No Network Available</string>
+    <string name="no_network_message">We cannot detect a network connection on this device. Please check your mobile data or Wi-Fi and try again.</string>
+    <string name="go_to_settings">Go to settings</string>
+    <string name="all_new_curriculum_books">All new curriculum books</string>
+    <string name="my_new_curriculum_books">My new Curriculum books</string>
 
 </resources>
