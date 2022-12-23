@@ -150,7 +150,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
           Intent intent = new Intent(viewGroup.getContext(), ChaptersActivity.class);
 
-          intent.putExtra("title", item.getSubjectName());
+          intent.putExtra("name", item.getSubjectName());
           intent.putExtra("grade", item.getSubjectGrade());
           intent.putExtra("subjectChapters", item.getSubjectChapters().toString());
           intent.putExtra("p", item.getSubjectEn());

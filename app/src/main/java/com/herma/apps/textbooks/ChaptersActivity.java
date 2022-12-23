@@ -79,10 +79,9 @@ public class ChaptersActivity extends AppCompatActivity {
 
             }
             else if(getIntent().getStringExtra("subjectChapters") != null){
-                    this.setTitle(getIntent().getStringExtra("title") + "(" + getIntent().getStringExtra("grade")+")");
+                    this.setTitle(getIntent().getStringExtra("name") + "(" + getIntent().getStringExtra("grade")+")");
                 try {
                     fEn = getIntent().getStringExtra("p");
-                    System.out.println("getIntent().getStringExtra(\"subjectChapters\") " + getIntent().getStringExtra("subjectChapters"));
                     setFromWeb(getIntent().getStringExtra("subjectChapters"));
                 } catch (JSONException e) {
                     e.printStackTrace();
