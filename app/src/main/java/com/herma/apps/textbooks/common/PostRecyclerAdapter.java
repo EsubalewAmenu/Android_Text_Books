@@ -147,12 +147,13 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
       itemView.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
           Intent intent = new Intent(viewGroup.getContext(), ChaptersActivity.class);
 
-          intent.putExtra("book_name", item.getSubjectName());
-          intent.putExtra("courseDepartment", item.getSubjectGrade());
-          intent.putExtra("courseChapters", item.getSubjectChapters().toString());
-          intent.putExtra("courseEn", item.getSubjectEn());
+          intent.putExtra("title", item.getSubjectName());
+          intent.putExtra("grade", item.getSubjectGrade());
+          intent.putExtra("subjectChapters", item.getSubjectChapters().toString());
+          intent.putExtra("p", item.getSubjectEn());
 
           viewGroup.getContext().startActivity(intent);
         }

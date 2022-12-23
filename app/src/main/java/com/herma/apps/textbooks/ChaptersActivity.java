@@ -78,11 +78,21 @@ public class ChaptersActivity extends AppCompatActivity {
                 } catch (JSONException e) { System.out.println("JSONException on chapters parsing ");e.printStackTrace(); }
 
             }
-            else{
-                this.setTitle(getIntent().getStringExtra("name") + "(" + getIntent().getStringExtra("title")+")");
-                setData(getIntent().getStringExtra("subj"),  getIntent().getStringExtra("p"));
-                is_short = false;
+            else if(getIntent().getStringExtra("subjectChapters") != null){
+                    this.setTitle(getIntent().getStringExtra("title") + "(" + getIntent().getStringExtra("grade")+")");
+                try {
+                    fEn = getIntent().getStringExtra("p");
+                    System.out.println("getIntent().getStringExtra(\"subjectChapters\") " + getIntent().getStringExtra("subjectChapters"));
+                    setFromWeb(getIntent().getStringExtra("subjectChapters"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+                is_short = false;
+                }else{
+                    this.setTitle(getIntent().getStringExtra("name") + "(" + getIntent().getStringExtra("title")+")");
+                    setData(getIntent().getStringExtra("subj"),  getIntent().getStringExtra("p"));
+                    is_short = false;
+            }
         }
 
         MainAdapter adapter = new MainAdapter(ChaptersActivity.this, arrayList, new MainAdapter.ItemListener() {
@@ -125,6 +135,14 @@ public class ChaptersActivity extends AppCompatActivity {
             adContainerView.setVisibility(View.GONE);
         }
 
+    }
+    public void setFromWeb(String chaptersJsonArray) throws JSONException {
+        JSONArray datas = new JSONArray(chaptersJsonArray);
+
+        for(int i = 0; i < datas.length(); i++){
+            JSONObject c = datas.getJSONObject(i);
+            arrayList.add(new Item("", c.getString("name") , c.getString("file_name"), fEn, R.drawable.icon, "#000000"));
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
