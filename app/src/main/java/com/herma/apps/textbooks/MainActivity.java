@@ -46,6 +46,7 @@ import com.herma.apps.textbooks.common.Item;
 import com.herma.apps.textbooks.ui.about.About_us;
 import com.herma.apps.textbooks.ui.fragment.AllNewCurriculumBooks;
 import com.herma.apps.textbooks.ui.fragment.BookFragment;
+import com.herma.apps.textbooks.ui.fragment.MyNewCurriculumBooks;
 import com.herma.apps.textbooks.ui.fragment.PremiumFragment;
 import com.herma.apps.textbooks.ui.fragment.QuestionsFragment;
 import com.herma.apps.textbooks.ui.fragment.RewardFragment;
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity
 
     QuestionsFragment questionsFragment;
     AllNewCurriculumBooks allNewCurriculumBooks;
+    MyNewCurriculumBooks myNewCurriculumBooks;
 
     SharedPreferences pre;
 
@@ -477,11 +479,11 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_my_books) {
-//            questionsFragment = new QuestionsFragment();
-//            mFragmentManager = getSupportFragmentManager();
-//            mFragmentTransaction = mFragmentManager.beginTransaction();
-//            mFragmentTransaction.replace(R.id.containerView, questionsFragment).commit();
-//            setTitle("My new curriculum books");
+            myNewCurriculumBooks = new MyNewCurriculumBooks();
+            mFragmentManager = getSupportFragmentManager();
+            mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.replace(R.id.containerView, myNewCurriculumBooks).commit();
+            setTitle("My new curriculum books");
         } else if (id == R.id.nav_all_books) {
             allNewCurriculumBooks = new AllNewCurriculumBooks();
             mFragmentManager = getSupportFragmentManager();
