@@ -31,10 +31,10 @@ public class MyNewCurriculumBooks extends Fragment {
 
         try {
             MainActivity mainActivity = (MainActivity) getActivity();
-//            ArrayList arrayList = mainActivity.getData(getActivity());
-//            MainAdapter adapter = mainActivity.setData(getActivity(), arrayList);
+            ArrayList arrayList = mainActivity.getData(getActivity(), "new");
+            MainAdapter adapter = mainActivity.setData(getActivity(), arrayList, "a");
 
-//            recyclerView.setAdapter(adapter);
+            recyclerView.setAdapter(adapter);
 
             GridLayoutManager manager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(manager);

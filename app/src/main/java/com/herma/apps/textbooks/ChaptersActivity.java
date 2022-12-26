@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,6 +70,7 @@ public class ChaptersActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         arrayList = new ArrayList<>();
 
+        db = new DB(getApplicationContext());
 
         if (getIntent().getExtras() != null) {
 
@@ -91,7 +93,7 @@ public class ChaptersActivity extends AppCompatActivity {
                 }
                 is_short = false;
                 }else{
-                    this.setTitle(getIntent().getStringExtra("name") + "(" + getIntent().getStringExtra("title")+")");
+                    this.setTitle(getIntent().getStringExtra("name") );//+ "(" + getIntent().getStringExtra("title")+")");
                     setData(getIntent().getStringExtra("subj"),  getIntent().getStringExtra("p"));
                     is_short = false;
             }
@@ -143,7 +145,7 @@ public class ChaptersActivity extends AppCompatActivity {
 
         for(int i = 0; i < datas.length(); i++){
             JSONObject c = datas.getJSONObject(i);
-            arrayList.add(new Item("", c.getString("name") , c.getString("file_name"), fEn, R.drawable.icon, "#000000"));
+            arrayList.add(new Item("0", c.getString("name") , c.getString("file_name"), fEn, R.drawable.icon, "#000000"));
         }
     }
     @Override
@@ -214,8 +216,6 @@ public void setFromShort(String shortArrayList) throws JSONException {
         fName = item.fileName;
         fEn = item.en;
 
-        System.out.println(" getIntent().getStringExtra(\"subjectChapters\")!=null && !is_short " + getIntent().getStringExtra("subjectChapters")!=null +" " + !is_short);
-
         if(getIntent().getStringExtra("subjectChapters")!=null && !is_short)
             isDBSouldBeUpdated(fName, fEn);
 
@@ -246,6 +246,7 @@ try {
 
     private void isDBSouldBeUpdated(String fileName, String fEn) {
 
+
         if(arrayList.size()>0){
             if(arrayList.get(0).chapterID=="0") {
                 String chapterNamesList ="", chapterNamesListAnd ="";
@@ -259,10 +260,8 @@ try {
 
                 // get grade by using subject in gradeName and subject_slug in gradeInNum
                 // if not exist create grade by using subject for gradeName and subject_slug for gradeInNum
-                db = new DB(getApplicationContext());
 
-                System.out.println("fileName + \"'\"+chapterNamesList " + fileName + "'"+chapterNamesList);
-
+                System.out.println("grade grade grade grade grade grade grade end" + grade );
                 Cursor chap = db.getSelect("*", "chapters", "filename='" + fileName + "'"+chapterNamesList);
                 if (chap.moveToFirst()) {
                     updateChapters(chap.getString(1),grade, subject, chapterNamesListAnd, fEn);
@@ -275,7 +274,7 @@ try {
                     contentValues.put("p", fEn);
                     db.insert("books",contentValues);
 
-                    Cursor bookCursor = db.getSelect("*", "books", "name='" + subject + "' and uc='new'");
+                    Cursor bookCursor = db.getSelect("*", "books", "name='" + subject + "' and grade='"+grade+"' and uc='new'");
                     if (bookCursor.moveToFirst()) {
                         updateChapters(bookCursor.getString(0),grade, subject, chapterNamesListAnd, fEn);
                     }

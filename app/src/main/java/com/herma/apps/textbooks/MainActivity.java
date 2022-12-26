@@ -290,15 +290,24 @@ public class MainActivity extends AppCompatActivity
     }
 
     public ArrayList getData(Context context, String choosedGrade) {
-
-//        open(context,"read", "books.hrm");
-
         db = new DB(context);
+        ArrayList arrayList = new ArrayList<>();
+
+        if(choosedGrade == "new"){
+
+            final Cursor subjectsCursor = db.getSelect("*", "books", "uc='new' ORDER BY name ASC");
+            if (subjectsCursor.moveToFirst()) {
+                do {
+                    arrayList.add(new Item("", subjectsCursor.getString(2)+" (Grade "+subjectsCursor.getString(1)+")", subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
+                } while (subjectsCursor.moveToNext());
+            }
+            return arrayList;
+        }
+
+
         // get if textbook or teacher guide
         final Cursor gradeCursor = db.getSelect("*", "grade", "id="+choosedGrade);
         gradeCursor.moveToFirst();
-
-        ArrayList arrayList = new ArrayList<>();
 
         final Cursor subjectsCursor = db.getSelect("*", "books", "grade='" + gradeCursor.getString(2) + "' and gtype='" + gradeCursor.getString(3) + "' ORDER BY name ASC");
         if (subjectsCursor.moveToFirst()) {
@@ -345,7 +354,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(Item item) {
 
-                System.out.println("en p is " + item.en);
+//                System.out.println("en p is " + item.en);
 
                 chaptersIntent = new Intent(context, ChaptersActivity.class);
                 chaptersIntent.putExtra("subj", item.fileName);
