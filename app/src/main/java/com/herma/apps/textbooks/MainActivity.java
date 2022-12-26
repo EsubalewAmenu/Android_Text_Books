@@ -301,6 +301,12 @@ public class MainActivity extends AppCompatActivity
                     arrayList.add(new Item("", subjectsCursor.getString(2)+" (Grade "+subjectsCursor.getString(1)+")", subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
                 } while (subjectsCursor.moveToNext());
             }
+
+            if(arrayList.size() == 0) {
+                openAllBooksFragment();
+                return null;
+            }
+
             return arrayList;
         }
 
@@ -488,27 +494,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_my_books) {
-            myNewCurriculumBooks = new MyNewCurriculumBooks();
-            mFragmentManager = getSupportFragmentManager();
-            mFragmentTransaction = mFragmentManager.beginTransaction();
-            mFragmentTransaction.replace(R.id.containerView, myNewCurriculumBooks).commit();
-            setTitle("My new curriculum books");
-
-
-            pre.edit().putString("choosedGrade", "my_b" ).apply();
-            pre.edit().putString("choosedGradeT", "My new curriculum books").apply();
-
+            openMyBooksFragment();
         } else if (id == R.id.nav_all_books) {
-            allNewCurriculumBooks = new AllNewCurriculumBooks();
-            mFragmentManager = getSupportFragmentManager();
-            mFragmentTransaction = mFragmentManager.beginTransaction();
-            mFragmentTransaction.replace(R.id.containerView, allNewCurriculumBooks).commit();
-            setTitle("All new curriculum books");
-
-
-            pre.edit().putString("choosedGrade", "all_b" ).apply();
-            pre.edit().putString("choosedGradeT", "All new curriculum books").apply();
-
+            openAllBooksFragment();
         } else if (id == R.id.nav_g12) {
             changeFragment("1", "Grade 12");
         } else if (id == R.id.nav_g11) {
@@ -612,20 +600,33 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    public void openMyBooksFragment(){
+        myNewCurriculumBooks = new MyNewCurriculumBooks();
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.replace(R.id.containerView, myNewCurriculumBooks).commit();
+        setTitle("My new curriculum books");
+
+
+        pre.edit().putString("choosedGrade", "my_b" ).apply();
+        pre.edit().putString("choosedGradeT", "My new curriculum books").apply();
+    }
+    public void openAllBooksFragment(){
+        allNewCurriculumBooks = new AllNewCurriculumBooks();
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.replace(R.id.containerView, allNewCurriculumBooks).commit();
+        setTitle("All new curriculum books");
+
+
+        pre.edit().putString("choosedGrade", "all_b" ).apply();
+        pre.edit().putString("choosedGradeT", "All new curriculum books").apply();
+    }
     public void changeFragment(String grade, String title){
         if(grade.equals("my_b")){
-            myNewCurriculumBooks = new MyNewCurriculumBooks();
-            mFragmentManager = getSupportFragmentManager();
-            mFragmentTransaction = mFragmentManager.beginTransaction();
-            mFragmentTransaction.replace(R.id.containerView, myNewCurriculumBooks).commit();
-            setTitle("My new curriculum books");
+            openMyBooksFragment();
         }else if(grade.equals("all_b")){
-
-            allNewCurriculumBooks = new AllNewCurriculumBooks();
-            mFragmentManager = getSupportFragmentManager();
-            mFragmentTransaction = mFragmentManager.beginTransaction();
-            mFragmentTransaction.replace(R.id.containerView, allNewCurriculumBooks).commit();
-            setTitle("All new curriculum books");
+            openAllBooksFragment();
         }else {
             Fragmentbundle = new Bundle();
             //0
