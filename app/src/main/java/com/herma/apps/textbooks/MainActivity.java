@@ -493,12 +493,22 @@ public class MainActivity extends AppCompatActivity
             mFragmentTransaction = mFragmentManager.beginTransaction();
             mFragmentTransaction.replace(R.id.containerView, myNewCurriculumBooks).commit();
             setTitle("My new curriculum books");
+
+
+            pre.edit().putString("choosedGrade", "my_b" ).apply();
+            pre.edit().putString("choosedGradeT", "My new curriculum books").apply();
+
         } else if (id == R.id.nav_all_books) {
             allNewCurriculumBooks = new AllNewCurriculumBooks();
             mFragmentManager = getSupportFragmentManager();
             mFragmentTransaction = mFragmentManager.beginTransaction();
             mFragmentTransaction.replace(R.id.containerView, allNewCurriculumBooks).commit();
             setTitle("All new curriculum books");
+
+
+            pre.edit().putString("choosedGrade", "all_b" ).apply();
+            pre.edit().putString("choosedGradeT", "All new curriculum books").apply();
+
         } else if (id == R.id.nav_g12) {
             changeFragment("1", "Grade 12");
         } else if (id == R.id.nav_g11) {
@@ -603,20 +613,34 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
     public void changeFragment(String grade, String title){
-        Fragmentbundle = new Bundle();
-        //0
-        BookFragment bookFragment = new BookFragment();
-        Fragmentbundle.putString("choosedGrade", grade);
-        Fragmentbundle.putString("title", title);
-        bookFragment.setArguments(Fragmentbundle);
-        mFragmentManager = getSupportFragmentManager();
-        mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.replace(R.id.containerView,bookFragment).commit();
-        setTitle(title);
+        if(grade.equals("my_b")){
+            myNewCurriculumBooks = new MyNewCurriculumBooks();
+            mFragmentManager = getSupportFragmentManager();
+            mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.replace(R.id.containerView, myNewCurriculumBooks).commit();
+            setTitle("My new curriculum books");
+        }else if(grade.equals("all_b")){
 
-        pre.edit().putString("choosedGrade", grade ).apply();
-        pre.edit().putString("choosedGradeT", title).apply();
+            allNewCurriculumBooks = new AllNewCurriculumBooks();
+            mFragmentManager = getSupportFragmentManager();
+            mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.replace(R.id.containerView, allNewCurriculumBooks).commit();
+            setTitle("All new curriculum books");
+        }else {
+            Fragmentbundle = new Bundle();
+            //0
+            BookFragment bookFragment = new BookFragment();
+            Fragmentbundle.putString("choosedGrade", grade);
+            Fragmentbundle.putString("title", title);
+            bookFragment.setArguments(Fragmentbundle);
+            mFragmentManager = getSupportFragmentManager();
+            mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.replace(R.id.containerView, bookFragment).commit();
+            setTitle(title);
 
+            pre.edit().putString("choosedGrade", grade).apply();
+            pre.edit().putString("choosedGradeT", title).apply();
+        }
     }
 
 //    public void shareApp(Context context, String chooserTitle,
