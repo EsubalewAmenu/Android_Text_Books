@@ -1,11 +1,13 @@
 package com.herma.apps.textbooks;
 
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,6 +50,8 @@ public class ChaptersActivity extends AppCompatActivity {
     String FILEPATH;
 
     boolean is_short;
+    ContentValues contentValues;
+    DB db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,7 @@ public class ChaptersActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         arrayList = new ArrayList<>();
 
+        db = new DB(getApplicationContext());
 
         if (getIntent().getExtras() != null) {
 
@@ -78,11 +83,20 @@ public class ChaptersActivity extends AppCompatActivity {
                 } catch (JSONException e) { System.out.println("JSONException on chapters parsing ");e.printStackTrace(); }
 
             }
-            else{
-                this.setTitle(getIntent().getStringExtra("name") + "(" + getIntent().getStringExtra("title")+")");
-                setData(getIntent().getStringExtra("subj"),  getIntent().getStringExtra("p"));
-                is_short = false;
+            else if(getIntent().getStringExtra("subjectChapters") != null){
+                    this.setTitle(getIntent().getStringExtra("name") + "(" + getIntent().getStringExtra("grade")+")");
+                try {
+                    fEn = getIntent().getStringExtra("p");
+                    setFromWeb(getIntent().getStringExtra("subjectChapters"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+                is_short = false;
+                }else{
+                    this.setTitle(getIntent().getStringExtra("name") );//+ "(" + getIntent().getStringExtra("title")+")");
+                    setData(getIntent().getStringExtra("subj"),  getIntent().getStringExtra("p"));
+                    is_short = false;
+            }
         }
 
         MainAdapter adapter = new MainAdapter(ChaptersActivity.this, arrayList, new MainAdapter.ItemListener() {
@@ -125,6 +139,14 @@ public class ChaptersActivity extends AppCompatActivity {
             adContainerView.setVisibility(View.GONE);
         }
 
+    }
+    public void setFromWeb(String chaptersJsonArray) throws JSONException {
+        JSONArray datas = new JSONArray(chaptersJsonArray);
+
+        for(int i = 0; i < datas.length(); i++){
+            JSONObject c = datas.getJSONObject(i);
+            arrayList.add(new Item("0", c.getString("name") , c.getString("file_name"), fEn, R.drawable.icon, "#000000"));
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -194,6 +216,9 @@ public void setFromShort(String shortArrayList) throws JSONException {
         fName = item.fileName;
         fEn = item.en;
 
+        if(getIntent().getStringExtra("subjectChapters")!=null && !is_short)
+            isDBSouldBeUpdated(fName, fEn);
+
         File chapterFile = new File(FILEPATH + fName);
         if (chapterFile.exists()) {
 
@@ -216,6 +241,104 @@ try {
         }else
             new Commons(ChaptersActivity.this).messageDialog(ChaptersActivity.this, "d", R.string.no_file, 1234, fName, fEn, R.string.download, R.string.cancel, R.string.downloading, item.chapName, getIntent().getStringExtra("name"), "", "", is_short);
         }
+    }
+
+
+    private void isDBSouldBeUpdated(String fileName, String fEn) {
+
+
+        if(arrayList.size()>0){
+            if(arrayList.get(0).chapterID=="0") {
+                String chapterNamesList ="", chapterNamesListAnd ="";
+                for (int k=0;k<arrayList.size();k++) {
+                    chapterNamesList += " or filename='"+arrayList.get(k).fileName+"'";
+                    chapterNamesListAnd += " and filename!='"+arrayList.get(k).fileName+"'";
+                }
+                // grade table
+                String subject = getIntent().getStringExtra("name");
+                String grade = getIntent().getStringExtra("grade").replace("Grade ", "");
+
+                // get grade by using subject in gradeName and subject_slug in gradeInNum
+                // if not exist create grade by using subject for gradeName and subject_slug for gradeInNum
+
+                System.out.println("grade grade grade grade grade grade grade end" + grade );
+                Cursor chap = db.getSelect("*", "chapters", "filename='" + fileName + "'"+chapterNamesList);
+                if (chap.moveToFirst()) {
+                    updateChapters(chap.getString(1),grade, subject, chapterNamesListAnd, fEn);
+                }else{
+                    contentValues = new ContentValues();
+                    contentValues.put("grade", grade);
+                    contentValues.put("name", subject);
+                    contentValues.put("uc", "new");
+                    contentValues.put("gtype", System.currentTimeMillis());
+                    contentValues.put("p", fEn);
+                    db.insert("books",contentValues);
+
+                    Cursor bookCursor = db.getSelect("*", "books", "name='" + subject + "' and grade='"+grade+"' and uc='new'");
+                    if (bookCursor.moveToFirst()) {
+                        updateChapters(bookCursor.getString(0),grade, subject, chapterNamesListAnd, fEn);
+                    }
+                }
+            }
+        }
+
+    }
+
+    private void updateChapters(String subject_id, String subject_slug, String course, String chapterNamesListAnd, String fEn) {
+
+//        db.executeCommand("UPDATE books set grade='"+ subject_slug +"', name='"+course+"', p='"+fEn+"' WHERE id="+subject_id);
+
+        contentValues = new ContentValues();
+        contentValues.put("grade", subject_slug );
+        contentValues.put("name", course );
+        contentValues.put("uc", "new" );
+        contentValues.put("p", fEn );
+        db.update("books", contentValues, "id", subject_id);
+
+        final Cursor allChaptersFromDb = db.getSelect("*", "chapters", "subject_id='" + subject_id + "'");
+        boolean isExist;
+        if (allChaptersFromDb.moveToFirst()) {
+            do {
+                isExist = false;
+//                arrayList.add(new Item("", subjectsCursor.getString(2) , subjectsCursor.getString(3), p, R.drawable.icon, "#000000"));
+
+                for (int i = 0; i < arrayList.size(); i++) {
+                    // update unit where chapterName,arrayList.get(i).fileName
+                    // or create on chapters table by using subject_id, arrayList.get(i).chapterName,arrayList.get(i).fileName, fEn
+                    if(allChaptersFromDb.getString(3) == arrayList.get(i).fileName ) {
+                        isExist = true;
+//                        db.executeCommand("UPDATE chapters set chaptername='"+ arrayList.get(i).chapName +"' WHERE id="+allChaptersFromDb.getInt(0));
+
+                        contentValues = new ContentValues();
+                        contentValues.put("chaptername", arrayList.get(i).chapName );
+                        db.update("chapters", contentValues, "id", allChaptersFromDb.getString(0));
+                    }
+                }
+
+//                if(!isExist)
+//                    db.executeCommand("DELETE FROM chapters WHERE filename='" + fileName + "'");
+
+            } while (allChaptersFromDb.moveToNext());
+        }
+
+        for (int i = 0; i < arrayList.size(); i++) {
+            // update unit where chapterName,arrayList.get(i).fileName
+            // or create on chapters table by using subject_id, arrayList.get(i).chapterName,arrayList.get(i).fileName, fEn
+            final Cursor singleChapter = db.getSelect("*", "chapters", "filename='" + arrayList.get(i).fileName + "'");
+            if (!singleChapter.moveToFirst()) {
+//                db.executeCommand("INSERT INTO chapters (`subject_id`,`chaptername`,`filename`) VALUES ('"+subject_id+"', '"+
+//                arrayList.get(i).chapName+"', '"+arrayList.get(i).fileName+"'");
+
+                contentValues = new ContentValues();
+                contentValues.put("subject_id", subject_id);
+                contentValues.put("chaptername", arrayList.get(i).chapName);
+                contentValues.put("filename", arrayList.get(i).fileName);
+                db.insert("chapters",contentValues);
+            }
+        }
+
+        db.deleteData("chapters", "subject_id="+subject_id+" and (filename!='00000'"+chapterNamesListAnd+")");
+
     }
     private void rateApp() {
         try {

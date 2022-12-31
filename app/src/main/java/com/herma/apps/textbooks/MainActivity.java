@@ -44,7 +44,9 @@ import com.herma.apps.textbooks.common.MainAdapter;
 import com.herma.apps.textbooks.common.DB;
 import com.herma.apps.textbooks.common.Item;
 import com.herma.apps.textbooks.ui.about.About_us;
+import com.herma.apps.textbooks.ui.fragment.AllNewCurriculumBooks;
 import com.herma.apps.textbooks.ui.fragment.BookFragment;
+import com.herma.apps.textbooks.ui.fragment.MyNewCurriculumBooks;
 import com.herma.apps.textbooks.ui.fragment.PremiumFragment;
 import com.herma.apps.textbooks.ui.fragment.QuestionsFragment;
 import com.herma.apps.textbooks.ui.fragment.RewardFragment;
@@ -102,6 +104,8 @@ public class MainActivity extends AppCompatActivity
     private AdView mAdView;
 
     QuestionsFragment questionsFragment;
+    AllNewCurriculumBooks allNewCurriculumBooks;
+    MyNewCurriculumBooks myNewCurriculumBooks;
 
     SharedPreferences pre;
 
@@ -286,15 +290,30 @@ public class MainActivity extends AppCompatActivity
     }
 
     public ArrayList getData(Context context, String choosedGrade) {
-
-//        open(context,"read", "books.hrm");
-
         db = new DB(context);
+        ArrayList arrayList = new ArrayList<>();
+
+        if(choosedGrade == "new"){
+
+            final Cursor subjectsCursor = db.getSelect("*", "books", "uc='new' ORDER BY name ASC");
+            if (subjectsCursor.moveToFirst()) {
+                do {
+                    arrayList.add(new Item("", subjectsCursor.getString(2)+" (Grade "+subjectsCursor.getString(1)+")", subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
+                } while (subjectsCursor.moveToNext());
+            }
+
+            if(arrayList.size() == 0) {
+                openAllBooksFragment();
+                return null;
+            }
+
+            return arrayList;
+        }
+
+
         // get if textbook or teacher guide
         final Cursor gradeCursor = db.getSelect("*", "grade", "id="+choosedGrade);
         gradeCursor.moveToFirst();
-
-        ArrayList arrayList = new ArrayList<>();
 
         final Cursor subjectsCursor = db.getSelect("*", "books", "grade='" + gradeCursor.getString(2) + "' and gtype='" + gradeCursor.getString(3) + "' ORDER BY name ASC");
         if (subjectsCursor.moveToFirst()) {
@@ -341,7 +360,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(Item item) {
 
-                System.out.println("en p is " + item.en);
+//                System.out.println("en p is " + item.en);
 
                 chaptersIntent = new Intent(context, ChaptersActivity.class);
                 chaptersIntent.putExtra("subj", item.fileName);
@@ -474,7 +493,11 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_g12) {
+        if (id == R.id.nav_my_books) {
+            openMyBooksFragment();
+        } else if (id == R.id.nav_all_books) {
+            openAllBooksFragment();
+        } else if (id == R.id.nav_g12) {
             changeFragment("1", "Grade 12");
         } else if (id == R.id.nav_g11) {
             changeFragment("2", "Grade 11");
@@ -577,21 +600,48 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    public void changeFragment(String grade, String title){
-        Fragmentbundle = new Bundle();
-        //0
-        BookFragment bookFragment = new BookFragment();
-        Fragmentbundle.putString("choosedGrade", grade);
-        Fragmentbundle.putString("title", title);
-        bookFragment.setArguments(Fragmentbundle);
+    public void openMyBooksFragment(){
+        myNewCurriculumBooks = new MyNewCurriculumBooks();
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.replace(R.id.containerView,bookFragment).commit();
-        setTitle(title);
+        mFragmentTransaction.replace(R.id.containerView, myNewCurriculumBooks).commit();
+        setTitle("My new curriculum books");
 
-        pre.edit().putString("choosedGrade", grade ).apply();
-        pre.edit().putString("choosedGradeT", title).apply();
 
+        pre.edit().putString("choosedGrade", "my_b" ).apply();
+        pre.edit().putString("choosedGradeT", "My new curriculum books").apply();
+    }
+    public void openAllBooksFragment(){
+        allNewCurriculumBooks = new AllNewCurriculumBooks();
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.replace(R.id.containerView, allNewCurriculumBooks).commit();
+        setTitle("All new curriculum books");
+
+
+        pre.edit().putString("choosedGrade", "all_b" ).apply();
+        pre.edit().putString("choosedGradeT", "All new curriculum books").apply();
+    }
+    public void changeFragment(String grade, String title){
+        if(grade.equals("my_b")){
+            openMyBooksFragment();
+        }else if(grade.equals("all_b")){
+            openAllBooksFragment();
+        }else {
+            Fragmentbundle = new Bundle();
+            //0
+            BookFragment bookFragment = new BookFragment();
+            Fragmentbundle.putString("choosedGrade", grade);
+            Fragmentbundle.putString("title", title);
+            bookFragment.setArguments(Fragmentbundle);
+            mFragmentManager = getSupportFragmentManager();
+            mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.replace(R.id.containerView, bookFragment).commit();
+            setTitle(title);
+
+            pre.edit().putString("choosedGrade", grade).apply();
+            pre.edit().putString("choosedGradeT", title).apply();
+        }
     }
 
 //    public void shareApp(Context context, String chooserTitle,
