@@ -1,15 +1,13 @@
 package com.herma.apps.textbooks;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,25 +19,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.ads.AdRequest;
-import com.herma.apps.textbooks.common.Commons;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -48,6 +39,10 @@ public class SplashActivity extends AppCompatActivity {
     public RequestQueue queue;
     public static String USERNAME = "public-api-user", PAZZWORD = "public-api-password";
 
+    GoogleSignInClient mGoogleSignInClient;
+    int RC_SIGN_IN = 9001;
+    private String clientId = "924950298904-idfco62fpgu65naq9mb8oa6ij8evji5t.apps.googleusercontent.com";
+    private String clientSecret = "YOUR_CLIENT_SECRET_HERE";
 
     private static int SPLASH_SCREEN_TIME_OUT = 1100;
     @Override
@@ -59,33 +54,88 @@ public class SplashActivity extends AppCompatActivity {
         //This method is used so that your splash activity
         //can cover the entire screen.
         setContentView(R.layout.activity_splash);
-        ;
 
-        new Handler().postDelayed(new Runnable() {
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(clientId)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+
+
+        findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
+            public void onClick(View view) {
+                signIn();
+            }
+        });
 
-//
+        findViewById(R.id.btnSkip).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
                 getLastUpdated();
-//
-
-
-//                SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//                String choosedP = pre.getString("choosedP", null);
-//                String choosedGrade = pre.getString("choosedGrade", null);
-//                String choosedGradeT = pre.getString("choosedGradeT", "Grade 12");
-
 
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-//                intent.putExtra("choosedP", choosedP);
-//                intent.putExtra("choosedGrade", choosedGrade);
-//                intent.putExtra("choosedGradeT", choosedGradeT);
                 startActivity(intent);
                 finish();
-
             }
-        }, SPLASH_SCREEN_TIME_OUT);
+        });
 
+
+
+
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                getLastUpdated();
+//
+//                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+////                startActivity(intent);
+////                finish();
+//
+//            }
+//        }, SPLASH_SCREEN_TIME_OUT);
+
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+    }
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            // Signed in successfully, show authenticated UI.
+            updateUI(account);
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w("Tag", "signInResult:failed code=" + e.getStatusCode());
+            updateUI(null);
+        }
+    }
+    private void updateUI(GoogleSignInAccount account){
+
+        String userId = account.getId();
+        String userName = account.getDisplayName();
+        String userEmail = account.getEmail();
+
+        System.out.println("userId " + userId + " userName " + userName + " userEmail " + userEmail);
+    }
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
         private void getLastUpdated() {
@@ -101,7 +151,6 @@ public class SplashActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(String response) {
                                     if (response != null) {
-//                                        System.out.println(" adf response is " + response);
 //        response is {"success":true,"error":false,"activator":{"license_code":"5335","license_type":"1","out_date":"2021-09-22"}}
 
                                         try {

@@ -29,6 +29,17 @@
         android:layout_height="200dp"
         app:srcCompat="@drawable/herma" />
 
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="217dp"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnSkip"
+        android:layout_width="222dp"
+        android:layout_height="wrap_content"
+        android:text="Skip" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
