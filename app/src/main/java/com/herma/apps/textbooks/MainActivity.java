@@ -677,14 +677,14 @@ public class MainActivity extends AppCompatActivity
                             public void onResponse(String response) {
                                 if (response != null) {
                                     try {
-                                        System.out.println(response);
+//                                        System.out.println(response);
                                         // Getting JSON Array node
                                         JSONObject jsonObj = new JSONObject(response);
 
                                         System.out.println("response code is " + jsonObj.getString("code"));
                                         if(jsonObj.getInt("code") == 200 ){
                                             Ads = jsonObj.getString("ad");
-                                            if(Ads != null){
+                                            if(Ads != "null"){
                                                 setAd(); myB = true;
                                             }else tvAds.setVisibility(View.GONE);
                                         }else tvAds.setVisibility(View.GONE);
