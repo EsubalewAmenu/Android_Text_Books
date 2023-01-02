@@ -49,7 +49,7 @@
     <string name="action_rate">Rate us (5 Star)</string>
     <string name="action_store">Other apps</string>
     <string name="exit">Exit</string>
-    <string name="pls_wait">Please wait...\n\nTelegram:-@ethio_textbooks</string>
+    <string name="pls_wait">\n\nTelegram:-@ethio_textbooks</string>
     <string name="menu_g12">Grade 12</string>
     <string name="menu_g11">Grade 11</string>
     <string name="menu_g10">Grade 10</string>

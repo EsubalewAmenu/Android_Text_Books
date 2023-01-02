@@ -13,10 +13,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -29,6 +31,8 @@ import com.google.android.gms.tasks.Task;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,10 +45,8 @@ public class SplashActivity extends AppCompatActivity {
 
     GoogleSignInClient mGoogleSignInClient;
     int RC_SIGN_IN = 9001;
-    private String clientId = "924950298904-idfco62fpgu65naq9mb8oa6ij8evji5t.apps.googleusercontent.com";
-    private String clientSecret = "YOUR_CLIENT_SECRET_HERE";
 
-    private static int SPLASH_SCREEN_TIME_OUT = 1100;
+    private static int SPLASH_SCREEN_TIME_OUT = 1050;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,49 +59,57 @@ public class SplashActivity extends AppCompatActivity {
 
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(clientId)
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
 
 
-        findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
+
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if (account != null) {
+            // The user is already signed in
+
+            findViewById(R.id.sign_in_button).setVisibility(View.INVISIBLE);
+            findViewById(R.id.btnSkip).setVisibility(View.INVISIBLE);
+
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void onClick(View view) {
-                signIn();
+            public void run() {
+
+                openMainActivity();
+
             }
-        });
+        }, SPLASH_SCREEN_TIME_OUT);
+        }else{
 
-        findViewById(R.id.btnSkip).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    signIn();
+                }
+            });
 
-                getLastUpdated();
-
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-
+            findViewById(R.id.btnSkip).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openMainActivity();
+                }
+            });
+        }
 
 
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//                getLastUpdated();
-//
-//                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-////                startActivity(intent);
-////                finish();
-//
-//            }
-//        }, SPLASH_SCREEN_TIME_OUT);
 
     }
+
+    private void openMainActivity() {
+        getLastUpdated();
+
+        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -127,17 +137,142 @@ public class SplashActivity extends AppCompatActivity {
     }
     private void updateUI(GoogleSignInAccount account){
 
-        String userId = account.getId();
-        String userName = account.getDisplayName();
-        String userEmail = account.getEmail();
+        try {
 
-        System.out.println("userId " + userId + " userName " + userName + " userEmail " + userEmail);
+        String userId = account.getId();
+//        String userName = account.getDisplayName();
+        String userEmail = account.getEmail();
+        String givenName = account.getGivenName();
+        String familyName = account.getFamilyName();
+
+//        System.out.println("givenName " + givenName + "FamilyName " + familyName + "userId " + userId + " userName " + userName + " userEmail " + userEmail);
+
+            registerOrSignUp(givenName, familyName, userId, userEmail);
+        }catch (Exception e ){}
     }
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+    private void registerOrSignUp(String givenName, String familyName, String userId, String userEmail) throws JSONException {
+
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+
+        String url = "wp/v2/users/register";
+
+        JSONObject jsonBody = new JSONObject();
+        jsonBody.put("google_user_id", userId);
+        jsonBody.put("given_name", givenName);
+        jsonBody.put("family_name", familyName);
+        jsonBody.put("email", userEmail);
+        jsonBody.put("registed_with", "google");
+        final String requestBody = jsonBody.toString();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASEAPI+url ,
+
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+//                        System.out.println(response);
+
+                        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+                        pre.edit().putString("userId", userId).apply();
+                        pre.edit().putString("given_name", givenName).apply();
+                        pre.edit().putString("family_name", familyName).apply();
+                        pre.edit().putString("email", userEmail).apply();
+                        pre.edit().putString("registed_with", "'google'").apply();
+
+                        openMainActivity();
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Check if the error has a network response
+                NetworkResponse response = error.networkResponse;
+                if (response != null) {
+                    // Get the error status code
+                    int statusCode = response.statusCode;
+
+                    // Get the error response body as a string
+                    String responseBody = new String(response.data, StandardCharsets.UTF_8);
+
+                    // Print the error details
+                    System.out.println("Error status code: " + statusCode);
+                    System.out.println("Error response body: " + responseBody);
+                    if(statusCode == 409 ){
+
+                        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+                        pre.edit().putString("userId", userId).apply();
+                        pre.edit().putString("given_name", givenName).apply();
+                        pre.edit().putString("family_name", familyName).apply();
+                        pre.edit().putString("email", userEmail).apply();
+                        pre.edit().putString("registed_with", "'google'").apply();
+
+                        openMainActivity();
+                    }
+                } else {
+                    // The error does not have a network response
+                    System.out.println("Error message: " + error.getMessage());
+                }
+            }
+
+        })
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", USERNAME);
+                params.put("password", PAZZWORD);
+                return params;
+            }
+//            @Override
+//            protected Map<String,String> getParams(){
+//                Map<String,String> params = new HashMap<String, String>();
+//
+//                params.put("google_user_id", userId);
+//                params.put("givenName", givenName);
+//                params.put("familyName", familyName);
+//                params.put("email", userEmail);
+//                params.put("registed_with", "google");
+//
+////                params.put("user",userAccount.getUsername());
+////                params.put("pass",userAccount.getPassword());
+////                params.put("comment", Uri.encode(comment));
+////                params.put("comment_post_ID",String.valueOf(postId));
+////                params.put("blogId",String.valueOf(blogId));
+//
+//                return params;
+//            }
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                try {
+                    return requestBody == null ? null : requestBody.getBytes("utf-8");
+                } catch (UnsupportedEncodingException uee) {
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                    return null;
+                }
+            }
+        };
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        stringRequest.setTag(this);
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
+    }
         private void getLastUpdated() {
 
                     RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
