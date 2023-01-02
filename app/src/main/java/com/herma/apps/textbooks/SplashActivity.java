@@ -229,24 +229,6 @@ public class SplashActivity extends AppCompatActivity {
                 params.put("password", PAZZWORD);
                 return params;
             }
-//            @Override
-//            protected Map<String,String> getParams(){
-//                Map<String,String> params = new HashMap<String, String>();
-//
-//                params.put("google_user_id", userId);
-//                params.put("givenName", givenName);
-//                params.put("familyName", familyName);
-//                params.put("email", userEmail);
-//                params.put("registed_with", "google");
-//
-////                params.put("user",userAccount.getUsername());
-////                params.put("pass",userAccount.getPassword());
-////                params.put("comment", Uri.encode(comment));
-////                params.put("comment_post_ID",String.valueOf(postId));
-////                params.put("blogId",String.valueOf(blogId));
-//
-//                return params;
-//            }
             @Override
             public String getBodyContentType() {
                 return "application/json; charset=utf-8";
@@ -291,10 +273,7 @@ public class SplashActivity extends AppCompatActivity {
                                         try {
                                             // Getting JSON Array node
                                             JSONObject jsonObj = new JSONObject(response);
-//
-//                                        String verif_customer_rewards = "";
-//
-//
+
                                             if(jsonObj.getString("success").equals("true") ) {
 
                                                 SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
