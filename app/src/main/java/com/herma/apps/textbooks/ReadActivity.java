@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,10 +37,15 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+import com.google.android.gms.ads.rewarded.ServerSideVerificationOptions;
 import com.herma.apps.textbooks.common.Commons;
 import com.herma.apps.textbooks.ui.about.About_us;
 
@@ -66,10 +72,13 @@ public class ReadActivity extends AppCompatActivity {
     private AdView mAdView;
     private InterstitialAd mInterstitialAd;
     File f;
-    String rewardId = "", storedPhone = "0";
+    String rewardId = "", storedPhone = "0", TAG = "ReadActivity.java";
+
+    private RewardedAd mRewardedAd;
 
     TextView txtTimerValue;
     ImageButton btnGiftReward;
+    long reward_p_id, reward_minutes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,7 +180,7 @@ public class ReadActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                requestPhoneNuber();
+                requestPhoneNumber();
 
             }
         });
@@ -181,7 +190,7 @@ public class ReadActivity extends AppCompatActivity {
 
     }
 
-    private void requestPhoneNuber() {
+    private void requestPhoneNumber() {
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ReadActivity.this);
@@ -202,7 +211,8 @@ public class ReadActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 //                        m_Text = input.getText().toString();
 
-                if ((input.getText().toString()).matches("^09\\d{8}")) {
+//                if ((input.getText().toString()).matches("^(09|07)\\d{8}$")) {
+                if ((input.getText().toString()).matches("^(09)\\d{8}$")) {
                     btnGiftReward.setVisibility(View.INVISIBLE);
                     endReward(input.getText().toString());
 
@@ -212,7 +222,7 @@ public class ReadActivity extends AppCompatActivity {
                     editor.putString("storedPhone", input.getText().toString());
                     editor.apply();
                     //////////////
-                } else requestPhoneNuber();
+                } else requestPhoneNumber();
 
 //                System.out.println("inserted phone is " + input.getText().toString());
 
@@ -356,13 +366,13 @@ public class ReadActivity extends AppCompatActivity {
                                 System.out.println("response code is " + jsonObj.getString("code"));
                                 if (jsonObj.getInt("code") == 200) {
                                     jsonObj = new JSONObject(jsonObj.getString("response"));
-                                    long id = jsonObj.getLong("id");
-                                    long minutes = jsonObj.getLong("minutes");
+                                    reward_p_id = jsonObj.getLong("id");
+                                    reward_minutes = jsonObj.getLong("minutes");
 
-                                    System.out.println("value of id = " + id + " and valude of mun is " + minutes);
-                                    if (id > 0 && minutes > 0) {
+                                    System.out.println("value of id = " + reward_p_id + " and valude of mun is " + reward_minutes);
+                                    if (reward_p_id > 0 && reward_minutes > 0) {
                                         // show counter
-                                        rewardCountdown(minutes);
+                                        rewardCountdown(reward_minutes);
                                     }
                                 }
 
@@ -417,7 +427,55 @@ public class ReadActivity extends AppCompatActivity {
         return true;
     }
 
+
     public void endReward(String _phone) {
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        RewardedAd.load(this, getString(R.string.adReward),
+                adRequest, new RewardedAdLoadCallback() {
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error.
+                        Log.d(TAG, loadAdError.toString());
+                        mRewardedAd = null;
+                    }
+
+                    @Override
+                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
+                        Log.d(TAG, "Ad was loaded.");
+                        mRewardedAd = rewardedAd;
+                        if (mRewardedAd != null) {
+                            mRewardedAd.show(ReadActivity.this, new OnUserEarnedRewardListener() {
+                                @Override
+                                public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                                    // Handle the reward.
+                                    Log.d(TAG, "The user earned the reward.");
+
+                                    SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+                                    String custom_data="";
+                                    try {
+                                        JSONObject jsonBody = new JSONObject();
+                                        jsonBody.put("phone", _phone);
+                                        jsonBody.put("email", pre.getString("email", "1"));
+                                        jsonBody.put("reward_p_id", reward_p_id);
+                                        custom_data = jsonBody.toString();
+                                    }catch (Exception kl){}
+
+                                    ServerSideVerificationOptions options = new ServerSideVerificationOptions
+                                            .Builder()
+                                            .setCustomData(custom_data)
+                                            .build();
+                                    rewardedAd.setServerSideVerificationOptions(options);
+                                }
+                            });
+                        } else {
+                            Log.d(TAG, "The rewarded ad wasn't ready yet.");
+                        }
+
+                    }
+                });
+
 //
 ////        System.out.println("endReward() reward done!");
 //        OkHttpClient rewardClient = new OkHttpClient();
