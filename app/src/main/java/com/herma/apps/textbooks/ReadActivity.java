@@ -143,11 +143,7 @@ public class ReadActivity extends AppCompatActivity {
                                                 SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
                                                 storedPhone = sharedPref.getString("storedPhone", "0");
 
-                                                isThereReward();
-
-//                                    rewardCountdown(0.2);
-
-//                                            System.out.println("passed seconds remaining: isTheirReward");
+//                                                isThereReward();
 
                                                 mInterstitialAd = interstitialAd;
                                                 mInterstitialAd.show(ReadActivity.this);
