@@ -9,7 +9,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,16 +21,31 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnRenderListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+import com.google.android.gms.ads.rewarded.ServerSideVerificationOptions;
 import com.herma.apps.textbooks.common.Commons;
 import com.herma.apps.textbooks.ui.about.About_us;
 
@@ -42,6 +59,10 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ReadActivity extends AppCompatActivity {
 
@@ -51,10 +72,13 @@ public class ReadActivity extends AppCompatActivity {
     private AdView mAdView;
     private InterstitialAd mInterstitialAd;
     File f;
-    String rewardId = "", storedPhone = "0";
+    String rewardId = "", storedPhone = "0", TAG = "ReadActivity.java";
+
+    private RewardedAd mRewardedAd;
 
     TextView txtTimerValue;
     ImageButton btnGiftReward;
+    long reward_p_id, reward_minutes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +87,7 @@ public class ReadActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // add back arrow to toolbar
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
@@ -84,8 +108,8 @@ public class ReadActivity extends AppCompatActivity {
 
             try {
                 this.setTitle(getIntent().getStringExtra("chapterName") + " (" + getIntent().getStringExtra("subject") + ")");
-                if(new Commons(ReadActivity.this).dec(filePath, getIntent().getStringExtra("fileName")+".pdf",  getIntent().getStringExtra("p"))) {
-                    f = new File(ReadActivity.this.getFilesDir()+"nor.pdf");
+                if (new Commons(ReadActivity.this).dec(filePath, getIntent().getStringExtra("fileName") + ".pdf", getIntent().getStringExtra("p"))) {
+                    f = new File(ReadActivity.this.getFilesDir() + "nor.pdf");
                     pdfView.fromFile(f)
                             .onRender(new OnRenderListener() {
                                 @Override
@@ -96,7 +120,7 @@ public class ReadActivity extends AppCompatActivity {
 
                                     AdRequest adRequest = new AdRequest.Builder().build();
 
-                                    if(new Commons(getApplicationContext()).showGoogleAd( 1)) {
+                                    if (new Commons(getApplicationContext()).showGoogleAd(1)) {
 
 //                                        mAdView.loadAd(adRequest);
 
@@ -119,11 +143,7 @@ public class ReadActivity extends AppCompatActivity {
                                                 SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
                                                 storedPhone = sharedPref.getString("storedPhone", "0");
 
-                                                isTheirReward();
-
-//                                    rewardCountdown(0.2);
-
-//                                            System.out.println("passed seconds remaining: isTheirReward");
+//                                                isThereReward();
 
                                                 mInterstitialAd = interstitialAd;
                                                 mInterstitialAd.show(ReadActivity.this);
@@ -137,7 +157,7 @@ public class ReadActivity extends AppCompatActivity {
                                         });
 
 
-                                    }else{
+                                    } else {
                                         adContainerView.setVisibility(View.GONE);
                                     }
 
@@ -146,7 +166,9 @@ public class ReadActivity extends AppCompatActivity {
 
 
                 }
-            } catch (Exception e) {e.printStackTrace();}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
 
@@ -154,7 +176,7 @@ public class ReadActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                requestPhoneNuber();
+                requestPhoneNumber();
 
             }
         });
@@ -164,7 +186,7 @@ public class ReadActivity extends AppCompatActivity {
 
     }
 
-    private void requestPhoneNuber() {
+    private void requestPhoneNumber() {
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ReadActivity.this);
@@ -185,7 +207,8 @@ public class ReadActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 //                        m_Text = input.getText().toString();
 
-                if ((input.getText().toString()).matches("^09\\d{8}")) {
+//                if ((input.getText().toString()).matches("^(09|07)\\d{8}$")) {
+                if ((input.getText().toString()).matches("^(09)\\d{8}$")) {
                     btnGiftReward.setVisibility(View.INVISIBLE);
                     endReward(input.getText().toString());
 
@@ -195,7 +218,7 @@ public class ReadActivity extends AppCompatActivity {
                     editor.putString("storedPhone", input.getText().toString());
                     editor.apply();
                     //////////////
-                } else requestPhoneNuber();
+                } else requestPhoneNumber();
 
 //                System.out.println("inserted phone is " + input.getText().toString());
 
@@ -222,6 +245,7 @@ public class ReadActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.read, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -247,6 +271,7 @@ public class ReadActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void rateApp() {
         try {
             Intent rateIntent = rateIntentForUrl("market://details");
@@ -276,11 +301,12 @@ public class ReadActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
     }
-    public void rewardCountdown(double _minute){  //
+
+    public void rewardCountdown(double _minute) {  //
 
         txtTimerValue.setVisibility(View.VISIBLE);
 
-        new CountDownTimer( (long) (_minute*60*1000) , 1000) { // 30000 mili = 30 sec
+        new CountDownTimer((long) (_minute * 60 * 1000), 1000) { // 30000 mili = 30 sec
 
             public void onTick(long millisUntilFinished) {
 //                System.out.println("seconds remaining: " + millisUntilFinished / 1000);
@@ -307,55 +333,145 @@ public class ReadActivity extends AppCompatActivity {
         }.start();
     }
 
+    public boolean isThereReward() {
 
-    public void isTheirReward(){
-//
-//        OkHttpClient rewardClient = new OkHttpClient();
-//
-//        Request request = new Request.Builder()
-//                .header("username", SplashActivity.USERNAME)
-//        .header("password", SplashActivity.PAZZWORD)
-//                .url(new Commons(this).WEBSITE + "/reward/api/items/start_reward?phone=" + storedPhone)
-//                .build();
-//        rewardClient.newCall(request).enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                e.printStackTrace();
-//            }
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                if (response.isSuccessful()) {
-//                    final String myResponse = response.body().string();
-//                    ReadActivity.this.runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//
-//                            try {
-//                                JSONObject reader = new JSONObject(myResponse);
-//
-//
-////                                    System.out.println("myResponse = " + myResponse);
-//
-//                                if((reader.getString("success")).equals("true") && (reader.getString("message")).equals("START")){
-//                                    rewardId = reader.getString("id");
-//                                    rewardCountdown(reader.getDouble("min"));
-//
-////                                    System.out.println("rewardId = " + rewardId);
-//                                }
-//
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//
-//                        }
-//                    });
-//                }
-//            }
-//        });
-//
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+
+        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String email = pre.getString("email", "1");
+
+        String pattern = "^[a-zA-Z0-9._%+-]+@gmail\\.com$";
+        if (!email.matches(pattern))
+            return false;
+
+        String url = "ds_rewards/v1/is_reward_open/1-12-textbooks?email=" + email;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, SplashActivity.BASEAPI + url,
+
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println(response);
+
+                        if (response != null) {
+                            try {
+//                                        System.out.println(response);
+                                // Getting JSON Array node
+                                JSONObject jsonObj = new JSONObject(response);
+
+                                System.out.println("response code is " + jsonObj.getString("code"));
+                                if (jsonObj.getInt("code") == 200) {
+                                    jsonObj = new JSONObject(jsonObj.getString("response"));
+                                    reward_p_id = jsonObj.getLong("id");
+                                    reward_minutes = jsonObj.getLong("minutes");
+
+                                    System.out.println("value of id = " + reward_p_id + " and valude of mun is " + reward_minutes);
+                                    if (reward_p_id > 0 && reward_minutes > 0) {
+                                        // show counter
+                                        rewardCountdown(reward_minutes);
+                                    }
+                                }
+
+                            } catch (final JSONException e) {
+                            }
+
+                        }
+
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Check if the error has a network response
+                NetworkResponse response = error.networkResponse;
+                if (response != null) {
+                    // Get the error status code
+                    int statusCode = response.statusCode;
+
+                    // Get the error response body as a string
+                    String responseBody = new String(response.data, StandardCharsets.UTF_8);
+
+                    // Print the error details
+                    System.out.println("Error status code: " + statusCode);
+                    System.out.println("Error response body: " + responseBody);
+                } else {
+                    // The error does not have a network response
+                    System.out.println("Error message: " + error.getMessage());
+                }
+            }
+
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", SplashActivity.USERNAME);
+                params.put("password", SplashActivity.PAZZWORD);
+                return params;
+            }
+
+        };
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        stringRequest.setTag(this);
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
+        return true;
     }
 
-    public void endReward(String _phone){
+
+    public void endReward(String _phone) {
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        RewardedAd.load(this, getString(R.string.adReward),
+                adRequest, new RewardedAdLoadCallback() {
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error.
+                        Log.d(TAG, loadAdError.toString());
+                        mRewardedAd = null;
+                    }
+
+                    @Override
+                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
+                        Log.d(TAG, "Ad was loaded.");
+                        mRewardedAd = rewardedAd;
+                        if (mRewardedAd != null) {
+                            mRewardedAd.show(ReadActivity.this, new OnUserEarnedRewardListener() {
+                                @Override
+                                public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                                    // Handle the reward.
+                                    Log.d(TAG, "The user earned the reward.");
+
+                                    SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+                                    String custom_data="";
+                                    try {
+                                        JSONObject jsonBody = new JSONObject();
+                                        jsonBody.put("phone", _phone);
+                                        jsonBody.put("email", pre.getString("email", "1"));
+                                        jsonBody.put("reward_p_id", reward_p_id);
+                                        custom_data = jsonBody.toString();
+                                    }catch (Exception kl){}
+
+                                    ServerSideVerificationOptions options = new ServerSideVerificationOptions
+                                            .Builder()
+                                            .setCustomData(custom_data)
+                                            .build();
+                                    rewardedAd.setServerSideVerificationOptions(options);
+                                }
+                            });
+                        } else {
+                            Log.d(TAG, "The rewarded ad wasn't ready yet.");
+                        }
+
+                    }
+                });
+
 //
 ////        System.out.println("endReward() reward done!");
 //        OkHttpClient rewardClient = new OkHttpClient();

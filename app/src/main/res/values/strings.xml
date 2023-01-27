@@ -1,27 +1,27 @@
 <resources>
 
 
-<!--    <string name="adQuestionsInt">ca-app-pub-3940256099942544/1033173712</string>-->
-<!--    <string name="adReaderInt">ca-app-pub-3940256099942544/1033173712</string>-->
-<!--    <string name="adHome">ca-app-pub-3940256099942544/6300978111</string>-->
-<!--    <string name="adChapter">ca-app-pub-3940256099942544/6300978111</string>-->
-<!--    <string name="adQuestions">ca-app-pub-3940256099942544/6300978111</string>-->
-<!--    <string name="adReader">ca-app-pub-3940256099942544/6300978111</string>-->
-<!--        <string name="adReward">ca-app-pub-3940256099942544/5224354917</string>-->
+    <string name="adQuestionsInt">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="adReaderInt">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="adHome">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="adChapter">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="adQuestions">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="adReader">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="adReward">ca-app-pub-3940256099942544/5224354917</string>
 
-<!--    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>-->
+    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
 
 
 
-    <string name="adQuestionsInt">ca-app-pub-8011674951494696/7993749596</string>
-    <string name="adReaderInt">ca-app-pub-8011674951494696/4934737105</string>
-    <string name="adHome">ca-app-pub-8011674951494696/8312993039</string>
-    <string name="adChapter">ca-app-pub-8011674951494696/7079802411</string>
-    <string name="adQuestions">ca-app-pub-8011674951494696/4170948875</string>
-    <string name="adReader">ca-app-pub-8011674951494696/3605507555</string>
-    <string name="adReward">ca-app-pub-8011674951494696/2726130955</string>
+<!--    <string name="adQuestionsInt">ca-app-pub-8011674951494696/7993749596</string>-->
+<!--    <string name="adReaderInt">ca-app-pub-8011674951494696/4934737105</string>-->
+<!--    <string name="adHome">ca-app-pub-8011674951494696/8312993039</string>-->
+<!--    <string name="adChapter">ca-app-pub-8011674951494696/7079802411</string>-->
+<!--    <string name="adQuestions">ca-app-pub-8011674951494696/4170948875</string>-->
+<!--    <string name="adReader">ca-app-pub-8011674951494696/3605507555</string>-->
+<!--    <string name="adReward">ca-app-pub-8011674951494696/2726130955</string>-->
 
-    <string name="admob_app_id">ca-app-pub-8011674951494696~8662393111</string>
+<!--    <string name="admob_app_id">ca-app-pub-8011674951494696~8662393111</string>-->
 
 
     <string name="app_name">1-12 Text Books</string>
@@ -49,7 +49,7 @@
     <string name="action_rate">Rate us (5 Star)</string>
     <string name="action_store">Other apps</string>
     <string name="exit">Exit</string>
-    <string name="pls_wait">Please wait...\n\nTelegram:-@ethio_textbooks</string>
+    <string name="pls_wait">\n\nTelegram:-@ethio_textbooks</string>
     <string name="menu_g12">Grade 12</string>
     <string name="menu_g11">Grade 11</string>
     <string name="menu_g10">Grade 10</string>

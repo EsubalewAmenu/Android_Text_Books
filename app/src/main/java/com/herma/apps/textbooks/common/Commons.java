@@ -395,7 +395,7 @@ ProgressDialog progressBar;
 
         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(context);
         String license_type = pre.getString("license_type", "");
-        String out_date = pre.getString("out_date", "");
+        String out_date = pre.getString("out_date", "2100-12-31");
         String last_update = pre.getString("last_update", "");
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
