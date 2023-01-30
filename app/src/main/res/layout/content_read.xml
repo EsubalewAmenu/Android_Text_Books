@@ -25,12 +25,11 @@
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:ignore="HardcodedText">
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
@@ -93,7 +92,7 @@
         app:layout_constraintBottom_toTopOf="@+id/add_alarm_fab"
         app:layout_constraintEnd_toEndOf="@+id/add_alarm_fab"
         app:layout_constraintStart_toStartOf="@+id/add_alarm_fab"
-        app:srcCompat="@android:drawable/btn_minus" />
+        app:srcCompat="@android:drawable/ic_btn_speak_now" />
 
     <!-- Action name text for the add person button -->
     <!-- Make sure that you are constraining this Text

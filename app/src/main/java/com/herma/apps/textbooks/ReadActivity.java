@@ -249,9 +249,19 @@ public void commentRelateds(){
     });
     // below is the sample action to handle add person FAB. Here it shows simple Toast msg.
     // The Toast will be shown only when they are visible and only when user clicks on them
-    mAddPersonFab.setOnClickListener(
-            view -> Toast.makeText(ReadActivity.this, "Person Added", Toast.LENGTH_SHORT
-            ).show());
+    mAddPersonFab.setOnClickListener(new View.OnClickListener() {
+                                         @Override
+                                         public void onClick(View view) {
+                                             //            view -> Toast.makeText(ReadActivity.this, "Person Added", Toast.LENGTH_SHORT).show();
+
+                                             Intent commentIntent = new Intent(ReadActivity.this, CommentActivity.class);
+                                             commentIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
+                                             commentIntent.putExtra("subject", getIntent().getStringExtra("subject"));
+                                             commentIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
+                                             startActivity(commentIntent);
+                                         }
+                                     }
+    );
 
     // below is the sample action to handle add alarm FAB. Here it shows simple Toast msg
     // The Toast will be shown only when they are visible and only when user clicks on them
