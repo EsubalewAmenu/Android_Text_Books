@@ -8,13 +8,34 @@
     android:padding="16dp"
     android:background="@drawable/top_border">
 
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_profile_picture"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/herma" />
+
+    <TextView
+        android:id="@+id/tv_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        tools:text="Abebe"
+        />
+
     <TextView
         android:id="@+id/tv_date"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
         tools:text="15/05/2021 at 12:25"
         />
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <TextView
         android:id="@+id/tv_comment"
@@ -68,8 +89,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         tools:text="Show replies"
+        android:visibility="gone"
         />
-    <!--        android:visibility="gone"-->
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/ll_replies"

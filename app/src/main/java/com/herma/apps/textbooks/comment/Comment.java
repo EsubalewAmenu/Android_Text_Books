@@ -12,13 +12,37 @@ public class Comment {
     private Button btnLike;
     private Button btnReply;
     private List<Comment> replies;
+    private int like;
+    private int dislike;
+    private boolean addReplyToParent = false;
 
-    public Comment(String comment, String author, String timestamp) {
-        this.comment = comment;
-        this.author = author;
-        this.timestamp = timestamp;
 
+    public Comment() {
         this.replies = new ArrayList<>();
+    }
+
+    public boolean isAddReplyToParent() {
+        return addReplyToParent;
+    }
+
+    public void setAddReplyToParent(boolean addReplyToParent) {
+        this.addReplyToParent = addReplyToParent;
+    }
+
+    public int getLike() {
+        return like;
+    }
+
+    public void setLike(int like) {
+        this.like = like;
+    }
+
+    public int getDislike() {
+        return dislike;
+    }
+
+    public void setDislike(int dislike) {
+        this.dislike = dislike;
     }
 
     public String getComment() {
