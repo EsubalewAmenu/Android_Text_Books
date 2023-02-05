@@ -12,6 +12,8 @@ public class Comment {
     private Button btnLike;
     private Button btnReply;
     private List<Comment> replies;
+    private int childCommentCount;
+    private boolean childSeen;
     private int like;
     private int dislike;
     private boolean addReplyToParent = false;
@@ -27,6 +29,22 @@ public class Comment {
 
     public void setAddReplyToParent(boolean addReplyToParent) {
         this.addReplyToParent = addReplyToParent;
+    }
+
+    public int getChildCommentCount() {
+        return childCommentCount;
+    }
+
+    public void setChildCommentCount(int childCommentCount) {
+        this.childCommentCount = childCommentCount;
+    }
+
+    public boolean isChildSeen() {
+        return childSeen;
+    }
+
+    public void setChildSeen(boolean childSeen) {
+        this.childSeen = childSeen;
     }
 
     public int getLike() {

@@ -47,6 +47,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         holder.tvTimestamp.setText(comment.getTimestamp());
         holder.btnLike.setText(comment.getLike()+"");
         holder.btnDislike.setText(comment.getDislike()+"");
+        holder.btn_more.setText("See " + comment.getChildCommentCount() + " replies");
+
+        if(comment.getChildCommentCount() > 0 )
+            holder.btn_more.setVisibility(View.VISIBLE);
 
         String imageUrl = "https://www.gravatar.com/avatar/dfssa";
 
@@ -100,6 +104,20 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 holder.btnDislike.setText(comment.getDislike()+"");
             }
         });
+        holder.btn_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!comment.isChildSeen()) {
+                    System.out.println("was not seen");
+                    addChild(comment, "inputMessage", "Test Author", "15/05/2021 at 12:25", holder.llReplies.getContext(), holder.llReplies);
+                    comment.setChildSeen(true);
+                }else{
+                    System.out.println("aleady seen");
+                    holder.llReplies.removeAllViews();
+                    comment.setChildSeen(false);
+                }
+            }
+        });
 
     }
 
@@ -114,6 +132,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         newComment.setComment(inputMessage);
         newComment.setAuthor(author);
         newComment.setTimestamp(timestamp);
+        newComment.setChildCommentCount(r.nextInt(3));
 
         newComment.setAddReplyToParent(true);
 

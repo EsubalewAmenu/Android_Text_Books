@@ -73,6 +73,7 @@ public class CommentActivity extends AppCompatActivity {
         comment.setComment("Sample text 1");
         comment.setAuthor("test Author 1 ");
         comment.setTimestamp("2022-01-01 10:00:00");
+        comment.setChildCommentCount(r.nextInt(3));
 
         comments.add(comment);
 
@@ -82,6 +83,7 @@ public class CommentActivity extends AppCompatActivity {
         comment.setComment("Sample text 2");
         comment.setAuthor("test Author 2 ");
         comment.setTimestamp("2022-01-02 10:00:00");
+        comment.setChildCommentCount(r.nextInt(3));
 
         comments.add(comment);
 
@@ -126,6 +128,7 @@ public class CommentActivity extends AppCompatActivity {
                     comment.setComment(inputMessage);
                     comment.setAuthor(author);
                     comment.setTimestamp(timestamp);
+                    comment.setChildCommentCount(r.nextInt(3));
                     comments.add(comment);
                     commentAdapter.notifyDataSetChanged();
 
