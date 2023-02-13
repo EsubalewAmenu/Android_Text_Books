@@ -24,7 +24,7 @@ import java.util.Random;
 
 public class CommentActivity extends AppCompatActivity {
 
-    private Button btnComment, btnAddComment;
+    private Button btnAddComment;
     private RecyclerView rvComment;
     private CommentAdapter commentAdapter;
     private List<Comment> comments;
@@ -43,19 +43,11 @@ public class CommentActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        btnComment = findViewById(R.id.btn_comment);
         btnAddComment = findViewById(R.id.btn_add_comment);
         rvComment = findViewById(R.id.rv_comment);
     }
 
     private void initListeners() {
-        btnComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showCommentSection();
-            }
-        });
-
         btnAddComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,13 +80,12 @@ public class CommentActivity extends AppCompatActivity {
         comments.add(comment);
 
 
-        commentAdapter = new CommentAdapter(comments);
+        commentAdapter = new CommentAdapter(comments, getApplicationContext());
         rvComment.setLayoutManager(new LinearLayoutManager(this));
         rvComment.setAdapter(commentAdapter);
     }
 
     private void showCommentSection() {
-//        btnComment.setVisibility(View.GONE);
         rvComment.setVisibility(View.VISIBLE);
         btnAddComment.setVisibility(View.VISIBLE);
     }

@@ -56,6 +56,7 @@
             android:text="42"
             android:layout_weight="1"
             android:drawableStart="@drawable/ic_like"
+            style="@style/TextButtonStyle"
             />
         <Button
             android:id="@+id/btn_dislike"
@@ -64,6 +65,7 @@
             android:layout_weight="1"
             android:text="69"
             android:drawableStart="@drawable/ic_dislike"
+            style="@style/TextButtonStyle"
             />
         <Button
             android:id="@+id/btn_reply"
@@ -72,6 +74,7 @@
             android:layout_weight="1"
             android:text=""
             android:drawableStart="@drawable/ic_reply"
+            style="@style/TextButtonStyle"
             />
         <Button
             android:id="@+id/btn_report"
@@ -80,6 +83,7 @@
             android:layout_weight="1"
             android:text=""
             android:drawableStart="@drawable/ic_report"
+            style="@style/TextButtonStyle"
             />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -90,6 +94,7 @@
         android:layout_marginStart="16dp"
         tools:text="Show replies"
         android:visibility="gone"
+        style="@style/TextButtonStyle"
         />
 
     <androidx.appcompat.widget.LinearLayoutCompat
