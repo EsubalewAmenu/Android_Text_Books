@@ -3,8 +3,10 @@ package com.herma.apps.textbooks.comment;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,21 +20,45 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
+import com.herma.apps.textbooks.CommentActivity;
 import com.herma.apps.textbooks.R;
+import com.herma.apps.textbooks.SplashActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
     private List<Comment> commentList;
     private Context context;
+    private String chapter;
 
-    public CommentAdapter(List<Comment> commentList, Context context) {
+    public CommentAdapter(List<Comment> commentList, Context context, String chapter) {
         this.commentList = commentList;
         this.context = context;
+        this.chapter = chapter;
     }
 
     @NonNull
@@ -56,10 +82,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         if(comment.getChildCommentCount() > 0 )
             holder.btn_more.setVisibility(View.VISIBLE);
 
-        String imageUrl = "https://www.gravatar.com/avatar/dfssa";
+//        String imageUrl = "https://www.gravatar.com/avatar/dfssa";
 
         Glide.with(holder.llReplies.getContext())
-                .load(imageUrl)
+                .load(comment.getAuthor_avatar_url())//imageUrl)
                 .placeholder(R.drawable.herma)
                 .into(holder.ivProfilePicture);
 
@@ -104,7 +130,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                         TextInputEditText input = dialogView.findViewById(R.id.ti_message);
                         String inputMessage = input.getText().toString();
 
-                        addChild(comment, inputMessage, "Test Author", "15/05/2021 at 12:25", holder.llReplies.getContext(), holder.llReplies);
+                        addChild(comment, inputMessage, holder.llReplies.getContext(), holder.llReplies);
                     }
                 });
                 dialogBuilder.setNegativeButton("Cancel", null);
@@ -152,8 +178,18 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             @Override
             public void onClick(View view) {
                 if(!comment.isChildSeen()) {
+
+
+//                    try {
+                        System.out.println("get child comments");
+//                        getComments(comment.getCommentId(), chapter);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+
+
                     System.out.println("was not seen");
-                    addChild(comment, "inputMessage", "Test Author", "15/05/2021 at 12:25", holder.llReplies.getContext(), holder.llReplies);
+                    addChild(comment, "inputMessage", holder.llReplies.getContext(), holder.llReplies);
                     comment.setChildSeen(true);
                 }else{
                     System.out.println("aleady seen");
@@ -165,34 +201,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     }
 
-    private void addChild(Comment parentComment, String inputMessage, String author, String timestamp, Context context, LinearLayoutCompat llReplies) {
+    private void addChild(Comment parentComment, String inputMessage, Context context, LinearLayoutCompat llReplies) {
 
-        Random r = new Random();
-//                for (int i = 0; i < 5; i++) {
 
-        Comment newComment = new Comment();
-        newComment.setLike(r.nextInt(1000));
-        newComment.setDislike(r.nextInt(1000));
-        newComment.setComment(inputMessage);
-        newComment.setAuthor(author);
-        newComment.setTimestamp(timestamp);
-        newComment.setChildCommentCount(r.nextInt(3));
-
-        newComment.setAddReplyToParent(true);
-
-        if(parentComment.isAddReplyToParent()) {
-            commentList.add(newComment);
-        }else{
-            RecyclerView rvReplies = new RecyclerView(context);
-            rvReplies.setLayoutManager(new LinearLayoutManager(context));
-            llReplies.addView(rvReplies);
-
-            List<Comment> replyList = new ArrayList<>();
-            replyList.add(newComment);
-//                }
-            CommentAdapter replyAdapter = new CommentAdapter(replyList, context);
-            rvReplies.setAdapter(replyAdapter);
-//            btn_more.se
+        try {
+            postChildComment(inputMessage,parentComment.getCommentId(), parentComment, llReplies);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -227,4 +242,201 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         }
 
     }
+
+
+    public void postChildComment(String userComment, int parent, Comment parentComment, LinearLayoutCompat llReplies) throws JSONException {
+
+        String chapter = "new_12wst1";
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        String url = SplashActivity.BASEAPI+"wp/v2/chapter/comment/"+chapter+"/"+parent;
+
+        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(context);
+
+        JSONObject jsonBody = new JSONObject();
+        jsonBody.put("google_user_id", pre.getString("userId", "1"));
+        jsonBody.put("email", pre.getString("email", "1"));
+        jsonBody.put("registed_with", "google");
+        jsonBody.put("comment_content", chapter+" "+userComment);
+        final String requestBody = jsonBody.toString();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url ,
+
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+//                        System.out.println("post comment response is ");
+//                        System.out.println(response);
+
+                        Random r = new Random();
+//                for (int i = 0; i < 5; i++) {
+                        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+
+                        Comment newComment = new Comment();
+                        newComment.setLike(r.nextInt(1000));
+                        newComment.setDislike(r.nextInt(1000));
+                        newComment.setComment(userComment);
+                        newComment.setAuthor(pre.getString("email", "1"));
+                        newComment.setTimestamp(timestamp);
+                        newComment.setChildCommentCount(r.nextInt(3));
+
+                        newComment.setAddReplyToParent(true);
+
+                        if(parentComment.isAddReplyToParent()) {
+                            commentList.add(newComment);
+                        }else{
+                            RecyclerView rvReplies = new RecyclerView(context);
+                            rvReplies.setLayoutManager(new LinearLayoutManager(context));
+                            llReplies.addView(rvReplies);
+
+                            List<Comment> replyList = new ArrayList<>();
+                            replyList.add(newComment);
+//                }
+                            CommentAdapter replyAdapter = new CommentAdapter(replyList, context, chapter);
+                            rvReplies.setAdapter(replyAdapter);
+//            btn_more.se
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Check if the error has a network response
+                NetworkResponse response = error.networkResponse;
+                if (response != null) {
+                    // Get the error status code
+                    int statusCode = response.statusCode;
+
+                    // Get the error response body as a string
+                    String responseBody = new String(response.data, StandardCharsets.UTF_8);
+
+                    // Print the error details
+                    System.out.println("Error status code: " + statusCode);
+                    System.out.println("Error response body: " + responseBody);
+                } else {
+                    // The error does not have a network response
+                    System.out.println("Error message: " + error.getMessage());
+                }
+            }
+
+        })
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
+                params.put("password", pre.getString("userId", "1"));//SplashActivity.PAZZWORD);
+                return params;
+            }
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                try {
+                    return requestBody == null ? null : requestBody.getBytes("utf-8");
+                } catch (UnsupportedEncodingException uee) {
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                    return null;
+                }
+            }
+        };
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        stringRequest.setTag(this);
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
+    }
+
+    private void getComments(int parent, String chapter) throws JSONException {
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(context);
+
+        String url = SplashActivity.BASEAPI+"wp/v2/chapter/comments/"+chapter+"/"+parent;
+
+
+        JSONObject jsonBody = new JSONObject();
+        jsonBody.put("email", pre.getString("email", "1"));
+        final String requestBody = jsonBody.toString();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url ,
+
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("get child comment request response is ");
+                        System.out.println(response);
+
+                        if (response != null) {
+
+//                            setComments(response);
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Check if the error has a network response
+                NetworkResponse response = error.networkResponse;
+                if (response != null) {
+                    // Get the error status code
+                    int statusCode = response.statusCode;
+
+                    // Get the error response body as a string
+                    String responseBody = new String(response.data, StandardCharsets.UTF_8);
+
+                    // Print the error details
+                    System.out.println("Error status code: " + statusCode);
+                    System.out.println("Error response body: " + responseBody);
+                } else {
+                    // The error does not have a network response
+                    System.out.println("Error message: " + error.getMessage());
+                }
+            }
+
+        })
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", SplashActivity.USERNAME);
+                params.put("password", SplashActivity.PAZZWORD);
+                return params;
+            }
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                try {
+                    return requestBody == null ? null : requestBody.getBytes("utf-8");
+                } catch (UnsupportedEncodingException uee) {
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                    return null;
+                }
+            }
+        };
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        stringRequest.setTag(this);
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
+    }
+
 }

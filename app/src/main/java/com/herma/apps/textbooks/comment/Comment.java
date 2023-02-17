@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Comment {
+    private int commentId;
     private String comment;
     private String author;
     private String timestamp;
+    private String author_avatar_url;
     private Button btnLike;
     private Button btnReply;
     private List<Comment> replies;
@@ -21,6 +23,22 @@ public class Comment {
 
     public Comment() {
         this.replies = new ArrayList<>();
+    }
+
+    public int getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(int commentId) {
+        this.commentId = commentId;
+    }
+
+    public String getAuthor_avatar_url() {
+        return author_avatar_url;
+    }
+
+    public void setAuthor_avatar_url(String author_avatar_url) {
+        this.author_avatar_url = author_avatar_url;
     }
 
     public boolean isAddReplyToParent() {
