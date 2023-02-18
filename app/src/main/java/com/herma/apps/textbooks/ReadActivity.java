@@ -266,7 +266,7 @@ public void commentRelateds(){
     // below is the sample action to handle add alarm FAB. Here it shows simple Toast msg
     // The Toast will be shown only when they are visible and only when user clicks on them
     mAddAlarmFab.setOnClickListener(
-            view -> Toast.makeText(ReadActivity.this, "Alarm Added", Toast.LENGTH_SHORT
+            view -> Toast.makeText(ReadActivity.this, "Quiz - Coming soon!", Toast.LENGTH_SHORT
             ).show());
 }
     private void requestPhoneNumber() {

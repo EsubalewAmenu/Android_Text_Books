@@ -19,10 +19,28 @@ public class Comment {
     private int like;
     private int dislike;
     private boolean addReplyToParent = false;
+    private int is_user_liked;
+    private int is_user_disliked;
 
 
     public Comment() {
         this.replies = new ArrayList<>();
+    }
+
+    public int getIs_user_liked() {
+        return is_user_liked;
+    }
+
+    public void setIs_user_liked(int is_user_liked) {
+        this.is_user_liked = is_user_liked;
+    }
+
+    public int getIs_user_disliked() {
+        return is_user_disliked;
+    }
+
+    public void setIs_user_disliked(int is_user_disliked) {
+        this.is_user_disliked = is_user_disliked;
     }
 
     public int getCommentId() {

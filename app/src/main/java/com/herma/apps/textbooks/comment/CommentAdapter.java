@@ -96,16 +96,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         Drawable normalDislikeDrawable = context.getResources().getDrawable(R.drawable.ic_dislike);
         Drawable activeDislikeDrawable = context.getResources().getDrawable(R.drawable.ic_dislike_active);
 
-        int isUserLiked = (new Random().nextInt(1));
-        int isUserDisliked = (new Random().nextInt(1));
+//        int isUserLiked = (new Random().nextInt(1));
+//        int isUserDisliked = (new Random().nextInt(1));
 
-        if (isUserLiked == 1) {
+        if (comment.getIs_user_liked() == 1) {
             holder.btnLike.setCompoundDrawablesWithIntrinsicBounds(activeLikeDrawable, null, null, null);
         } else {
             holder.btnLike.setCompoundDrawablesWithIntrinsicBounds(normalLikeDrawable, null, null, null);
         }
 
-        if (isUserDisliked == 1) {
+        if (comment.getIs_user_disliked() == 1) {
             holder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(activeDislikeDrawable, null, null, null);
         } else {
             holder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(normalDislikeDrawable, null, null, null);
@@ -154,6 +154,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     holder.btnLike.setCompoundDrawablesWithIntrinsicBounds(activeLikeDrawable, null, null, null);
                     comment.setLike(comment.getLike()+1);
 
+
+                    if(holder.btnDislike.getCompoundDrawables()[0] == activeDislikeDrawable){
+                        holder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(normalDislikeDrawable, null, null, null);
+                        comment.setDislike(comment.getDislike()-1);
+                        holder.btnDislike.setText(comment.getDislike()+"");
+                    }
+
                     try {
                         postInteraction(comment.getCommentId(), "L", 0);
                     } catch (JSONException e) {
@@ -183,7 +190,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
                 if (holder.btnDislike.getCompoundDrawables()[0] == normalDislikeDrawable) {
                     holder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(activeDislikeDrawable, null, null, null);
-                    comment.setDislike(comment.getDislike()-1);
+                    comment.setDislike(comment.getDislike()+1);
+
+                    if(holder.btnLike.getCompoundDrawables()[0] == activeLikeDrawable){
+                        holder.btnLike.setCompoundDrawablesWithIntrinsicBounds(normalLikeDrawable, null, null, null);
+                        comment.setLike(comment.getLike()-1);
+                        holder.btnLike.setText(comment.getLike()+"");
+
+                    }
 
                     try {
                         postInteraction(comment.getCommentId(), "D", 0);
@@ -193,7 +207,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
                 } else {
                     holder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(normalDislikeDrawable, null, null, null);
-                    comment.setDislike(comment.getDislike()+1);
+                    comment.setDislike(comment.getDislike()-1);
 
                     try {
                         postInteraction(comment.getCommentId(), "D", 1);
@@ -406,6 +420,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                                     newComment.setCommentId(c.getInt("comment_ID"));
                                     newComment.setLike(c.getInt("likes"));
                                     newComment.setDislike(c.getInt("dislikes"));
+                                    newComment.setIs_user_liked(c.getInt("is_user_liked"));
+                                    newComment.setIs_user_disliked(c.getInt("is_user_disliked"));
                                     newComment.setComment(c.getString("comment_content").substring(chapter.length()));
                                     newComment.setAuthor(c.getString("display_name"));
                                     newComment.setTimestamp(c.getString("comment_date_gmt"));
@@ -424,10 +440,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
                                         List<Comment> replyList = new ArrayList<>();
                                         replyList.add(newComment);
-//                }
                                         CommentAdapter replyAdapter = new CommentAdapter(replyList, context, chapter);
                                         rvReplies.setAdapter(replyAdapter);
-//            btn_more.se
                                     }
 
                                 }
@@ -464,8 +478,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("username", SplashActivity.USERNAME);
-                params.put("password", SplashActivity.PAZZWORD);
+                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
+                params.put("password", pre.getString("userId", "1"));//SplashActivity.PAZZWORD);
                 return params;
             }
             @Override

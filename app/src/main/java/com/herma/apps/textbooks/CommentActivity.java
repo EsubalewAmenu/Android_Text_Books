@@ -94,27 +94,6 @@ public class CommentActivity extends AppCompatActivity {
 
         comments = new ArrayList<>();
 
-//        comment = new Comment();
-//        comment.setLike(r.nextInt(1000));
-//        comment.setDislike(r.nextInt(1000));
-//        comment.setComment("Sample text 1");
-//        comment.setAuthor("test Author 1 ");
-//        comment.setTimestamp("2022-01-01 10:00:00");
-//        comment.setChildCommentCount(r.nextInt(3));
-//
-//        comments.add(comment);
-//
-//        comment = new Comment();
-//        comment.setLike(r.nextInt(1000));
-//        comment.setDislike(r.nextInt(1000));
-//        comment.setComment("Sample text 2");
-//        comment.setAuthor("test Author 2 ");
-//        comment.setTimestamp("2022-01-02 10:00:00");
-//        comment.setChildCommentCount(r.nextInt(3));
-//
-//        comments.add(comment);
-
-
         commentAdapter = new CommentAdapter(comments, getApplicationContext(), chapter);
         rvComment.setLayoutManager(new LinearLayoutManager(this));
         rvComment.setAdapter(commentAdapter);
@@ -191,6 +170,8 @@ public class CommentActivity extends AppCompatActivity {
                                 comment.setCommentId(c.getInt("comment_ID"));
                                 comment.setLike(c.getInt("likes"));
                                 comment.setDislike(c.getInt("dislikes"));
+                                comment.setIs_user_liked(c.getInt("is_user_liked"));
+                                comment.setIs_user_disliked(c.getInt("is_user_liked"));
                                 comment.setComment(c.getString("comment_content").substring(chapter.length()));
                                 comment.setAuthor(c.getString("display_name"));
                                 comment.setTimestamp(c.getString("comment_date_gmt"));
@@ -314,8 +295,8 @@ public class CommentActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("username", SplashActivity.USERNAME);
-                params.put("password", SplashActivity.PAZZWORD);
+                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
+                params.put("password", pre.getString("userId", "1"));//SplashActivity.PAZZWORD);
                 return params;
             }
             @Override
@@ -360,6 +341,8 @@ public class CommentActivity extends AppCompatActivity {
                     comment.setCommentId(c.getInt("comment_ID"));
                     comment.setLike(c.getInt("likes"));
                     comment.setDislike(c.getInt("dislikes"));
+                    comment.setIs_user_liked(c.getInt("is_user_liked"));
+                    comment.setIs_user_disliked(c.getInt("is_user_disliked"));
                     comment.setComment(c.getString("comment_content").substring(chapter.length()));
                     comment.setAuthor(c.getString("display_name"));
                     comment.setTimestamp(c.getString("comment_date_gmt"));

@@ -72,7 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="Add Alarm"
+        android:text="Quiz on this unit"
         app:layout_constraintBottom_toBottomOf="@+id/add_alarm_fab"
         app:layout_constraintEnd_toStartOf="@+id/add_alarm_fab"
         app:layout_constraintTop_toTopOf="@+id/add_alarm_fab" />
@@ -105,7 +105,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="Add Person"
+        android:text="Comments"
         app:layout_constraintBottom_toBottomOf="@+id/add_person_fab"
         app:layout_constraintEnd_toStartOf="@+id/add_person_fab"
         app:layout_constraintTop_toTopOf="@+id/add_person_fab" />
