@@ -43,7 +43,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 
 public class CommentActivity extends AppCompatActivity {
 
@@ -52,7 +51,6 @@ public class CommentActivity extends AppCompatActivity {
     private CommentAdapter commentAdapter;
     private List<Comment> comments;
     private Comment comment;
-    private Random r = new Random();
 
     public String chapter = "";
     SharedPreferences pre = null;
@@ -122,10 +120,10 @@ public class CommentActivity extends AppCompatActivity {
         rvComment.setAdapter(commentAdapter);
     }
 
-    private void showCommentSection() {
-        rvComment.setVisibility(View.VISIBLE);
-        btnAddComment.setVisibility(View.VISIBLE);
-    }
+//    private void showCommentSection() {
+//        rvComment.setVisibility(View.VISIBLE);
+//        btnAddComment.setVisibility(View.VISIBLE);
+//    }
 
     private void addComment() {
         {
@@ -163,7 +161,6 @@ public class CommentActivity extends AppCompatActivity {
         }
     }
 
-
     public void postComment(String userComment, int parent) throws JSONException {
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
@@ -187,26 +184,13 @@ public class CommentActivity extends AppCompatActivity {
                         System.out.println("post comment response is ");
                         System.out.println(response);
 
-//                        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
-//
-//                        comment = new Comment();
-//                        comment.setLike(r.nextInt(1000));
-//                        comment.setDislike(r.nextInt(1000));
-//                        comment.setComment(userComment);
-//                        comment.setAuthor(pre.getString("email", "1"));
-//                        comment.setTimestamp(timestamp);
-//                        comment.setChildCommentCount(0);
-//                        comments.add(comment);
-//                        commentAdapter.notifyDataSetChanged();
-
-
                         try {
                                 JSONObject c = new JSONObject(response).getJSONObject("comment");
 
                                 comment = new Comment();
                                 comment.setCommentId(c.getInt("comment_ID"));
-                                comment.setLike(r.nextInt(1000));
-                                comment.setDislike(r.nextInt(1000));
+                                comment.setLike(c.getInt("likes"));
+                                comment.setDislike(c.getInt("dislikes"));
                                 comment.setComment(c.getString("comment_content").substring(chapter.length()));
                                 comment.setAuthor(c.getString("display_name"));
                                 comment.setTimestamp(c.getString("comment_date_gmt"));
@@ -295,8 +279,8 @@ public class CommentActivity extends AppCompatActivity {
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-//                        System.out.println("request response is ");
-//                        System.out.println(response);
+                        System.out.println("request response is ");
+                        System.out.println(response);
 
                         if (response != null) {
                             setComments(response);
@@ -374,8 +358,8 @@ public class CommentActivity extends AppCompatActivity {
 
                     comment = new Comment();
                     comment.setCommentId(c.getInt("comment_ID"));
-                    comment.setLike(r.nextInt(1000));
-                    comment.setDislike(r.nextInt(1000));
+                    comment.setLike(c.getInt("likes"));
+                    comment.setDislike(c.getInt("dislikes"));
                     comment.setComment(c.getString("comment_content").substring(chapter.length()));
                     comment.setAuthor(c.getString("display_name"));
                     comment.setTimestamp(c.getString("comment_date_gmt"));
