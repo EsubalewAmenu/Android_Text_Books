@@ -8,6 +8,8 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -94,25 +96,25 @@ public class CommentActivity extends AppCompatActivity {
 
         comments = new ArrayList<>();
 
-        comment = new Comment();
-        comment.setLike(r.nextInt(1000));
-        comment.setDislike(r.nextInt(1000));
-        comment.setComment("Sample text 1");
-        comment.setAuthor("test Author 1 ");
-        comment.setTimestamp("2022-01-01 10:00:00");
-        comment.setChildCommentCount(r.nextInt(3));
-
-        comments.add(comment);
-
-        comment = new Comment();
-        comment.setLike(r.nextInt(1000));
-        comment.setDislike(r.nextInt(1000));
-        comment.setComment("Sample text 2");
-        comment.setAuthor("test Author 2 ");
-        comment.setTimestamp("2022-01-02 10:00:00");
-        comment.setChildCommentCount(r.nextInt(3));
-
-        comments.add(comment);
+//        comment = new Comment();
+//        comment.setLike(r.nextInt(1000));
+//        comment.setDislike(r.nextInt(1000));
+//        comment.setComment("Sample text 1");
+//        comment.setAuthor("test Author 1 ");
+//        comment.setTimestamp("2022-01-01 10:00:00");
+//        comment.setChildCommentCount(r.nextInt(3));
+//
+//        comments.add(comment);
+//
+//        comment = new Comment();
+//        comment.setLike(r.nextInt(1000));
+//        comment.setDislike(r.nextInt(1000));
+//        comment.setComment("Sample text 2");
+//        comment.setAuthor("test Author 2 ");
+//        comment.setTimestamp("2022-01-02 10:00:00");
+//        comment.setChildCommentCount(r.nextInt(3));
+//
+//        comments.add(comment);
 
 
         commentAdapter = new CommentAdapter(comments, getApplicationContext(), chapter);
@@ -182,20 +184,42 @@ public class CommentActivity extends AppCompatActivity {
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-//                        System.out.println("post comment response is ");
-//                        System.out.println(response);
+                        System.out.println("post comment response is ");
+                        System.out.println(response);
 
-                        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+//                        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+//
+//                        comment = new Comment();
+//                        comment.setLike(r.nextInt(1000));
+//                        comment.setDislike(r.nextInt(1000));
+//                        comment.setComment(userComment);
+//                        comment.setAuthor(pre.getString("email", "1"));
+//                        comment.setTimestamp(timestamp);
+//                        comment.setChildCommentCount(0);
+//                        comments.add(comment);
+//                        commentAdapter.notifyDataSetChanged();
 
-                        comment = new Comment();
-                        comment.setLike(r.nextInt(1000));
-                        comment.setDislike(r.nextInt(1000));
-                        comment.setComment(userComment);
-                        comment.setAuthor(pre.getString("email", "1"));
-                        comment.setTimestamp(timestamp);
-                        comment.setChildCommentCount(r.nextInt(3));
-                        comments.add(comment);
-                        commentAdapter.notifyDataSetChanged();
+
+                        try {
+                                JSONObject c = new JSONObject(response).getJSONObject("comment");
+
+                                comment = new Comment();
+                                comment.setCommentId(c.getInt("comment_ID"));
+                                comment.setLike(r.nextInt(1000));
+                                comment.setDislike(r.nextInt(1000));
+                                comment.setComment(c.getString("comment_content").substring(chapter.length()));
+                                comment.setAuthor(c.getString("display_name"));
+                                comment.setTimestamp(c.getString("comment_date_gmt"));
+                                comment.setAuthor_avatar_url(c.getString("author_avatar_urls"));
+//                    comment.setAuthor_avatar_url(c.getJSONObject("author_avatar_urls").getString("24")); // options are 24, 48 & 96
+                                comment.setChildCommentCount(c.getInt("child_comments_count"));
+                                comments.add(comment);
+                                commentAdapter.notifyDataSetChanged();
+
+
+                        } catch (final JSONException e) {
+                            System.out.println(e);
+                        }
                     }
 
                 }, new Response.ErrorListener() {
@@ -275,9 +299,9 @@ public class CommentActivity extends AppCompatActivity {
 //                        System.out.println(response);
 
                         if (response != null) {
-
                             setComments(response);
                         }
+
                     }
 
                 }, new Response.ErrorListener() {
@@ -342,6 +366,9 @@ public class CommentActivity extends AppCompatActivity {
             try {
                 JSONArray datas = new JSONArray(response);
 
+                if(datas.length() == 0){
+                    Toast.makeText(CommentActivity.this, "There's no post, Be the first!", Toast.LENGTH_LONG).show();
+                }
                 for(int i = 0; i < datas.length(); i++){
                     JSONObject c = datas.getJSONObject(i);
 
@@ -349,10 +376,9 @@ public class CommentActivity extends AppCompatActivity {
                     comment.setCommentId(c.getInt("comment_ID"));
                     comment.setLike(r.nextInt(1000));
                     comment.setDislike(r.nextInt(1000));
-                    comment.setComment(c.getString("comment_content"));
-                    comment.setAuthor(c.getString("comment_author"));
+                    comment.setComment(c.getString("comment_content").substring(chapter.length()));
+                    comment.setAuthor(c.getString("display_name"));
                     comment.setTimestamp(c.getString("comment_date_gmt"));
-                    comment.setChildCommentCount(r.nextInt(3));
                     comment.setAuthor_avatar_url(c.getString("author_avatar_urls"));
 //                    comment.setAuthor_avatar_url(c.getJSONObject("author_avatar_urls").getString("24")); // options are 24, 48 & 96
                     comment.setChildCommentCount(c.getInt("child_comments_count"));

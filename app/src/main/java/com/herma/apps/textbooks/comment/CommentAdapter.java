@@ -36,6 +36,7 @@ import com.herma.apps.textbooks.CommentActivity;
 import com.herma.apps.textbooks.R;
 import com.herma.apps.textbooks.SplashActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -130,7 +131,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                         TextInputEditText input = dialogView.findViewById(R.id.ti_message);
                         String inputMessage = input.getText().toString();
 
-                        addChild(comment, inputMessage, holder.llReplies.getContext(), holder.llReplies);
+//                        addChild(comment, inputMessage, holder.llReplies.getContext(), holder.llReplies);
+                        try {
+                            postChildComment(inputMessage, comment, holder.llReplies);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
                 dialogBuilder.setNegativeButton("Cancel", null);
@@ -180,19 +186,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 if(!comment.isChildSeen()) {
 
 
-//                    try {
-                        System.out.println("get child comments");
-//                        getComments(comment.getCommentId(), chapter);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
+                    try {
+                        getComments(chapter, comment, holder.llReplies);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-
-                    System.out.println("was not seen");
-                    addChild(comment, "inputMessage", holder.llReplies.getContext(), holder.llReplies);
                     comment.setChildSeen(true);
                 }else{
-                    System.out.println("aleady seen");
                     holder.llReplies.removeAllViews();
                     comment.setChildSeen(false);
                 }
@@ -200,17 +201,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         });
 
     }
-
-    private void addChild(Comment parentComment, String inputMessage, Context context, LinearLayoutCompat llReplies) {
-
-
-        try {
-            postChildComment(inputMessage,parentComment.getCommentId(), parentComment, llReplies);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public int getItemCount() {
         return commentList.size();
@@ -244,13 +234,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     }
 
 
-    public void postChildComment(String userComment, int parent, Comment parentComment, LinearLayoutCompat llReplies) throws JSONException {
+    public void postChildComment(String userComment, Comment parentComment, LinearLayoutCompat llReplies) throws JSONException {
 
         String chapter = "new_12wst1";
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
-        String url = SplashActivity.BASEAPI+"wp/v2/chapter/comment/"+chapter+"/"+parent;
+        String url = SplashActivity.BASEAPI+"wp/v2/chapter/comment/"+chapter+"/"+parentComment.getCommentId();
 
         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -356,12 +346,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     }
 
-    private void getComments(int parent, String chapter) throws JSONException {
+    private void getComments(String chapter, Comment parentComment, LinearLayoutCompat llReplies) throws JSONException {
 
         RequestQueue queue = Volley.newRequestQueue(context);
         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(context);
 
-        String url = SplashActivity.BASEAPI+"wp/v2/chapter/comments/"+chapter+"/"+parent;
+        String url = SplashActivity.BASEAPI+"wp/v2/chapter/comments/"+chapter+"/"+parentComment.getCommentId();
 
 
         JSONObject jsonBody = new JSONObject();
@@ -373,12 +363,69 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("get child comment request response is ");
-                        System.out.println(response);
+//                        System.out.println("get child comment request response is ");
+//                        System.out.println(response);
 
                         if (response != null) {
 
-//                            setComments(response);
+
+                            try {
+                                JSONArray datas = new JSONArray(response);
+
+                                for(int i = 0; i < datas.length(); i++){
+                                    JSONObject c = datas.getJSONObject(i);
+
+//                                    addChild(parentComment, c.getString("comment_content"), context, llReplies);
+
+                                    Random r = new Random();
+
+                                    Comment newComment = new Comment();
+                                    newComment.setCommentId(c.getInt("comment_ID"));
+                                    newComment.setLike(r.nextInt(1000));
+                                    newComment.setDislike(r.nextInt(1000));
+                                    newComment.setComment(c.getString("comment_content").substring(chapter.length()));
+                                    newComment.setAuthor(c.getString("display_name"));
+                                    newComment.setTimestamp(c.getString("comment_date_gmt"));
+                                    newComment.setAuthor_avatar_url(c.getString("author_avatar_urls"));
+//                    comment.setAuthor_avatar_url(c.getJSONObject("author_avatar_urls").getString("24")); // options are 24, 48 & 96
+                                    newComment.setChildCommentCount(c.getInt("child_comments_count"));
+
+                                    newComment.setAddReplyToParent(true);
+
+                                    if(parentComment.isAddReplyToParent()) {
+                                        commentList.add(newComment);
+                                    }else{
+                                        RecyclerView rvReplies = new RecyclerView(context);
+                                        rvReplies.setLayoutManager(new LinearLayoutManager(context));
+                                        llReplies.addView(rvReplies);
+
+                                        List<Comment> replyList = new ArrayList<>();
+                                        replyList.add(newComment);
+//                }
+                                        CommentAdapter replyAdapter = new CommentAdapter(replyList, context, chapter);
+                                        rvReplies.setAdapter(replyAdapter);
+//            btn_more.se
+                                    }
+
+//                                    comment = new Comment();
+//                                    comment.setCommentId(c.getInt("comment_ID"));
+//                                    comment.setLike(r.nextInt(1000));
+//                                    comment.setDislike(r.nextInt(1000));
+//                                    comment.setComment(c.getString("comment_content"));
+//                                    comment.setAuthor(c.getString("comment_author"));
+//                                    comment.setTimestamp(c.getString("comment_date_gmt"));
+//                                    comment.setChildCommentCount(r.nextInt(3));
+//                                    comment.setAuthor_avatar_url(c.getString("author_avatar_urls"));
+////                    comment.setAuthor_avatar_url(c.getJSONObject("author_avatar_urls").getString("24")); // options are 24, 48 & 96
+//                                    comment.setChildCommentCount(c.getInt("child_comments_count"));
+//                                    comments.add(comment);
+//                                    commentAdapter.notifyDataSetChanged();
+
+                                }
+
+                            } catch (final JSONException e) {
+                                System.out.println(e);
+                            }
                         }
                     }
 
