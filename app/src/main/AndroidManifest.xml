@@ -34,7 +34,8 @@
         <activity
             android:name=".ReadActivity"
             android:hardwareAccelerated="true"
-            android:theme="@style/AppTheme.NoActionBar" />
+            />
+        <!--            android:theme="@style/AppTheme.NoActionBar" -->
         <activity
             android:name=".ChaptersActivity"
             android:hardwareAccelerated="true"

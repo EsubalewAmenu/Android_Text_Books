@@ -77,8 +77,8 @@ public class ReadActivity extends AppCompatActivity {
 
     private RewardedAd mRewardedAd;
 
-    TextView txtTimerValue;
-    ImageButton btnGiftReward;
+//    TextView txtTimerValue;
+//    ImageButton btnGiftReward;
     long reward_p_id, reward_minutes;
 
 
@@ -94,17 +94,21 @@ public class ReadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        // add back arrow to toolbar
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+
+        // Add back button to the toolbar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        // add back arrow to toolbar
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//            getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        }
 
         pdfView = (PDFView) findViewById(R.id.pdfView);
-        txtTimerValue = (TextView) findViewById(R.id.timerValue);
-        btnGiftReward = (ImageButton) findViewById(R.id.btnGiftReward);
+//        txtTimerValue = (TextView) findViewById(R.id.timerValue);
+//        btnGiftReward = (ImageButton) findViewById(R.id.btnGiftReward);
 
         if (getIntent().getExtras() != null) {
 
@@ -182,14 +186,14 @@ public class ReadActivity extends AppCompatActivity {
 
         }
 
-        btnGiftReward.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                requestPhoneNumber();
-
-            }
-        });
+//        btnGiftReward.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                requestPhoneNumber();
+//
+//            }
+//        });
 
         /////////////
 
@@ -292,7 +296,7 @@ public void commentRelateds(){
 
 //                if ((input.getText().toString()).matches("^(09|07)\\d{8}$")) {
                 if ((input.getText().toString()).matches("^(09)\\d{8}$")) {
-                    btnGiftReward.setVisibility(View.INVISIBLE);
+//                    btnGiftReward.setVisibility(View.INVISIBLE);
                     endReward(input.getText().toString());
 
                     ////////////
@@ -312,7 +316,7 @@ public void commentRelateds(){
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
 
-                btnGiftReward.setVisibility(View.INVISIBLE);
+//                btnGiftReward.setVisibility(View.INVISIBLE);
                 Toast.makeText(ReadActivity.this, R.string.cancel_phone, Toast.LENGTH_LONG).show();
 
             }
@@ -387,7 +391,7 @@ public void commentRelateds(){
 
     public void rewardCountdown(double _minute) {  //
 
-        txtTimerValue.setVisibility(View.VISIBLE);
+//        txtTimerValue.setVisibility(View.VISIBLE);
 
         new CountDownTimer((long) (_minute * 60 * 1000), 1000) { // 30000 mili = 30 sec
 
@@ -404,13 +408,13 @@ public void commentRelateds(){
 ////                    + ":"+ String.format("%03d", milliseconds)
 //                );
 
-                txtTimerValue.setText(mins + ":" + String.format("%02d", secs));
+//                txtTimerValue.setText(mins + ":" + String.format("%02d", secs));
 
             }
 
             public void onFinish() {
-                btnGiftReward.setVisibility(View.VISIBLE);
-                txtTimerValue.setVisibility(View.INVISIBLE);
+//                btnGiftReward.setVisibility(View.VISIBLE);
+//                txtTimerValue.setVisibility(View.INVISIBLE);
                 System.out.println("reward done!");
             }
         }.start();

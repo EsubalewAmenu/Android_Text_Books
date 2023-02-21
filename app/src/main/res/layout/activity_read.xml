@@ -6,38 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".ReadActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+<!--    <com.google.android.material.appbar.AppBarLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:theme="@style/AppTheme.AppBarOverlay">-->
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" >
+<!--        <androidx.appcompat.widget.Toolbar-->
+<!--            android:id="@+id/toolbar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="?attr/actionBarSize"-->
+<!--            android:background="?attr/colorPrimary"-->
+<!--            app:popupTheme="@style/AppTheme.PopupOverlay" >-->
 
-        <TextView
-            android:id="@+id/timerValue"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:textSize="20sp"
-            android:visibility="invisible"
-            />
+<!--        <TextView-->
+<!--            android:id="@+id/timerValue"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:textSize="20sp"-->
+<!--            android:visibility="invisible"-->
+<!--            />-->
 
-            <ImageButton
-                android:id="@+id/btnGiftReward"
-                android:layout_width="70dp"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/rewards4"
-                android:scaleType="fitCenter"
-                android:visibility="invisible" />
+<!--            <ImageButton-->
+<!--                android:id="@+id/btnGiftReward"-->
+<!--                android:layout_width="70dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                app:srcCompat="@drawable/rewards4"-->
+<!--                android:scaleType="fitCenter"-->
+<!--                android:visibility="invisible" />-->
 
-        </androidx.appcompat.widget.Toolbar>
+<!--        </androidx.appcompat.widget.Toolbar>-->
 
-    </com.google.android.material.appbar.AppBarLayout>
+<!--    </com.google.android.material.appbar.AppBarLayout>-->
 
     <include layout="@layout/content_read" />
 
