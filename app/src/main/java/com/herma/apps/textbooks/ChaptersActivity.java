@@ -57,13 +57,9 @@ public class ChaptersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chapters);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        // add back arrow to toolbar
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+
+        // Add back button to the toolbar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FILEPATH = getFilesDir().getPath()+"/Herma/books/";
 

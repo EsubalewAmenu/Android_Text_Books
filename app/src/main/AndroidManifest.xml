@@ -35,11 +35,10 @@
             android:name=".ReadActivity"
             android:hardwareAccelerated="true"
             />
-        <!--            android:theme="@style/AppTheme.NoActionBar" -->
+
         <activity
             android:name=".ChaptersActivity"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:hardwareAccelerated="true"/>
         <activity
             android:name=".SplashActivity"
             android:exported="true"
