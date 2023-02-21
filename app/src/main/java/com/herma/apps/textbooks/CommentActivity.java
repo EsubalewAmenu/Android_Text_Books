@@ -2,10 +2,14 @@ package com.herma.apps.textbooks;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -27,7 +31,9 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.material.textfield.TextInputEditText;
 import com.herma.apps.textbooks.comment.Comment;
 import com.herma.apps.textbooks.comment.CommentAdapter;
+import com.herma.apps.textbooks.common.Commons;
 import com.herma.apps.textbooks.common.Item;
+import com.herma.apps.textbooks.ui.about.About_us;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,7 +52,7 @@ import java.util.Map;
 
 public class CommentActivity extends AppCompatActivity {
 
-    private Button btnAddComment;
+//    private Button btnAddComment;
     private RecyclerView rvComment;
     private CommentAdapter commentAdapter;
     private List<Comment> comments;
@@ -60,11 +66,14 @@ public class CommentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
 
+        // Add back button to the toolbar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         chapter = getIntent().getStringExtra("fileName");
         pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         initViews();
-        initListeners();
+//        initListeners();
 
         try {
             initRecyclerView();
@@ -73,20 +82,40 @@ public class CommentActivity extends AppCompatActivity {
         }
 
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.comment, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_add_comment) {
+            // Handle the button click event here
+            addComment();
+            return true;
+        }else if(id == android.R.id.home){
+        // Handle clicks on the back button (the left arrow in the toolbar)
+        onBackPressed();
+        return true;
+    }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     private void initViews() {
-        btnAddComment = findViewById(R.id.btn_add_comment);
+//        btnAddComment = findViewById(R.id.btn_add_comment);
         rvComment = findViewById(R.id.rv_comment);
     }
 
-    private void initListeners() {
-        btnAddComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addComment();
-            }
-        });
-    }
+//    private void initListeners() {
+//        btnAddComment.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                addComment();
+//            }
+//        });
+//    }
 
     private void initRecyclerView() throws JSONException {
 
