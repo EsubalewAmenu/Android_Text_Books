@@ -277,8 +277,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     public void postChildComment(String userComment, Comment parentComment, LinearLayoutCompat llReplies) throws JSONException {
 
-        String chapter = "new_12wst1";
-
         RequestQueue queue = Volley.newRequestQueue(context);
 
         String url = SplashActivity.BASEAPI+"wp/v2/chapter/comment/"+chapter+"/"+parentComment.getCommentId();
@@ -297,36 +295,39 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-//                        System.out.println("post comment response is ");
-//                        System.out.println(response);
-
-                        Random r = new Random();
-//                for (int i = 0; i < 5; i++) {
-                        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+                        try {
+                        JSONObject c = new JSONObject(response).getJSONObject("comment");
 
                         Comment newComment = new Comment();
-                        newComment.setLike(r.nextInt(1000));
-                        newComment.setDislike(r.nextInt(1000));
-                        newComment.setComment(userComment);
-                        newComment.setAuthor(pre.getString("email", "1"));
-                        newComment.setTimestamp(timestamp);
-                        newComment.setChildCommentCount(r.nextInt(3));
+                        newComment.setCommentId(c.getInt("comment_ID"));
+                        newComment.setLike(c.getInt("likes"));
+                        newComment.setDislike(c.getInt("dislikes"));
+                        newComment.setIs_user_liked(c.getInt("is_user_liked"));
+                        newComment.setIs_user_disliked(c.getInt("is_user_liked"));
+                        newComment.setComment(c.getString("comment_content").substring(chapter.length()));
+                        newComment.setAuthor(c.getString("display_name"));
+                        newComment.setTimestamp(c.getString("comment_date_gmt"));
+                        newComment.setAuthor_avatar_url(c.getString("author_avatar_urls"));
+//                    newComment.setAuthor_avatar_url(c.getJSONObject("author_avatar_urls").getString("24")); // options are 24, 48 & 96
+                        newComment.setChildCommentCount(c.getInt("child_comments_count"));
 
                         newComment.setAddReplyToParent(true);
 
                         if(parentComment.isAddReplyToParent()) {
-                            commentList.add(newComment);
+                            commentList.add(0,newComment);
                         }else{
                             RecyclerView rvReplies = new RecyclerView(context);
                             rvReplies.setLayoutManager(new LinearLayoutManager(context));
-                            llReplies.addView(rvReplies);
+                            llReplies.addView(rvReplies,0);
 
                             List<Comment> replyList = new ArrayList<>();
                             replyList.add(newComment);
-//                }
                             CommentAdapter replyAdapter = new CommentAdapter(replyList, context, chapter);
                             rvReplies.setAdapter(replyAdapter);
-//            btn_more.se
+                        }
+
+                        } catch (final JSONException e) {
+                            System.out.println(e);
                         }
                     }
 
@@ -389,6 +390,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     private void getComments(String chapter, Comment parentComment, LinearLayoutCompat llReplies) throws JSONException {
 
+        System.out.println("requested chapter is " + chapter + " parent id is " + parentComment.getCommentId());
         RequestQueue queue = Volley.newRequestQueue(context);
         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -404,8 +406,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-//                        System.out.println("get child comment request response is ");
-//                        System.out.println(response);
+                        System.out.println("get child comment request response is ");
+                        System.out.println(response);
 
                         if (response != null) {
 

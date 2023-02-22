@@ -222,7 +222,7 @@ public class CommentActivity extends AppCompatActivity {
                                 comment.setAuthor_avatar_url(c.getString("author_avatar_urls"));
 //                    comment.setAuthor_avatar_url(c.getJSONObject("author_avatar_urls").getString("24")); // options are 24, 48 & 96
                                 comment.setChildCommentCount(c.getInt("child_comments_count"));
-                                comments.add(comment);
+                                comments.add(0,comment);
                                 commentAdapter.notifyDataSetChanged();
 
 
@@ -341,18 +341,25 @@ public class CommentActivity extends AppCompatActivity {
                         });
 
                     }
-                    else if (error instanceof TimeoutError || error.getCause() instanceof SocketTimeoutException
-                            || error.getCause() instanceof ConnectTimeoutException
-                            || error.getCause() instanceof SocketException
-                            || (error.getCause().getMessage() != null
-                            && error.getCause().getMessage().contains("Connection timed out"))) {
-                        Toast.makeText(getApplicationContext(), "Connection timeout error. \npls Swipe to reload",
-                                Toast.LENGTH_LONG).show();
-
-                    } else {
-                        Toast.makeText(getApplicationContext(), "An unknown error occurred.\npls swap to refresh",
+                    else {
+                        Toast.makeText(getApplicationContext(), "Connection Timeout!",
                                 Toast.LENGTH_LONG).show();
                         System.out.println("Error on sys:"+error);
+
+                        tv_no_comment.setText("Connection Timeout!");
+                        tv_no_comment.setVisibility(View.VISIBLE);
+                        retry_button.setVisibility(View.VISIBLE);
+
+                        retry_button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                try {
+                                    getComments(parent, page);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
                     }
                 }catch (Exception j){}
             }
