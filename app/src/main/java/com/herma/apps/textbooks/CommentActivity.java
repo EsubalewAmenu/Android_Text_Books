@@ -4,8 +4,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,6 +28,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
@@ -36,11 +40,14 @@ import com.herma.apps.textbooks.common.Commons;
 import com.herma.apps.textbooks.common.Item;
 import com.herma.apps.textbooks.ui.about.About_us;
 
+import org.apache.http.conn.ConnectTimeoutException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -58,7 +65,9 @@ public class CommentActivity extends AppCompatActivity {
     private CommentAdapter commentAdapter;
     private List<Comment> comments;
     private Comment comment;
+
     private TextView tv_no_comment;
+    private Button retry_button;
 
     public String chapter = "";
     SharedPreferences pre = null;
@@ -111,10 +120,11 @@ public class CommentActivity extends AppCompatActivity {
 //        btnAddComment = findViewById(R.id.btn_add_comment);
         rvComment = findViewById(R.id.rv_comment);
         tv_no_comment = findViewById(R.id.tv_no_comment);
+        retry_button = findViewById(R.id.retry_button);
     }
 
 //    private void initListeners() {
-//        btnAddComment.setOnClickListener(new View.OnClickListener() {
+//        retry_button.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
 //                addComment();
@@ -306,22 +316,42 @@ public class CommentActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // Check if the error has a network response
-                NetworkResponse response = error.networkResponse;
-                if (response != null) {
-                    // Get the error status code
-                    int statusCode = response.statusCode;
+//                  System.out.println("That didn't work! " + error);
+                try{
+//                            Toast.makeText(getContext(), "That didn't work! " + error, Toast.LENGTH_LONG).show();
 
-                    // Get the error response body as a string
-                    String responseBody = new String(response.data, StandardCharsets.UTF_8);
+                    if (!isOnline()) {
+                        showNetworkDialog();
+                        tv_no_comment.setText("No network available. Please check your connection settings or ");
+                        tv_no_comment.setVisibility(View.VISIBLE);
+                        retry_button.setVisibility(View.VISIBLE);
 
-                    // Print the error details
-                    System.out.println("Error status code: " + statusCode);
-                    System.out.println("Error response body: " + responseBody);
-                } else {
-                    // The error does not have a network response
-                    System.out.println("Error message: " + error.getMessage());
-                }
+                        retry_button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                try {
+                                    getComments(parent, page);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
+                    }
+                    else if (error instanceof TimeoutError || error.getCause() instanceof SocketTimeoutException
+                            || error.getCause() instanceof ConnectTimeoutException
+                            || error.getCause() instanceof SocketException
+                            || (error.getCause().getMessage() != null
+                            && error.getCause().getMessage().contains("Connection timed out"))) {
+                        Toast.makeText(getApplicationContext(), "Connection timeout error. \npls Swipe to reload",
+                                Toast.LENGTH_LONG).show();
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "An unknown error occurred.\npls swap to refresh",
+                                Toast.LENGTH_LONG).show();
+                        System.out.println("Error on sys:"+error);
+                    }
+                }catch (Exception j){}
             }
 
         })
@@ -367,7 +397,12 @@ public class CommentActivity extends AppCompatActivity {
 
                 if(datas.length() == 0 && page == 1){
                     Toast.makeText(CommentActivity.this, "There's no post, Be the first!", Toast.LENGTH_LONG).show();
+                    tv_no_comment.setText("No comments yet.\nBe the first one to share your thoughts.");
                     tv_no_comment.setVisibility(View.VISIBLE);
+                    retry_button.setVisibility(View.GONE);
+                }else{
+                    tv_no_comment.setVisibility(View.GONE);
+                    retry_button.setVisibility(View.GONE);
                 }
                 for(int i = 0; i < datas.length(); i++){
                     JSONObject c = datas.getJSONObject(i);
@@ -392,6 +427,38 @@ public class CommentActivity extends AppCompatActivity {
             } catch (final JSONException e) {
                 System.out.println(e);
             }
+
+    }
+
+
+    public boolean isOnline() {
+        // Get a reference to the ConnectivityManager to check the state of network connectivity
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
+
+        // Get details on the currently active default data network
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
+    public void showNetworkDialog() {
+        // Create an AlertDialog.Builder
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog_Alert);
+        // Set an Icon and title, and message
+        builder.setIcon(R.drawable.ic_warning);
+        builder.setTitle(getString(R.string.no_network_title));
+        builder.setMessage(getString(R.string.no_network_message));
+        builder.setPositiveButton(getString(R.string.go_to_settings), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 1234);
+            }
+        });
+        builder.setNegativeButton(getString(R.string.cancel), null);
+
+        // Create and show the AlertDialog
+        androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+        alertDialog.show();
 
     }
 }

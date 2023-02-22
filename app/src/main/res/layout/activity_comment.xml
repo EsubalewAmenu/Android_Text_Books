@@ -17,6 +17,18 @@
         android:gravity="center"
         android:layout_gravity="center"
         android:visibility="gone"/>
+
+
+    <Button
+        android:id="@+id/retry_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click here to retry"
+        android:textColor="@color/colorAccent"
+        android:background="@android:color/transparent"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_comment"
         android:layout_width="match_parent"
