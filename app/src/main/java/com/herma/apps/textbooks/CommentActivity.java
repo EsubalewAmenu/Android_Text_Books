@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -60,7 +61,6 @@ import java.util.Map;
 
 public class CommentActivity extends AppCompatActivity {
 
-//    private Button btnAddComment;
     private RecyclerView rvComment;
     private CommentAdapter commentAdapter;
     private List<Comment> comments;
@@ -71,6 +71,10 @@ public class CommentActivity extends AppCompatActivity {
 
     public String chapter = "";
     SharedPreferences pre = null;
+
+    private boolean isLoading = false;
+    private int currentPage = 1;
+    private int totalPages = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,15 +138,44 @@ public class CommentActivity extends AppCompatActivity {
 
     private void initRecyclerView() throws JSONException {
 
-        getComments(0, 1);
+        getComments(0, currentPage);
 
         comments = new ArrayList<>();
 
-        commentAdapter = new CommentAdapter(comments, getApplicationContext(), chapter);
+        commentAdapter = new CommentAdapter(comments, getApplicationContext(), chapter, new CommentAdapter.LoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                if (!isLoading && currentPage < totalPages) {
+                    isLoading = true;
+                    commentAdapter.setLoading(true);
+                    currentPage++;
+                    try {
+                        getComments(0, currentPage);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
         rvComment.setLayoutManager(new LinearLayoutManager(this));
         rvComment.setAdapter(commentAdapter);
+
     }
 
+//    private void loadMoreComments() {
+//        // Add loading indicator to the RecyclerView
+//        commentAdapter.showLoadingIndicator();
+//
+//        // Load more comments
+//        // ...
+//
+//        // Remove loading indicator and add new comments to the RecyclerView
+//        commentAdapter.hideLoadingIndicator();
+//        commentAdapter.addComments(newComments);
+//
+//        // Set isLoading to false
+//        isLoading = false;
+//    }
 //    private void showCommentSection() {
 //        rvComment.setVisibility(View.VISIBLE);
 //        btnAddComment.setVisibility(View.VISIBLE);
@@ -312,6 +345,10 @@ public class CommentActivity extends AppCompatActivity {
 
                         if (response != null) {
                             setComments(response, page);
+
+
+                            isLoading = false;
+                            commentAdapter.setLoading(false);
                         }
 
                     }
@@ -319,6 +356,9 @@ public class CommentActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                isLoading = false;
+
 //                  System.out.println("That didn't work! " + error);
                 try{
 //                            Toast.makeText(getContext(), "That didn't work! " + error, Toast.LENGTH_LONG).show();

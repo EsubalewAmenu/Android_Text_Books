@@ -120,5 +120,6 @@
     <string name="go_to_settings">Go to settings</string>
     <string name="all_new_curriculum_books">All new curriculum books</string>
     <string name="my_new_curriculum_books">My new Curriculum books</string>
+    <string name="load_more_text">Load more comments</string>
 
 </resources>

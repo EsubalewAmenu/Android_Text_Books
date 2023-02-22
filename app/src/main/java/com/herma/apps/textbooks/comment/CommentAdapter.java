@@ -4,15 +4,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,7 +31,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
-import com.herma.apps.textbooks.CommentActivity;
 import com.herma.apps.textbooks.R;
 import com.herma.apps.textbooks.SplashActivity;
 
@@ -42,53 +40,65 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 
-public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
+public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {//RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
     private List<Comment> commentList;
     private Context context;
     private String chapter;
 
-    public CommentAdapter(List<Comment> commentList, Context context, String chapter) {
+    private static final int ITEM_TYPE_COMMENT = 0;
+    private static final int ITEM_TYPE_LOAD_MORE = 1;
+
+    private boolean isLoading = false;
+    LoadMoreListener loadMoreListener;
+
+    public CommentAdapter(List<Comment> commentList, Context context, String chapter, LoadMoreListener loadMoreListener) {
         this.commentList = commentList;
         this.context = context;
         this.chapter = chapter;
+        this.loadMoreListener = loadMoreListener;
     }
 
     @NonNull
     @Override
-    public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_message_item, parent, false);
-        return new CommentViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == ITEM_TYPE_COMMENT) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_message_item, parent, false);
+            return new CommentViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.load_more_button, parent, false);
+            return new LoadMoreViewHolder(view);
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-        final Comment comment = commentList.get(position);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof CommentViewHolder) {
 
-        holder.tvComment.setText(comment.getComment());
-        holder.tvAuthor.setText(comment.getAuthor());
-        holder.tvTimestamp.setText(comment.getTimestamp());
-        holder.btnLike.setText(comment.getLike()+"");
-        holder.btnDislike.setText(comment.getDislike()+"");
-        holder.btn_more.setText("See " + comment.getChildCommentCount() + " replies");
+            CommentViewHolder commentViewHolder = (CommentViewHolder) holder;
+
+            final Comment comment = commentList.get(position);
+
+            commentViewHolder.tvComment.setText(comment.getComment());
+            commentViewHolder.tvAuthor.setText(comment.getAuthor());
+            commentViewHolder.tvTimestamp.setText(comment.getTimestamp());
+            commentViewHolder.btnLike.setText(comment.getLike()+"");
+            commentViewHolder.btnDislike.setText(comment.getDislike()+"");
+            commentViewHolder.btn_more.setText("See " + comment.getChildCommentCount() + " replies");
 
         if(comment.getChildCommentCount() > 0 )
-            holder.btn_more.setVisibility(View.VISIBLE);
+            commentViewHolder.btn_more.setVisibility(View.VISIBLE);
 
 //        String imageUrl = "https://www.gravatar.com/avatar/dfssa";
 
-        Glide.with(holder.llReplies.getContext())
+        Glide.with(commentViewHolder.llReplies.getContext())
                 .load(comment.getAuthor_avatar_url())//imageUrl)
                 .placeholder(R.drawable.herma)
-                .into(holder.ivProfilePicture);
+                .into(commentViewHolder.ivProfilePicture);
 
         Drawable normalLikeDrawable = context.getResources().getDrawable(R.drawable.ic_like);
         Drawable activeLikeDrawable = context.getResources().getDrawable(R.drawable.ic_like_active);
@@ -100,27 +110,27 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 //        int isUserDisliked = (new Random().nextInt(1));
 
         if (comment.getIs_user_liked() == 1) {
-            holder.btnLike.setCompoundDrawablesWithIntrinsicBounds(activeLikeDrawable, null, null, null);
+            commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(activeLikeDrawable, null, null, null);
         } else {
-            holder.btnLike.setCompoundDrawablesWithIntrinsicBounds(normalLikeDrawable, null, null, null);
+            commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(normalLikeDrawable, null, null, null);
         }
 
         if (comment.getIs_user_disliked() == 1) {
-            holder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(activeDislikeDrawable, null, null, null);
+            commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(activeDislikeDrawable, null, null, null);
         } else {
-            holder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(normalDislikeDrawable, null, null, null);
+            commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(normalDislikeDrawable, null, null, null);
         }
 
-        holder.btnReply.setOnClickListener(new View.OnClickListener() {
+            commentViewHolder.btnReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 // Create an instance of the dialog box
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(holder.llReplies.getContext());
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(commentViewHolder.llReplies.getContext());
 
                 // Inflate the XML layout file
 //                View dialogView = getLayoutInflater().inflate(R.layout.dialog_comment, null);
-                View dialogView = LayoutInflater.from(holder.llReplies.getContext()).inflate(R.layout.dialog_comment, null);
+                View dialogView = LayoutInflater.from(commentViewHolder.llReplies.getContext()).inflate(R.layout.dialog_comment, null);
                 dialogBuilder.setView(dialogView);
 
                 // Add the OK and Cancel buttons
@@ -133,7 +143,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
 //                        addChild(comment, inputMessage, holder.llReplies.getContext(), holder.llReplies);
                         try {
-                            postChildComment(inputMessage, comment, holder.llReplies);
+                            postChildComment(inputMessage, comment, commentViewHolder.llReplies);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -146,19 +156,19 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             }
         });
 
-        holder.btnLike.setOnClickListener(new View.OnClickListener() {
+            commentViewHolder.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (holder.btnLike.getCompoundDrawables()[0] == normalLikeDrawable) {
-                    holder.btnLike.setCompoundDrawablesWithIntrinsicBounds(activeLikeDrawable, null, null, null);
+                if (commentViewHolder.btnLike.getCompoundDrawables()[0] == normalLikeDrawable) {
+                    commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(activeLikeDrawable, null, null, null);
                     comment.setLike(comment.getLike()+1);
 
 
-                    if(holder.btnDislike.getCompoundDrawables()[0] == activeDislikeDrawable){
-                        holder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(normalDislikeDrawable, null, null, null);
+                    if(commentViewHolder.btnDislike.getCompoundDrawables()[0] == activeDislikeDrawable){
+                        commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(normalDislikeDrawable, null, null, null);
                         comment.setDislike(comment.getDislike()-1);
-                        holder.btnDislike.setText(comment.getDislike()+"");
+                        commentViewHolder.btnDislike.setText(comment.getDislike()+"");
                     }
 
                     try {
@@ -168,7 +178,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     }
 
                 } else {
-                    holder.btnLike.setCompoundDrawablesWithIntrinsicBounds(normalLikeDrawable, null, null, null);
+                    commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(normalLikeDrawable, null, null, null);
                     comment.setLike(comment.getLike()-1);
 
                     try {
@@ -179,23 +189,23 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
                 }
 
-                holder.btnLike.setText(comment.getLike()+"");
+                commentViewHolder.btnLike.setText(comment.getLike()+"");
             }
         });
-        holder.btnDislike.setOnClickListener(new View.OnClickListener() {
+            commentViewHolder.btnDislike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                comment.setDislike(comment.getDislike()-1);
 //                holder.btnDislike.setText(comment.getDislike()+"");
 
-                if (holder.btnDislike.getCompoundDrawables()[0] == normalDislikeDrawable) {
-                    holder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(activeDislikeDrawable, null, null, null);
+                if (commentViewHolder.btnDislike.getCompoundDrawables()[0] == normalDislikeDrawable) {
+                    commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(activeDislikeDrawable, null, null, null);
                     comment.setDislike(comment.getDislike()+1);
 
-                    if(holder.btnLike.getCompoundDrawables()[0] == activeLikeDrawable){
-                        holder.btnLike.setCompoundDrawablesWithIntrinsicBounds(normalLikeDrawable, null, null, null);
+                    if(commentViewHolder.btnLike.getCompoundDrawables()[0] == activeLikeDrawable){
+                        commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(normalLikeDrawable, null, null, null);
                         comment.setLike(comment.getLike()-1);
-                        holder.btnLike.setText(comment.getLike()+"");
+                        commentViewHolder.btnLike.setText(comment.getLike()+"");
 
                     }
 
@@ -206,7 +216,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     }
 
                 } else {
-                    holder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(normalDislikeDrawable, null, null, null);
+                    commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(normalDislikeDrawable, null, null, null);
                     comment.setDislike(comment.getDislike()-1);
 
                     try {
@@ -217,37 +227,78 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
                 }
 
-                holder.btnDislike.setText(comment.getDislike()+"");
+                commentViewHolder.btnDislike.setText(comment.getDislike()+"");
 
             }
         });
-        holder.btn_more.setOnClickListener(new View.OnClickListener() {
+            commentViewHolder.btn_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!comment.isChildSeen()) {
 
 
                     try {
-                        getComments(chapter, comment, holder.llReplies);
+                        getComments(chapter, comment, commentViewHolder.llReplies);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
                     comment.setChildSeen(true);
                 }else{
-                    holder.llReplies.removeAllViews();
+                    commentViewHolder.llReplies.removeAllViews();
                     comment.setChildSeen(false);
                 }
             }
         });
-
+        } else if (holder instanceof LoadMoreViewHolder) {
+            LoadMoreViewHolder loadMoreViewHolder = (LoadMoreViewHolder) holder;
+            if (isLoading) {
+                loadMoreViewHolder.progressBar.setVisibility(View.VISIBLE);
+                loadMoreViewHolder.btnLoadMore.setVisibility(View.GONE);
+            } else {
+                loadMoreViewHolder.progressBar.setVisibility(View.GONE);
+                loadMoreViewHolder.btnLoadMore.setVisibility(View.VISIBLE);
+            }
+            loadMoreViewHolder.btnLoadMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (loadMoreListener != null) {
+                        isLoading = true;
+                        loadMoreListener.onLoadMore();
+                    }
+                }
+            });
+        }
     }
+
     @Override
     public int getItemCount() {
-        return commentList.size();
+        return commentList.size() + 1; // +1 for Load More item
     }
 
-    class CommentViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public int getItemViewType(int position) {
+        if (position < commentList.size()) {
+            return ITEM_TYPE_COMMENT;
+        } else {
+            return ITEM_TYPE_LOAD_MORE;
+        }
+    }
+
+    public void setLoading(boolean isLoading) {
+        this.isLoading = isLoading;
+        notifyDataSetChanged();
+//        if (!isLoading) {
+//            currentPage++;
+//        }
+    }
+
+    public interface LoadMoreListener {
+        void onLoadMore();
+    }
+
+
+    static class CommentViewHolder extends RecyclerView.ViewHolder {
         private TextView tvAuthor;
         private TextView tvComment;
         private TextView tvTimestamp;
@@ -274,6 +325,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     }
 
+    static class LoadMoreViewHolder extends RecyclerView.ViewHolder {
+        private ProgressBar progressBar;
+        private Button btnLoadMore;
+
+        public LoadMoreViewHolder(@NonNull View itemView) {
+            super(itemView);
+            progressBar = itemView.findViewById(R.id.progressBar);
+            btnLoadMore = itemView.findViewById(R.id.btn_load_more);
+        }
+    }
 
     public void postChildComment(String userComment, Comment parentComment, LinearLayoutCompat llReplies) throws JSONException {
 
@@ -322,7 +383,21 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
                             List<Comment> replyList = new ArrayList<>();
                             replyList.add(newComment);
-                            CommentAdapter replyAdapter = new CommentAdapter(replyList, context, chapter);
+                            CommentAdapter replyAdapter = new CommentAdapter(replyList, context, chapter, new LoadMoreListener() {
+                                @Override
+                                public void onLoadMore() {
+                                    System.out.println("on load more on child adapter 1");
+//                                    if (!isLoading && currentPage < totalPages) {
+//                                        isLoading = true;
+//                                        currentPage++;
+//                                        try {
+//                                            getComments(0, currentPage);
+//                                        } catch (JSONException e) {
+//                                            e.printStackTrace();
+//                                        }
+//                                    }
+                                }
+                            });
                             rvReplies.setAdapter(replyAdapter);
                         }
 
@@ -442,7 +517,21 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
                                         List<Comment> replyList = new ArrayList<>();
                                         replyList.add(newComment);
-                                        CommentAdapter replyAdapter = new CommentAdapter(replyList, context, chapter);
+                                        CommentAdapter replyAdapter = new CommentAdapter(replyList, context, chapter, new LoadMoreListener() {
+                                            @Override
+                                            public void onLoadMore() {
+                                                System.out.println("on load more on child adapter");
+//                                                if (!isLoading && currentPage < totalPages) {
+//                                                    isLoading = true;
+//                                                    currentPage++;
+//                                                    try {
+//                                                        getComments(0, currentPage);
+//                                                    } catch (JSONException e) {
+//                                                        e.printStackTrace();
+//                                                    }
+//                                                }
+                                            }
+                                        });
                                         rvReplies.setAdapter(replyAdapter);
                                     }
 
