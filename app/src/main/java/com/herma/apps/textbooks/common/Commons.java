@@ -83,15 +83,15 @@ ProgressDialog progressBar;
      *
      * @return true if connected to the network
      */
-    public boolean isOnline(Context context) {
-        // Get a reference to the ConnectivityManager to check the state of network connectivity
-        ConnectivityManager connectivityManager = (ConnectivityManager)
-                context.getSystemService(context.CONNECTIVITY_SERVICE);
-
-        // Get details on the currently active default data network
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected();
-    }
+//    public boolean isOnline(Context context) {
+//        // Get a reference to the ConnectivityManager to check the state of network connectivity
+//        ConnectivityManager connectivityManager = (ConnectivityManager)
+//                context.getSystemService(context.CONNECTIVITY_SERVICE);
+//
+//        // Get details on the currently active default data network
+//        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+//        return networkInfo != null && networkInfo.isConnected();
+//    }
 //
 //    /**
 //     * When offline, show a snackbar message
