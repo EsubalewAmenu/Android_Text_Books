@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,6 +58,7 @@ public class CommentActivity extends AppCompatActivity {
     private CommentAdapter commentAdapter;
     private List<Comment> comments;
     private Comment comment;
+    private TextView tv_no_comment;
 
     public String chapter = "";
     SharedPreferences pre = null;
@@ -108,6 +110,7 @@ public class CommentActivity extends AppCompatActivity {
     private void initViews() {
 //        btnAddComment = findViewById(R.id.btn_add_comment);
         rvComment = findViewById(R.id.rv_comment);
+        tv_no_comment = findViewById(R.id.tv_no_comment);
     }
 
 //    private void initListeners() {
@@ -121,7 +124,7 @@ public class CommentActivity extends AppCompatActivity {
 
     private void initRecyclerView() throws JSONException {
 
-        getComments(0);
+        getComments(0, 1);
 
         comments = new ArrayList<>();
 
@@ -275,11 +278,11 @@ public class CommentActivity extends AppCompatActivity {
 
     }
 
-    private void getComments(int parent) throws JSONException {
+    private void getComments(int parent, int page) throws JSONException {
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
-        String url = SplashActivity.BASEAPI+"wp/v2/chapter/comments/"+chapter+"/"+parent;
+        String url = SplashActivity.BASEAPI+"wp/v2/chapter/comments/"+chapter+"/"+parent+"?page="+page;
 
 
         JSONObject jsonBody = new JSONObject();
@@ -295,7 +298,7 @@ public class CommentActivity extends AppCompatActivity {
                         System.out.println(response);
 
                         if (response != null) {
-                            setComments(response);
+                            setComments(response, page);
                         }
 
                     }
@@ -357,13 +360,14 @@ public class CommentActivity extends AppCompatActivity {
 
     }
 
-    private void setComments(String response) {
+    private void setComments(String response, int page) {
 
             try {
                 JSONArray datas = new JSONArray(response);
 
-                if(datas.length() == 0){
+                if(datas.length() == 0 && page == 1){
                     Toast.makeText(CommentActivity.this, "There's no post, Be the first!", Toast.LENGTH_LONG).show();
+                    tv_no_comment.setVisibility(View.VISIBLE);
                 }
                 for(int i = 0; i < datas.length(); i++){
                     JSONObject c = datas.getJSONObject(i);
