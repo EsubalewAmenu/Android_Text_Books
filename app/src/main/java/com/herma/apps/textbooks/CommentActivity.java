@@ -75,6 +75,7 @@ public class CommentActivity extends AppCompatActivity {
     private boolean isLoading = false;
     private int currentPage = 1;
     private int totalPages = 5;
+    private int commentsPerPage = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -328,7 +329,7 @@ public class CommentActivity extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
-        String url = SplashActivity.BASEAPI+"wp/v2/chapter/comments/"+chapter+"/"+parent+"?page="+page;
+        String url = SplashActivity.BASEAPI+"wp/v2/chapter/comments/"+chapter+"/"+parent+"?page="+page+"&per_page="+commentsPerPage;
 
 
         JSONObject jsonBody = new JSONObject();
@@ -340,8 +341,8 @@ public class CommentActivity extends AppCompatActivity {
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("request response is ");
-                        System.out.println(response);
+//                        System.out.println("request response is ");
+//                        System.out.println(response);
 
                         if (response != null) {
                             setComments(response, page);
@@ -441,7 +442,8 @@ public class CommentActivity extends AppCompatActivity {
     }
 
     private void setComments(String response, int page) {
-
+//System.out.println("get comment response is ");
+//System.out.println(response);
             try {
                 JSONArray datas = new JSONArray(response);
 
@@ -449,6 +451,9 @@ public class CommentActivity extends AppCompatActivity {
                     tv_no_comment.setText("No comments yet.\nBe the first one to share your thoughts.");
                     tv_no_comment.setVisibility(View.VISIBLE);
                     retry_button.setVisibility(View.GONE);
+                }else if(datas.length() == 0 && page > 1){
+                    System.out.println("There is no additional comment");
+                    commentAdapter.setNoMoreComment();
                 }else{
                     tv_no_comment.setVisibility(View.GONE);
                     retry_button.setVisibility(View.GONE);

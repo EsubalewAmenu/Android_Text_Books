@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -55,6 +56,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private boolean isLoading = false;
     LoadMoreListener loadMoreListener;
+    LoadMoreViewHolder loadMoreViewHolder;
 
     public CommentAdapter(List<Comment> commentList, Context context, String chapter, LoadMoreListener loadMoreListener) {
         this.commentList = commentList;
@@ -251,14 +253,19 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         });
         } else if (holder instanceof LoadMoreViewHolder) {
-            LoadMoreViewHolder loadMoreViewHolder = (LoadMoreViewHolder) holder;
-            if (isLoading) {
-                loadMoreViewHolder.progressBar.setVisibility(View.VISIBLE);
+            loadMoreViewHolder = (LoadMoreViewHolder) holder;
+            if (commentList.isEmpty()) {
+                // Disable the "Load More" button if there are no comments
+                loadMoreViewHolder.progressBar.setVisibility(View.GONE);
                 loadMoreViewHolder.btnLoadMore.setVisibility(View.GONE);
             } else {
-                loadMoreViewHolder.progressBar.setVisibility(View.GONE);
-                loadMoreViewHolder.btnLoadMore.setVisibility(View.VISIBLE);
-            }
+                if (isLoading) {
+                    loadMoreViewHolder.progressBar.setVisibility(View.VISIBLE);
+                    loadMoreViewHolder.btnLoadMore.setVisibility(View.GONE);
+                } else {
+                    loadMoreViewHolder.progressBar.setVisibility(View.GONE);
+                    loadMoreViewHolder.btnLoadMore.setVisibility(View.VISIBLE);
+                }
             loadMoreViewHolder.btnLoadMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -268,7 +275,8 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                 }
             });
-        }
+        }            }
+
     }
 
     @Override
@@ -285,12 +293,18 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    public void setNoMoreComment() {
+
+        loadMoreViewHolder.btnLoadMore.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
+        loadMoreViewHolder.btnLoadMore.setTextColor(ContextCompat.getColor(context, R.color.cardview_dark_background));
+        loadMoreViewHolder.btnLoadMore.setText("End of comments");
+        loadMoreViewHolder.btnLoadMore.setEnabled(false);
+
+        notifyDataSetChanged();
+    }
     public void setLoading(boolean isLoading) {
         this.isLoading = isLoading;
         notifyDataSetChanged();
-//        if (!isLoading) {
-//            currentPage++;
-//        }
     }
 
     public interface LoadMoreListener {
