@@ -204,8 +204,8 @@ public class CommentActivity extends AppCompatActivity {
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("post comment response is ");
-                        System.out.println(response);
+//                        System.out.println("post comment response is ");
+//                        System.out.println(response);
 
                         try {
                                 JSONObject c = new JSONObject(response).getJSONObject("comment");
@@ -225,6 +225,9 @@ public class CommentActivity extends AppCompatActivity {
                                 comments.add(comment);
                                 commentAdapter.notifyDataSetChanged();
 
+
+                            tv_no_comment.setVisibility(View.GONE);
+                            retry_button.setVisibility(View.GONE);
 
                         } catch (final JSONException e) {
                             System.out.println(e);
@@ -396,7 +399,6 @@ public class CommentActivity extends AppCompatActivity {
                 JSONArray datas = new JSONArray(response);
 
                 if(datas.length() == 0 && page == 1){
-                    Toast.makeText(CommentActivity.this, "There's no post, Be the first!", Toast.LENGTH_LONG).show();
                     tv_no_comment.setText("No comments yet.\nBe the first one to share your thoughts.");
                     tv_no_comment.setVisibility(View.VISIBLE);
                     retry_button.setVisibility(View.GONE);
