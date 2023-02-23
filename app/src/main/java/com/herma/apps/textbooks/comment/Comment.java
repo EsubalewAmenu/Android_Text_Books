@@ -22,10 +22,10 @@ public class Comment {
     private int is_user_liked;
     private int is_user_disliked;
 
-
     public Comment() {
         this.replies = new ArrayList<>();
     }
+
 
     public int getIs_user_liked() {
         return is_user_liked;

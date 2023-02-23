@@ -57,6 +57,10 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private boolean isLoading = false;
     LoadMoreListener loadMoreListener;
     LoadMoreViewHolder loadMoreViewHolder;
+    int repliesPerPage = 2;
+    int page = 1;
+
+    CommentAdapter replyAdapter = null, subReplyAdapter = null;
 
     public CommentAdapter(List<Comment> commentList, Context context, String chapter, LoadMoreListener loadMoreListener) {
         this.commentList = commentList;
@@ -238,6 +242,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             public void onClick(View view) {
                 if(!comment.isChildSeen()) {
 
+                    page = 1;
 
                     try {
                         getComments(chapter, comment, commentViewHolder.llReplies);
@@ -254,12 +259,22 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         });
         } else if (holder instanceof LoadMoreViewHolder) {
             loadMoreViewHolder = (LoadMoreViewHolder) holder;
+
             if (commentList.isEmpty()) {
                 // Disable the "Load More" button if there are no comments
                 loadMoreViewHolder.progressBar.setVisibility(View.GONE);
                 loadMoreViewHolder.btnLoadMore.setVisibility(View.GONE);
-            } else {
+            } else if(loadMoreViewHolder.removeChildCommentLoadMore ){
+                if(loadMoreViewHolder.noMoreComment) {
+                    setNoMoreReplies();
+                }else{
+                    loadMoreViewHolder.progressBar.setVisibility(View.GONE);
+                loadMoreViewHolder.btnLoadMore.setVisibility(View.GONE);
+                }
+
+            }else {
                 if (isLoading) {
+
                     loadMoreViewHolder.progressBar.setVisibility(View.VISIBLE);
                     loadMoreViewHolder.btnLoadMore.setVisibility(View.GONE);
                 } else {
@@ -277,6 +292,15 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
         }            }
 
+    }
+
+    private void setNoMoreReplies() {
+
+        loadMoreViewHolder.btnLoadMore.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
+        loadMoreViewHolder.btnLoadMore.setTextColor(ContextCompat.getColor(context, R.color.cardview_dark_background));
+        loadMoreViewHolder.btnLoadMore.setText("End of replies");
+        loadMoreViewHolder.btnLoadMore.setEnabled(false);
+        loadMoreViewHolder.btnLoadMore.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -302,11 +326,17 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         notifyDataSetChanged();
     }
+
     public void setLoading(boolean isLoading) {
         this.isLoading = isLoading;
         notifyDataSetChanged();
     }
 
+    public void removeLoadMore() {
+        this.isLoading = false;
+        loadMoreViewHolder.removeChildCommentLoadMore = true;
+        notifyDataSetChanged();
+    }
     public interface LoadMoreListener {
         void onLoadMore();
     }
@@ -343,10 +373,16 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private ProgressBar progressBar;
         private Button btnLoadMore;
 
+        private boolean removeChildCommentLoadMore;
+        private boolean noMoreComment;
+
+
         public LoadMoreViewHolder(@NonNull View itemView) {
             super(itemView);
             progressBar = itemView.findViewById(R.id.progressBar);
             btnLoadMore = itemView.findViewById(R.id.btn_load_more);
+            removeChildCommentLoadMore = false;
+            noMoreComment = false;
         }
     }
 
@@ -397,19 +433,21 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                             List<Comment> replyList = new ArrayList<>();
                             replyList.add(newComment);
-                            CommentAdapter replyAdapter = new CommentAdapter(replyList, context, chapter, new LoadMoreListener() {
+                            replyAdapter = new CommentAdapter(replyList, context, chapter, new LoadMoreListener() {
                                 @Override
                                 public void onLoadMore() {
-                                    System.out.println("on load more on child adapter 1");
-//                                    if (!isLoading && currentPage < totalPages) {
-//                                        isLoading = true;
-//                                        currentPage++;
-//                                        try {
-//                                            getComments(0, currentPage);
-//                                        } catch (JSONException e) {
-//                                            e.printStackTrace();
-//                                        }
-//                                    }
+                                    System.out.println("on load more on child adapter 2");
+                                    if (!isLoading) {
+                                        isLoading = true;
+                                        replyAdapter.setLoading(true);
+                                        page++;
+                                        try {
+                                            getComments(chapter,parentComment, llReplies);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        replyAdapter.setLoading(false);
+                                    }
                                 }
                             });
                             rvReplies.setAdapter(replyAdapter);
@@ -483,7 +521,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         RequestQueue queue = Volley.newRequestQueue(context);
         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(context);
 
-        String url = SplashActivity.BASEAPI+"wp/v2/chapter/comments/"+chapter+"/"+parentComment.getCommentId();
+        String url = SplashActivity.BASEAPI+"wp/v2/chapter/comments/"+chapter+"/"+parentComment.getCommentId()+"?page="+page+"&per_page="+repliesPerPage;
 
 
         JSONObject jsonBody = new JSONObject();
@@ -495,14 +533,25 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("get child comment request response is ");
-                        System.out.println(response);
+//                        System.out.println("get child comment request response is ");
+//                        System.out.println(response);
 
                         if (response != null) {
 
 
                             try {
                                 JSONArray datas = new JSONArray(response);
+//
+//                                if(datas.length() < repliesPerPage) {
+//                                    subReplyAdapter.loadMoreViewHolder.noMoreComment = true;
+//                                    subReplyAdapter.notifyDataSetChanged();
+//                                }
+
+                                List<Comment> replyList = new ArrayList<>();
+
+                                RecyclerView rvReplies = new RecyclerView(context);
+                                rvReplies.setLayoutManager(new LinearLayoutManager(context));
+                                llReplies.addView(rvReplies);
 
                                 for(int i = 0; i < datas.length(); i++){
                                     JSONObject c = datas.getJSONObject(i);
@@ -525,35 +574,39 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     if(parentComment.isAddReplyToParent()) {
                                         commentList.add(newComment);
                                     }else{
-                                        RecyclerView rvReplies = new RecyclerView(context);
-                                        rvReplies.setLayoutManager(new LinearLayoutManager(context));
-                                        llReplies.addView(rvReplies);
 
-                                        List<Comment> replyList = new ArrayList<>();
                                         replyList.add(newComment);
-                                        CommentAdapter replyAdapter = new CommentAdapter(replyList, context, chapter, new LoadMoreListener() {
-                                            @Override
-                                            public void onLoadMore() {
-                                                System.out.println("on load more on child adapter");
-//                                                if (!isLoading && currentPage < totalPages) {
-//                                                    isLoading = true;
-//                                                    currentPage++;
-//                                                    try {
-//                                                        getComments(0, currentPage);
-//                                                    } catch (JSONException e) {
-//                                                        e.printStackTrace();
-//                                                    }
-//                                                }
-                                            }
-                                        });
-                                        rvReplies.setAdapter(replyAdapter);
                                     }
 
                                 }
 
+                                subReplyAdapter = new CommentAdapter(replyList, context, chapter, new LoadMoreListener() {
+                                    @Override
+                                    public void onLoadMore() {
+                                        System.out.println("on load more on child adapter 1234 "+chapter + " parent id is " + parentComment.getCommentId()+" page " + page);
+                                        if (!isLoading) {
+                                            System.out.println("is loading ");
+                                            isLoading = true;
+                                            subReplyAdapter.setLoading(true);
+                                            page++;
+                                            try {
+                                                getComments(chapter,parentComment, llReplies);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            isLoading = false;
+                                            subReplyAdapter.removeLoadMore();
+
+
+                                        }
+                                    }
+                                });
+                                rvReplies.setAdapter(subReplyAdapter);
+
                             } catch (final JSONException e) {
                                 System.out.println(e);
                             }
+
                         }
                     }
 

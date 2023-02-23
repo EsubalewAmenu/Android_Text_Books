@@ -74,7 +74,6 @@ public class CommentActivity extends AppCompatActivity {
 
     private boolean isLoading = false;
     private int currentPage = 1;
-    private int totalPages = 5;
     private int commentsPerPage = 4;
 
     @Override
@@ -146,7 +145,7 @@ public class CommentActivity extends AppCompatActivity {
         commentAdapter = new CommentAdapter(comments, getApplicationContext(), chapter, new CommentAdapter.LoadMoreListener() {
             @Override
             public void onLoadMore() {
-                if (!isLoading && currentPage < totalPages) {
+                if (!isLoading) {
                     isLoading = true;
                     commentAdapter.setLoading(true);
                     currentPage++;
@@ -183,7 +182,7 @@ public class CommentActivity extends AppCompatActivity {
 //    }
 
     private void addComment() {
-        {
+
 //            String author = "Test author";
 
             // Create an instance of the dialog box
@@ -215,7 +214,7 @@ public class CommentActivity extends AppCompatActivity {
 
             // Show the dialog box
             dialogBuilder.show();
-        }
+
     }
 
     public void postComment(String userComment, int parent) throws JSONException {
@@ -451,7 +450,7 @@ public class CommentActivity extends AppCompatActivity {
                     tv_no_comment.setText("No comments yet.\nBe the first one to share your thoughts.");
                     tv_no_comment.setVisibility(View.VISIBLE);
                     retry_button.setVisibility(View.GONE);
-                }else if(datas.length() == 0 && page > 1){
+                }else if((datas.length() == 0 && page > 1) || datas.length() < commentsPerPage ) {
                     System.out.println("There is no additional comment");
                     commentAdapter.setNoMoreComment();
                 }else{
