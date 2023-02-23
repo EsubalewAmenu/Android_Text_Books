@@ -142,7 +142,7 @@ public class CommentActivity extends AppCompatActivity {
 
         comments = new ArrayList<>();
 
-        commentAdapter = new CommentAdapter(comments, getApplicationContext(), chapter, new CommentAdapter.LoadMoreListener() {
+        commentAdapter = new CommentAdapter(comments, this, chapter, new CommentAdapter.LoadMoreListener() {
             @Override
             public void onLoadMore() {
                 if (!isLoading) {

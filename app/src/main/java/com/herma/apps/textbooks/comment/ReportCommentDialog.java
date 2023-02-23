@@ -1,0 +1,150 @@
+package com.herma.apps.textbooks.comment;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.herma.apps.textbooks.R;
+import com.herma.apps.textbooks.SplashActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+
+public class ReportCommentDialog {
+
+    private Context context;
+    private int commentId;
+
+    public ReportCommentDialog(Context context, int commentId) {
+        this.context = context;
+        this.commentId = commentId;
+    }
+
+    public void show() {
+        if (context instanceof Activity && !((Activity) context).isFinishing()) {
+            final EditText reasonEditText = new EditText(context);
+
+            new AlertDialog.Builder(context)
+                    .setTitle("Report Comment")
+                    .setMessage("Please enter the reason for reporting this comment:")
+                    .setView(reasonEditText)
+                    .setPositiveButton("Report", (dialog, which) -> {
+                        String reason = reasonEditText.getText().toString();
+//                        ReportCommentTask task = new ReportCommentTask();
+//                        task.execute(commentId, reason);
+
+                        try {
+                            postCommentReport(commentId, reason);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+        }
+    }
+
+
+    public void postCommentReport(int CommentId, String reason) throws JSONException {
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        String url = SplashActivity.BASEAPI+"wp/v2/report-comment/" + commentId;
+
+        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(context);
+
+        JSONObject jsonBody = new JSONObject();
+        jsonBody.put("google_user_id", pre.getString("userId", "1"));
+        jsonBody.put("email", pre.getString("email", "1"));
+        jsonBody.put("registed_with", "google");
+        jsonBody.put("reason", reason);
+        final String requestBody = jsonBody.toString();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url ,
+
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+//                        System.out.println("post comment response is ");
+//                        System.out.println(response);
+
+                            Toast.makeText(context, "Thank you for reporting! We'll review the comment", Toast.LENGTH_LONG).show();
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try{
+                        Toast.makeText(context, "Connection Error. Please check your mobile data or Wi-Fi and try again.", Toast.LENGTH_LONG).show();
+                }catch (Exception j){}
+            }
+
+        })
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
+                params.put("password", pre.getString("userId", "1"));//SplashActivity.PAZZWORD);
+                return params;
+            }
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                try {
+                    return requestBody == null ? null : requestBody.getBytes("utf-8");
+                } catch (UnsupportedEncodingException uee) {
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                    return null;
+                }
+            }
+        };
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        stringRequest.setTag(this);
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
+    }
+}

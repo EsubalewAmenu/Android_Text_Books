@@ -136,6 +136,15 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(normalDislikeDrawable, null, null, null);
         }
 
+            commentViewHolder.btnReport.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+//                    System.out.println("Reported "+ comment.getCommentId());
+                    ReportCommentDialog dialog = new ReportCommentDialog(context, comment.getCommentId());
+                    dialog.show();
+
+                }
+            });
             commentViewHolder.btnReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -366,6 +375,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private Button btnLike;
         private Button btnDislike;
         private Button btnReply;
+        private Button btnReport;
         LinearLayoutCompat llReplies;
         ImageView ivProfilePicture;
         private Button btn_more;
@@ -378,6 +388,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             btnLike = itemView.findViewById(R.id.btn_like);
             btnDislike = itemView.findViewById(R.id.btn_dislike);
             btnReply = itemView.findViewById(R.id.btn_reply);
+            btnReport = itemView.findViewById(R.id.btn_report);
             llReplies = itemView.findViewById(R.id.ll_replies);
             ivProfilePicture = itemView.findViewById(R.id.iv_profile_picture);
             btn_more = itemView.findViewById(R.id.btn_more);
@@ -549,8 +560,8 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-//                        System.out.println("get child comment request response is ");
-//                        System.out.println(response);
+                        System.out.println("get child comment request response is ");
+                        System.out.println(response);
 
                         if (response != null) {
 
