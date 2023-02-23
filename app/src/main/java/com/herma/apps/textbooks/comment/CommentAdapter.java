@@ -106,11 +106,20 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 .placeholder(R.drawable.herma)
                 .into(commentViewHolder.ivProfilePicture);
 
-        Drawable normalLikeDrawable = context.getResources().getDrawable(R.drawable.ic_like);
-        Drawable activeLikeDrawable = context.getResources().getDrawable(R.drawable.ic_like_active);
+            Drawable normalLikeDrawable = null, activeLikeDrawable = null, normalDislikeDrawable = null, activeDislikeDrawable = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                normalLikeDrawable = context.getResources().getDrawable(R.drawable.ic_like, context.getTheme());
+                 activeLikeDrawable = context.getResources().getDrawable(R.drawable.ic_like_active, context.getTheme());
+                 normalDislikeDrawable = context.getResources().getDrawable(R.drawable.ic_dislike, context.getTheme());
+                 activeDislikeDrawable = context.getResources().getDrawable(R.drawable.ic_dislike_active, context.getTheme());
+            }else{
+                normalLikeDrawable = context.getResources().getDrawable(R.drawable.ic_like);
+                 activeLikeDrawable = context.getResources().getDrawable(R.drawable.ic_like_active);
+                 normalDislikeDrawable = context.getResources().getDrawable(R.drawable.ic_dislike);
+                 activeDislikeDrawable = context.getResources().getDrawable(R.drawable.ic_dislike_active);
 
-        Drawable normalDislikeDrawable = context.getResources().getDrawable(R.drawable.ic_dislike);
-        Drawable activeDislikeDrawable = context.getResources().getDrawable(R.drawable.ic_dislike_active);
+            }
+
 
 //        int isUserLiked = (new Random().nextInt(1));
 //        int isUserDisliked = (new Random().nextInt(1));
@@ -162,17 +171,21 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         });
 
+            Drawable finalActiveLikeDrawable = activeLikeDrawable;
+            Drawable finalNormalLikeDrawable = normalLikeDrawable;
+            Drawable finalActiveDislikeDrawable = activeDislikeDrawable;
+            Drawable finalNormalDislikeDrawable = normalDislikeDrawable;
             commentViewHolder.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (commentViewHolder.btnLike.getCompoundDrawables()[0] == normalLikeDrawable) {
-                    commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(activeLikeDrawable, null, null, null);
+                if (commentViewHolder.btnLike.getCompoundDrawables()[0] == finalNormalLikeDrawable) {
+                    commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(finalActiveLikeDrawable, null, null, null);
                     comment.setLike(comment.getLike()+1);
 
 
-                    if(commentViewHolder.btnDislike.getCompoundDrawables()[0] == activeDislikeDrawable){
-                        commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(normalDislikeDrawable, null, null, null);
+                    if(commentViewHolder.btnDislike.getCompoundDrawables()[0] == finalActiveDislikeDrawable){
+                        commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(finalNormalDislikeDrawable, null, null, null);
                         comment.setDislike(comment.getDislike()-1);
                         commentViewHolder.btnDislike.setText(comment.getDislike()+"");
                     }
@@ -184,7 +197,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
 
                 } else {
-                    commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(normalLikeDrawable, null, null, null);
+                    commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(finalNormalLikeDrawable, null, null, null);
                     comment.setLike(comment.getLike()-1);
 
                     try {
@@ -198,18 +211,22 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 commentViewHolder.btnLike.setText(comment.getLike()+"");
             }
         });
+            Drawable finalNormalDislikeDrawable1 = normalDislikeDrawable;
+            Drawable finalActiveDislikeDrawable1 = activeDislikeDrawable;
+            Drawable finalActiveLikeDrawable1 = activeLikeDrawable;
+            Drawable finalNormalLikeDrawable1 = normalLikeDrawable;
             commentViewHolder.btnDislike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                comment.setDislike(comment.getDislike()-1);
 //                holder.btnDislike.setText(comment.getDislike()+"");
 
-                if (commentViewHolder.btnDislike.getCompoundDrawables()[0] == normalDislikeDrawable) {
-                    commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(activeDislikeDrawable, null, null, null);
+                if (commentViewHolder.btnDislike.getCompoundDrawables()[0] == finalNormalDislikeDrawable1) {
+                    commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(finalActiveDislikeDrawable1, null, null, null);
                     comment.setDislike(comment.getDislike()+1);
 
-                    if(commentViewHolder.btnLike.getCompoundDrawables()[0] == activeLikeDrawable){
-                        commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(normalLikeDrawable, null, null, null);
+                    if(commentViewHolder.btnLike.getCompoundDrawables()[0] == finalActiveLikeDrawable1){
+                        commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(finalNormalLikeDrawable1, null, null, null);
                         comment.setLike(comment.getLike()-1);
                         commentViewHolder.btnLike.setText(comment.getLike()+"");
 
@@ -222,7 +239,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
 
                 } else {
-                    commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(normalDislikeDrawable, null, null, null);
+                    commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(finalNormalDislikeDrawable1, null, null, null);
                     comment.setDislike(comment.getDislike()-1);
 
                     try {
@@ -517,7 +534,6 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private void getComments(String chapter, Comment parentComment, LinearLayoutCompat llReplies) throws JSONException {
 
-        System.out.println("requested chapter is " + chapter + " parent id is " + parentComment.getCommentId());
         RequestQueue queue = Volley.newRequestQueue(context);
         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -583,9 +599,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 subReplyAdapter = new CommentAdapter(replyList, context, chapter, new LoadMoreListener() {
                                     @Override
                                     public void onLoadMore() {
-                                        System.out.println("on load more on child adapter 1234 "+chapter + " parent id is " + parentComment.getCommentId()+" page " + page);
                                         if (!isLoading) {
-                                            System.out.println("is loading ");
                                             isLoading = true;
                                             subReplyAdapter.setLoading(true);
                                             page++;
