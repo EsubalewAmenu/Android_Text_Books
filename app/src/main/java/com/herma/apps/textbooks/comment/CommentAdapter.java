@@ -560,8 +560,8 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("get child comment request response is ");
-                        System.out.println(response);
+//                        System.out.println("get child comment request response is ");
+//                        System.out.println(response);
 
                         if (response != null) {
 
