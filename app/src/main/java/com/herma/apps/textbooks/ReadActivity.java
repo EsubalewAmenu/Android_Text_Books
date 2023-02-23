@@ -257,12 +257,19 @@ public void commentRelateds(){
                                          @Override
                                          public void onClick(View view) {
                                              //            view -> Toast.makeText(ReadActivity.this, "Person Added", Toast.LENGTH_SHORT).show();
+                                             SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                             String userEmail = pre.getString("email", "1");
+                                             if(userEmail.contains("@")) {
 
                                              Intent commentIntent = new Intent(ReadActivity.this, CommentActivity.class);
                                              commentIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
                                              commentIntent.putExtra("subject", getIntent().getStringExtra("subject"));
                                              commentIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
                                              startActivity(commentIntent);
+                                             }else{
+                                                 Toast.makeText(ReadActivity.this, "You should sign in first!", Toast.LENGTH_SHORT).show();
+
+                                             }
                                          }
                                      }
     );
