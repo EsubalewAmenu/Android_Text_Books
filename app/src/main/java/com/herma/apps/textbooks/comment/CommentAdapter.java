@@ -541,11 +541,11 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                             try {
                                 JSONArray datas = new JSONArray(response);
-//
-//                                if(datas.length() < repliesPerPage) {
-//                                    subReplyAdapter.loadMoreViewHolder.noMoreComment = true;
-//                                    subReplyAdapter.notifyDataSetChanged();
-//                                }
+
+                                if(datas.length() == 0){ // < repliesPerPage) {
+                                    subReplyAdapter.loadMoreViewHolder.noMoreComment = true;
+                                    subReplyAdapter.notifyDataSetChanged();
+                                }
 
                                 List<Comment> replyList = new ArrayList<>();
 
