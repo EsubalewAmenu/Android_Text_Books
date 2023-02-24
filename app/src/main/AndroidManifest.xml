@@ -51,6 +51,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".settings.SettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.about.About_us"
             android:screenOrientation="portrait" />
         <activity

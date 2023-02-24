@@ -23,6 +23,7 @@ import com.herma.apps.textbooks.common.MainAdapter;
 import com.herma.apps.textbooks.common.Commons;
 import com.herma.apps.textbooks.common.DB;
 import com.herma.apps.textbooks.common.Item;
+import com.herma.apps.textbooks.settings.LanguageHelper;
 import com.herma.apps.textbooks.ui.about.About_us;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,6 +56,7 @@ public class ChaptersActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        LanguageHelper.updateLanguage(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chapters);
 

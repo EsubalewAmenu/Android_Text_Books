@@ -27,6 +27,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.herma.apps.textbooks.settings.LanguageHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,6 +50,7 @@ public class SplashActivity extends AppCompatActivity {
     private static int SPLASH_SCREEN_TIME_OUT = 1050;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        LanguageHelper.updateLanguage(this);
         super.onCreate(savedInstanceState);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -56,7 +58,6 @@ public class SplashActivity extends AppCompatActivity {
         //This method is used so that your splash activity
         //can cover the entire screen.
         setContentView(R.layout.activity_splash);
-
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
