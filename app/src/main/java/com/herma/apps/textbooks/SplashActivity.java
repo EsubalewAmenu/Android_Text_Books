@@ -28,6 +28,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.herma.apps.textbooks.settings.LanguageHelper;
+import com.herma.apps.textbooks.settings.SettingsActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,6 +59,12 @@ public class SplashActivity extends AppCompatActivity {
         //This method is used so that your splash activity
         //can cover the entire screen.
         setContentView(R.layout.activity_splash);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String languageCode = prefs.getString("language_code", "None");
+
+        if(languageCode.equals("None"))
+            startActivity(new Intent(SplashActivity.this, SettingsActivity.class));
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
