@@ -46,6 +46,7 @@ import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.android.gms.ads.rewarded.ServerSideVerificationOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.herma.apps.textbooks.common.Commons;
 import com.herma.apps.textbooks.ui.about.About_us;
 
@@ -76,25 +77,38 @@ public class ReadActivity extends AppCompatActivity {
 
     private RewardedAd mRewardedAd;
 
-    TextView txtTimerValue;
-    ImageButton btnGiftReward;
+//    TextView txtTimerValue;
+//    ImageButton btnGiftReward;
     long reward_p_id, reward_minutes;
+
+
+    FloatingActionButton mAddFab, mAddAlarmFab, mAddPersonFab;
+
+    // These are taken to make visible and invisible along with FABs
+    TextView addAlarmActionText, addPersonActionText;
+
+    // to check whether sub FAB buttons are visible or not.
+    Boolean isAllFabsVisible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        // add back arrow to toolbar
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+
+        // Add back button to the toolbar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        // add back arrow to toolbar
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//            getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        }
 
         pdfView = (PDFView) findViewById(R.id.pdfView);
-        txtTimerValue = (TextView) findViewById(R.id.timerValue);
-        btnGiftReward = (ImageButton) findViewById(R.id.btnGiftReward);
+//        txtTimerValue = (TextView) findViewById(R.id.timerValue);
+//        btnGiftReward = (ImageButton) findViewById(R.id.btnGiftReward);
 
         if (getIntent().getExtras() != null) {
 
@@ -172,20 +186,100 @@ public class ReadActivity extends AppCompatActivity {
 
         }
 
-        btnGiftReward.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                requestPhoneNumber();
-
-            }
-        });
+//        btnGiftReward.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                requestPhoneNumber();
+//
+//            }
+//        });
 
         /////////////
 
-
+        commentRelateds();
     }
+public void commentRelateds(){
 
+    // Register all the FABs with their IDs This FAB button is the Parent
+    mAddFab = findViewById(R.id.add_fab);
+
+    // FAB button
+    mAddAlarmFab = findViewById(R.id.add_alarm_fab);
+    mAddPersonFab = findViewById(R.id.add_person_fab);
+
+    // Also register the action name text, of all the FABs.
+    addAlarmActionText = findViewById(R.id.add_alarm_action_text);
+    addPersonActionText = findViewById(R.id.add_person_action_text);
+
+    // Now set all the FABs and all the action name texts as GONE
+    mAddAlarmFab.setVisibility(View.GONE);
+    mAddPersonFab.setVisibility(View.GONE);
+    addAlarmActionText.setVisibility(View.GONE);
+    addPersonActionText.setVisibility(View.GONE);
+
+    // make the boolean variable as false, as all the
+    // action name texts and all the sub FABs are invisible
+    isAllFabsVisible = false;
+
+    // We will make all the FABs and action name texts
+    // visible only when Parent FAB button is clicked So
+    // we have to handle the Parent FAB button first, by
+    // using setOnClickListener you can see below
+    mAddFab.setOnClickListener(view -> {
+        if (!isAllFabsVisible) {
+            // when isAllFabsVisible becomes true make all
+            // the action name texts and FABs VISIBLE
+            mAddAlarmFab.show();
+            mAddPersonFab.show();
+            addAlarmActionText.setVisibility(View.VISIBLE);
+            addPersonActionText.setVisibility(View.VISIBLE);
+
+            // make the boolean variable true as we
+            // have set the sub FABs visibility to GONE
+            isAllFabsVisible = true;
+        } else {
+            // when isAllFabsVisible becomes true make
+            // all the action name texts and FABs GONE.
+            mAddAlarmFab.hide();
+            mAddPersonFab.hide();
+            addAlarmActionText.setVisibility(View.GONE);
+            addPersonActionText.setVisibility(View.GONE);
+
+            // make the boolean variable false as we
+            // have set the sub FABs visibility to GONE
+            isAllFabsVisible = false;
+        }
+    });
+    // below is the sample action to handle add person FAB. Here it shows simple Toast msg.
+    // The Toast will be shown only when they are visible and only when user clicks on them
+    mAddPersonFab.setOnClickListener(new View.OnClickListener() {
+                                         @Override
+                                         public void onClick(View view) {
+                                             //            view -> Toast.makeText(ReadActivity.this, "Person Added", Toast.LENGTH_SHORT).show();
+                                             SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                             String userEmail = pre.getString("email", "1");
+                                             if(userEmail.contains("@")) {
+
+                                             Intent commentIntent = new Intent(ReadActivity.this, CommentActivity.class);
+                                             commentIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
+                                             commentIntent.putExtra("subject", getIntent().getStringExtra("subject"));
+                                             commentIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
+                                             startActivity(commentIntent);
+                                             }else{
+                                                 Toast.makeText(ReadActivity.this, "You should sign in first!", Toast.LENGTH_SHORT).show();
+
+                                             }
+                                         }
+                                     }
+    );
+
+    // below is the sample action to handle add alarm FAB. Here it shows simple Toast msg
+    // The Toast will be shown only when they are visible and only when user clicks on them
+    mAddAlarmFab.setOnClickListener(
+            view -> Toast.makeText(ReadActivity.this, "Chapter based Quiz - Coming soon!", Toast.LENGTH_SHORT
+            ).show());
+}
     private void requestPhoneNumber() {
 
 
@@ -209,7 +303,7 @@ public class ReadActivity extends AppCompatActivity {
 
 //                if ((input.getText().toString()).matches("^(09|07)\\d{8}$")) {
                 if ((input.getText().toString()).matches("^(09)\\d{8}$")) {
-                    btnGiftReward.setVisibility(View.INVISIBLE);
+//                    btnGiftReward.setVisibility(View.INVISIBLE);
                     endReward(input.getText().toString());
 
                     ////////////
@@ -229,7 +323,7 @@ public class ReadActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
 
-                btnGiftReward.setVisibility(View.INVISIBLE);
+//                btnGiftReward.setVisibility(View.INVISIBLE);
                 Toast.makeText(ReadActivity.this, R.string.cancel_phone, Toast.LENGTH_LONG).show();
 
             }
@@ -304,7 +398,7 @@ public class ReadActivity extends AppCompatActivity {
 
     public void rewardCountdown(double _minute) {  //
 
-        txtTimerValue.setVisibility(View.VISIBLE);
+//        txtTimerValue.setVisibility(View.VISIBLE);
 
         new CountDownTimer((long) (_minute * 60 * 1000), 1000) { // 30000 mili = 30 sec
 
@@ -321,13 +415,13 @@ public class ReadActivity extends AppCompatActivity {
 ////                    + ":"+ String.format("%03d", milliseconds)
 //                );
 
-                txtTimerValue.setText(mins + ":" + String.format("%02d", secs));
+//                txtTimerValue.setText(mins + ":" + String.format("%02d", secs));
 
             }
 
             public void onFinish() {
-                btnGiftReward.setVisibility(View.VISIBLE);
-                txtTimerValue.setVisibility(View.INVISIBLE);
+//                btnGiftReward.setVisibility(View.VISIBLE);
+//                txtTimerValue.setVisibility(View.INVISIBLE);
                 System.out.println("reward done!");
             }
         }.start();

@@ -1,31 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:orientation="vertical">
 
-
-
-    <FrameLayout
-        android:id="@+id/ad_view_container"
+    <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/ad_view_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true" />
+
+        <com.github.barteksc.pdfviewer.PDFView
+            android:id="@+id/pdfView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="HardcodedText">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/add_fab"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_alignParentBottom="true" />
-<!--    <com.google.android.gms.ads.AdView-->
-<!--        xmlns:ads="http://schemas.android.com/apk/res-auto"-->
-<!--        android:id="@+id/adView"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        ads:adSize="SMART_BANNER"-->
-<!--        ads:adUnitId="@string/adReader">-->
-<!--    </com.google.android.gms.ads.AdView>-->
+        android:layout_gravity="end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@android:drawable/ic_menu_add"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <com.github.barteksc.pdfviewer.PDFView
-        android:id="@+id/pdfView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    <!-- Floating action button for add alarm -->
+    <!-- Make sure that you are constraining this
+         button to the parent button -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:elevation="8dp"
+        android:id="@+id/add_alarm_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toTopOf="@+id/add_fab"
+        app:layout_constraintEnd_toEndOf="@+id/add_fab"
+        app:layout_constraintStart_toStartOf="@+id/add_fab"
+        app:srcCompat="@android:drawable/ic_lock_idle_alarm" />
 
-</LinearLayout>
+    <!-- Action name text for the add alarm button -->
+    <!-- Make sure that you are constraining this Text to
+         the add Alarm FAB button -->
+    <TextView
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:elevation="8dp"
+        android:id="@+id/add_alarm_action_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Quiz on this unit"
+        app:layout_constraintBottom_toBottomOf="@+id/add_alarm_fab"
+        app:layout_constraintEnd_toStartOf="@+id/add_alarm_fab"
+        app:layout_constraintTop_toTopOf="@+id/add_alarm_fab" />
+
+    <!-- Floating action button for add person -->
+    <!-- Make sure that you are constraining this
+         button to the add Alarm FAB button -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:elevation="8dp"
+        android:id="@+id/add_person_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toTopOf="@+id/add_alarm_fab"
+        app:layout_constraintEnd_toEndOf="@+id/add_alarm_fab"
+        app:layout_constraintStart_toStartOf="@+id/add_alarm_fab"
+        app:srcCompat="@android:drawable/ic_btn_speak_now" />
+
+    <!-- Action name text for the add person button -->
+    <!-- Make sure that you are constraining this Text
+         to the add Person FAB button -->
+    <TextView
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:elevation="8dp"
+        android:id="@+id/add_person_action_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Comments"
+        app:layout_constraintBottom_toBottomOf="@+id/add_person_fab"
+        app:layout_constraintEnd_toStartOf="@+id/add_person_fab"
+        app:layout_constraintTop_toTopOf="@+id/add_person_fab" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

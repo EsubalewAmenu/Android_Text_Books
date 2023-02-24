@@ -130,6 +130,10 @@
                 android:icon="@android:drawable/ic_dialog_info"
                 android:title="@string/about" />
             <item
+                android:id="@+id/action_settings"
+                android:icon="@drawable/setting"
+                android:title="@string/settings_title"/>
+            <item
                 android:id="@+id/nav_exit"
                 android:icon="@android:drawable/ic_delete"
                 android:title="@string/exit" />

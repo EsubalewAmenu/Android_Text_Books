@@ -43,6 +43,8 @@ import com.herma.apps.textbooks.common.Commons;
 import com.herma.apps.textbooks.common.MainAdapter;
 import com.herma.apps.textbooks.common.DB;
 import com.herma.apps.textbooks.common.Item;
+import com.herma.apps.textbooks.settings.LanguageHelper;
+import com.herma.apps.textbooks.settings.SettingsActivity;
 import com.herma.apps.textbooks.ui.about.About_us;
 import com.herma.apps.textbooks.ui.fragment.AllNewCurriculumBooks;
 import com.herma.apps.textbooks.ui.fragment.BookFragment;
@@ -116,6 +118,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        LanguageHelper.updateLanguage(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
@@ -251,6 +254,9 @@ public class MainActivity extends AppCompatActivity
                 return true;
             case R.id.action_about:
                 startActivity(new Intent(getApplicationContext(), About_us.class));
+                return true;
+            case R.id.action_settings:
+                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                 return true;
             case R.id.action_exit:
 
