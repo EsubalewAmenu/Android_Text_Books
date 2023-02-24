@@ -57,7 +57,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private boolean isLoading = false;
     LoadMoreListener loadMoreListener;
     LoadMoreViewHolder loadMoreViewHolder;
-    int repliesPerPage = 2;
+    int repliesPerPage = 10;
     int page = 1;
 
     CommentAdapter replyAdapter = null, subReplyAdapter = null;
