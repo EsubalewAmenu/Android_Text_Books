@@ -1,26 +1,26 @@
 <resources>
 
 
-<!--    <string name="adQuestionsInt" translatable="false">ca-app-pub-3940256099942544/1033173712</string>-->
-<!--    <string name="adReaderInt" translatable="false">ca-app-pub-3940256099942544/1033173712</string>-->
-<!--    <string name="adHome" translatable="false">ca-app-pub-3940256099942544/6300978111</string>-->
-<!--    <string name="adChapter" translatable="false">ca-app-pub-3940256099942544/6300978111</string>-->
-<!--    <string name="adQuestions" translatable="false">ca-app-pub-3940256099942544/6300978111</string>-->
-<!--    <string name="adReader" translatable="false">ca-app-pub-3940256099942544/6300978111</string>-->
-<!--    <string name="adReward" translatable="false">ca-app-pub-3940256099942544/5224354917</string>-->
+    <string name="adQuestionsInt" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="adReaderInt" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="adHome" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="adChapter" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="adQuestions" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="adReader" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="adReward" translatable="false">ca-app-pub-3940256099942544/5224354917</string>
 
-<!--    <string name="admob_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>-->
+    <string name="admob_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
 
 
-        <string name="adQuestionsInt" translatable="false">ca-app-pub-8011674951494696/7993749596</string>
-        <string name="adReaderInt" translatable="false">ca-app-pub-8011674951494696/4934737105</string>
-        <string name="adHome" translatable="false">ca-app-pub-8011674951494696/8312993039</string>
-        <string name="adChapter" translatable="false">ca-app-pub-8011674951494696/7079802411</string>
-        <string name="adQuestions" translatable="false">ca-app-pub-8011674951494696/4170948875</string>
-        <string name="adReader" translatable="false">ca-app-pub-8011674951494696/3605507555</string>
-        <string name="adReward" translatable="false">ca-app-pub-8011674951494696/2726130955</string>
+<!--        <string name="adQuestionsInt" translatable="false">ca-app-pub-8011674951494696/7993749596</string>-->
+<!--        <string name="adReaderInt" translatable="false">ca-app-pub-8011674951494696/4934737105</string>-->
+<!--        <string name="adHome" translatable="false">ca-app-pub-8011674951494696/8312993039</string>-->
+<!--        <string name="adChapter" translatable="false">ca-app-pub-8011674951494696/7079802411</string>-->
+<!--        <string name="adQuestions" translatable="false">ca-app-pub-8011674951494696/4170948875</string>-->
+<!--        <string name="adReader" translatable="false">ca-app-pub-8011674951494696/3605507555</string>-->
+<!--        <string name="adReward" translatable="false">ca-app-pub-8011674951494696/2726130955</string>-->
 
-        <string name="admob_app_id" translatable="false">ca-app-pub-8011674951494696~8662393111</string>
+<!--        <string name="admob_app_id" translatable="false">ca-app-pub-8011674951494696~8662393111</string>-->
 
 
     <string name="app_name">1-12 Text Books</string>
@@ -129,5 +129,6 @@
     <string name="lang_am" translatable="false">\u12a0\u121b\u122d\u129b</string>
     <string name="lang_or" translatable="false">Afaan Oromo</string>
     <string name="restart_the_app">Please restart the app!</string>
+    <string name="skip">Skip</string>
 
 </resources>
