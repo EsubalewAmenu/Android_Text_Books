@@ -1,0 +1,106 @@
+<resources>
+    <string name= "app_name">1-12 የጽሑፍ መጽሐፍት</string>
+    <string name= "navigation_drawer_open">የአሰሳ መሳቢያውን ክፈት</string>
+    <string name="navigation_drawer_close">የአሰሳ መሳቢያን ዝጋ</string>
+    <string name="nav_header_title">1-12 የመማሪያ መጽሐፍት</string>
+    <string name= "nav_header_subtitle">apps@datascienceplc.com</string>
+    <string name="nav_header_desc">የአሰሳ ራስጌ</string>
+
+    <string name="downloading"> በማውረድ ላይ...</string>
+    <string name="download">አውርድ</string>
+    <string name="cancel">ሰርዝ</string>
+    <string name="no_file">ፋይል አልተገኘም።</string>
+    <string name="no_file_desc_pre"> አውርድ \'</string>
+    ይህንን ክፍል ለማንበብ <string name="no_file_desc_pos">\'።</string>
+    <string name="try_later">"አይ/ቀርፋፋ የበይነመረብ ግንኙነት! እባክህ ቆይተህ ሞክር"</string>
+
+    <string name="share_link_pre">ሄይ! </string> አውርደሃል
+    <string name="share_link_center">መተግበሪያ? መተግበሪያውን እዚህ ያውርዱት </string>
+    <string name="share_link_pos">እንደኔ ሁሌም ደስተኛ ትሆናለህ ምክንያቱም መተግበሪያው ከመቼውም ጊዜ ይበልጥ አስፈላጊው ነገር ስላለው።</string>
+
+    <string name="app_description">ይህ መተግበሪያ ከ1ኛ እስከ 12ኛ ክፍል ያሉትን ሁሉንም የፅሁፍ መፅሃፍት ይሸፍናል።ይህ መተግበሪያ ኢንተርኔት ለሌላቸው ተማሪዎች ይጠቅማል፣ከመስመር ውጭ የሚሰራ እና ሙሉ ባህሪያትን የያዘ አንድ ጊዜ ብቻ ያውርዳል። </string>
+    <string name="about">ስለ</string>
+    <string name="menu_share">ለጓደኛ ይንገሩ (አገናኝ)</string>
+    <string name="action_rate">ደረጃ ስጥልን (5 ኮከብ)</string>
+    <string name="action_store">ሌሎች መተግበሪያዎች</string>
+    <string name= "exit">ውጣ</string>
+    <string name= "pls_wait">\n\nቴሌግራም:-@ethio_textbooks</string>
+    <string name="menu_g12">12ኛ ክፍል</string>
+    <string name="menu_g11">11ኛ ክፍል</string>
+    <string name="menu_g10">10ኛ ክፍል</string>
+    <string name="menu_g9">9ኛ ክፍል</string>
+    <string name="menu_g8">8ኛ ክፍል</string>
+    <string name="menu_g7">7ኛ ክፍል</string>
+    <string name="menu_g6">6ኛ ክፍል</string>
+    <string name="menu_g5">5ኛ ክፍል</string>
+    <string name="menu_g12t">የ12ኛ ክፍል መምህራን መመሪያ</string>
+    <string name="menu_g11t">የ11ኛ ክፍል መምህራን መመሪያ</string>
+    <string name="menu_g10t">የ10ኛ ክፍል መምህራን መመሪያ</string>
+    <string name="menu_g9t">የ9ኛ ክፍል መምህራን መመሪያ</string>
+    <string name="menu_g8t">የ8ኛ ክፍል መምህራን መመሪያ</string>
+    <string name="menu_g7t">የ7ኛ ክፍል መምህራን መመሪያ</string>
+    <string name="menu_g4">4ኛ ክፍል</string>
+    <string name="menu_g3">3ኛ ክፍል</string>
+    <string name="menu_g2">2ኛ ክፍል</string>
+    <string name="menu_g1">1ኛ ክፍል</string>
+    <string name="others">ሌሎች</string>
+    <string name="cancel_phone">ለጊዜው መሸለም አልፈለጉም። መሸለም ከፈለጉ ድጋሚ ማንበብ ማንበብ</string>
+    <string name="insert_phone">አስገባ</string>
+    <string name="insert_phone_eg">የሚሸለሙበትን የኢትዮጵያ ስልክ ቁጥር አስገዳጅ (ለምሳሌ፡- 0923481783)</string>
+    <string name="ok">እሺ</string>
+    <string name= "menu_ad_free">ዋና ተጠቃሚ</string>
+    <string name="action_delete_subject">አሃዶችን ሰርዝ</string>
+    <string name="Delete">ሰርዝ</string>
+    <string name="yes">አዎ</string>
+    <string name= "menu_questions">የስራ ሉህ</string>
+    <string name= "questions_intro">ለሁሉም ክፍሎች የአካል ብቃት እንቅስቃሴ ጥያቄዎችን እስክንጨርስ ታገሱ።\in\Telegram @ethio_textbooks 0923481783</string>
+    <string name= "start_questionnaire" > መልመጃውን ጀምር</string>
+    <string name= "show_result">ውጤትን አሳይ</string>
+    <string name="about_short">*ነጻ* መተግበሪያዎች ከDataScience P.L.C.\nኢሜል፡ apps@datascienceplc.com</string>
+    <string name="test_exam">የአካል ብቃት እንቅስቃሴ ጥያቄዎች</string>
+    <string name="answer">መልሶች</string>
+    <string name="previous">የቀደመው</string>
+    <string name="finish">ጨርስ</string>
+    <string name="next">ቀጣይ</string>
+    <string name="show_answer">መልሱን እዚያ አሳይ</string>
+    <string name= "open_shortnote">ክፍት ማስታወሻ</string>
+
+    <string name="app_restart">ጥያቄዎችን ለመለማመድ ይህ የመጀመሪያ ጊዜዎ ነው። እባክህ ኢንተርኔት እንዳለህ አረጋግጥ እና \"እንደገና ሞክር" የሚለውን ተጫን።</string>
+    <string name="thanks_for_activated">እናመሰግናለን! እባክዎ መተግበሪያውን እንደገና ያስጀምሩት።</string>
+    <string name= "wrong_code" > የተሳሳተ ወይም ጊዜው ያለፈበት ኮድ ተጠቅመሃል።</string>
+    <string name="check_your_internet">እባክዎ ኢንተርኔት እንዳለዎት ያረጋግጡ ወይም ቆይተው እንደገና ይሞክሩ።</string>
+    <string name="premium_intro">እንደ ፕሪሚየም ተጠቃሚ ከተመዘገቡ የጎግል ማስታወቂያዎችን አያዩም። ለበለጠ መረጃ እዚህ ይጫኑ።\n\nTelegram @ethio_textbooks 0923481783</string>
+    <string name="try_again">እንደገና ይሞክሩ</string>
+    <string name="loading">በመጫን ላይ...</string>
+    <string name="your_name">የእርስዎ ስም</string>
+    <string name="phone">ስልክ ቁጥር</string>
+    <string name="code">ኮድ</string>
+    <string name="active">አግብር</string>
+    <string name="your_license_type">ዓይነት፡ </string>
+    <string name="paid_date">የሚከፈልበት ቀን: </string>
+    <string name="out_date">የሚያበቃበት ቀን: </string>
+    <string name="license_out_dated">የእርስዎ ልዩ መብት ጊዜ አልፎበታል! እባክዎ ይክፈሉ</string>
+    <string name="license_not_out_dated">መተግበሪያውን ከስልክዎ ላይ ከሰረዙት መብቱ የሚሰራ አይሆንም።\nለደንበኝነት ስለተመዘገቡ እናመሰግናለን።</string>
+    <string name="not_registed">እንደ ፕሪሚየም ተጠቃሚ አልተመዘገቡም። እባክዎ ይመዝገቡ።</string>
+    <string name="fill_the_form">እባክዎ ከላይ ያለውን አስቀድመው ይሙሉ።</string>
+    <string name="you_can_download_again">በማንኛውም ጊዜ እንደገና ማውረድ ይችላሉ :)</string>
+    <string name="menu_ad_reward">ሽልማት</string>
+    <string name= "startReward" > ጀምር ሽልማት</string>
+    <string name="reward_intro">ክፍያ ለማዘዝ እዚህ ጠቅ ያድርጉ .... mnamn</string>
+    <string name="college_books">የኮሌጅ መጽሐፍት (የመተግበሪያ አገናኝ)</string>
+    <string name="add_books">መጽሐፍ ስቀል</string>
+
+    <string name="no_network_title">ምንም አውታረ መረብ የለም</string>
+    <string name="no_network_message">በዚህ መሳሪያ ላይ ያለውን የአውታረ መረብ ግንኙነት ማግኘት አንችልም። እባክህ የተንቀሳቃሽ ስልክህን ወይም ዋይ ፋይህን ተመልከት እና እንደገና ሞክር።</string>
+    <string name="go_to_settings">ወደ ቅንብሮች ሂድ</string>
+    <string name= "all_new_curriculum_books">ሁሉም አዲስ ሥርዓተ ትምህርት መጻሕፍት</string>
+    <string name="my_new_curriculum_books">የእኔ አዲስ ሥርዓተ ትምህርት መጽሐፍት</string>
+    <string name="load_more_text">ተጨማሪ አስተያየቶችን ጫን</string>
+    <string name= "settings_title">ቅንብሮች</string>
+    <string name="save_button_text">አስቀምጥ</string>
+    <string name="select_language_prompt">ቋንቋ ምረጥ፦</string>
+
+    <string name="restart_the_app">እባክዎ መተግበሪያውን እንደገና ያስጀምሩት!</string>
+    <string name="skip">ዝለል</string>
+    
+</resources>

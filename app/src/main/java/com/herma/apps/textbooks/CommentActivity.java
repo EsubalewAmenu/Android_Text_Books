@@ -74,7 +74,7 @@ public class CommentActivity extends AppCompatActivity {
 
     private boolean isLoading = false;
     private int currentPage = 1;
-    private int commentsPerPage = 3;
+    private int commentsPerPage = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
