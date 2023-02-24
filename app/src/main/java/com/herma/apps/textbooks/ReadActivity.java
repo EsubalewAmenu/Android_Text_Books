@@ -146,29 +146,29 @@ public class ReadActivity extends AppCompatActivity {
                                         });
 
 
-//                                        InterstitialAd.load(getApplicationContext(), getString(R.string.adReaderInt), adRequest, new InterstitialAdLoadCallback() {
-//                                            @Override
-//                                            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-//                                                // The mInterstitialAd reference will be null until
-//                                                // an ad is loaded.
-//
-////                                            System.out.println("request seconds remaining: isTheirReward");
-//
-//                                                SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-//                                                storedPhone = sharedPref.getString("storedPhone", "0");
-//
-////                                                isThereReward();
-//
-//                                                mInterstitialAd = interstitialAd;
-//                                                mInterstitialAd.show(ReadActivity.this);
-//                                            }
-//
-//                                            @Override
-//                                            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-//                                                // Handle the error
-//                                                mInterstitialAd = null;
-//                                            }
-//                                        });
+                                        InterstitialAd.load(getApplicationContext(), getString(R.string.adReaderInt), adRequest, new InterstitialAdLoadCallback() {
+                                            @Override
+                                            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                                                // The mInterstitialAd reference will be null until
+                                                // an ad is loaded.
+
+//                                            System.out.println("request seconds remaining: isTheirReward");
+
+                                                SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+                                                storedPhone = sharedPref.getString("storedPhone", "0");
+
+//                                                isThereReward();
+
+                                                mInterstitialAd = interstitialAd;
+                                                mInterstitialAd.show(ReadActivity.this);
+                                            }
+
+                                            @Override
+                                            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                                                // Handle the error
+                                                mInterstitialAd = null;
+                                            }
+                                        });
 
 
                                     } else {
