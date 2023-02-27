@@ -9,8 +9,8 @@ android {
         applicationId "com.herma.apps.textbooks"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 58
-        versionName "3.4.1"
+        versionCode 59
+        versionName "3.4.2"
         multiDexEnabled true
 
         ndk {
@@ -62,6 +62,6 @@ dependencies {
     implementation 'com.android.volley:volley:1.2.1'
 
 // added for comment activity
-    implementation 'de.hdodenhof:circleimageview:3.1.0'
+//    implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
 }
