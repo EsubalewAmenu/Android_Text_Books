@@ -123,7 +123,7 @@ ProgressDialog progressBar;
             fileName = "Sh " + grade + " " + subject + " " + chapterName;
         }
         if(message==1234)
-            text.setText(context.getResources().getString(R.string.no_file) + context.getResources().getString(R.string.no_file_desc_pre)+fileName+context.getResources().getString(R.string.no_file_desc_pos));
+            text.setText(context.getResources().getString(R.string.no_file) + context.getResources().getString(R.string.no_file_desc_pre)+context.getResources().getString(R.string.no_file_desc_pos));
         else
             text.setText(context.getResources().getString(message));
 

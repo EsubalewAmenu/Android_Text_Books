@@ -4,6 +4,6 @@ xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://sch
 
     <item
         android:id="@+id/action_add_comment"
-        android:title="Click to post"
+        android:title="@string/click_to_post"
         app:showAsAction="always"/>
 </menu>

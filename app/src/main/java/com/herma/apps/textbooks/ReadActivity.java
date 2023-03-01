@@ -267,7 +267,7 @@ public void commentRelateds(){
                                              commentIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
                                              startActivity(commentIntent);
                                              }else{
-                                                 Toast.makeText(ReadActivity.this, "You should sign in first!", Toast.LENGTH_SHORT).show();
+                                                 Toast.makeText(ReadActivity.this, getString(R.string.sign_in_first), Toast.LENGTH_SHORT).show();
 
                                              }
                                          }
@@ -277,61 +277,61 @@ public void commentRelateds(){
     // below is the sample action to handle add alarm FAB. Here it shows simple Toast msg
     // The Toast will be shown only when they are visible and only when user clicks on them
     mAddAlarmFab.setOnClickListener(
-            view -> Toast.makeText(ReadActivity.this, "Chapter based Quiz - Coming soon!", Toast.LENGTH_SHORT
+            view -> Toast.makeText(ReadActivity.this, R.string.coming_soon, Toast.LENGTH_SHORT
             ).show());
 }
-    private void requestPhoneNumber() {
-
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(ReadActivity.this);
-        builder.setTitle(R.string.insert_phone_eg);
-
-// Set up the input
-        final EditText input = new EditText(getApplicationContext());
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.setInputType(InputType.TYPE_CLASS_PHONE);
-
-        input.setText(storedPhone);
-
-        builder.setView(input);
-
-// Set up the buttons
-        builder.setPositiveButton(R.string.insert_phone, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-//                        m_Text = input.getText().toString();
-
-//                if ((input.getText().toString()).matches("^(09|07)\\d{8}$")) {
-                if ((input.getText().toString()).matches("^(09)\\d{8}$")) {
-//                    btnGiftReward.setVisibility(View.INVISIBLE);
-                    endReward(input.getText().toString());
-
-                    ////////////
-                    SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString("storedPhone", input.getText().toString());
-                    editor.apply();
-                    //////////////
-                } else requestPhoneNumber();
-
-//                System.out.println("inserted phone is " + input.getText().toString());
-
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-
-//                btnGiftReward.setVisibility(View.INVISIBLE);
-                Toast.makeText(ReadActivity.this, R.string.cancel_phone, Toast.LENGTH_LONG).show();
-
-            }
-        });
-
-        builder.show();
-
-    }
+//    private void requestPhoneNumber() {
+//
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(ReadActivity.this);
+//        builder.setTitle(R.string.insert_phone_eg);
+//
+//// Set up the input
+//        final EditText input = new EditText(getApplicationContext());
+//// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+//        input.setInputType(InputType.TYPE_CLASS_PHONE);
+//
+//        input.setText(storedPhone);
+//
+//        builder.setView(input);
+//
+//// Set up the buttons
+//        builder.setPositiveButton(R.string.insert_phone, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+////                        m_Text = input.getText().toString();
+//
+////                if ((input.getText().toString()).matches("^(09|07)\\d{8}$")) {
+//                if ((input.getText().toString()).matches("^(09)\\d{8}$")) {
+////                    btnGiftReward.setVisibility(View.INVISIBLE);
+//                    endReward(input.getText().toString());
+//
+//                    ////////////
+//                    SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+//                    SharedPreferences.Editor editor = sharedPref.edit();
+//                    editor.putString("storedPhone", input.getText().toString());
+//                    editor.apply();
+//                    //////////////
+//                } else requestPhoneNumber();
+//
+////                System.out.println("inserted phone is " + input.getText().toString());
+//
+//            }
+//        });
+//        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.cancel();
+//
+////                btnGiftReward.setVisibility(View.INVISIBLE);
+//                Toast.makeText(ReadActivity.this, R.string.cancel_phone, Toast.LENGTH_LONG).show();
+//
+//            }
+//        });
+//
+//        builder.show();
+//
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

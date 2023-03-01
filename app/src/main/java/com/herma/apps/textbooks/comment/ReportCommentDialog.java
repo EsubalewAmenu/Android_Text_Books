@@ -57,10 +57,10 @@ public class ReportCommentDialog {
             final EditText reasonEditText = new EditText(context);
 
             new AlertDialog.Builder(context)
-                    .setTitle("Report Comment")
-                    .setMessage("Please enter the reason for reporting this comment:")
+                    .setTitle(R.string.report_comment)
+                    .setMessage(R.string.report_reason)
                     .setView(reasonEditText)
-                    .setPositiveButton("Report", (dialog, which) -> {
+                    .setPositiveButton(R.string.report, (dialog, which) -> {
                         String reason = reasonEditText.getText().toString();
 //                        ReportCommentTask task = new ReportCommentTask();
 //                        task.execute(commentId, reason);
@@ -72,7 +72,7 @@ public class ReportCommentDialog {
                         }
 
                     })
-                    .setNegativeButton("Cancel", null)
+                    .setNegativeButton(R.string.cancel, null)
                     .show();
         }
     }
@@ -101,14 +101,14 @@ public class ReportCommentDialog {
 //                        System.out.println("post comment response is ");
 //                        System.out.println(response);
 
-                            Toast.makeText(context, "Thank you for reporting! We'll review the comment", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, context.getString(R.string.thanks_for_reporting), Toast.LENGTH_LONG).show();
                     }
 
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 try{
-                        Toast.makeText(context, "Connection Error. Please check your mobile data or Wi-Fi and try again.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, context.getString(R.string.connection_error), Toast.LENGTH_LONG).show();
                 }catch (Exception j){}
             }
 

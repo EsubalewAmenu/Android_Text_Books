@@ -94,7 +94,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             commentViewHolder.tvTimestamp.setText(comment.getTimestamp());
             commentViewHolder.btnLike.setText(comment.getLike()+"");
             commentViewHolder.btnDislike.setText(comment.getDislike()+"");
-            commentViewHolder.btn_more.setText("See " + comment.getChildCommentCount() + " replies");
+            commentViewHolder.btn_more.setText(context.getString(R.string.see) + comment.getChildCommentCount() + context.getString(R.string.replies));
 
         if(comment.getChildCommentCount() > 0 )
             commentViewHolder.btn_more.setVisibility(View.VISIBLE);
@@ -158,7 +158,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 dialogBuilder.setView(dialogView);
 
                 // Add the OK and Cancel buttons
-                dialogBuilder.setPositiveButton("Post", new DialogInterface.OnClickListener() {
+                dialogBuilder.setPositiveButton(R.string.post, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // Get the input value and do something with it
@@ -173,7 +173,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         }
                     }
                 });
-                dialogBuilder.setNegativeButton("Cancel", null);
+                dialogBuilder.setNegativeButton(R.string.cancel, null);
 
                 // Show the dialog box
                 dialogBuilder.show();
@@ -324,7 +324,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         loadMoreViewHolder.btnLoadMore.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
         loadMoreViewHolder.btnLoadMore.setTextColor(ContextCompat.getColor(context, R.color.cardview_dark_background));
-        loadMoreViewHolder.btnLoadMore.setText("End of replies");
+        loadMoreViewHolder.btnLoadMore.setText(R.string.end_of_replies);
         loadMoreViewHolder.btnLoadMore.setEnabled(false);
         loadMoreViewHolder.btnLoadMore.setVisibility(View.VISIBLE);
     }
@@ -347,7 +347,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         loadMoreViewHolder.btnLoadMore.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
         loadMoreViewHolder.btnLoadMore.setTextColor(ContextCompat.getColor(context, R.color.cardview_dark_background));
-        loadMoreViewHolder.btnLoadMore.setText("End of comments");
+        loadMoreViewHolder.btnLoadMore.setText(R.string.end_of_comments);
         loadMoreViewHolder.btnLoadMore.setEnabled(false);
 
         notifyDataSetChanged();
@@ -464,7 +464,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             replyAdapter = new CommentAdapter(replyList, context, chapter, new LoadMoreListener() {
                                 @Override
                                 public void onLoadMore() {
-                                    System.out.println("on load more on child adapter 2");
+//                                    System.out.println("on load more on child adapter 2");
                                     if (!isLoading) {
                                         isLoading = true;
                                         replyAdapter.setLoading(true);
