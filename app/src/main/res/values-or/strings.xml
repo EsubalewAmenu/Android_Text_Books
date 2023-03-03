@@ -116,7 +116,7 @@
     <string name="thanks_for_reporting">Waan gabaasuu keessaniif galatoomaa! Yaada</string>n kenname ni gamaaggamna
     <string name="connection_error">Dogongora Walqabsiisaa. Mee daataa moobaayilaa ykn Wi-Fi keessan ilaalaa irra deebi\'aa yaalaa.</string>
     <string name="connection_timeout">Interneetii suuta jechuu!</string>
-    <string name="no_comments_yet">Ammatti yaada hin kennine.\nYaada keessan kan jalqabaa ta'aa.</string>
+    <string name="no_comments_yet">Ammatti yaada hin kennine.\nYaada keessan kan jalqabaa ta\'aa.</string>
 
 
 </resources>

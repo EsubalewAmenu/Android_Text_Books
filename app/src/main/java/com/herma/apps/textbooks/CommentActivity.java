@@ -451,8 +451,9 @@ public class CommentActivity extends AppCompatActivity {
                     tv_no_comment.setVisibility(View.VISIBLE);
                     retry_button.setVisibility(View.GONE);
                 }else if((datas.length() == 0 && page > 1) || datas.length() < commentsPerPage ) {
-                    System.out.println("There is no additional comment");
                     commentAdapter.setNoMoreComment();
+                    tv_no_comment.setVisibility(View.GONE);
+                    retry_button.setVisibility(View.GONE);
                 }else{
                     tv_no_comment.setVisibility(View.GONE);
                     retry_button.setVisibility(View.GONE);
