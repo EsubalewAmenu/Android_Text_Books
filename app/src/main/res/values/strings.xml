@@ -147,5 +147,7 @@
     <string name="report">Report</string>
     <string name="thanks_for_reporting">Thank you for reporting! We\'ll review the comment</string>
     <string name="connection_error">Connection Error. Please check your mobile data or Wi-Fi and try again.</string>
+    <string name="connection_timeout">Connection Timeout!</string>
+    <string name="no_comments_yet">No comments yet.\nBe the first one to share your thoughts.</string>
 
 </resources>

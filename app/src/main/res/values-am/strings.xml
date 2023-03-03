@@ -99,10 +99,10 @@
 
     <string name="coming_soon">በምዕራፍ ላይ የተመሰረተ ጥያቄ - በቅርቡ ይመጣል!</string>
     <string name="sign_in_first">መጀመሪያ መግባት አለብህ!</string>
-    <string name="loading_comments">አስተያየቶችን በመጫን ላይ...</string>
+    <string name="loading_comments">አስተያየቶች በማምጣት ላይ...</string>
     <string name="click_here_to_retry">እንደገና ለመሞከር እዚህ ጠቅ ያድርጉ</string>
     <string name="comments">አስተያየቶች</string>
-    <string name="quiz_on_this_unit">በዚህ ክፍል ላይ ጥያቄዎች</string>
+    <string name="quiz_on_this_unit">በዚህ ምዕራፍ ላይ ጥያቄዎች</string>
     <string name="click_to_post">ለመለጠፍ ጠቅ ያድርጉ</string>
     <string name="see">" </string> ተመልከት
     <string name= "replies">" ምላሾች"</string>
@@ -114,5 +114,7 @@
     <string name="report">ሪፖርት አድርግ</string>
     <string name="thanks_for_reporting">ሪፖርት ስላደረጉ እናመሰግናለን! አስተያየቱን እንገመግመዋለን</string>
     <string name="connection_error">የግንኙነት ስህተት። እባክህ የተንቀሳቃሽ ስልክህን ወይም ዋይ ፋይህን ተመልከት እና እንደገና ሞክር።</string>
+    <string name="connection_timeout">ቀርፋፋ የበይነመረብ ግንኙነት!</string>
+    <string name="no_comments_yet">እስካሁን ምንም አስተያየት የለም።\nአስተያየት ለማካፈል የመጀመሪያ ይሁኑ።</string>
 
 </resources>

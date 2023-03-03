@@ -365,7 +365,7 @@ public class CommentActivity extends AppCompatActivity {
 
                     if (!isOnline()) {
                         showNetworkDialog();
-                        tv_no_comment.setText("No network available. Please check your connection settings or ");
+                        tv_no_comment.setText(getString(R.string.no_network_message));
                         tv_no_comment.setVisibility(View.VISIBLE);
                         retry_button.setVisibility(View.VISIBLE);
 
@@ -382,11 +382,11 @@ public class CommentActivity extends AppCompatActivity {
 
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "Connection Timeout!",
+                        Toast.makeText(getApplicationContext(), getString(R.string.connection_timeout),
                                 Toast.LENGTH_LONG).show();
                         System.out.println("Error on sys:"+error);
 
-                        tv_no_comment.setText("Connection Timeout!");
+                        tv_no_comment.setText(R.string.connection_timeout);
                         tv_no_comment.setVisibility(View.VISIBLE);
                         retry_button.setVisibility(View.VISIBLE);
 
@@ -447,7 +447,7 @@ public class CommentActivity extends AppCompatActivity {
                 JSONArray datas = new JSONArray(response);
 
                 if(datas.length() == 0 && page == 1){
-                    tv_no_comment.setText("No comments yet.\nBe the first one to share your thoughts.");
+                    tv_no_comment.setText(R.string.no_comments_yet);
                     tv_no_comment.setVisibility(View.VISIBLE);
                     retry_button.setVisibility(View.GONE);
                 }else if((datas.length() == 0 && page > 1) || datas.length() < commentsPerPage ) {

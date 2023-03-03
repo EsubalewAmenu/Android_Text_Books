@@ -557,11 +557,12 @@ public class MainActivity extends AppCompatActivity
 //            pre.edit().putString("choosedGradeT", "Worksheet").apply();
 
         }else if (id == R.id.nav_share) {
-                Intent intent4 = new Intent("android.intent.action.SEND");
-                intent4.setType("text/plain");
-                intent4.putExtra("android.intent.extra.TEXT", getString(R.string.share_link_pre) + " " + getString(R.string.app_name) + " " + getString(R.string.share_link_center) + " " + "https://play.google.com/store/apps/details?id="+getPackageName() + " "+ getString(R.string.share_link_pos));
-                startActivity(Intent.createChooser(intent4, "SHARE VIA"));
-
+            Intent intent4 = new Intent("android.intent.action.SEND");
+            intent4.setType("text/plain");
+            intent4.putExtra("android.intent.extra.TEXT", getString(R.string.share_link_pre) + " " + getString(R.string.app_name) + " " + getString(R.string.share_link_center) + " " + "https://play.google.com/store/apps/details?id=" + getPackageName() + " " + getString(R.string.share_link_pos));
+            startActivity(Intent.createChooser(intent4, "SHARE VIA"));
+        }else if(id == R.id.action_settings){
+            startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
         } else if (id == R.id.nav_ad_free) {
 
 //            Fragmentbundle = new Bundle();
