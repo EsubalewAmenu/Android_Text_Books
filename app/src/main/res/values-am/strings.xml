@@ -116,5 +116,6 @@
     <string name="connection_error">የግንኙነት ስህተት። እባክህ የተንቀሳቃሽ ስልክህን ወይም ዋይ ፋይህን ተመልከት እና እንደገና ሞክር።</string>
     <string name="connection_timeout">ቀርፋፋ የበይነመረብ ግንኙነት!</string>
     <string name="no_comments_yet">እስካሁን ምንም አስተያየት የለም።\nአስተያየት ለማካፈል የመጀመሪያ ይሁኑ።</string>
+    <string name="write_your_comment">አስተያየትዎን ይፃፉ….</string>
 
 </resources>

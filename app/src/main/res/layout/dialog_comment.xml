@@ -7,7 +7,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Write your feedback/comment/suggestion....">
+        android:hint="@string/write_your_comment">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/ti_message"

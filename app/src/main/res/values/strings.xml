@@ -149,5 +149,6 @@
     <string name="connection_error">Connection Error. Please check your mobile data or Wi-Fi and try again.</string>
     <string name="connection_timeout">Connection Timeout!</string>
     <string name="no_comments_yet">No comments yet.\nBe the first one to share your thoughts.</string>
+    <string name="write_your_comment">Write your feedback/comment/suggestion....</string>
 
 </resources>
