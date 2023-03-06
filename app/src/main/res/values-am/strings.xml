@@ -9,7 +9,7 @@
     <string name="cancel">ሰርዝ</string>
     <string name="no_file">ፋይል አልተገኘም።</string>
     <string name="no_file_desc_pre"> አውርድ </string>
-    ይህንን ክፍል ለማንበብ <string name="no_file_desc_pos"></string>
+    <string name="no_file_desc_pos">ይህንን ክፍል ለማንበብ </string>
     <string name="try_later">"አይ/ቀርፋፋ የበይነመረብ ግንኙነት! እባክህ ቆይተህ ሞክር"</string>
     <string name="share_link_pre">ሄይ!  </string>
     <string name="share_link_center">መተግበሪያ አውርደሃል? መተግበሪያውን እዚህ ያውርዱት </string>
@@ -81,7 +81,7 @@
     <string name="you_can_download_again">በማንኛውም ጊዜ እንደገና ማውረድ ይችላሉ :)</string>
     <string name="menu_ad_reward">ሽልማት</string>
 
-    <string name= "startReward" > ጀምር ሽልማት</string>
+    <string name= "startReward" > ሽልማት ጀምር </string>
     <string name="reward_intro">ክፍያ ለማዘዝ እዚህ ጠቅ ያድርጉ .... mnamn</string>
     <string name="college_books">የኮሌጅ መጽሐፍት (የመተግበሪያ አገናኝ)</string>
     <string name="add_books">መጽሐፍ ስቀል</string>

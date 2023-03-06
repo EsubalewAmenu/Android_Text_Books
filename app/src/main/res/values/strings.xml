@@ -138,8 +138,8 @@
     <string name="comments">Comments</string>
     <string name="quiz_on_this_unit">Quiz on this unit</string>
     <string name="click_to_post">Click to post</string>
-    <string name="see">"See "</string>
-    <string name="replies">" replies"</string>
+    <string name="see">See</string>
+    <string name="replies"> replies</string>
     <string name="post">Post</string>
     <string name="end_of_replies">End of replies</string>
     <string name="end_of_comments">End of comments</string>
