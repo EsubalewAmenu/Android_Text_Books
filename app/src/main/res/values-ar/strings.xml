@@ -82,7 +82,7 @@
     <string name="menu_ad_reward"> مكافأة </string>
 
     <string name="startReward"> StartReward </string>
-    <string name="Rew_intro"> انقر هنا لطلب الدفع .... mnamn </string>
+    <string name="reward_intro"> انقر هنا لطلب الدفع .... mnamn </string>
     <string name="college_books"> كتب الكلية (رابط التطبيق) </string>
     <string name="add_books"> تحميل كتاب </string>
     <string name="no_network_title"> لا توجد شبكة متاحة </string>

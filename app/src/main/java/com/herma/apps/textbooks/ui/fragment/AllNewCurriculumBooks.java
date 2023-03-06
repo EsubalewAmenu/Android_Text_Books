@@ -147,18 +147,30 @@ public class AllNewCurriculumBooks extends Fragment implements SwipeRefreshLayou
                 gradeRecyclerViewLayoutManager);
         // Adding items to RecyclerView.
         ArrayList<GradeItem> source = new ArrayList<GradeItem>();
-        source.add(new GradeItem(12,getString(R.string.menu_g12)));
-        source.add(new GradeItem(11,getString(R.string.menu_g11)));
-        source.add(new GradeItem(10,getString(R.string.menu_g10)));
-        source.add(new GradeItem(9,getString(R.string.menu_g9)));
-        source.add(new GradeItem(8,getString(R.string.menu_g8)));
-        source.add(new GradeItem(7,getString(R.string.menu_g7)));
-        source.add(new GradeItem(6,getString(R.string.menu_g6)));
-        source.add(new GradeItem(5,getString(R.string.menu_g5)));
-        source.add(new GradeItem(4,getString(R.string.menu_g4)));
-        source.add(new GradeItem(3,getString(R.string.menu_g3)));
-        source.add(new GradeItem(2,getString(R.string.menu_g2)));
-        source.add(new GradeItem(1,getString(R.string.menu_g1)));
+        source.add(new GradeItem(12,"Grade 12"));
+        source.add(new GradeItem(11,"Grade 11"));
+        source.add(new GradeItem(10,"Grade 10"));
+        source.add(new GradeItem(9,"Grade 9"));
+        source.add(new GradeItem(8,"Grade 8"));
+        source.add(new GradeItem(7,"Grade 7"));
+        source.add(new GradeItem(6,"Grade 6"));
+        source.add(new GradeItem(5,"Grade 5"));
+        source.add(new GradeItem(4,"Grade 4"));
+        source.add(new GradeItem(3,"Grade 3"));
+        source.add(new GradeItem(2,"Grade 2"));
+        source.add(new GradeItem(1,"Grade 1"));
+//        source.add(new GradeItem(12,getString(R.string.menu_g12)));
+//        source.add(new GradeItem(11,getString(R.string.menu_g11)));
+//        source.add(new GradeItem(10,getString(R.string.menu_g10)));
+//        source.add(new GradeItem(9,getString(R.string.menu_g9)));
+//        source.add(new GradeItem(8,getString(R.string.menu_g8)));
+//        source.add(new GradeItem(7,getString(R.string.menu_g7)));
+//        source.add(new GradeItem(6,getString(R.string.menu_g6)));
+//        source.add(new GradeItem(5,getString(R.string.menu_g5)));
+//        source.add(new GradeItem(4,getString(R.string.menu_g4)));
+//        source.add(new GradeItem(3,getString(R.string.menu_g3)));
+//        source.add(new GradeItem(2,getString(R.string.menu_g2)));
+//        source.add(new GradeItem(1,getString(R.string.menu_g1)));
 
         adapterGrade = new GradeAdapter(source, new GradeAdapter.OnGradeItemListener() {
             @Override
