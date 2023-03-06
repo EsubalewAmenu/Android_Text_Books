@@ -29,6 +29,7 @@
     <string name="lang_en" translatable="false">English</string>
     <string name="lang_am" translatable="false">\u12a0\u121b\u122d\u129b</string>
     <string name="lang_or" translatable="false">Afaan Oromo</string>
+    <string name="lang_ar" translatable="false">\u0639\u0631\u0628\u064A</string>
 
     <string name="nav_header_subtitle" translatable="false">apps@datascienceplc.com</string>
 

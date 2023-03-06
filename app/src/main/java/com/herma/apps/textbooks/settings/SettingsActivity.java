@@ -47,6 +47,8 @@ public class SettingsActivity extends AppCompatActivity {
             languageSpinner.setSelection(1);
         else if(languageCode.equals("or"))
             languageSpinner.setSelection(2);
+        else if(languageCode.equals("ar"))
+            languageSpinner.setSelection(3);
 
 
         // Save language settings when the user clicks the save button
@@ -61,6 +63,8 @@ public class SettingsActivity extends AppCompatActivity {
                     languageCode = "am";
                 else if(language == getString(R.string.lang_or))
                     languageCode = "or";
+                else if(language == getString(R.string.lang_ar))
+                    languageCode = "ar";
 
                 LanguageHelper.setLanguage(getApplicationContext(), languageCode);
                 LanguageHelper.updateLanguage(SettingsActivity.this);
