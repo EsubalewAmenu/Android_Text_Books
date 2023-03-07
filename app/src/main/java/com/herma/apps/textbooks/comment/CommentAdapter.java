@@ -93,7 +93,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             commentViewHolder.tvAuthor.setText(comment.getAuthor());
             commentViewHolder.tvTimestamp.setText(comment.getTimestamp());
             commentViewHolder.btnLike.setText(comment.getLike()+"");
-            commentViewHolder.btnDislike.setText(comment.getDislike()+"");
+//            commentViewHolder.btnDislike.setText(comment.getDislike()+"");
             commentViewHolder.btn_more.setText(context.getString(R.string.see) + comment.getChildCommentCount() + context.getString(R.string.replies));
 
         if(comment.getChildCommentCount() > 0 )
@@ -195,8 +195,8 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                     if(commentViewHolder.btnDislike.getCompoundDrawables()[0] == finalActiveDislikeDrawable){
                         commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(finalNormalDislikeDrawable, null, null, null);
-                        comment.setDislike(comment.getDislike()-1);
-                        commentViewHolder.btnDislike.setText(comment.getDislike()+"");
+//                        comment.setDislike(comment.getDislike()-1);
+//                        commentViewHolder.btnDislike.setText(comment.getDislike()+"");
                     }
 
                     try {
@@ -259,7 +259,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                 }
 
-                commentViewHolder.btnDislike.setText(comment.getDislike()+"");
+//                commentViewHolder.btnDislike.setText(comment.getDislike()+"");
 
             }
         });

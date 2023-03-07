@@ -63,10 +63,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="69"
             android:drawableStart="@drawable/ic_dislike"
             style="@style/TextButtonStyle"
             />
+        <!--            android:text="69"-->
         <Button
             android:id="@+id/btn_reply"
             android:layout_width="0dp"
