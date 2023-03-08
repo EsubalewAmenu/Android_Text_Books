@@ -2,8 +2,13 @@ package com.herma.apps.textbooks.comment;
 
 import android.widget.Button;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
 
 public class Comment {
     private int commentId;
@@ -120,7 +125,11 @@ public class Comment {
     }
 
     public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
+        try {
+            this.timestamp = getTimeAgo(timestamp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public List<Comment> getReplies() {
@@ -130,4 +139,43 @@ public class Comment {
     public void addReply(Comment reply) {
         this.replies.add(reply);
     }
+
+    public static String getTimeAgo(String timeString) throws Exception {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date timeUtc0 = dateFormat.parse(timeString);
+
+        // Convert UTC 0 date to UTC 3
+        TimeZone timeZoneUtc3 = TimeZone.getTimeZone("UTC+3");
+        dateFormat.setTimeZone(timeZoneUtc3);
+        Date timeUtc3 = dateFormat.parse(dateFormat.format(timeUtc0));
+
+        long timeDifference = (new Date().getTime() - timeUtc3.getTime()) / 1000;
+
+        if (timeDifference < 1) {
+            return "less than 1 second ago";
+        }
+
+        Map<Long, String> conditions = new LinkedHashMap<>();
+        conditions.put(12 * 30 * 24 * 60 * 60L, "year");
+        conditions.put(30 * 24 * 60 * 60L, "mon");
+        conditions.put(24 * 60 * 60L, "day");
+        conditions.put(60 * 60L, "hr");
+        conditions.put(60L, "min");
+        conditions.put(1L, "sec");
+
+        for (Map.Entry<Long, String> entry : conditions.entrySet()) {
+            long secs = entry.getKey();
+            String str = entry.getValue();
+
+            if (timeDifference >= secs) {
+                long t = Math.round((double) timeDifference / secs);
+                return t + " " + str + (t > 1 ? "s" : "") + " ago";
+            }
+        }
+
+        return "";
+    }
+
+
 }
