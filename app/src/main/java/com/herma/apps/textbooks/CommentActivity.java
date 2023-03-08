@@ -194,7 +194,7 @@ public class CommentActivity extends AppCompatActivity {
             dialogBuilder.setView(dialogView);
 
             // Add the OK and Cancel buttons
-            dialogBuilder.setPositiveButton("Post", new DialogInterface.OnClickListener() {
+            dialogBuilder.setPositiveButton(getString(R.string.post), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     // Get the input value and do something with it
@@ -210,7 +210,7 @@ public class CommentActivity extends AppCompatActivity {
 
                 }
             });
-            dialogBuilder.setNegativeButton("Cancel", null);
+            dialogBuilder.setNegativeButton(getString(R.string.cancel), null);
 
             // Show the dialog box
             dialogBuilder.show();
@@ -447,7 +447,7 @@ public class CommentActivity extends AppCompatActivity {
                 JSONArray datas = new JSONArray(response);
 
                 if(datas.length() == 0 && page == 1){
-                    tv_no_comment.setText(R.string.no_comments_yet);
+                    tv_no_comment.setText(getString(R.string.no_comments_yet));
                     tv_no_comment.setVisibility(View.VISIBLE);
                     retry_button.setVisibility(View.GONE);
                 }else if((datas.length() == 0 && page > 1) || datas.length() < commentsPerPage ) {

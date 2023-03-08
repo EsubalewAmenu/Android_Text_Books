@@ -158,7 +158,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 dialogBuilder.setView(dialogView);
 
                 // Add the OK and Cancel buttons
-                dialogBuilder.setPositiveButton(R.string.post, new DialogInterface.OnClickListener() {
+                dialogBuilder.setPositiveButton(context.getString(R.string.post), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // Get the input value and do something with it
@@ -173,7 +173,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         }
                     }
                 });
-                dialogBuilder.setNegativeButton(R.string.cancel, null);
+                dialogBuilder.setNegativeButton(context.getString(R.string.cancel), null);
 
                 // Show the dialog box
                 dialogBuilder.show();
@@ -324,7 +324,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         loadMoreViewHolder.btnLoadMore.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
         loadMoreViewHolder.btnLoadMore.setTextColor(ContextCompat.getColor(context, R.color.cardview_dark_background));
-        loadMoreViewHolder.btnLoadMore.setText(R.string.end_of_replies);
+        loadMoreViewHolder.btnLoadMore.setText(context.getString(R.string.end_of_replies));
         loadMoreViewHolder.btnLoadMore.setEnabled(false);
         loadMoreViewHolder.btnLoadMore.setVisibility(View.VISIBLE);
     }
@@ -347,7 +347,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         loadMoreViewHolder.btnLoadMore.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
         loadMoreViewHolder.btnLoadMore.setTextColor(ContextCompat.getColor(context, R.color.cardview_dark_background));
-        loadMoreViewHolder.btnLoadMore.setText(R.string.end_of_comments);
+        loadMoreViewHolder.btnLoadMore.setText(context.getString(R.string.end_of_comments));
         loadMoreViewHolder.btnLoadMore.setEnabled(false);
 
         notifyDataSetChanged();

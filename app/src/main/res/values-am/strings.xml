@@ -8,8 +8,8 @@
     <string name="download">አውርድ</string>
     <string name="cancel">ሰርዝ</string>
     <string name="no_file">ፋይል አልተገኘም።</string>
-    <string name="no_file_desc_pre"> አውርድ </string>
-    <string name="no_file_desc_pos">ይህንን ክፍል ለማንበብ </string>
+    <string name="no_file_desc_pre"> ይህንን ክፍል ለማንበብ  </string>
+    <string name="no_file_desc_pos"> በቅድሚያ አውርድ</string>
     <string name="try_later">"አይ/ቀርፋፋ የበይነመረብ ግንኙነት! እባክህ ቆይተህ ሞክር"</string>
     <string name="share_link_pre">ሄይ!  </string>
     <string name="share_link_center">መተግበሪያ አውርደሃል? መተግበሪያውን እዚህ ያውርዱት </string>
@@ -90,7 +90,7 @@
     <string name="go_to_settings">ወደ ቅንብሮች ሂድ</string>
     <string name= "all_new_curriculum_books">ሁሉም አዲስ ሥርዓተ ትምህርት መጻሕፍት</string>
     <string name="my_new_curriculum_books">የእኔ አዲስ ሥርዓተ ትምህርት መጽሐፍት</string>
-    <string name="load_more_text">ተጨማሪ አስተያየቶችን ጫን</string>
+    <string name="load_more_text">ተጨማሪ አስተያየቶችን አምጣ</string>
     <string name= "settings_title">ቅንብሮች</string>
     <string name="save_button_text">አስቀምጥ</string>
     <string name="select_language_prompt">ቋንቋ ምረጥ፦</string>
@@ -98,7 +98,7 @@
     <string name="skip">ዝለል</string>
 
     <string name="coming_soon">በምዕራፍ ላይ የተመሰረተ ጥያቄ - በቅርቡ ይመጣል!</string>
-    <string name="sign_in_first">መጀመሪያ መግባት አለብህ!</string>
+    <string name="sign_in_first">መጀመሪያ በጎግል መግባት አለብህ!</string>
     <string name="loading_comments">አስተያየቶች በማምጣት ላይ...</string>
     <string name="click_here_to_retry">እንደገና ለመሞከር እዚህ ጠቅ ያድርጉ</string>
     <string name="comments">አስተያየቶች</string>
@@ -106,7 +106,7 @@
     <string name="click_to_post">ለመለጠፍ ጠቅ ያድርጉ</string>
     <string name="see">" </string> ተመልከት
     <string name= "replies">" ምላሾች"</string>
-    <string name="post">መለጠፍ</string>
+    <string name="post">ለጥፍ</string>
     <string name="end_of_replies">የምላሾች መጨረሻ</string>
     <string name="end_of_comments">የአስተያየቶች መጨረሻ</string>
     <string name="report_comment">አስተያየት ሪፖርት አድርግ</string>
