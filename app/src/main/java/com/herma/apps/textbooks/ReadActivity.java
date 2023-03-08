@@ -82,10 +82,10 @@ public class ReadActivity extends AppCompatActivity {
     long reward_p_id, reward_minutes;
 
 
-    FloatingActionButton mAddFab, mAddAlarmFab, mAddPersonFab;
+    FloatingActionButton mAddFab, mAddQuizFab, mAddCommentFab;
 
     // These are taken to make visible and invisible along with FABs
-    TextView addAlarmActionText, addPersonActionText;
+    TextView addQuizActionText, addCommentActionText;
 
     // to check whether sub FAB buttons are visible or not.
     Boolean isAllFabsVisible;
@@ -205,18 +205,18 @@ public void commentRelateds(){
     mAddFab = findViewById(R.id.add_fab);
 
     // FAB button
-    mAddAlarmFab = findViewById(R.id.add_alarm_fab);
-    mAddPersonFab = findViewById(R.id.add_person_fab);
+    mAddQuizFab = findViewById(R.id.add_quiz_fab);
+    mAddCommentFab = findViewById(R.id.add_comment_fab);
 
     // Also register the action name text, of all the FABs.
-    addAlarmActionText = findViewById(R.id.add_alarm_action_text);
-    addPersonActionText = findViewById(R.id.add_person_action_text);
+    addQuizActionText = findViewById(R.id.add_quiz_action_text);
+    addCommentActionText = findViewById(R.id.add_comment_action_text);
 
     // Now set all the FABs and all the action name texts as GONE
-    mAddAlarmFab.setVisibility(View.GONE);
-    mAddPersonFab.setVisibility(View.GONE);
-    addAlarmActionText.setVisibility(View.GONE);
-    addPersonActionText.setVisibility(View.GONE);
+    mAddQuizFab.setVisibility(View.GONE);
+    mAddCommentFab.setVisibility(View.GONE);
+    addQuizActionText.setVisibility(View.GONE);
+    addCommentActionText.setVisibility(View.GONE);
 
     // make the boolean variable as false, as all the
     // action name texts and all the sub FABs are invisible
@@ -230,10 +230,10 @@ public void commentRelateds(){
         if (!isAllFabsVisible) {
             // when isAllFabsVisible becomes true make all
             // the action name texts and FABs VISIBLE
-            mAddAlarmFab.show();
-            mAddPersonFab.show();
-            addAlarmActionText.setVisibility(View.VISIBLE);
-            addPersonActionText.setVisibility(View.VISIBLE);
+            mAddQuizFab.show();
+            mAddCommentFab.show();
+            addQuizActionText.setVisibility(View.VISIBLE);
+            addCommentActionText.setVisibility(View.VISIBLE);
 
             // make the boolean variable true as we
             // have set the sub FABs visibility to GONE
@@ -241,10 +241,10 @@ public void commentRelateds(){
         } else {
             // when isAllFabsVisible becomes true make
             // all the action name texts and FABs GONE.
-            mAddAlarmFab.hide();
-            mAddPersonFab.hide();
-            addAlarmActionText.setVisibility(View.GONE);
-            addPersonActionText.setVisibility(View.GONE);
+            mAddQuizFab.hide();
+            mAddCommentFab.hide();
+            addQuizActionText.setVisibility(View.GONE);
+            addCommentActionText.setVisibility(View.GONE);
 
             // make the boolean variable false as we
             // have set the sub FABs visibility to GONE
@@ -253,7 +253,7 @@ public void commentRelateds(){
     });
     // below is the sample action to handle add person FAB. Here it shows simple Toast msg.
     // The Toast will be shown only when they are visible and only when user clicks on them
-    mAddPersonFab.setOnClickListener(new View.OnClickListener() {
+    mAddCommentFab.setOnClickListener(new View.OnClickListener() {
                                          @Override
                                          public void onClick(View view) {
                                              //            view -> Toast.makeText(ReadActivity.this, "Person Added", Toast.LENGTH_SHORT).show();
@@ -276,7 +276,7 @@ public void commentRelateds(){
 
     // below is the sample action to handle add alarm FAB. Here it shows simple Toast msg
     // The Toast will be shown only when they are visible and only when user clicks on them
-    mAddAlarmFab.setOnClickListener(
+    mAddQuizFab.setOnClickListener(
             view -> Toast.makeText(ReadActivity.this, R.string.coming_soon, Toast.LENGTH_SHORT
             ).show());
 }

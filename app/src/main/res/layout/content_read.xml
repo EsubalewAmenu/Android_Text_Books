@@ -44,14 +44,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Floating action button for add alarm -->
+    <!-- Floating action button for add quiz -->
     <!-- Make sure that you are constraining this
          button to the parent button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:elevation="8dp"
-        android:id="@+id/add_alarm_fab"
+        android:id="@+id/add_quiz_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
@@ -61,54 +61,54 @@
         app:layout_constraintStart_toStartOf="@+id/add_fab"
         app:srcCompat="@android:drawable/ic_lock_idle_alarm" />
 
-    <!-- Action name text for the add alarm button -->
+    <!-- Action name text for the add quiz button -->
     <!-- Make sure that you are constraining this Text to
-         the add Alarm FAB button -->
+         the add quiz FAB button -->
     <TextView
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:elevation="8dp"
-        android:id="@+id/add_alarm_action_text"
+        android:id="@+id/add_quiz_action_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="@string/quiz_on_this_unit"
-        app:layout_constraintBottom_toBottomOf="@+id/add_alarm_fab"
-        app:layout_constraintEnd_toStartOf="@+id/add_alarm_fab"
-        app:layout_constraintTop_toTopOf="@+id/add_alarm_fab" />
+        app:layout_constraintBottom_toBottomOf="@+id/add_quiz_fab"
+        app:layout_constraintEnd_toStartOf="@+id/add_quiz_fab"
+        app:layout_constraintTop_toTopOf="@+id/add_quiz_fab" />
 
-    <!-- Floating action button for add person -->
+    <!-- Floating action button for add comment -->
     <!-- Make sure that you are constraining this
-         button to the add Alarm FAB button -->
+         button to the add quiz FAB button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:elevation="8dp"
-        android:id="@+id/add_person_fab"
+        android:id="@+id/add_comment_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         app:fabSize="normal"
-        app:layout_constraintBottom_toTopOf="@+id/add_alarm_fab"
-        app:layout_constraintEnd_toEndOf="@+id/add_alarm_fab"
-        app:layout_constraintStart_toStartOf="@+id/add_alarm_fab"
+        app:layout_constraintBottom_toTopOf="@+id/add_quiz_fab"
+        app:layout_constraintEnd_toEndOf="@+id/add_quiz_fab"
+        app:layout_constraintStart_toStartOf="@+id/add_quiz_fab"
         app:srcCompat="@android:drawable/ic_btn_speak_now" />
 
-    <!-- Action name text for the add person button -->
+    <!-- Action name text for the add comment button -->
     <!-- Make sure that you are constraining this Text
-         to the add Person FAB button -->
+         to the add comment FAB button -->
     <TextView
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:elevation="8dp"
-        android:id="@+id/add_person_action_text"
+        android:id="@+id/add_comment_action_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="@string/comments"
-        app:layout_constraintBottom_toBottomOf="@+id/add_person_fab"
-        app:layout_constraintEnd_toStartOf="@+id/add_person_fab"
-        app:layout_constraintTop_toTopOf="@+id/add_person_fab" />
+        app:layout_constraintBottom_toBottomOf="@+id/add_comment_fab"
+        app:layout_constraintEnd_toStartOf="@+id/add_comment_fab"
+        app:layout_constraintTop_toTopOf="@+id/add_comment_fab" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
