@@ -68,6 +68,7 @@ public class SplashActivity extends AppCompatActivity {
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
+                .requestProfile()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
@@ -152,10 +153,14 @@ public class SplashActivity extends AppCompatActivity {
         String userEmail = account.getEmail();
         String givenName = account.getGivenName();
         String familyName = account.getFamilyName();
-
+            String photoUrl = "";
+            if (account.getPhotoUrl() != null) {
+                photoUrl = account.getPhotoUrl().toString();
+                // Use the profile URL as needed
+            }
 //        System.out.println("givenName " + givenName + "FamilyName " + familyName + "userId " + userId + " userName " + userName + " userEmail " + userEmail);
 
-            registerOrSignUp(givenName, familyName, userId, userEmail);
+            registerOrSignUp(givenName, familyName, userId, userEmail, photoUrl);
         }catch (Exception e ){}
     }
     private void signIn() {
@@ -163,7 +168,7 @@ public class SplashActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    private void registerOrSignUp(String givenName, String familyName, String userId, String userEmail) throws JSONException {
+    private void registerOrSignUp(String givenName, String familyName, String userId, String userEmail, String photoUrl) throws JSONException {
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
@@ -173,6 +178,7 @@ public class SplashActivity extends AppCompatActivity {
         jsonBody.put("google_user_id", userId);
         jsonBody.put("given_name", givenName);
         jsonBody.put("family_name", familyName);
+        jsonBody.put("photo_url", photoUrl);
         jsonBody.put("email", userEmail);
         jsonBody.put("registed_with", "google");
         final String requestBody = jsonBody.toString();
