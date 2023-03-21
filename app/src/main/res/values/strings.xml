@@ -42,8 +42,8 @@
     <string name="download">Download</string>
     <string name="cancel">Cancel</string>
     <string name="no_file">File not found.</string>
-    <string name="no_file_desc_pre"> Download </string>
-    <string name="no_file_desc_pos"> to read this unit.</string>
+    <string name="no_file_desc_pre"> </string>
+    <string name="no_file_desc_pos"> Download to read this unit.</string>
     <string name="try_later">"No/Slow internet connection! Please try later"</string>
     <string name="share_link_pre">Hey! Have you downloaded </string>
     <string name="share_link_center"> app? Download the app here </string>
