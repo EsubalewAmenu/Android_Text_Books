@@ -16,14 +16,14 @@
     <string name="share_link_pos"> وستكون سعيدًا إلى الأبد مثلي تمامًا لأن التطبيق يحتوي على أهم شيء على الإطلاق. </string>
 
 
-    <string name="app_description"> يغطي هذا التطبيق جميع الكتب النصية من الصف الأول إلى 12. سيكون هذا التطبيق مفيدًا للطلاب الذين لا يحتاجون إلى الإنترنت ، ويعمل دون اتصال بالإنترنت ويمكن تنزيله مرة واحدة فقط مع ميزات كاملة. </string>
+    <string name="app_description"> يغطي هذا التطبيق جميع الكتب النصية من الصف الأول إلى إثنا عشر. سيكون هذا التطبيق مفيدًا للطلاب الذين لا يحتاجون إلى الإنترنت ، ويعمل دون اتصال بالإنترنت ويمكن تنزيله مرة واحدة فقط مع ميزات كاملة. </string>
     <string name="about">عن</string>
     <string name="menu_share"> أخبر صديقًا (رابط) </string>
     <string name="action_rate"> قيمنا (5 نجوم) </string>
     <string name="action_store"> تطبيقات أخرى </string>
     <string name="exit"> خروج </string>
-    <string name="pls_wait"> \ n \ n برقية: - @ ethio_textbooks </string>
-    <string name="menu_g12"> الصف 12 </string>
+    <string name="pls_wait"> \ n \ n برقية: - @ethio_textbooks </string>
+    <string name="menu_g12"> الصف الثاني عشر </string>
     <string name="menu_g11"> الصف الحادي عشر </string>
     <string name="menu_g10"> الصف العاشر </string>
     <string name="menu_g9"> الصف التاسع </string>
@@ -51,7 +51,7 @@
     <string name="questions_intro"> يُرجى التحلي بالصبر حتى نكمل أسئلة التمرين لجميع الدرجات. \ n \ n Telegram @ethio_textbooks 0923481783 </string>
     <string name="start_questionnaire"> ابدأ التمرين </string>
     <string name="show_result"> إظهار النتيجة </string>
-    <string name="about_short"> * تطبيقات مجانية * من DataScience P.L.C. \ n البريد الإلكتروني: apps@datascienceplc.com </string>
+    <string name="about_short"> تطبيقات *مجانية* من DataScience P.L.C. \ n البريد الإلكتروني: apps@datascienceplc.com </string>
     <string name="test_exam"> أسئلة التمرين </string>
     <string name="answer"> الإجابات </string>
     <string name="previous"> السابق </string>
@@ -60,11 +60,11 @@
     <string name="show_answer"> إظهار الإجابة هناك </string>
     <string name="open_shortnote"> فتح الملاحظة </string>
 
-    <string name="app_restart"> هذه هي المرة الأولى التي تأتي فيها للتدريب على الأسئلة. يرجى التأكد من توفر اتصال بالإنترنت والنقر فوق \ "حاول مرة أخرى \". </string>
+    <string name="app_restart"> هذه هي المرة الأولى التي تأتي فيها للتدريب على الأسئلة. يرجى التأكد من توفر اتصال بالإنترنت اضغط \ "حاول مرة أخرى \". </string>
     <string name="thanks_for_activated"> شكرًا لك! الرجاء إعادة تشغيل التطبيق. </string>
     <string name="wrong_code"> لقد استخدمت رمزًا غير صحيح أو منتهي الصلاحية. </string>
     <string name="check_your_internet"> يرجى التأكد من توفر اتصال بالإنترنت أو المحاولة مرة أخرى لاحقًا. </string>
-    <string name="premium_intro"> إذا قمت بالتسجيل كمستخدم Premium ، فلن ترى إعلانات Google. انقر هنا لمزيد من المعلومات. \ n \ n Telegram @ethio_textbooks 0923481783 </string>
+    <string name="premium_intro"> إذا قمت بالتسجيل مستخدم مميز، فلن ترى إعلانات Google. اضغط هنا لمزيد من المعلومات. \ n \ n Telegram @ethio_textbooks 0923481783 </string>
     <string name="try_again"> حاول مرة أخرى </string>
     <string name="loading"> جارٍ التحميل ... </string>
     <string name="your_name"> اسمك </string>
@@ -81,8 +81,8 @@
     <string name="you_can_download_again"> يمكنك تنزيله مرة أخرى في أي وقت :) </string>
     <string name="menu_ad_reward"> مكافأة </string>
 
-    <string name="startReward"> StartReward </string>
-    <string name="reward_intro"> انقر هنا لطلب الدفع .... mnamn </string>
+    <string name="startReward"> ابدأ المكافأة </string>
+    <string name="reward_intro"> اضغط هنا لطلب الدفع .... </string>
     <string name="college_books"> كتب الكلية (رابط التطبيق) </string>
     <string name="add_books"> تحميل كتاب </string>
     <string name="no_network_title"> لا توجد شبكة متاحة </string>
@@ -100,11 +100,11 @@
     <string name="coming_soon"> اختبار قائم على الفصل - قريبًا! </string>
     <string name="sign_in_first"> يجب تسجيل الدخول أولاً! </string>
     <string name="loading_comments"> جارٍ تحميل التعليقات ... </string>
-    <string name="click_here_to_retry"> انقر هنا لإعادة المحاولة </string>
+    <string name="click_here_to_retry"> اضغط هنا لإعادة المحاولة </string>
     <string name="comments"> التعليقات </string>
     <string name="quiz_on_this_unit"> اختبار حول هذه الوحدة </string>
-    <string name="click_to_post"> انقر للنشر </string>
-    <string name="see"> "See" </string>
+    <string name="click_to_post"> اضغط للنشر </string>
+    <string name="see"> "شاهد" </string>
     <string name="replies"> "الردود" </string>
     <string name="post"> نشر </string>
     <string name="end_of_replies"> نهاية الردود </string>
