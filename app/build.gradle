@@ -9,8 +9,8 @@ android {
         applicationId "com.herma.apps.textbooks"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 62
-        versionName "3.4.5"
+        versionCode 63
+        versionName "3.4.6"
         multiDexEnabled true
 
         ndk {
@@ -23,6 +23,13 @@ android {
     bundle {
         storeArchive {
             enable = false
+        }
+        language {
+            // Specifies that the app bundle should not support
+            // configuration APKs for language resources. These
+            // resources are instead packaged with each base and
+            // dynamic feature APK.
+            enableSplit = false
         }
     }
     ndkVersion "25.1.8937393"
@@ -39,6 +46,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     namespace 'com.herma.apps.textbooks'
+
 }
 
 dependencies {
