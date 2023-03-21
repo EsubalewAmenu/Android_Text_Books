@@ -423,9 +423,9 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(context);
 
         JSONObject jsonBody = new JSONObject();
-        jsonBody.put("google_user_id", pre.getString("userId", "1"));
-        jsonBody.put("email", pre.getString("email", "1"));
-        jsonBody.put("registed_with", "google");
+//        jsonBody.put("google_user_id", pre.getString("google_user_id", "1"));
+//        jsonBody.put("username", pre.getString("email", "1"));
+//        jsonBody.put("login_with", pre.getString("registed_with", "1"));
         jsonBody.put("comment_content", chapter+" "+userComment);
         final String requestBody = jsonBody.toString();
 
@@ -513,7 +513,8 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
-                params.put("password", pre.getString("userId", "1"));//SplashActivity.PAZZWORD);
+                params.put("password", pre.getString("google_user_id", "1"));//SplashActivity.PAZZWORD);
+                params.put("login_with", pre.getString("registed_with", "1"));
                 return params;
             }
             @Override
@@ -662,7 +663,8 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
-                params.put("password", pre.getString("userId", "1"));//SplashActivity.PAZZWORD);
+                params.put("password", pre.getString("google_user_id", "1"));//SplashActivity.PAZZWORD);
+                params.put("login_with", pre.getString("registed_with", "1"));
                 return params;
             }
             @Override
@@ -741,7 +743,8 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
-                params.put("password", pre.getString("userId", "1"));//SplashActivity.PAZZWORD);
+                params.put("password", pre.getString("google_user_id", "1"));//SplashActivity.PAZZWORD);
+                params.put("login_with", pre.getString("registed_with", "1"));
                 return params;
             }
             @Override

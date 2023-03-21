@@ -183,6 +183,9 @@ public class SplashActivity extends AppCompatActivity {
         jsonBody.put("registed_with", "google");
         final String requestBody = jsonBody.toString();
 
+//        System.out.println("login request to server");
+//        System.out.println(requestBody);
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, BASEAPI+url ,
 
                 new com.android.volley.Response.Listener<String>() {
@@ -196,7 +199,7 @@ public class SplashActivity extends AppCompatActivity {
                         pre.edit().putString("given_name", givenName).apply();
                         pre.edit().putString("family_name", familyName).apply();
                         pre.edit().putString("email", userEmail).apply();
-                        pre.edit().putString("registed_with", "'google'").apply();
+                        pre.edit().putString("registed_with", "google").apply();
 
                         openMainActivity();
                     }
