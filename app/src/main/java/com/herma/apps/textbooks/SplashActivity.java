@@ -192,7 +192,7 @@ public class SplashActivity extends AppCompatActivity {
 
                         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-                        pre.edit().putString("userId", userId).apply();
+                        pre.edit().putString("google_user_id", userId).apply();
                         pre.edit().putString("given_name", givenName).apply();
                         pre.edit().putString("family_name", familyName).apply();
                         pre.edit().putString("email", userEmail).apply();
@@ -239,8 +239,10 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("username", USERNAME);
-                params.put("password", PAZZWORD);
+//                params.put("username", USERNAME);
+//                params.put("password", PAZZWORD);
+                params.put("Content-Type", "application/json; charset=utf-8");
+                params.put("Content-Length", String.valueOf(requestBody.getBytes().length));
                 return params;
             }
             @Override
