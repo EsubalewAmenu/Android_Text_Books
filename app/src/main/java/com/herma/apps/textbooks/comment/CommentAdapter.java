@@ -100,6 +100,9 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if(comment.getChildCommentCount() > 0 )
             commentViewHolder.btn_more.setVisibility(View.VISIBLE);
 
+            if(comment.isAddReplyToParent()){
+                commentViewHolder.btnReply.setVisibility(View.GONE);
+            }
 //        String imageUrl = "https://www.gravatar.com/avatar/dfssa";
 
         Glide.with(commentViewHolder.llReplies.getContext())
