@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.LinearLayoutCompat;
@@ -163,13 +164,17 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // Get the input value and do something with it
                         TextInputEditText input = dialogView.findViewById(R.id.ti_message);
-                        String inputMessage = input.getText().toString();
+                        String inputMessage = input.getText().toString().trim();
 
-//                        addChild(comment, inputMessage, holder.llReplies.getContext(), holder.llReplies);
+                        if(!inputMessage.isEmpty()){
                         try {
                             postChildComment(inputMessage, comment, commentViewHolder.llReplies);
                         } catch (JSONException e) {
                             e.printStackTrace();
+                        }
+                    }else{
+                            Toast.makeText(context, context.getString(R.string.write_your_comment),
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

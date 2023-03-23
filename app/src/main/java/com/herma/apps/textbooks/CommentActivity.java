@@ -199,14 +199,18 @@ public class CommentActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     // Get the input value and do something with it
                     TextInputEditText input = dialogView.findViewById(R.id.ti_message);
-                    String inputMessage = input.getText().toString();
+                    String inputMessage = input.getText().toString().trim();
 
-
-                    try {
-                        postComment(input.getText().toString(), 0);
+                    if(!inputMessage.isEmpty()){
+                        try {
+                        postComment(inputMessage, 0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                }else{
+                    Toast.makeText(CommentActivity.this, getString(R.string.write_your_comment),
+                            Toast.LENGTH_SHORT).show();
+                }
 
                 }
             });
