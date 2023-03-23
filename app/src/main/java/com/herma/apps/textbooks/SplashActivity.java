@@ -66,6 +66,9 @@ public class SplashActivity extends AppCompatActivity {
         if(languageCode.equals("None"))
             startActivity(new Intent(SplashActivity.this, SettingsActivity.class));
 
+        getLastUpdated();
+
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .requestProfile()
@@ -112,8 +115,6 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void openMainActivity() {
-        getLastUpdated();
-
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
