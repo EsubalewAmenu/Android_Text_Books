@@ -6,7 +6,7 @@
     <string name="nav_header_desc">የአሰሳ ራስጌ</string>
     <string name="downloading"> በማውረድ ላይ...</string>
     <string name="download">አውርድ</string>
-    <string name="cancel">ሰርዝ</string>
+    <string name="cancel">ተወው</string>
     <string name="no_file">ፋይል አልተገኘም።</string>
     <string name="no_file_desc_pre">   </string>
     <string name="no_file_desc_pos">ይህንን ምዕራፍ ለማንበብ በቅድሚያ ያውርዱ።</string>
