@@ -8,8 +8,8 @@
     <string name="download">አውርድ</string>
     <string name="cancel">ሰርዝ</string>
     <string name="no_file">ፋይል አልተገኘም።</string>
-    <string name="no_file_desc_pre"> ይህንን ክፍል ለማንበብ  </string>
-    <string name="no_file_desc_pos"> በቅድሚያ አውርድ</string>
+    <string name="no_file_desc_pre">   </string>
+    <string name="no_file_desc_pos">ይህንን ምዕራፍ ለማንበብ በቅድሚያ ያውርዱ።</string>
     <string name="try_later">"አይ/ቀርፋፋ የበይነመረብ ግንኙነት! እባክህ ቆይተህ ሞክር"</string>
     <string name="share_link_pre">ሄይ!  </string>
     <string name="share_link_center">መተግበሪያ አውርደሃል? መተግበሪያውን እዚህ ያውርዱት </string>
