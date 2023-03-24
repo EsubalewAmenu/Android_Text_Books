@@ -272,25 +272,44 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         });
             commentViewHolder.btn_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!comment.isChildSeen()) {
+                @Override
+                public void onClick(View view) {
+                    if(!comment.isChildSeen()) {
 
-                    page = 1;
+                        page = 1;
 
+                        try {
+                            getComments(chapter, comment, commentViewHolder.llReplies);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        comment.setChildSeen(true);
+                    }else{
+                        commentViewHolder.llReplies.removeAllViews();
+                        comment.setChildSeen(false);
+                    }
+                }
+            });
+
+            commentViewHolder.btn_edit_comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    System.out.println("btn_edit_comment");
+                }
+            });
+            commentViewHolder.btn_delete_comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    System.out.println("btn_delete_comment");
                     try {
-                        getComments(chapter, comment, commentViewHolder.llReplies);
+                        postInteraction(comment.getCommentId(), "delete", 0);
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-                    comment.setChildSeen(true);
-                }else{
-                    commentViewHolder.llReplies.removeAllViews();
-                    comment.setChildSeen(false);
                 }
-            }
-        });
+            });
         } else if (holder instanceof LoadMoreViewHolder) {
             loadMoreViewHolder = (LoadMoreViewHolder) holder;
 
@@ -387,6 +406,8 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         LinearLayoutCompat llReplies;
         ImageView ivProfilePicture;
         private Button btn_more;
+        private Button btn_edit_comment;
+        private Button btn_delete_comment;
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -400,6 +421,8 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             llReplies = itemView.findViewById(R.id.ll_replies);
             ivProfilePicture = itemView.findViewById(R.id.iv_profile_picture);
             btn_more = itemView.findViewById(R.id.btn_more);
+            btn_edit_comment = itemView.findViewById(R.id.btn_comment_edit);
+            btn_delete_comment = itemView.findViewById(R.id.btn_comment_delete);
 
         }
 
@@ -702,7 +725,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     }
 
-    public void postInteraction(int comment_id, String like_or_dislike, int is_remove) throws JSONException {
+    public void postInteraction(int comment_id, String like_or_dislike_or_delete, int is_remove) throws JSONException {
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -711,11 +734,16 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(context);
 
         JSONObject jsonBody = new JSONObject();
-        jsonBody.put("like_or_dislike", like_or_dislike);
+        jsonBody.put("like_or_dislike", like_or_dislike_or_delete);
         jsonBody.put("is_remove", is_remove);
         final String requestBody = jsonBody.toString();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url ,
+        int REQUEST_METHOD = Request.Method.POST;
+        if(like_or_dislike_or_delete.equals("delete")) {
+            REQUEST_METHOD = Request.Method.DELETE;
+            url = SplashActivity.BASEAPI + "wp/v2/comment/delete/" + comment_id;
+        }
+        StringRequest stringRequest = new StringRequest(REQUEST_METHOD, url ,
 
                 new com.android.volley.Response.Listener<String>() {
                     @Override

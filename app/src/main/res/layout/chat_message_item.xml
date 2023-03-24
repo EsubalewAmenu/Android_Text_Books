@@ -37,6 +37,28 @@
             android:textSize="12sp"
             android:layout_marginStart="8dp"
             android:text="15/05/2021 at 12:25" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end">
+
+            <Button
+                android:id="@+id/btn_comment_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_edit"
+                style="@style/TextButtonStyle" />
+
+            <Button
+                android:id="@+id/btn_comment_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/id_delete"
+                style="@style/TextButtonStyle" />
+
+        </LinearLayout>
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <TextView

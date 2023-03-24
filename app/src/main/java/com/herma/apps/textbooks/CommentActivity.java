@@ -365,8 +365,12 @@ public class CommentActivity extends AppCompatActivity {
                 isLoading = false;
 
 //                  System.out.println("That didn't work! " + error);
+
                 try{
-//                            Toast.makeText(getContext(), "That didn't work! " + error, Toast.LENGTH_LONG).show();
+//                    String responseBody = new String(error.networkResponse.data, "utf-8");
+//                    System.out.println("error data is ");
+//                    System.out.println(responseBody);
+
 
                     if (!isOnline()) {
                         showNetworkDialog();
@@ -445,7 +449,6 @@ public class CommentActivity extends AppCompatActivity {
         queue.add(stringRequest);
 
     }
-
     private void setComments(String response, int page) {
 //System.out.println("get comment response is ");
 //System.out.println(response);
