@@ -311,13 +311,33 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             commentViewHolder.btn_delete_comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    System.out.println("btn_delete_comment");
-                    try {
-                        postInteraction(comment.getCommentId(), "delete", 0);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle(R.string.confirem_delete);
+                    builder.setMessage(R.string.confirem_delete_message);
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+// Add the buttons
+                    builder.setPositiveButton(context.getString(R.string.yes), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User clicked Yes button, perform the delete action here
+                            try {
+                                postInteraction(comment.getCommentId(), "delete", 0);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    builder.setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User clicked Cancel button, do nothing
+                            dialog.cancel();
+                        }
+                    });
+
+// Create the AlertDialog
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
                 }
             });
         } else if (holder instanceof LoadMoreViewHolder) {

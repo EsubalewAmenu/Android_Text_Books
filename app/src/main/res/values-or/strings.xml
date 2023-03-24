@@ -118,6 +118,7 @@
     <string name="connection_timeout">Interneetii suuta jechuu!</string>
     <string name="no_comments_yet">Ammatti yaada hin kennine.\nYaada keessan kan jalqabaa ta\'aa.</string>
     <string name="write_your_comment">Yaada keessan barreessaa....</string>
-
+    <string name="confirem_delete">Haquu Mirkaneessi</string>
+    <string name="confirem_delete_message">Wanta kana haquu akka barbaaddu mirkaneeffatteettaa?</string>
 
 </resources>

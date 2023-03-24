@@ -117,5 +117,6 @@
     <string name="connection_timeout">ቀርፋፋ የበይነመረብ ግንኙነት!</string>
     <string name="no_comments_yet">እስካሁን ምንም አስተያየት የለም።\nአስተያየት ለማካፈል የመጀመሪያ ይሁኑ።</string>
     <string name="write_your_comment">አስተያየትዎን ይፃፉ….</string>
-
+    <string name="confirem_delete">መሰረዝን አረጋግጥ</string>
+    <string name="confirem_delete_message">እርግጠኛ ነዎት መሰረዝ ይፈልጋሉ?</string>
 </resources>

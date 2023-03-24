@@ -117,5 +117,6 @@
     <string name="connection_timeout"> مهلة الاتصال! </string>
     <string name="no_comments_yet"> لا توجد تعليقات حتى الآن. \ n كن أول من يشارك أفكارك. </string>
     <string name="write_your_comment"> اكتب ملاحظاتك / تعليقك / اقتراحك .... </string>
-
+    <string name="confirem_delete"> تأكيد الحذف </ string>
+    <string name="confirem_delete_message"> هل أنت متأكد أنك تريد حذف هذا العنصر؟ </ string>
 </resources>
