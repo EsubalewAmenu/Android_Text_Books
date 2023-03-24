@@ -62,12 +62,15 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     int page = 1;
 
     CommentAdapter replyAdapter = null, subReplyAdapter = null;
+    SharedPreferences pre = null;
 
     public CommentAdapter(List<Comment> commentList, Context context, String chapter, LoadMoreListener loadMoreListener) {
         this.commentList = commentList;
         this.context = context;
         this.chapter = chapter;
         this.loadMoreListener = loadMoreListener;
+
+        pre = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     @NonNull
@@ -232,6 +235,13 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Drawable finalActiveDislikeDrawable1 = activeDislikeDrawable;
             Drawable finalActiveLikeDrawable1 = activeLikeDrawable;
             Drawable finalNormalLikeDrawable1 = normalLikeDrawable;
+
+            if(comment.getComment_author_email().equals(pre.getString("email", "1"))) {
+                commentViewHolder.btn_delete_comment.setVisibility(View.VISIBLE);
+                commentViewHolder.btn_edit_comment.setVisibility(View.VISIBLE);
+            }
+
+
             commentViewHolder.btnDislike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -450,8 +460,6 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         RequestQueue queue = Volley.newRequestQueue(context);
 
         String url = SplashActivity.BASEAPI+"wp/v2/chapter/comment/"+chapter+"/"+parentComment.getCommentId();
-
-        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(context);
 
         JSONObject jsonBody = new JSONObject();
 //        jsonBody.put("google_user_id", pre.getString("google_user_id", "1"));
