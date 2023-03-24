@@ -96,34 +96,34 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             commentViewHolder.tvComment.setText(comment.getComment());
             commentViewHolder.tvAuthor.setText(comment.getAuthor());
             commentViewHolder.tvTimestamp.setText(comment.getTimestamp());
-            commentViewHolder.btnLike.setText(comment.getLike()+"");
+            commentViewHolder.btnLike.setText(comment.getLike() + "");
 //            commentViewHolder.btnDislike.setText(comment.getDislike()+"");
             commentViewHolder.btn_more.setText(context.getString(R.string.see) + comment.getChildCommentCount() + context.getString(R.string.replies));
 
-        if(comment.getChildCommentCount() > 0 )
-            commentViewHolder.btn_more.setVisibility(View.VISIBLE);
+            if (comment.getChildCommentCount() > 0)
+                commentViewHolder.btn_more.setVisibility(View.VISIBLE);
 
-            if(comment.isAddReplyToParent()){
+            if (comment.isAddReplyToParent()) {
                 commentViewHolder.btnReply.setVisibility(View.GONE);
             }
 //        String imageUrl = "https://www.gravatar.com/avatar/dfssa";
 
-        Glide.with(commentViewHolder.llReplies.getContext())
-                .load(comment.getAuthor_avatar_url())//imageUrl)
-                .placeholder(R.drawable.herma)
-                .into(commentViewHolder.ivProfilePicture);
+            Glide.with(commentViewHolder.llReplies.getContext())
+                    .load(comment.getAuthor_avatar_url())//imageUrl)
+                    .placeholder(R.drawable.herma)
+                    .into(commentViewHolder.ivProfilePicture);
 
             Drawable normalLikeDrawable = null, activeLikeDrawable = null, normalDislikeDrawable = null, activeDislikeDrawable = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 normalLikeDrawable = context.getResources().getDrawable(R.drawable.ic_like, context.getTheme());
-                 activeLikeDrawable = context.getResources().getDrawable(R.drawable.ic_like_active, context.getTheme());
-                 normalDislikeDrawable = context.getResources().getDrawable(R.drawable.ic_dislike, context.getTheme());
-                 activeDislikeDrawable = context.getResources().getDrawable(R.drawable.ic_dislike_active, context.getTheme());
-            }else{
+                activeLikeDrawable = context.getResources().getDrawable(R.drawable.ic_like_active, context.getTheme());
+                normalDislikeDrawable = context.getResources().getDrawable(R.drawable.ic_dislike, context.getTheme());
+                activeDislikeDrawable = context.getResources().getDrawable(R.drawable.ic_dislike_active, context.getTheme());
+            } else {
                 normalLikeDrawable = context.getResources().getDrawable(R.drawable.ic_like);
-                 activeLikeDrawable = context.getResources().getDrawable(R.drawable.ic_like_active);
-                 normalDislikeDrawable = context.getResources().getDrawable(R.drawable.ic_dislike);
-                 activeDislikeDrawable = context.getResources().getDrawable(R.drawable.ic_dislike_active);
+                activeLikeDrawable = context.getResources().getDrawable(R.drawable.ic_like_active);
+                normalDislikeDrawable = context.getResources().getDrawable(R.drawable.ic_dislike);
+                activeDislikeDrawable = context.getResources().getDrawable(R.drawable.ic_dislike_active);
 
             }
 
@@ -131,17 +131,17 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 //        int isUserLiked = (new Random().nextInt(1));
 //        int isUserDisliked = (new Random().nextInt(1));
 
-        if (comment.getIs_user_liked() == 1) {
-            commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(activeLikeDrawable, null, null, null);
-        } else {
-            commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(normalLikeDrawable, null, null, null);
-        }
+            if (comment.getIs_user_liked() == 1) {
+                commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(activeLikeDrawable, null, null, null);
+            } else {
+                commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(normalLikeDrawable, null, null, null);
+            }
 
-        if (comment.getIs_user_disliked() == 1) {
-            commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(activeDislikeDrawable, null, null, null);
-        } else {
-            commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(normalDislikeDrawable, null, null, null);
-        }
+            if (comment.getIs_user_disliked() == 1) {
+                commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(activeDislikeDrawable, null, null, null);
+            } else {
+                commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(normalDislikeDrawable, null, null, null);
+            }
 
             commentViewHolder.btnReport.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -153,138 +153,132 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             });
             commentViewHolder.btnReply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
 
-                // Create an instance of the dialog box
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(commentViewHolder.llReplies.getContext());
+                    // Create an instance of the dialog box
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(commentViewHolder.llReplies.getContext());
 
-                // Inflate the XML layout file
+                    // Inflate the XML layout file
 //                View dialogView = getLayoutInflater().inflate(R.layout.dialog_comment, null);
-                View dialogView = LayoutInflater.from(commentViewHolder.llReplies.getContext()).inflate(R.layout.dialog_comment, null);
-                dialogBuilder.setView(dialogView);
+                    View dialogView = LayoutInflater.from(commentViewHolder.llReplies.getContext()).inflate(R.layout.dialog_comment, null);
+                    dialogBuilder.setView(dialogView);
 
-                // Add the OK and Cancel buttons
-                dialogBuilder.setPositiveButton(context.getString(R.string.post), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // Get the input value and do something with it
-                        TextInputEditText input = dialogView.findViewById(R.id.ti_message);
-                        String inputMessage = input.getText().toString().trim();
+                    // Add the OK and Cancel buttons
+                    dialogBuilder.setPositiveButton(context.getString(R.string.post), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // Get the input value and do something with it
+                            TextInputEditText input = dialogView.findViewById(R.id.ti_message);
+                            String inputMessage = input.getText().toString().trim();
 
-                        if(!inputMessage.isEmpty()){
-                        try {
-                            postChildComment(inputMessage, comment, commentViewHolder.llReplies);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            if (!inputMessage.isEmpty()) {
+                                try {
+                                    postChildComment(inputMessage, comment, commentViewHolder.llReplies);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Toast.makeText(context, context.getString(R.string.write_your_comment),
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }else{
-                            Toast.makeText(context, context.getString(R.string.write_your_comment),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                dialogBuilder.setNegativeButton(context.getString(R.string.cancel), null);
+                    });
+                    dialogBuilder.setNegativeButton(context.getString(R.string.cancel), null);
 
-                // Show the dialog box
-                dialogBuilder.show();
-            }
-        });
+                    // Show the dialog box
+                    dialogBuilder.show();
+                }
+            });
 
             Drawable finalActiveLikeDrawable = activeLikeDrawable;
             Drawable finalNormalLikeDrawable = normalLikeDrawable;
             Drawable finalActiveDislikeDrawable = activeDislikeDrawable;
             Drawable finalNormalDislikeDrawable = normalDislikeDrawable;
             commentViewHolder.btnLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
 
-                if (commentViewHolder.btnLike.getCompoundDrawables()[0] == finalNormalLikeDrawable) {
-                    commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(finalActiveLikeDrawable, null, null, null);
-                    comment.setLike(comment.getLike()+1);
+                    if (commentViewHolder.btnLike.getCompoundDrawables()[0] == finalNormalLikeDrawable) {
+                        commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(finalActiveLikeDrawable, null, null, null);
+                        comment.setLike(comment.getLike() + 1);
 
 
-                    if(commentViewHolder.btnDislike.getCompoundDrawables()[0] == finalActiveDislikeDrawable){
-                        commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(finalNormalDislikeDrawable, null, null, null);
+                        if (commentViewHolder.btnDislike.getCompoundDrawables()[0] == finalActiveDislikeDrawable) {
+                            commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(finalNormalDislikeDrawable, null, null, null);
 //                        comment.setDislike(comment.getDislike()-1);
 //                        commentViewHolder.btnDislike.setText(comment.getDislike()+"");
+                        }
+
+                        try {
+                            postInteraction(comment.getCommentId(), "L", 0);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    } else {
+                        commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(finalNormalLikeDrawable, null, null, null);
+                        comment.setLike(comment.getLike() - 1);
+
+                        try {
+                            postInteraction(comment.getCommentId(), "L", 1);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     }
 
-                    try {
-                        postInteraction(comment.getCommentId(), "L", 0);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                } else {
-                    commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(finalNormalLikeDrawable, null, null, null);
-                    comment.setLike(comment.getLike()-1);
-
-                    try {
-                        postInteraction(comment.getCommentId(), "L", 1);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
+                    commentViewHolder.btnLike.setText(comment.getLike() + "");
                 }
-
-                commentViewHolder.btnLike.setText(comment.getLike()+"");
-            }
-        });
+            });
             Drawable finalNormalDislikeDrawable1 = normalDislikeDrawable;
             Drawable finalActiveDislikeDrawable1 = activeDislikeDrawable;
             Drawable finalActiveLikeDrawable1 = activeLikeDrawable;
             Drawable finalNormalLikeDrawable1 = normalLikeDrawable;
 
-            if(comment.getComment_author_email().equals(pre.getString("email", "1"))) {
-                commentViewHolder.btn_delete_comment.setVisibility(View.VISIBLE);
-                commentViewHolder.btn_edit_comment.setVisibility(View.VISIBLE);
-            }
-
-
             commentViewHolder.btnDislike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
 //                comment.setDislike(comment.getDislike()-1);
 //                holder.btnDislike.setText(comment.getDislike()+"");
 
-                if (commentViewHolder.btnDislike.getCompoundDrawables()[0] == finalNormalDislikeDrawable1) {
-                    commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(finalActiveDislikeDrawable1, null, null, null);
-                    comment.setDislike(comment.getDislike()+1);
+                    if (commentViewHolder.btnDislike.getCompoundDrawables()[0] == finalNormalDislikeDrawable1) {
+                        commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(finalActiveDislikeDrawable1, null, null, null);
+                        comment.setDislike(comment.getDislike() + 1);
 
-                    if(commentViewHolder.btnLike.getCompoundDrawables()[0] == finalActiveLikeDrawable1){
-                        commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(finalNormalLikeDrawable1, null, null, null);
-                        comment.setLike(comment.getLike()-1);
-                        commentViewHolder.btnLike.setText(comment.getLike()+"");
+                        if (commentViewHolder.btnLike.getCompoundDrawables()[0] == finalActiveLikeDrawable1) {
+                            commentViewHolder.btnLike.setCompoundDrawablesWithIntrinsicBounds(finalNormalLikeDrawable1, null, null, null);
+                            comment.setLike(comment.getLike() - 1);
+                            commentViewHolder.btnLike.setText(comment.getLike() + "");
+
+                        }
+
+                        try {
+                            postInteraction(comment.getCommentId(), "D", 0);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    } else {
+                        commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(finalNormalDislikeDrawable1, null, null, null);
+                        comment.setDislike(comment.getDislike() - 1);
+
+                        try {
+                            postInteraction(comment.getCommentId(), "D", 1);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
                     }
-
-                    try {
-                        postInteraction(comment.getCommentId(), "D", 0);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                } else {
-                    commentViewHolder.btnDislike.setCompoundDrawablesWithIntrinsicBounds(finalNormalDislikeDrawable1, null, null, null);
-                    comment.setDislike(comment.getDislike()-1);
-
-                    try {
-                        postInteraction(comment.getCommentId(), "D", 1);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
 
 //                commentViewHolder.btnDislike.setText(comment.getDislike()+"");
 
-            }
-        });
+                }
+            });
             commentViewHolder.btn_more.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(!comment.isChildSeen()) {
+                    if (!comment.isChildSeen()) {
 
                         page = 1;
 
@@ -295,12 +289,18 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         }
 
                         comment.setChildSeen(true);
-                    }else{
+                    } else {
                         commentViewHolder.llReplies.removeAllViews();
                         comment.setChildSeen(false);
                     }
                 }
             });
+
+
+            if (comment.getComment_author_email().equals(pre.getString("email", "1"))) {
+                commentViewHolder.btn_delete_comment.setVisibility(View.VISIBLE);
+                commentViewHolder.btn_edit_comment.setVisibility(View.VISIBLE);
+
 
             commentViewHolder.btn_edit_comment.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -321,6 +321,8 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             // User clicked Yes button, perform the delete action here
                             try {
                                 postInteraction(comment.getCommentId(), "delete", 0);
+                                commentList.remove(holder.getAdapterPosition());
+                                notifyDataSetChanged();
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -340,6 +342,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                 }
             });
+        }
         } else if (holder instanceof LoadMoreViewHolder) {
             loadMoreViewHolder = (LoadMoreViewHolder) holder;
 
