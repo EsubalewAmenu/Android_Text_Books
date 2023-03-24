@@ -255,13 +255,13 @@ public class CommentActivity extends AppCompatActivity {
                                 comment.setIs_user_disliked(c.getInt("is_user_liked"));
                                 comment.setComment(c.getString("comment_content").substring(chapter.length()));
                                 comment.setAuthor(c.getString("display_name"));
+                                comment.setComment_author_email(c.getString("comment_author_email"));
                                 comment.setTimestamp(c.getString("comment_date_gmt"));
                                 comment.setAuthor_avatar_url(c.getString("author_avatar_urls"));
 //                    comment.setAuthor_avatar_url(c.getJSONObject("author_avatar_urls").getString("24")); // options are 24, 48 & 96
                                 comment.setChildCommentCount(c.getInt("child_comments_count"));
                                 comments.add(0,comment);
                                 commentAdapter.notifyDataSetChanged();
-
 
                             tv_no_comment.setVisibility(View.GONE);
                             retry_button.setVisibility(View.GONE);
@@ -478,6 +478,7 @@ public class CommentActivity extends AppCompatActivity {
                     comment.setIs_user_disliked(c.getInt("is_user_disliked"));
                     comment.setComment(c.getString("comment_content").substring(chapter.length()));
                     comment.setAuthor(c.getString("display_name"));
+                    comment.setComment_author_email(c.getString("comment_author_email"));
                     comment.setTimestamp(c.getString("comment_date_gmt"));
                     comment.setAuthor_avatar_url(c.getString("author_avatar_urls"));
 //                    comment.setAuthor_avatar_url(c.getJSONObject("author_avatar_urls").getString("24")); // options are 24, 48 & 96

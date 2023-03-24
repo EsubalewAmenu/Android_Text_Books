@@ -26,11 +26,19 @@ public class Comment {
     private boolean addReplyToParent = false;
     private int is_user_liked;
     private int is_user_disliked;
+    private String comment_author_email;
 
     public Comment() {
         this.replies = new ArrayList<>();
     }
 
+    public String getComment_author_email() {
+        return comment_author_email;
+    }
+
+    public void setComment_author_email(String comment_author_email) {
+        this.comment_author_email = comment_author_email;
+    }
 
     public int getIs_user_liked() {
         return is_user_liked;

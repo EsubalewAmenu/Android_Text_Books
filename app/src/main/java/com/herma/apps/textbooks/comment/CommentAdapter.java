@@ -476,6 +476,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         newComment.setIs_user_disliked(c.getInt("is_user_liked"));
                         newComment.setComment(c.getString("comment_content").substring(chapter.length()));
                         newComment.setAuthor(c.getString("display_name"));
+                        newComment.setComment_author_email(c.getString("comment_author_email"));
                         newComment.setTimestamp(c.getString("comment_date_gmt"));
                         newComment.setAuthor_avatar_url(c.getString("author_avatar_urls"));
 //                    newComment.setAuthor_avatar_url(c.getJSONObject("author_avatar_urls").getString("24")); // options are 24, 48 & 96
@@ -623,6 +624,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     newComment.setIs_user_disliked(c.getInt("is_user_disliked"));
                                     newComment.setComment(c.getString("comment_content").substring(chapter.length()));
                                     newComment.setAuthor(c.getString("display_name"));
+                                    newComment.setComment_author_email(c.getString("comment_author_email"));
                                     newComment.setTimestamp(c.getString("comment_date_gmt"));
                                     newComment.setAuthor_avatar_url(c.getString("author_avatar_urls"));
 //                    comment.setAuthor_avatar_url(c.getJSONObject("author_avatar_urls").getString("24")); // options are 24, 48 & 96
