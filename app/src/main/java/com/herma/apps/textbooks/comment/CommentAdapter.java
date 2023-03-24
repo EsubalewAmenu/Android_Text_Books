@@ -174,7 +174,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                             if (!inputMessage.isEmpty()) {
                                 try {
-                                    postChildComment(inputMessage, comment, commentViewHolder.llReplies);
+                                    postChildComment(inputMessage, "post", comment, commentViewHolder.llReplies);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -305,7 +305,43 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             commentViewHolder.btn_edit_comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    System.out.println("btn_edit_comment");
+
+                    // Create an instance of the dialog box
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+
+                    // Inflate the XML layout file
+//                View dialogView = getLayoutInflater().inflate(R.layout.dialog_comment, null);
+                    View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_comment, null);
+                    TextInputEditText input = dialogView.findViewById(R.id.ti_message);
+
+                    input.setText(comment.getComment());
+                    dialogBuilder.setView(dialogView);
+
+                    // Add the OK and Cancel buttons
+                    dialogBuilder.setPositiveButton(context.getString(R.string.post), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // Get the input value and do something with it
+                            String inputMessage = input.getText().toString().trim();
+
+                            if (!inputMessage.isEmpty() && !inputMessage.equals(comment.getComment())) {
+//                                System.out.println("comment will be updated");
+//                                System.out.println(inputMessage);
+                                try {
+                                    postChildComment(inputMessage, "update", comment, commentViewHolder.llReplies);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Toast.makeText(context, context.getString(R.string.write_your_comment),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                    dialogBuilder.setNegativeButton(context.getString(R.string.cancel), null);
+
+                    // Show the dialog box
+                    dialogBuilder.show();
                 }
             });
             commentViewHolder.btn_delete_comment.setOnClickListener(new View.OnClickListener() {
@@ -478,11 +514,17 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    public void postChildComment(String userComment, Comment parentComment, LinearLayoutCompat llReplies) throws JSONException {
+    public void postChildComment(String userComment, String type, Comment parentComment, LinearLayoutCompat llReplies) throws JSONException {
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
         String url = SplashActivity.BASEAPI+"wp/v2/chapter/comment/"+chapter+"/"+parentComment.getCommentId();
+        int REQUEST_METHOD = Request.Method.POST;
+
+        if(type.equals("update")) {
+            url = SplashActivity.BASEAPI + "wp/v2/comment/update/" + parentComment.getCommentId();
+            REQUEST_METHOD = Request.Method.PATCH;
+        }
 
         JSONObject jsonBody = new JSONObject();
 //        jsonBody.put("google_user_id", pre.getString("google_user_id", "1"));
@@ -491,59 +533,63 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         jsonBody.put("comment_content", chapter+" "+userComment);
         final String requestBody = jsonBody.toString();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url ,
+        StringRequest stringRequest = new StringRequest(REQUEST_METHOD, url ,
 
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                        JSONObject c = new JSONObject(response).getJSONObject("comment");
+                            if(type.equals("update")) {
+                            parentComment.setComment(userComment);
+                            notifyDataSetChanged();
+                            }else{
+                                JSONObject c = new JSONObject(response).getJSONObject("comment");
 
-                        Comment newComment = new Comment();
-                        newComment.setCommentId(c.getInt("comment_ID"));
-                        newComment.setLike(c.getInt("likes"));
-                        newComment.setDislike(c.getInt("dislikes"));
-                        newComment.setIs_user_liked(c.getInt("is_user_liked"));
-                        newComment.setIs_user_disliked(c.getInt("is_user_liked"));
-                        newComment.setComment(c.getString("comment_content").substring(chapter.length()));
-                        newComment.setAuthor(c.getString("display_name"));
-                        newComment.setComment_author_email(c.getString("comment_author_email"));
-                        newComment.setTimestamp(c.getString("comment_date_gmt"));
-                        newComment.setAuthor_avatar_url(c.getString("author_avatar_urls"));
+                            Comment newComment = new Comment();
+                            newComment.setCommentId(c.getInt("comment_ID"));
+                            newComment.setLike(c.getInt("likes"));
+                            newComment.setDislike(c.getInt("dislikes"));
+                            newComment.setIs_user_liked(c.getInt("is_user_liked"));
+                            newComment.setIs_user_disliked(c.getInt("is_user_liked"));
+                            newComment.setComment(c.getString("comment_content").substring(chapter.length()));
+                            newComment.setAuthor(c.getString("display_name"));
+                            newComment.setComment_author_email(c.getString("comment_author_email"));
+                            newComment.setTimestamp(c.getString("comment_date_gmt"));
+                            newComment.setAuthor_avatar_url(c.getString("author_avatar_urls"));
 //                    newComment.setAuthor_avatar_url(c.getJSONObject("author_avatar_urls").getString("24")); // options are 24, 48 & 96
-                        newComment.setChildCommentCount(c.getInt("child_comments_count"));
+                            newComment.setChildCommentCount(c.getInt("child_comments_count"));
 
-                        newComment.setAddReplyToParent(true);
+                            newComment.setAddReplyToParent(true);
 
-                        if(parentComment.isAddReplyToParent()) {
-                            commentList.add(0,newComment);
-                        }else{
-                            RecyclerView rvReplies = new RecyclerView(context);
-                            rvReplies.setLayoutManager(new LinearLayoutManager(context));
-                            llReplies.addView(rvReplies,0);
+                            if (parentComment.isAddReplyToParent()) {
+                                commentList.add(0, newComment);
+                            } else {
+                                RecyclerView rvReplies = new RecyclerView(context);
+                                rvReplies.setLayoutManager(new LinearLayoutManager(context));
+                                llReplies.addView(rvReplies, 0);
 
-                            List<Comment> replyList = new ArrayList<>();
-                            replyList.add(newComment);
-                            replyAdapter = new CommentAdapter(replyList, context, chapter, new LoadMoreListener() {
-                                @Override
-                                public void onLoadMore() {
+                                List<Comment> replyList = new ArrayList<>();
+                                replyList.add(newComment);
+                                replyAdapter = new CommentAdapter(replyList, context, chapter, new LoadMoreListener() {
+                                    @Override
+                                    public void onLoadMore() {
 //                                    System.out.println("on load more on child adapter 2");
-                                    if (!isLoading) {
-                                        isLoading = true;
-                                        replyAdapter.setLoading(true);
-                                        page++;
-                                        try {
-                                            getComments(chapter,parentComment, llReplies);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                                        if (!isLoading) {
+                                            isLoading = true;
+                                            replyAdapter.setLoading(true);
+                                            page++;
+                                            try {
+                                                getComments(chapter, parentComment, llReplies);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            replyAdapter.setLoading(false);
                                         }
-                                        replyAdapter.setLoading(false);
                                     }
-                                }
-                            });
-                            rvReplies.setAdapter(replyAdapter);
+                                });
+                                rvReplies.setAdapter(replyAdapter);
+                            }
                         }
-
                         } catch (final JSONException e) {
                             System.out.println(e);
                         }
