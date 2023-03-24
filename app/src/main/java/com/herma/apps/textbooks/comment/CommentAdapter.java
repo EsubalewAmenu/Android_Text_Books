@@ -98,7 +98,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             commentViewHolder.tvTimestamp.setText(comment.getTimestamp());
             commentViewHolder.btnLike.setText(comment.getLike() + "");
 //            commentViewHolder.btnDislike.setText(comment.getDislike()+"");
-            commentViewHolder.btn_more.setText(context.getString(R.string.see) + comment.getChildCommentCount() + context.getString(R.string.replies));
+            commentViewHolder.btn_more.setText(context.getString(R.string.see) + " " + comment.getChildCommentCount() + " " +context.getString(R.string.replies));
 
             if (comment.getChildCommentCount() > 0)
                 commentViewHolder.btn_more.setVisibility(View.VISIBLE);
