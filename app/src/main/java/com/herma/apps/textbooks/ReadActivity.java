@@ -48,6 +48,7 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.android.gms.ads.rewarded.ServerSideVerificationOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.herma.apps.textbooks.common.Commons;
+import com.herma.apps.textbooks.settings.SettingsActivity;
 import com.herma.apps.textbooks.ui.about.About_us;
 
 import androidx.annotation.NonNull;
@@ -355,6 +356,9 @@ public void commentRelateds(){
             case R.id.action_store:
                 Toast.makeText(ReadActivity.this, "More apps by us :)", Toast.LENGTH_SHORT).show();
                 openUrl("https://play.google.com/store/apps/developer?id=Herma%20plc");
+                return true;
+            case R.id.action_settings:
+                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                 return true;
             case R.id.action_about:
                 startActivity(new Intent(getApplicationContext(), About_us.class));

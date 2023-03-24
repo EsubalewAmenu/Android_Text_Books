@@ -24,6 +24,7 @@ import com.herma.apps.textbooks.common.Commons;
 import com.herma.apps.textbooks.common.DB;
 import com.herma.apps.textbooks.common.Item;
 import com.herma.apps.textbooks.settings.LanguageHelper;
+import com.herma.apps.textbooks.settings.SettingsActivity;
 import com.herma.apps.textbooks.ui.about.About_us;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -166,6 +167,9 @@ public class ChaptersActivity extends AppCompatActivity {
 
                 return true;
 
+            case R.id.action_settings:
+                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                return true;
             case R.id.action_rate:
                 Toast.makeText(ChaptersActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
                 rateApp();
