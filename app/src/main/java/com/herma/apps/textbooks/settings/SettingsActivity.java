@@ -71,6 +71,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                 Toast.makeText(SettingsActivity.this, R.string.restart_the_app, Toast.LENGTH_LONG).show();
 
+                finish();
             }
         });
 

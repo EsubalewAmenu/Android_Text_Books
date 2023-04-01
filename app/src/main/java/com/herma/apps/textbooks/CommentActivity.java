@@ -84,7 +84,7 @@ public class CommentActivity extends AppCompatActivity {
         // Add back button to the toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setTitle(getIntent().getStringExtra("chapterName"));
+        setTitle(getIntent().getStringExtra("chapterName") + " - " + getString(R.string.comments));
 
         chapter = getIntent().getStringExtra("fileName");
         pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

@@ -563,17 +563,13 @@ public class MainActivity extends AppCompatActivity
             startActivity(Intent.createChooser(intent4, "SHARE VIA"));
         }else if(id == R.id.action_settings){
             startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-        } else if (id == R.id.nav_ad_free) {
-
-//            Fragmentbundle = new Bundle();
-            PremiumFragment premiumFragment = new PremiumFragment();
-//            Fragmentbundle.putString("choosedGrade", grade);
-//            Fragmentbundle.putString("title", title);
-//            premiumFragment.setArguments(Fragmentbundle);
-            mFragmentManager = getSupportFragmentManager();
-            mFragmentTransaction = mFragmentManager.beginTransaction();
-            mFragmentTransaction.replace(R.id.containerView,premiumFragment).commit();
-            setTitle(R.string.menu_ad_free);
+//        } else if (id == R.id.nav_ad_free) {
+//
+//            PremiumFragment premiumFragment = new PremiumFragment();
+//            mFragmentManager = getSupportFragmentManager();
+//            mFragmentTransaction = mFragmentManager.beginTransaction();
+//            mFragmentTransaction.replace(R.id.containerView,premiumFragment).commit();
+//            setTitle(R.string.menu_ad_free);
 
 //        } else if (id == R.id.nav_ad_reward) {
 //
@@ -586,8 +582,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_college_books) {
             openUrl("https://play.google.com/store/apps/details?id=com.herma.apps.collegebooks&hl=en_US&gl=US");
             return true;
-        } else if (id == R.id.nav_add_books) {
-            openUrl("https://docs.google.com/forms/d/e/1FAIpQLSfCJtHIIZYY0CJe0V0W4GLkgr1407qMG3RwOs2KTqiIxt53ig/viewform?usp=sf_link");
+//        } else if (id == R.id.nav_add_books) {
+//            openUrl("https://docs.google.com/forms/d/e/1FAIpQLSfCJtHIIZYY0CJe0V0W4GLkgr1407qMG3RwOs2KTqiIxt53ig/viewform?usp=sf_link");
         } else if (id == R.id.nav_rate) {
             Toast.makeText(MainActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
             rateApp();
