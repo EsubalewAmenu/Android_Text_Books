@@ -1,44 +1,50 @@
 <resources>
 
 
-    <string name="adQuestionsInt">ca-app-pub-3940256099942544/1033173712</string>
-    <string name="adReaderInt">ca-app-pub-3940256099942544/1033173712</string>
-    <string name="adHome">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="adChapter">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="adQuestions">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="adReader">ca-app-pub-3940256099942544/6300978111</string>
-        <string name="adReward">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="adQuestionsInt" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="adReaderInt" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="adHome" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="adChapter" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="adQuestions" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="adReader" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="adReward" translatable="false">ca-app-pub-3940256099942544/5224354917</string>
 
-    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="admob_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
 
 
+<!--        <string name="adQuestionsInt" translatable="false">ca-app-pub-8011674951494696/7993749596</string>-->
+<!--        <string name="adReaderInt" translatable="false">ca-app-pub-8011674951494696/4934737105</string>-->
+<!--        <string name="adHome" translatable="false">ca-app-pub-8011674951494696/8312993039</string>-->
+<!--        <string name="adChapter" translatable="false">ca-app-pub-8011674951494696/7079802411</string>-->
+<!--        <string name="adQuestions" translatable="false">ca-app-pub-8011674951494696/4170948875</string>-->
+<!--        <string name="adReader" translatable="false">ca-app-pub-8011674951494696/3605507555</string>-->
+<!--        <string name="adReward" translatable="false">ca-app-pub-8011674951494696/2726130955</string>-->
 
-<!--    <string name="adQuestionsInt">ca-app-pub-8011674951494696/7993749596</string>-->
-<!--    <string name="adReaderInt">ca-app-pub-8011674951494696/4934737105</string>-->
-<!--    <string name="adHome">ca-app-pub-8011674951494696/8312993039</string>-->
-<!--    <string name="adChapter">ca-app-pub-8011674951494696/7079802411</string>-->
-<!--    <string name="adQuestions">ca-app-pub-8011674951494696/4170948875</string>-->
-<!--    <string name="adReader">ca-app-pub-8011674951494696/3605507555</string>-->
-<!--    <string name="adReward">ca-app-pub-8011674951494696/2726130955</string>-->
+<!--        <string name="admob_app_id" translatable="false">ca-app-pub-8011674951494696~8662393111</string>-->
 
-<!--    <string name="admob_app_id">ca-app-pub-8011674951494696~8662393111</string>-->
+<!--        <string name="cancel_phone">ለጊዜው መሸለም አልፈለጉም። መሸለም ከፈለጉ ድጋሚ ማንበብ ይችላሉ።</string>-->
+<!--        <string name="insert_phone">አስገባ</string>-->
+<!--        <string name="insert_phone_eg">የሚሸለሙበትን የኢትዮጵያ ስልክ ቁጥር ያስገቡ (ለምሳሌ:- 0923481783)</string>-->
 
+    <string name="lang_en" translatable="false">English</string>
+    <string name="lang_am" translatable="false">\u12a0\u121b\u122d\u129b</string>
+    <string name="lang_or" translatable="false">Afaan Oromo</string>
+    <string name="lang_ar" translatable="false">\u0639\u0631\u0628\u064A</string>
+
+    <string name="nav_header_subtitle" translatable="false">apps@datascienceplc.com</string>
 
     <string name="app_name">1-12 Text Books</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">1-12 Textbooks</string>
-    <string name="nav_header_subtitle">apps@datascienceplc.com</string>
     <string name="nav_header_desc">Navigation header</string>
-
     <string name="downloading"> Downloading...</string>
     <string name="download">Download</string>
     <string name="cancel">Cancel</string>
     <string name="no_file">File not found.</string>
-    <string name="no_file_desc_pre"> Download \'</string>
-    <string name="no_file_desc_pos">\' to read this unit.</string>
+    <string name="no_file_desc_pre"> </string>
+    <string name="no_file_desc_pos"> Download to read this unit.</string>
     <string name="try_later">"No/Slow internet connection! Please try later"</string>
-
     <string name="share_link_pre">Hey! Have you downloaded </string>
     <string name="share_link_center"> app? Download the app here </string>
     <string name="share_link_pos"> and you will forever be happy just like me because the app has the most important thing ever.</string>
@@ -49,7 +55,7 @@
     <string name="action_rate">Rate us (5 Star)</string>
     <string name="action_store">Other apps</string>
     <string name="exit">Exit</string>
-    <string name="pls_wait">Please wait...\n\nTelegram:-@ethio_textbooks</string>
+    <string name="pls_wait">\n\nTelegram:-@ethio_textbooks</string>
     <string name="menu_g12">Grade 12</string>
     <string name="menu_g11">Grade 11</string>
     <string name="menu_g10">Grade 10</string>
@@ -69,16 +75,13 @@
     <string name="menu_g2">Grade 2</string>
     <string name="menu_g1">Grade 1</string>
     <string name="others">Others</string>
-    <string name="cancel_phone">ለጊዜው መሸለም አልፈለጉም። መሸለም ከፈለጉ ድጋሚ ማንበብ ይችላሉ።</string>
-    <string name="insert_phone">አስገባ</string>
-    <string name="insert_phone_eg">የሚሸለሙበትን የኢትዮጵያ ስልክ ቁጥር ያስገቡ (ለምሳሌ:- 0923481783)</string>
-    <string name="እሺ">OK</string>
+
+    <string name="ok">OK</string>
     <string name="menu_ad_free">Premium user</string>
     <string name="action_delete_subject">Delete units</string>
     <string name="Delete">delete</string>
     <string name="yes">Yes</string>
     <string name="menu_questions">Worksheet</string>
-
     <string name="questions_intro">Please be patient til we complete the exercise questions for all grades.\n\nTelegram @ethio_textbooks 0923481783</string>
     <string name="start_questionnaire">Start the exercise</string>
     <string name="show_result">Show result</string>
@@ -111,10 +114,44 @@
     <string name="fill_the_form">Please fill the above in advance.</string>
     <string name="you_can_download_again">You can download it again at any time :)</string>
     <string name="menu_ad_reward">Reward</string>
+
     <string name="startReward">StartReward</string>
     <string name="reward_intro">click here to order payment .... mnamn</string>
     <string name="college_books">College Books (App link)</string>
-    <string name="add_books">Add Book</string>
+    <string name="add_books">Upload Book</string>
+    <string name="no_network_title">No Network Available</string>
+    <string name="no_network_message">We cannot detect a network connection on this device. Please check your mobile data or Wi-Fi and try again.</string>
+    <string name="go_to_settings">Go to settings</string>
+    <string name="all_new_curriculum_books">New curriculum books</string>
+    <string name="my_new_curriculum_books">My new Curriculum books</string>
+    <string name="load_more_text">Load more comments</string>
+    <string name="settings_title">Settings</string>
+    <string name="save_button_text">Save</string>
+    <string name="select_language_prompt">Select a language:</string>
+    <string name="restart_the_app">Please restart the app!</string>
+    <string name="skip">Skip</string>
 
+    <string name="coming_soon">Chapter based Quiz - Coming soon!</string>
+    <string name="sign_in_first">You should sign in first!</string>
+    <string name="loading_comments">Loading comments...</string>
+    <string name="click_here_to_retry">Click here to retry</string>
+    <string name="comments">Comments</string>
+    <string name="quiz_on_this_unit">Quiz on this unit</string>
+    <string name="click_to_post">Click to post</string>
+    <string name="see">See</string>
+    <string name="replies"> replies</string>
+    <string name="post">Post</string>
+    <string name="end_of_replies">End of replies</string>
+    <string name="end_of_comments">End of comments</string>
+    <string name="report_comment">Report Comment</string>
+    <string name="report_reason">Please enter the reason for reporting this comment:</string>
+    <string name="report">Report</string>
+    <string name="thanks_for_reporting">Thank you for reporting! We\'ll review the comment</string>
+    <string name="connection_error">Connection Error. Please check your mobile data or Wi-Fi and try again.</string>
+    <string name="connection_timeout">Connection Timeout!</string>
+    <string name="no_comments_yet">No comments yet.\nBe the first one to share your thoughts.</string>
+    <string name="write_your_comment">Write your feedback/comment/suggestion....</string>
+    <string name="confirem_delete">Confirm Delete</string>
+    <string name="confirem_delete_message">Are you sure you want to delete this item?</string>
 
 </resources>

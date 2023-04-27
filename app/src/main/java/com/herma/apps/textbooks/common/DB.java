@@ -6,6 +6,7 @@ package com.herma.apps.textbooks.common;
  * Email esubalew.a2009@gmail.com/
  */
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -129,4 +130,13 @@ public Cursor getSelect(String select, String from, String where) {
 	return cursor;
 }
 
+	public long insert(String table, ContentValues contentValues) {
+		return myDataBase.insert(table, null, contentValues);
+	}
+	public long update(String table, ContentValues contentValues, String whereCol, String whereVal) {
+		return myDataBase.update(table, contentValues, whereCol+" = ?", new String[]{whereVal});
+	}
+	public boolean deleteData(String from, String where) {
+		return myDataBase.delete(from, where, null) > 0;
+	}
 }

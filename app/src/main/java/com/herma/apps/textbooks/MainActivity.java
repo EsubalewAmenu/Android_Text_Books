@@ -43,8 +43,12 @@ import com.herma.apps.textbooks.common.Commons;
 import com.herma.apps.textbooks.common.MainAdapter;
 import com.herma.apps.textbooks.common.DB;
 import com.herma.apps.textbooks.common.Item;
+import com.herma.apps.textbooks.settings.LanguageHelper;
+import com.herma.apps.textbooks.settings.SettingsActivity;
 import com.herma.apps.textbooks.ui.about.About_us;
+import com.herma.apps.textbooks.ui.fragment.AllNewCurriculumBooks;
 import com.herma.apps.textbooks.ui.fragment.BookFragment;
+import com.herma.apps.textbooks.ui.fragment.MyNewCurriculumBooks;
 import com.herma.apps.textbooks.ui.fragment.PremiumFragment;
 import com.herma.apps.textbooks.ui.fragment.QuestionsFragment;
 import com.herma.apps.textbooks.ui.fragment.RewardFragment;
@@ -102,6 +106,8 @@ public class MainActivity extends AppCompatActivity
     private AdView mAdView;
 
     QuestionsFragment questionsFragment;
+    AllNewCurriculumBooks allNewCurriculumBooks;
+    MyNewCurriculumBooks myNewCurriculumBooks;
 
     SharedPreferences pre;
 
@@ -112,6 +118,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        LanguageHelper.updateLanguage(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
@@ -248,6 +255,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_about:
                 startActivity(new Intent(getApplicationContext(), About_us.class));
                 return true;
+            case R.id.action_settings:
+                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                return true;
             case R.id.action_exit:
 
                 System.exit(0);
@@ -286,15 +296,30 @@ public class MainActivity extends AppCompatActivity
     }
 
     public ArrayList getData(Context context, String choosedGrade) {
-
-//        open(context,"read", "books.hrm");
-
         db = new DB(context);
+        ArrayList arrayList = new ArrayList<>();
+
+        if(choosedGrade == "new"){
+
+            final Cursor subjectsCursor = db.getSelect("*", "books", "uc='new' ORDER BY name ASC");
+            if (subjectsCursor.moveToFirst()) {
+                do {
+                    arrayList.add(new Item("", subjectsCursor.getString(2)+" (Grade "+subjectsCursor.getString(1)+")", subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
+                } while (subjectsCursor.moveToNext());
+            }
+
+            if(arrayList.size() == 0) {
+                openAllBooksFragment();
+                return null;
+            }
+
+            return arrayList;
+        }
+
+
         // get if textbook or teacher guide
         final Cursor gradeCursor = db.getSelect("*", "grade", "id="+choosedGrade);
         gradeCursor.moveToFirst();
-
-        ArrayList arrayList = new ArrayList<>();
 
         final Cursor subjectsCursor = db.getSelect("*", "books", "grade='" + gradeCursor.getString(2) + "' and gtype='" + gradeCursor.getString(3) + "' ORDER BY name ASC");
         if (subjectsCursor.moveToFirst()) {
@@ -341,7 +366,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(Item item) {
 
-                System.out.println("en p is " + item.en);
+//                System.out.println("en p is " + item.en);
 
                 chaptersIntent = new Intent(context, ChaptersActivity.class);
                 chaptersIntent.putExtra("subj", item.fileName);
@@ -474,7 +499,11 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_g12) {
+        if (id == R.id.nav_my_books) {
+            openMyBooksFragment();
+        } else if (id == R.id.nav_all_books) {
+            openAllBooksFragment();
+        } else if (id == R.id.nav_g12) {
             changeFragment("1", "Grade 12");
         } else if (id == R.id.nav_g11) {
             changeFragment("2", "Grade 11");
@@ -528,22 +557,19 @@ public class MainActivity extends AppCompatActivity
 //            pre.edit().putString("choosedGradeT", "Worksheet").apply();
 
         }else if (id == R.id.nav_share) {
-                Intent intent4 = new Intent("android.intent.action.SEND");
-                intent4.setType("text/plain");
-                intent4.putExtra("android.intent.extra.TEXT", getString(R.string.share_link_pre) + " " + getString(R.string.app_name) + " " + getString(R.string.share_link_center) + " " + "https://play.google.com/store/apps/details?id="+getPackageName() + " "+ getString(R.string.share_link_pos));
-                startActivity(Intent.createChooser(intent4, "SHARE VIA"));
-
-        } else if (id == R.id.nav_ad_free) {
-
-//            Fragmentbundle = new Bundle();
-            PremiumFragment premiumFragment = new PremiumFragment();
-//            Fragmentbundle.putString("choosedGrade", grade);
-//            Fragmentbundle.putString("title", title);
-//            premiumFragment.setArguments(Fragmentbundle);
-            mFragmentManager = getSupportFragmentManager();
-            mFragmentTransaction = mFragmentManager.beginTransaction();
-            mFragmentTransaction.replace(R.id.containerView,premiumFragment).commit();
-            setTitle(R.string.menu_ad_free);
+            Intent intent4 = new Intent("android.intent.action.SEND");
+            intent4.setType("text/plain");
+            intent4.putExtra("android.intent.extra.TEXT", getString(R.string.share_link_pre) + " " + getString(R.string.app_name) + " " + getString(R.string.share_link_center) + " " + "https://play.google.com/store/apps/details?id=" + getPackageName() + " " + getString(R.string.share_link_pos));
+            startActivity(Intent.createChooser(intent4, "SHARE VIA"));
+        }else if(id == R.id.action_settings){
+            startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+//        } else if (id == R.id.nav_ad_free) {
+//
+//            PremiumFragment premiumFragment = new PremiumFragment();
+//            mFragmentManager = getSupportFragmentManager();
+//            mFragmentTransaction = mFragmentManager.beginTransaction();
+//            mFragmentTransaction.replace(R.id.containerView,premiumFragment).commit();
+//            setTitle(R.string.menu_ad_free);
 
 //        } else if (id == R.id.nav_ad_reward) {
 //
@@ -556,8 +582,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_college_books) {
             openUrl("https://play.google.com/store/apps/details?id=com.herma.apps.collegebooks&hl=en_US&gl=US");
             return true;
-        } else if (id == R.id.nav_add_books) {
-            openUrl("https://docs.google.com/forms/d/e/1FAIpQLSfCJtHIIZYY0CJe0V0W4GLkgr1407qMG3RwOs2KTqiIxt53ig/viewform?usp=sf_link");
+//        } else if (id == R.id.nav_add_books) {
+//            openUrl("https://docs.google.com/forms/d/e/1FAIpQLSfCJtHIIZYY0CJe0V0W4GLkgr1407qMG3RwOs2KTqiIxt53ig/viewform?usp=sf_link");
         } else if (id == R.id.nav_rate) {
             Toast.makeText(MainActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
             rateApp();
@@ -577,21 +603,48 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    public void changeFragment(String grade, String title){
-        Fragmentbundle = new Bundle();
-        //0
-        BookFragment bookFragment = new BookFragment();
-        Fragmentbundle.putString("choosedGrade", grade);
-        Fragmentbundle.putString("title", title);
-        bookFragment.setArguments(Fragmentbundle);
+    public void openMyBooksFragment(){
+        myNewCurriculumBooks = new MyNewCurriculumBooks();
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.replace(R.id.containerView,bookFragment).commit();
-        setTitle(title);
+        mFragmentTransaction.replace(R.id.containerView, myNewCurriculumBooks).commit();
+        setTitle("My new curriculum books");
 
-        pre.edit().putString("choosedGrade", grade ).apply();
-        pre.edit().putString("choosedGradeT", title).apply();
 
+        pre.edit().putString("choosedGrade", "my_b" ).apply();
+        pre.edit().putString("choosedGradeT", "My new curriculum books").apply();
+    }
+    public void openAllBooksFragment(){
+        allNewCurriculumBooks = new AllNewCurriculumBooks();
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.replace(R.id.containerView, allNewCurriculumBooks).commit();
+        setTitle("All new curriculum books");
+
+
+        pre.edit().putString("choosedGrade", "all_b" ).apply();
+        pre.edit().putString("choosedGradeT", "All new curriculum books").apply();
+    }
+    public void changeFragment(String grade, String title){
+        if(grade.equals("my_b")){
+            openMyBooksFragment();
+        }else if(grade.equals("all_b")){
+            openAllBooksFragment();
+        }else {
+            Fragmentbundle = new Bundle();
+            //0
+            BookFragment bookFragment = new BookFragment();
+            Fragmentbundle.putString("choosedGrade", grade);
+            Fragmentbundle.putString("title", title);
+            bookFragment.setArguments(Fragmentbundle);
+            mFragmentManager = getSupportFragmentManager();
+            mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.replace(R.id.containerView, bookFragment).commit();
+            setTitle(title);
+
+            pre.edit().putString("choosedGrade", grade).apply();
+            pre.edit().putString("choosedGradeT", title).apply();
+        }
     }
 
 //    public void shareApp(Context context, String chooserTitle,
@@ -627,14 +680,14 @@ public class MainActivity extends AppCompatActivity
                             public void onResponse(String response) {
                                 if (response != null) {
                                     try {
-                                        System.out.println(response);
+//                                        System.out.println(response);
                                         // Getting JSON Array node
                                         JSONObject jsonObj = new JSONObject(response);
 
                                         System.out.println("response code is " + jsonObj.getString("code"));
                                         if(jsonObj.getInt("code") == 200 ){
                                             Ads = jsonObj.getString("ad");
-                                            if(Ads != null){
+                                            if(Ads != "null"){
                                                 setAd(); myB = true;
                                             }else tvAds.setVisibility(View.GONE);
                                         }else tvAds.setVisibility(View.GONE);

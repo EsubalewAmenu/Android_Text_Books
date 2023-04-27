@@ -83,15 +83,15 @@ ProgressDialog progressBar;
      *
      * @return true if connected to the network
      */
-    public boolean isOnline(Context context) {
-        // Get a reference to the ConnectivityManager to check the state of network connectivity
-        ConnectivityManager connectivityManager = (ConnectivityManager)
-                context.getSystemService(context.CONNECTIVITY_SERVICE);
-
-        // Get details on the currently active default data network
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected();
-    }
+//    public boolean isOnline(Context context) {
+//        // Get a reference to the ConnectivityManager to check the state of network connectivity
+//        ConnectivityManager connectivityManager = (ConnectivityManager)
+//                context.getSystemService(context.CONNECTIVITY_SERVICE);
+//
+//        // Get details on the currently active default data network
+//        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+//        return networkInfo != null && networkInfo.isConnected();
+//    }
 //
 //    /**
 //     * When offline, show a snackbar message
@@ -123,7 +123,7 @@ ProgressDialog progressBar;
             fileName = "Sh " + grade + " " + subject + " " + chapterName;
         }
         if(message==1234)
-            text.setText(context.getResources().getString(R.string.no_file) + context.getResources().getString(R.string.no_file_desc_pre)+fileName+context.getResources().getString(R.string.no_file_desc_pos));
+            text.setText(context.getResources().getString(R.string.no_file) + context.getResources().getString(R.string.no_file_desc_pre)+context.getResources().getString(R.string.no_file_desc_pos));
         else
             text.setText(context.getResources().getString(message));
 
@@ -156,7 +156,10 @@ ProgressDialog progressBar;
 //                            downloadUrl = WEBSITE + "/manager/api/items/get_for_books?cnt=eth&what=short&name=";//+ finalFileName; // Path where you want to download file.
                             asyncDownloader.execute(downloadUrl, chapterID, fEn);
 
-                        } else{
+                        } else if (finalFileName1.startsWith("new")) {
+                            downloadUrl = WEBSITE + "/ds_bm/v1/book/download/1-12-textbooks/";//+ finalFileName; // Path where you want to download file.
+                            asyncDownloader.execute(downloadUrl, finalFileName1, fEn);
+                        }else{
 //                            downloadUrl = WEBSITE + "/manager/api/items/get_for_books?cnt=eth&what=txt&name=";//+ finalFileName; // Path where you want to download file.
                             downloadUrl = WEBSITE + "/ds_bm/v1/get_et_book/";//+ finalFileName; // Path where you want to download file.
                         asyncDownloader.execute(downloadUrl, finalFileName1, fEn);
@@ -248,6 +251,7 @@ ProgressDialog progressBar;
             fEn = params[2];
 
             try {
+                System.out.println("donwload url is ' " + params[0]+params[1]);
                 URL url = new URL(params[0]+params[1]);
                 connection = (HttpURLConnection) url.openConnection();
 
@@ -391,7 +395,7 @@ ProgressDialog progressBar;
 
         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(context);
         String license_type = pre.getString("license_type", "");
-        String out_date = pre.getString("out_date", "");
+        String out_date = pre.getString("out_date", "2100-12-31");
         String last_update = pre.getString("last_update", "");
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

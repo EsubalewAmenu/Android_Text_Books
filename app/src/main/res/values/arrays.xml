@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="languages">
+        <item key="en">@string/lang_en</item>
+        <item key="am">@string/lang_am</item>
+        <item key="or">@string/lang_or</item>
+        <item key="ar">@string/lang_ar</item>
+    </string-array>
+</resources>
+
