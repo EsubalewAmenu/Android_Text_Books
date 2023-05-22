@@ -621,9 +621,11 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
-                params.put("password", pre.getString("google_user_id", "1"));//SplashActivity.PAZZWORD);
-                params.put("login_with", pre.getString("registed_with", "1"));
+//                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
+//                params.put("password", pre.getString("google_user_id", "1"));//SplashActivity.PAZZWORD);
+//                params.put("login_with", pre.getString("registed_with", "1"));
+
+                params.put("Authorization", "Bearer "+pre.getString("token", "None"));
                 return params;
             }
             @Override
@@ -772,9 +774,11 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
-                params.put("password", pre.getString("google_user_id", "1"));//SplashActivity.PAZZWORD);
-                params.put("login_with", pre.getString("registed_with", "1"));
+//                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
+//                params.put("password", pre.getString("google_user_id", "1"));//SplashActivity.PAZZWORD);
+//                params.put("login_with", pre.getString("registed_with", "1"));
+
+                params.put("Authorization", "Bearer "+pre.getString("token", "None"));
                 return params;
             }
             @Override
@@ -857,9 +861,11 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
-                params.put("password", pre.getString("google_user_id", "1"));//SplashActivity.PAZZWORD);
-                params.put("login_with", pre.getString("registed_with", "1"));
+//                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
+//                params.put("password", pre.getString("google_user_id", "1"));//SplashActivity.PAZZWORD);
+//                params.put("login_with", pre.getString("registed_with", "1"));
+
+                params.put("Authorization", "Bearer "+pre.getString("token", "None"));
                 return params;
             }
             @Override

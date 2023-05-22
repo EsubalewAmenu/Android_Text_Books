@@ -1,5 +1,7 @@
 package com.herma.apps.textbooks;
 
+import static com.herma.apps.textbooks.common.TokenUtils.isTokenExpired;
+
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -259,8 +261,19 @@ public void commentRelateds(){
                                          public void onClick(View view) {
                                              //            view -> Toast.makeText(ReadActivity.this, "Person Added", Toast.LENGTH_SHORT).show();
                                              SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                             String userEmail = pre.getString("email", "1");
-                                             if(userEmail.contains("@")) {
+                                             String token = pre.getString("token", "None");
+
+                                             boolean isExpired;
+
+                                             if (token.equals("None")) {
+                                                 isExpired = true;
+                                             }
+                                             else {
+                                                 isExpired = isTokenExpired(token);
+                                             }
+
+
+                                             if(!isExpired) {
 
                                              Intent commentIntent = new Intent(ReadActivity.this, CommentActivity.class);
                                              commentIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));

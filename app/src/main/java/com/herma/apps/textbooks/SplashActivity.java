@@ -85,10 +85,12 @@ public class SplashActivity extends AppCompatActivity {
 
         boolean isExpired;
 
-            if (token.equals("None"))
+            if (token.equals("None")) {
                 isExpired = true;
-            else
+            }
+            else {
                 isExpired = isTokenExpired(token);
+            }
 
 //        if(!(prefs.getString("token", "None")).equals("None")){
                 if(!isExpired){
