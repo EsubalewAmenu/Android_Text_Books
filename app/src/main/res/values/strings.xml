@@ -137,6 +137,7 @@
     <string name="click_here_to_retry">Click here to retry</string>
     <string name="comments">Comments</string>
     <string name="quiz_on_this_unit">Quiz on this unit</string>
+    <string name="theme_mode">Theme Mode</string>
     <string name="click_to_post">Click to post</string>
     <string name="see">See</string>
     <string name="replies"> replies</string>
@@ -153,5 +154,8 @@
     <string name="write_your_comment">Write your feedback/comment/suggestion....</string>
     <string name="confirem_delete">Confirm Delete</string>
     <string name="confirem_delete_message">Are you sure you want to delete this item?</string>
+
+    <string name="theme_mode_light" >Light</string>
+    <string name="theme_mode_dark" >Dark</string>
 
 </resources>

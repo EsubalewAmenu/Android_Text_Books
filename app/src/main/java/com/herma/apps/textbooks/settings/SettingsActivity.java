@@ -1,8 +1,12 @@
 package com.herma.apps.textbooks.settings;
 
+import static com.herma.apps.textbooks.settings.LanguageHelper.LANGUAGE_CODE_KEY;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +28,8 @@ import java.util.Map;
 public class SettingsActivity extends AppCompatActivity {
 
     private Spinner languageSpinner;
+    private Spinner themeModeSpinner;
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +42,21 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         languageSpinner = findViewById(R.id.language_spinner);
+        themeModeSpinner = findViewById(R.id.theme_spinner);
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.languages, android.R.layout.simple_spinner_item);
 
+        ArrayAdapter<CharSequence> themeModeAdapter = ArrayAdapter.createFromResource(this,
+                R.array.themeMode, android.R.layout.simple_spinner_item);
+
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         languageSpinner.setAdapter(adapter);
+
+        themeModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        themeModeSpinner.setAdapter(themeModeAdapter);
 
         String languageCode = LanguageHelper.getLanguage(this);
         if(languageCode.equals("am"))
@@ -49,6 +65,9 @@ public class SettingsActivity extends AppCompatActivity {
             languageSpinner.setSelection(2);
         else if(languageCode.equals("ar"))
             languageSpinner.setSelection(3);
+
+        if(prefs.getString("themeMode","light").equals("dark"))
+            themeModeSpinner.setSelection(1);
 
 
         // Save language settings when the user clicks the save button
@@ -68,6 +87,17 @@ public class SettingsActivity extends AppCompatActivity {
 
                 LanguageHelper.setLanguage(getApplicationContext(), languageCode);
                 LanguageHelper.updateLanguage(SettingsActivity.this);
+
+                String themeMode = themeModeSpinner.getSelectedItem().toString();
+                SharedPreferences.Editor editor = prefs.edit();
+
+                if(themeMode == getString(R.string.theme_mode_light)) {
+                    editor.putString("themeMode", "light");
+                    editor.apply();
+                }else {
+                    editor.putString("themeMode", "dark");
+                    editor.apply();
+                }
 
                 Toast.makeText(SettingsActivity.this, R.string.restart_the_app, Toast.LENGTH_LONG).show();
 

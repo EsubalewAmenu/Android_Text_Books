@@ -6,5 +6,10 @@
         <item key="or">@string/lang_or</item>
         <item key="ar">@string/lang_ar</item>
     </string-array>
+
+    <string-array name="themeMode">
+        <item key="light">@string/theme_mode_light</item>
+        <item key="dark">@string/theme_mode_dark</item>
+    </string-array>
 </resources>
 
