@@ -118,6 +118,7 @@
     <string name="startReward">StartReward</string>
     <string name="reward_intro">click here to order payment .... mnamn</string>
     <string name="college_books">College Books (App link)</string>
+    <string name="experts_way">ExpertsWay (App link)</string>
     <string name="add_books">Upload Book</string>
     <string name="no_network_title">No Network Available</string>
     <string name="no_network_message">We cannot detect a network connection on this device. Please check your mobile data or Wi-Fi and try again.</string>

@@ -92,6 +92,10 @@
                 android:id="@+id/nav_college_books"
                 android:icon="@android:drawable/ic_dialog_dialer"
                 android:title="@string/college_books" />
+            <item
+                android:id="@+id/nav_expertsway"
+                android:icon="@android:drawable/ic_dialog_dialer"
+                android:title="@string/experts_way" />
 <!--            <item-->
 <!--                android:id="@+id/nav_add_books"-->
 <!--                android:icon="@android:drawable/ic_dialog_dialer"-->
