@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top|bottom|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentStart="false"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            >
+
+            <TextView
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal|center_vertical|fill_horizontal|center|fill|start|end"
+                android:layout_weight="1.0"
+                android:id="@+id/tvQuizIntro"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:text="@string/quiz_intro"
+                android:textAllCaps="false"
+                android:textSize="18sp"/>
+
+
+            <Button
+                android:id="@+id/btnQuizRetry"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/try_again"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                android:visibility="invisible"
+                />
+
+            <TextView
+                android:id="@+id/txtScore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                android:visibility="gone"
+                android:layout_gravity="center_vertical|center_horizontal"/>
+
+            <Button
+                android:id="@+id/resultButton"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/show_result"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                android:visibility="gone"
+                />
+
+        </LinearLayout>

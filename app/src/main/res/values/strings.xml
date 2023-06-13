@@ -12,7 +12,7 @@
     <string name="admob_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
 
 
-<!--        <string name="adReward" translatable="false">not-created</string>-->
+    <!--        <string name="adReward" translatable="false">not-created</string>-->
 
     <!--        <string name="adReaderInt" translatable="false">ca-app-pub-1204280332090356/4140375546</string>-->
     <!--        <string name="adQuestionsInt" translatable="false">ca-app-pub-1204280332090356/4231024821</string>-->
@@ -20,11 +20,11 @@
     <!--        <string name="adReader" translatable="false">ca-app-pub-1204280332090356/4536597886</string>-->
     <!--        <string name="adChapter" translatable="false">ca-app-pub-1204280332090356/5574347382</string>-->
     <!--        <string name="adHome" translatable="false">ca-app-pub-1204280332090356/4728169576</string>-->
-<!--        <string name="admob_app_id" translatable="false">ca-app-pub-1204280332090356~6532205836</string>-->
+    <!--        <string name="admob_app_id" translatable="false">ca-app-pub-1204280332090356~6532205836</string>-->
 
-<!--        <string name="cancel_phone">ለጊዜው መሸለም አልፈለጉም። መሸለም ከፈለጉ ድጋሚ ማንበብ ይችላሉ።</string>-->
-<!--        <string name="insert_phone">አስገባ</string>-->
-<!--        <string name="insert_phone_eg">የሚሸለሙበትን የኢትዮጵያ ስልክ ቁጥር ያስገቡ (ለምሳሌ:- 0923481783)</string>-->
+    <!--        <string name="cancel_phone">ለጊዜው መሸለም አልፈለጉም። መሸለም ከፈለጉ ድጋሚ ማንበብ ይችላሉ።</string>-->
+    <!--        <string name="insert_phone">አስገባ</string>-->
+    <!--        <string name="insert_phone_eg">የሚሸለሙበትን የኢትዮጵያ ስልክ ቁጥር ያስገቡ (ለምሳሌ:- 0923481783)</string>-->
 
     <string name="lang_en" translatable="false">English</string>
     <string name="lang_am" translatable="false">\u12a0\u121b\u122d\u129b</string>
@@ -156,7 +156,9 @@
     <string name="confirem_delete">Confirm Delete</string>
     <string name="confirem_delete_message">Are you sure you want to delete this item?</string>
 
-    <string name="theme_mode_light" >Light</string>
-    <string name="theme_mode_dark" >Dark</string>
+    <string name="theme_mode_light">Light</string>
+    <string name="theme_mode_dark">Dark</string>
+
+    <string name="quiz_intro">Please be patient til we load the quiz for this unit.\n\nTelegram @ethio_textbooks 0923481783</string>
 
 </resources>

@@ -300,9 +300,17 @@ public void commentRelateds(){
 
     // below is the sample action to handle add alarm FAB. Here it shows simple Toast msg
     // The Toast will be shown only when they are visible and only when user clicks on them
-    mAddQuizFab.setOnClickListener(
-            view -> Toast.makeText(ReadActivity.this, R.string.coming_soon, Toast.LENGTH_SHORT
-            ).show());
+//    mAddQuizFab.setOnClickListener(
+//            view -> Toast.makeText(ReadActivity.this, R.string.coming_soon, Toast.LENGTH_SHORT
+//            ).show());
+
+    mAddQuizFab.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent chapterQuizIntent = new Intent(ReadActivity.this, ChapterQuizHomeActivity.class);
+            startActivity(chapterQuizIntent);
+        }
+    });
 }
 //    private void requestPhoneNumber() {
 //

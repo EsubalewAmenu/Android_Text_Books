@@ -16,6 +16,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ChapterQuizHomeActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
             android:name=".CommentActivity"
             android:exported="false">
             <meta-data
@@ -33,12 +41,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ReadActivity"
-            android:hardwareAccelerated="true"
-            />
-
+            android:hardwareAccelerated="true" />
         <activity
             android:name=".ChaptersActivity"
-            android:hardwareAccelerated="true"/>
+            android:hardwareAccelerated="true" />
         <activity
             android:name=".SplashActivity"
             android:exported="true"
