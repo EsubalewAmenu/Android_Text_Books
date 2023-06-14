@@ -81,6 +81,7 @@ public class QuizActivity extends AppCompatActivity
                 JSONArray datas = new JSONArray(que);
 
                 questionsWithAnswer = new String[datas.length()][11];
+System.out.println("c.getString(\"answer_options\") is " );
 
                 JSONObject c;
                 for (int i = 0; i < datas.length(); i++) {
@@ -88,10 +89,11 @@ public class QuizActivity extends AppCompatActivity
                     c = datas.getJSONObject(i);
                     questionsWithAnswer[i][0] = c.getString("id");
                     questionsWithAnswer[i][1] = c.getString("question");
-                    questionsWithAnswer[i][2] = "test"; //c.getString("ans_a");
-                    questionsWithAnswer[i][3] = "test"; //c.getString("ans_b");
-                    questionsWithAnswer[i][4] = "test"; //c.getString("ans_c");
-                    questionsWithAnswer[i][5] = "test"; //c.getString("ans_d");
+
+                    questionsWithAnswer[i][2] = c.getJSONArray("answer_options").get(0).toString(); //c.getString("ans_a");
+                    questionsWithAnswer[i][3] = c.getJSONArray("answer_options").get(1).toString(); //c.getString("ans_b");
+                    questionsWithAnswer[i][4] = c.getJSONArray("answer_options").get(2).toString(); //c.getString("ans_c");
+                    questionsWithAnswer[i][5] = c.getJSONArray("answer_options").get(3).toString(); //c.getString("ans_d");
                     questionsWithAnswer[i][6] = "test"; //c.getString("ans_e");
                     questionsWithAnswer[i][7] = "test"; //c.getString("ans_f");
                     questionsWithAnswer[i][8] = "test"; //c.getString("correct_answer");
