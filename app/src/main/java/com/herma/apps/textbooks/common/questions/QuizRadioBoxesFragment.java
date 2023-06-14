@@ -101,6 +101,7 @@ public class QuizRadioBoxesFragment extends Fragment
                 returnIntent.putExtra("response", ((QuizActivity) mContext).response);
                 returnIntent.putExtra("responseShouldBe", ((QuizActivity) mContext).responseShouldBe);
                 returnIntent.putExtra("questions", ((QuizActivity) mContext).questions);
+                returnIntent.putExtra("questionsWithAnswer", ((QuizActivity) mContext).questionsWithAnswer);
 //                returnIntent.putExtra("packege", ((QuizActivity) mContext).packege);
 //                returnIntent.putExtra("questionsWithAnswer", ((QuizActivity) mContext).questionsWithAnswer);
 
@@ -173,8 +174,7 @@ public class QuizRadioBoxesFragment extends Fragment
     }
     /*This method get called only when the fragment get visible, and here states of Radio Button(s) retained*/
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser)
-    {
+    public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
         if (isVisibleToUser)

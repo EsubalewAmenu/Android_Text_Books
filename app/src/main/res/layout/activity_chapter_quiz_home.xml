@@ -45,15 +45,15 @@
                 android:visibility="gone"
                 android:layout_gravity="center_vertical|center_horizontal"/>
 
-            <Button
-                android:id="@+id/resultButton"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/show_result"
-                android:textAllCaps="false"
-                android:textSize="18sp"
-                android:visibility="gone"
-                />
+<!--            <Button-->
+<!--                android:id="@+id/resultButton"-->
+<!--                style="@style/Widget.AppCompat.Button.Colored"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/show_result"-->
+<!--                android:textAllCaps="false"-->
+<!--                android:textSize="18sp"-->
+<!--                android:visibility="gone"-->
+<!--                />-->
 
         </LinearLayout>

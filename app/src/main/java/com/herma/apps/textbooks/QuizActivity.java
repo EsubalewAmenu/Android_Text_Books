@@ -46,8 +46,7 @@ public class QuizActivity extends AppCompatActivity
     public boolean show_answer;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
 
@@ -57,8 +56,7 @@ public class QuizActivity extends AppCompatActivity
             parsingData();
 
     }
-    private void toolBarInit()
-    {
+    private void toolBarInit() {
         Toolbar questionToolbar = findViewById(R.id.questionToolbar);
         questionToolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         questionToolbar.setNavigationOnClickListener(v -> onBackPressed());
@@ -159,22 +157,6 @@ System.out.println("c.getString(\"answer_options\") is " );
     }
     }
 
-//    public void nextQuestion()
-//    {
-//        int item = questionsViewPager.getCurrentItem() + 1;
-//        questionsViewPager.setCurrentItem(item);
-//
-//        String currentQuestionPosition = String.valueOf(item + 1);
-//
-//        String questionPosition = currentQuestionPosition + "/" + totalQuestions;
-//        setTextWithSpan(questionPosition);
-//    }
-
-//    public int getTotalQuestionsSize()
-//    {
-//        return questionsWithAnswer.length;
-//    }
-
 
     private void setTextWithSpan(String questionPosition)
     {
@@ -207,8 +189,7 @@ System.out.println("c.getString(\"answer_options\") is " );
 
     };
 
-    public void nextQuestion()
-    {
+    public void nextQuestion() {
         int item = questionsViewPager.getCurrentItem() + 1;
         questionsViewPager.setCurrentItem(item);
 

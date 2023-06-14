@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -30,7 +31,7 @@ import java.util.Map;
 public class ChapterQuizHomeActivity extends AppCompatActivity {
 
     public RequestQueue queue;
-    Button btnQuizRetry, resultButton;
+    Button btnQuizRetry;//, resultButton;
     SharedPreferences pre = null;
     public String chapter = "";
     private static final int QUIZ_REQUEST = 2018;
@@ -48,7 +49,7 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
 
         btnQuizRetry = findViewById(R.id.btnQuizRetry);
         txtScore = (TextView) findViewById(R.id.txtScore);
-        resultButton = findViewById(R.id.resultButton);
+//        resultButton = findViewById(R.id.resultButton);
 
 //        loadQuizApiCall();
 
@@ -62,6 +63,31 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
         questions.putExtra("que", questionsFromServer);
         startActivityForResult(questions, QUIZ_REQUEST);
 
+        btnQuizRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+//                if(isOnline()) {
+                btnQuizRetry.setEnabled(false);
+//                loadQuizApiCall();
+
+
+                String questionsFromServer = "[{\"id\":288,\"question\":\"test quiz 2\",\"answer_options\":[\"quiz 2 test option 1\",\"quiz 2 test option 2\",\"quiz 2 test option3\",\"\"],\"correct_answer\":[0],\"answer_description\":\"quiz 2 test description\",\"randomize_options\":\"1\"},{\"id\":287,\"question\":\"test quiz 1\",\"answer_options\":[\"test option 1\",\"test option 2\",\"test option 3\",\"test option 4\"],\"correct_answer\":[1],\"answer_description\":\"test description\",\"randomize_options\":\"1\"}]";
+
+                System.out.println("main resp is");
+                System.out.println(questionsFromServer);
+                Intent questions = new Intent(ChapterQuizHomeActivity.this, QuizActivity.class);
+                questions.putExtra("showAnswer", false);//show_answer.isChecked());
+                questions.putExtra("outof", 10);//etOutOf.getText().toString());
+                questions.putExtra("que", questionsFromServer);
+                startActivityForResult(questions, QUIZ_REQUEST);
+
+
+//                }else
+//                    Toast.makeText(getContext(), getString(R.string.check_your_internet), Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
     }
 
@@ -90,6 +116,7 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 btnQuizRetry.setEnabled(true);
 
+                Toast.makeText(getApplicationContext(), getString(R.string.check_your_internet), Toast.LENGTH_SHORT).show();
                 System.out.println("main resp is error " + error);
 
             }
@@ -165,24 +192,25 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
                 txtScore.setTextColor(Color.WHITE);
             }
 
-            resultButton.setVisibility(View.VISIBLE);
+//            resultButton.setVisibility(View.VISIBLE);
+            btnQuizRetry.setVisibility(View.VISIBLE);
             txtScore.setVisibility(View.VISIBLE);
 
             txtScore.setText("ውጤት : " + score + "/" + answerKey.length + " (" + perc + "%) \nየፈጀብዎት ጊዜ :- " + timer);
 
 
 
-            resultButton.setOnClickListener(v -> {
-                Intent questions = new Intent(getApplicationContext(), AnswersActivity.class);
-
-//                questions.putExtra("queId", queId);
-                questions.putExtra("answerKey", answerKey);
-                questions.putExtra("response", response);
-                questions.putExtra("responseShouldBe", responseShouldBe);
-                questions.putExtra("questions", current_questions);
-
-                startActivity(questions);
-            });
+//            resultButton.setOnClickListener(v -> {
+//                Intent questions = new Intent(getApplicationContext(), AnswersActivity.class);
+//
+////                questions.putExtra("queId", queId);
+//                questions.putExtra("answerKey", answerKey);
+//                questions.putExtra("response", response);
+//                questions.putExtra("responseShouldBe", responseShouldBe);
+//                questions.putExtra("questions", current_questions);
+//
+//                startActivity(questions);
+//            });
         }
 
     }
