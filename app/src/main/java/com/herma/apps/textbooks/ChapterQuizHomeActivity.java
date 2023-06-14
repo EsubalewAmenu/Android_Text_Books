@@ -2,6 +2,7 @@ package com.herma.apps.textbooks;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -28,10 +30,11 @@ import java.util.Map;
 public class ChapterQuizHomeActivity extends AppCompatActivity {
 
     public RequestQueue queue;
-    Button btnQuizRetry;
+    Button btnQuizRetry, resultButton;
     SharedPreferences pre = null;
     public String chapter = "";
     private static final int QUIZ_REQUEST = 2018;
+    TextView txtScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,8 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
         chapter = getIntent().getStringExtra("fileName");
 
         btnQuizRetry = findViewById(R.id.btnQuizRetry);
+        txtScore = (TextView) findViewById(R.id.txtScore);
+        resultButton = findViewById(R.id.resultButton);
 
 //        loadQuizApiCall();
 
@@ -126,5 +131,47 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+
+
+            String timer = data.getStringExtra("timer");
+//            questionsFragment.current_questions = data.getStringArrayExtra("questions");
+            String[] answerKey = data.getStringArrayExtra("answerKey");
+            String[] response = data.getStringArrayExtra("response");
+
+            String[] responseShouldBe = data.getStringArrayExtra("responseShouldBe");
+
+            int score = 0;
+
+            if (answerKey.length > 0) {
+                for (int i = 0; i < answerKey.length; i++) {
+                    if (responseShouldBe[i].equals(response[i]))
+                        score++;
+                }
+            }
+
+            int perc = (100 * score) / answerKey.length;
+            if (perc >= 74) {
+//            rank = "አልፈዋል!";
+                txtScore.setBackgroundColor(Color.GREEN);
+
+            } else {
+//            rank = "አላለፉም!";
+                txtScore.setBackgroundColor(Color.RED);
+                txtScore.setTextColor(Color.WHITE);
+            }
+
+            resultButton.setVisibility(View.VISIBLE);
+            txtScore.setVisibility(View.VISIBLE);
+
+            txtScore.setText("ውጤት : " + score + "/" + answerKey.length + " (" + perc + "%) \nየፈጀብዎት ጊዜ :- " + timer);
+        }
+
     }
 }

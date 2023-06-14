@@ -195,7 +195,6 @@ public class QuestionActivity extends AppCompatActivity
 //                }while(questionsWithAnswer.length!=per_exam);
 //
 //            }
-System.out.println("questionsWithAnswer " + questionsWithAnswer.length);
         queId = new String[questionsWithAnswer.length];
         answerKey = new String[questionsWithAnswer.length];
         response = new String[questionsWithAnswer.length];

@@ -282,6 +282,7 @@ public class MainActivity extends AppCompatActivity
 
 //        if (requestCode == QUESTIONNAIRE_REQUEST)
 //        {
+
         if (resultCode == RESULT_OK) {
 
 

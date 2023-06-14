@@ -266,6 +266,7 @@ public class QuizRadioBoxesFragment extends Fragment
                     }
 
 //                    ((QuizActivity)mContext).responseShouldBe[(currentPagePosition)-1] = choices.get((__ans-65));
+                    ((QuizActivity)mContext).responseShouldBe[(currentPagePosition)-1] = choices.get(0);
 
 
 
