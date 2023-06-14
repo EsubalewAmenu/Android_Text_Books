@@ -262,16 +262,8 @@ public class RadioBoxesFragment extends Fragment
 
                     ((QuestionActivity)mContext).response[(currentPagePosition)-1] = choices.get(Integer.parseInt(cbPosition));
 
-//
-//                    if (((QuestionActivity)mContext).mRewardedVideoAd.isLoaded()) {
-//                        ((QuestionActivity)mContext).mRewardedVideoAd.show();
-//                    }
                     int __ans = (((QuestionActivity) mContext).answerKey[(currentPagePosition) - 1]).charAt(0);
 
-//                    System.out.println("currentPagePosition "+currentPagePosition+"  "+cbPosition+"  answer is " + ((QuestionActivity) mContext).answerKey[(currentPagePosition) - 1]);
-//                System.out.println(choices.get(Integer.parseInt(cbPosition)) + " and idgn " + ((QuestionActivity) mContext).answerKey[(currentPagePosition) - 1]);
-//                    System.out.println(choices.get((__ans-65)) + " and correct " + ((QuestionActivity) mContext).answerKey[(currentPagePosition) - 1]);
-//                System.out.println("int is " + Integer.parseInt(cbPosition) + " "+ __ans + "  " + (char) __ans);
                     if(((QuestionActivity) mContext).show_answer) {
 //                        if (((QuestionActivity) mContext).answerKey[(currentPagePosition) - 1].equals(("***" + choices.get(Integer.parseInt(cbPosition)))))
                         if(Integer.parseInt(cbPosition) == (__ans-65))
@@ -280,8 +272,7 @@ public class RadioBoxesFragment extends Fragment
                             Toast.makeText(mContext, "ስህተት!", Toast.LENGTH_SHORT).show();
                     }
 
-
-                    ((QuestionActivity)mContext).responseShouldBe[(currentPagePosition)-1] = choices.get((__ans-65));
+//                    ((QuestionActivity)mContext).responseShouldBe[(currentPagePosition)-1] = choices.get((__ans-65));
 
 
 

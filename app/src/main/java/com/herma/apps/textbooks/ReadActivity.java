@@ -308,6 +308,9 @@ public void commentRelateds(){
         @Override
         public void onClick(View view) {
             Intent chapterQuizIntent = new Intent(ReadActivity.this, ChapterQuizHomeActivity.class);
+            chapterQuizIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
+            chapterQuizIntent.putExtra("subject", getIntent().getStringExtra("subject"));
+            chapterQuizIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
             startActivity(chapterQuizIntent);
         }
     });

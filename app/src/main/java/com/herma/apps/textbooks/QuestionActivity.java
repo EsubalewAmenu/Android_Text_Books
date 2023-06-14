@@ -159,30 +159,40 @@ public class QuestionActivity extends AppCompatActivity
 
             try {
 
-                JSONObject jsonObj = new JSONObject(que);
+//                JSONObject jsonObj = new JSONObject(que);
+//                JSONArray datas = jsonObj.getJSONArray("ques");
 
+                JSONArray datas = new JSONArray(que);
 
-                JSONArray datas = jsonObj.getJSONArray("ques");
-
-                questionsWithAnswer = new String[datas.length()][10];
+                questionsWithAnswer = new String[datas.length()][11];
 
                 JSONObject c;
                 for (int i = 0; i < datas.length(); i++) {
 
                     c = datas.getJSONObject(i);
+//                    questionsWithAnswer[i][0] = c.getString("id");
+//                    questionsWithAnswer[i][1] = c.getString("question");
+//                    questionsWithAnswer[i][2] = c.getString("ans_a");
+//                    questionsWithAnswer[i][3] = c.getString("ans_b");
+//                    questionsWithAnswer[i][4] = c.getString("ans_c");
+//                    questionsWithAnswer[i][5] = c.getString("ans_d");
+//                    questionsWithAnswer[i][6] = c.getString("ans_e");
+//                    questionsWithAnswer[i][7] = c.getString("ans_f");
+//                    questionsWithAnswer[i][8] = c.getString("correct_ans");
+//                    questionsWithAnswer[i][9] = c.getString("details");
+
+
                     questionsWithAnswer[i][0] = c.getString("id");
                     questionsWithAnswer[i][1] = c.getString("question");
-                    questionsWithAnswer[i][2] = c.getString("ans_a");
-                    questionsWithAnswer[i][3] = c.getString("ans_b");
-                    questionsWithAnswer[i][4] = c.getString("ans_c");
-                    questionsWithAnswer[i][5] = c.getString("ans_d");
-                    questionsWithAnswer[i][6] = c.getString("ans_e");
-                    questionsWithAnswer[i][7] = c.getString("ans_f");
-                    questionsWithAnswer[i][8] = c.getString("correct_ans");
-                    questionsWithAnswer[i][9] = c.getString("details");
-//                    questionsWithAnswer[i][] = c.getString("");
-
-//                    chapMap.put(("Unit " + c.getString("chapter")), c.getString("chapter"));
+                    questionsWithAnswer[i][2] = "test"; //c.getString("ans_a");
+                    questionsWithAnswer[i][3] = "test"; //c.getString("ans_b");
+                    questionsWithAnswer[i][4] = "test"; //c.getString("ans_c");
+                    questionsWithAnswer[i][5] = "test"; //c.getString("ans_d");
+                    questionsWithAnswer[i][6] = "test"; //c.getString("ans_e");
+                    questionsWithAnswer[i][7] = "test"; //c.getString("ans_f");
+                    questionsWithAnswer[i][8] = "test"; //c.getString("correct_answer");
+                    questionsWithAnswer[i][9] = c.getString("answer_description");
+                    questionsWithAnswer[i][10] = c.getString("randomize_options");
                 }
 
 
@@ -200,7 +210,7 @@ public class QuestionActivity extends AppCompatActivity
 //                }while(questionsWithAnswer.length!=per_exam);
 //
 //            }
-
+System.out.println("questionsWithAnswer " + questionsWithAnswer.length);
         queId = new String[questionsWithAnswer.length];
         answerKey = new String[questionsWithAnswer.length];
         response = new String[questionsWithAnswer.length];

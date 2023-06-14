@@ -1,5 +1,6 @@
 package com.herma.apps.textbooks;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -29,6 +30,8 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
     public RequestQueue queue;
     Button btnQuizRetry;
     SharedPreferences pre = null;
+    public String chapter = "";
+    private static final int QUIZ_REQUEST = 2018;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,16 +41,28 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        chapter = getIntent().getStringExtra("fileName");
 
         btnQuizRetry = findViewById(R.id.btnQuizRetry);
 
         loadQuizApiCall();
 
+        String response = "[{\"id\":288,\"question\":\"test quiz 2\",\"answer_options\":[\"quiz 2 test option 1\",\"quiz 2 test option 2\",\"quiz 2 test option3\",\"\"],\"correct_answer\":[0],\"answer_description\":\"quiz 2 test description\",\"randomize_options\":\"1\"},{\"id\":287,\"question\":\"test quiz 1\",\"answer_options\":[\"test option 1\",\"test option 2\",\"test option 3\",\"test option 4\"],\"correct_answer\":[1],\"answer_description\":\"test description\",\"randomize_options\":\"1\"}]";
+
+        System.out.println("main resp is");
+        System.out.println(response);
+        Intent questions = new Intent(ChapterQuizHomeActivity.this, QuestionActivity.class);
+        questions.putExtra("showAnswer", false);//show_answer.isChecked());
+        questions.putExtra("outof", 10);//etOutOf.getText().toString());
+        questions.putExtra("que", response);
+        startActivityForResult(questions, QUIZ_REQUEST);
+
+
     }
 
     private void loadQuizApiCall() {
 
-        String quizApiUrl = new SplashActivity().BASEAPI + "ds_questions/v1/ enter quiz full url";
+        String quizApiUrl = new SplashActivity().BASEAPI + "ds_quiz/v1/questions/"+chapter;
 
         queue = Volley.newRequestQueue(this);
 
@@ -57,6 +72,13 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                                 System.out.println("main resp is " + response);
+
+                        Intent questions = new Intent(ChapterQuizHomeActivity.this, QuizActivity.class);
+                        questions.putExtra("showAnswer", false);//show_answer.isChecked());
+                        questions.putExtra("outof", 10);//etOutOf.getText().toString());
+                        questions.putExtra("que", response);
+                        startActivityForResult(questions, QUIZ_REQUEST);
+
                     }
 
                 }, new Response.ErrorListener() {
