@@ -148,7 +148,6 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
             String[] responseShouldBe = data.getStringArrayExtra("responseShouldBe");
 
             int score = 0;
-
             if (answerKey.length > 0) {
                 for (int i = 0; i < answerKey.length; i++) {
                     if (responseShouldBe[i].equals(response[i]))

@@ -97,12 +97,12 @@ public class QuizRadioBoxesFragment extends Fragment
                         + String.format("%02d", ((QuizActivity)mContext).secs));
 
                 returnIntent.putExtra("answerKey", ((QuizActivity) mContext).answerKey);
-                returnIntent.putExtra("queId", ((QuizActivity) mContext).queId);
+//                returnIntent.putExtra("queId", ((QuizActivity) mContext).queId);
                 returnIntent.putExtra("response", ((QuizActivity) mContext).response);
                 returnIntent.putExtra("responseShouldBe", ((QuizActivity) mContext).responseShouldBe);
-                returnIntent.putExtra("questions", ((QuizActivity) mContext).questions);
-                returnIntent.putExtra("packege", ((QuizActivity) mContext).packege);
-                returnIntent.putExtra("questionsWithAnswer", ((QuizActivity) mContext).questionsWithAnswer);
+//                returnIntent.putExtra("questions", ((QuizActivity) mContext).questions);
+//                returnIntent.putExtra("packege", ((QuizActivity) mContext).packege);
+//                returnIntent.putExtra("questionsWithAnswer", ((QuizActivity) mContext).questionsWithAnswer);
 
                 mContext.setResult(Activity.RESULT_OK, returnIntent);
                 mContext.finish();
@@ -253,7 +253,7 @@ public class QuizRadioBoxesFragment extends Fragment
 
 //                    System.out.println("Current Question = "+currentPagePosition);
 
-                    ((QuizActivity)mContext).response[(currentPagePosition)-1] = choices.get(Integer.parseInt(cbPosition));
+                    ((QuizActivity)mContext).response[(currentPagePosition)-1] = cbPosition;//choices.get(Integer.parseInt(cbPosition));
 
                     if(true){//((QuizActivity) mContext).show_answer) {
                         if(Integer.parseInt(cbPosition) == Integer.parseInt(radioButtonTypeQuestion[8]))
