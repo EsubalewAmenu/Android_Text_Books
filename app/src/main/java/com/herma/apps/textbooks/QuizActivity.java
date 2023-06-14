@@ -15,9 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.interstitial.InterstitialAd;
-import com.herma.apps.textbooks.common.questions.RadioBoxesFragment;
+import com.herma.apps.textbooks.common.questions.QuizRadioBoxesFragment;
 import com.herma.apps.textbooks.common.questions.ViewPagerAdapter;
 
 import org.json.JSONArray;
@@ -33,6 +31,7 @@ public class QuizActivity extends AppCompatActivity
     private ViewPager questionsViewPager;
     public String[][] questionsWithAnswer;
     public String[] answerKey, response, responseShouldBe, questions, queId;
+    public String packege;
 
     long startTime = 0L;
     private Handler customHandler = new Handler();
@@ -133,7 +132,7 @@ public class QuizActivity extends AppCompatActivity
 
 //            if (questionsWithAnswer[i][6].equals("R"))
 //            {
-                RadioBoxesFragment radioBoxesFragment = new RadioBoxesFragment();
+                QuizRadioBoxesFragment radioBoxesFragment = new QuizRadioBoxesFragment();
                 Bundle radioButtonBundle = new Bundle();
                 radioButtonBundle.putStringArray("question", questionsWithAnswer[i]);
                 radioButtonBundle.putInt("page_position", i);
@@ -204,6 +203,17 @@ public class QuizActivity extends AppCompatActivity
         }
 
     };
+
+    public void nextQuestion()
+    {
+        int item = questionsViewPager.getCurrentItem() + 1;
+        questionsViewPager.setCurrentItem(item);
+
+        String currentQuestionPosition = String.valueOf(item + 1);
+
+        String questionPosition = currentQuestionPosition + "/" + totalQuestions;
+        setTextWithSpan(questionPosition);
+    }
 
     public int getTotalQuestionsSize()
     {

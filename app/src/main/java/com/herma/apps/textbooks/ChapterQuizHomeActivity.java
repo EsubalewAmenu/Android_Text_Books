@@ -45,13 +45,13 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
 
         btnQuizRetry = findViewById(R.id.btnQuizRetry);
 
-        loadQuizApiCall();
+//        loadQuizApiCall();
 
         String response = "[{\"id\":288,\"question\":\"test quiz 2\",\"answer_options\":[\"quiz 2 test option 1\",\"quiz 2 test option 2\",\"quiz 2 test option3\",\"\"],\"correct_answer\":[0],\"answer_description\":\"quiz 2 test description\",\"randomize_options\":\"1\"},{\"id\":287,\"question\":\"test quiz 1\",\"answer_options\":[\"test option 1\",\"test option 2\",\"test option 3\",\"test option 4\"],\"correct_answer\":[1],\"answer_description\":\"test description\",\"randomize_options\":\"1\"}]";
 
         System.out.println("main resp is");
         System.out.println(response);
-        Intent questions = new Intent(ChapterQuizHomeActivity.this, QuestionActivity.class);
+        Intent questions = new Intent(ChapterQuizHomeActivity.this, QuizActivity.class);
         questions.putExtra("showAnswer", false);//show_answer.isChecked());
         questions.putExtra("outof", 10);//etOutOf.getText().toString());
         questions.putExtra("que", response);

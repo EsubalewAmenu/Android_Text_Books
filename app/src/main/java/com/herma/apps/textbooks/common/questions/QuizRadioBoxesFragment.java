@@ -3,21 +3,16 @@ package com.herma.apps.textbooks.common.questions;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.SQLException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LevelListDrawable;
-import android.nfc.Tag;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
-import android.text.Spanned;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -33,20 +28,18 @@ import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-//import androidx.preference.PreferenceManager;
+
+import com.herma.apps.textbooks.QuizActivity;
+import com.herma.apps.textbooks.R;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.android.material.tabs.TabLayout;
-import com.herma.apps.textbooks.QuestionActivity;
-import com.herma.apps.textbooks.R;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -56,7 +49,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * This fragment provide the RadioButton/Single Options.
  */
-public class RadioBoxesFragment extends Fragment
+public class QuizRadioBoxesFragment extends Fragment
 {
     private final ArrayList<RadioButton> radioButtonArrayList = new ArrayList<>();
     private boolean screenVisible = false;
@@ -74,7 +67,7 @@ public class RadioBoxesFragment extends Fragment
 
     List<String> choices;
 
-    public RadioBoxesFragment()
+    public QuizRadioBoxesFragment()
     {
         // Required empty public constructor
     }
@@ -93,30 +86,30 @@ public class RadioBoxesFragment extends Fragment
 
 //            setSeen(questionId);
 
-            if (currentPagePosition == ((QuestionActivity) mContext).getTotalQuestionsSize())
+            if (currentPagePosition == ((QuizActivity) mContext).getTotalQuestionsSize())
             {
                 /* Here, You go back from where you started OR If you want to go next Activity just change the Intent*/
                 Intent returnIntent = new Intent();
 
 
 
-                returnIntent.putExtra("timer", "" + ((QuestionActivity)mContext).mins + ":"
-                        + String.format("%02d", ((QuestionActivity)mContext).secs));
+                returnIntent.putExtra("timer", "" + ((QuizActivity)mContext).mins + ":"
+                        + String.format("%02d", ((QuizActivity)mContext).secs));
 
-                returnIntent.putExtra("answerKey", ((QuestionActivity) mContext).answerKey);
-                returnIntent.putExtra("queId", ((QuestionActivity) mContext).queId);
-                returnIntent.putExtra("response", ((QuestionActivity) mContext).response);
-                returnIntent.putExtra("responseShouldBe", ((QuestionActivity) mContext).responseShouldBe);
-                returnIntent.putExtra("questions", ((QuestionActivity) mContext).questions);
-                returnIntent.putExtra("packege", ((QuestionActivity) mContext).packege);
-                returnIntent.putExtra("questionsWithAnswer", ((QuestionActivity) mContext).questionsWithAnswer);
+                returnIntent.putExtra("answerKey", ((QuizActivity) mContext).answerKey);
+                returnIntent.putExtra("queId", ((QuizActivity) mContext).queId);
+                returnIntent.putExtra("response", ((QuizActivity) mContext).response);
+                returnIntent.putExtra("responseShouldBe", ((QuizActivity) mContext).responseShouldBe);
+                returnIntent.putExtra("questions", ((QuizActivity) mContext).questions);
+                returnIntent.putExtra("packege", ((QuizActivity) mContext).packege);
+                returnIntent.putExtra("questionsWithAnswer", ((QuizActivity) mContext).questionsWithAnswer);
 
                 mContext.setResult(Activity.RESULT_OK, returnIntent);
                 mContext.finish();
 
             } else
             {
-                ((QuestionActivity) mContext).nextQuestion();
+                ((QuizActivity) mContext).nextQuestion();
             }
         });
         previousButton.setOnClickListener(view -> mContext.onBackPressed());
@@ -260,28 +253,19 @@ public class RadioBoxesFragment extends Fragment
 
 //                    System.out.println("Current Question = "+currentPagePosition);
 
-                    ((QuestionActivity)mContext).response[(currentPagePosition)-1] = choices.get(Integer.parseInt(cbPosition));
+                    ((QuizActivity)mContext).response[(currentPagePosition)-1] = choices.get(Integer.parseInt(cbPosition));
 
-//
-//                    if (((QuestionActivity)mContext).mRewardedVideoAd.isLoaded()) {
-//                        ((QuestionActivity)mContext).mRewardedVideoAd.show();
-//                    }
-                    int __ans = (((QuestionActivity) mContext).answerKey[(currentPagePosition) - 1]).charAt(0);
+                    int __ans = (((QuizActivity) mContext).answerKey[(currentPagePosition) - 1]).charAt(0);
 
-//                    System.out.println("currentPagePosition "+currentPagePosition+"  "+cbPosition+"  answer is " + ((QuestionActivity) mContext).answerKey[(currentPagePosition) - 1]);
-//                System.out.println(choices.get(Integer.parseInt(cbPosition)) + " and idgn " + ((QuestionActivity) mContext).answerKey[(currentPagePosition) - 1]);
-//                    System.out.println(choices.get((__ans-65)) + " and correct " + ((QuestionActivity) mContext).answerKey[(currentPagePosition) - 1]);
-//                System.out.println("int is " + Integer.parseInt(cbPosition) + " "+ __ans + "  " + (char) __ans);
-                    if(((QuestionActivity) mContext).show_answer) {
-//                        if (((QuestionActivity) mContext).answerKey[(currentPagePosition) - 1].equals(("***" + choices.get(Integer.parseInt(cbPosition)))))
+                    if(((QuizActivity) mContext).show_answer) {
+//                        if (((QuizActivity) mContext).answerKey[(currentPagePosition) - 1].equals(("***" + choices.get(Integer.parseInt(cbPosition)))))
                         if(Integer.parseInt(cbPosition) == (__ans-65))
                             Toast.makeText(mContext, "ትክክል!", Toast.LENGTH_SHORT).show();
                         else
                             Toast.makeText(mContext, "ስህተት!", Toast.LENGTH_SHORT).show();
                     }
 
-
-                    ((QuestionActivity)mContext).responseShouldBe[(currentPagePosition)-1] = choices.get((__ans-65));
+//                    ((QuizActivity)mContext).responseShouldBe[(currentPagePosition)-1] = choices.get((__ans-65));
 
 
 
@@ -374,7 +358,7 @@ public class RadioBoxesFragment extends Fragment
         for(int i=2; i<8; i++)
             if(!radioButtonTypeQuestion[i].equals("null")){//radioButtonTypeQuestion[i]!=null && !radioButtonTypeQuestion[i].equals(null)) {
 
-                ((QuestionActivity) mContext).questions[getArguments().getInt("page_position")] = radioButtonTypeQuestion[1];
+                ((QuizActivity) mContext).questions[getArguments().getInt("page_position")] = radioButtonTypeQuestion[1];
 
 //                System.out.println("radioButtonTypeQuestion[i] choices is" + radioButtonTypeQuestion[i]+"/");
                     choices.add(radioButtonTypeQuestion[i]);
@@ -383,7 +367,7 @@ public class RadioBoxesFragment extends Fragment
 
 //        System.out.println("radioButtonTypeQuestion[i] answer is " + radioButtonTypeQuestion[8]);
 
-            ((QuestionActivity) mContext).answerKey[getArguments().getInt("page_position")] = radioButtonTypeQuestion[8];
+            ((QuizActivity) mContext).answerKey[getArguments().getInt("page_position")] = radioButtonTypeQuestion[8];
 //            choices.add(radioButtonTypeQuestion[i].substring(3));
 
         ////////////////////////
@@ -428,7 +412,7 @@ public class RadioBoxesFragment extends Fragment
             rb.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
             rb.setTextColor(ContextCompat.getColor(mContext, R.color.grey));
 
-            SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(((QuestionActivity) mContext));
+            SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(((QuizActivity) mContext));
             int view_gap;
             try {
                 view_gap = Integer.parseInt(pre.getString("view_gap", "anon"));
@@ -469,7 +453,7 @@ public class RadioBoxesFragment extends Fragment
 
         /* If the current question is last in the questionnaire then
         the "Next" button will change into "Finish" button*/
-        if (currentPagePosition == ((QuestionActivity) mContext).getTotalQuestionsSize())
+        if (currentPagePosition == ((QuizActivity) mContext).getTotalQuestionsSize())
         {
             nextOrFinishButton.setText(R.string.finish);
         } else
