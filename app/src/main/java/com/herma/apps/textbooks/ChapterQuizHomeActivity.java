@@ -52,14 +52,14 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
 
 //        loadQuizApiCall();
 
-        String response = "[{\"id\":288,\"question\":\"test quiz 2\",\"answer_options\":[\"quiz 2 test option 1\",\"quiz 2 test option 2\",\"quiz 2 test option3\",\"\"],\"correct_answer\":[0],\"answer_description\":\"quiz 2 test description\",\"randomize_options\":\"1\"},{\"id\":287,\"question\":\"test quiz 1\",\"answer_options\":[\"test option 1\",\"test option 2\",\"test option 3\",\"test option 4\"],\"correct_answer\":[1],\"answer_description\":\"test description\",\"randomize_options\":\"1\"}]";
+        String questionsFromServer = "[{\"id\":288,\"question\":\"test quiz 2\",\"answer_options\":[\"quiz 2 test option 1\",\"quiz 2 test option 2\",\"quiz 2 test option3\",\"\"],\"correct_answer\":[0],\"answer_description\":\"quiz 2 test description\",\"randomize_options\":\"1\"},{\"id\":287,\"question\":\"test quiz 1\",\"answer_options\":[\"test option 1\",\"test option 2\",\"test option 3\",\"test option 4\"],\"correct_answer\":[1],\"answer_description\":\"test description\",\"randomize_options\":\"1\"}]";
 
         System.out.println("main resp is");
-        System.out.println(response);
+        System.out.println(questionsFromServer);
         Intent questions = new Intent(ChapterQuizHomeActivity.this, QuizActivity.class);
         questions.putExtra("showAnswer", false);//show_answer.isChecked());
         questions.putExtra("outof", 10);//etOutOf.getText().toString());
-        questions.putExtra("que", response);
+        questions.putExtra("que", questionsFromServer);
         startActivityForResult(questions, QUIZ_REQUEST);
 
 
@@ -76,8 +76,7 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                                System.out.println("main resp is " + response);
-
+//                                System.out.println("main resp is " + response);
                         Intent questions = new Intent(ChapterQuizHomeActivity.this, QuizActivity.class);
                         questions.putExtra("showAnswer", false);//show_answer.isChecked());
                         questions.putExtra("outof", 10);//etOutOf.getText().toString());
@@ -141,7 +140,7 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
 
 
             String timer = data.getStringExtra("timer");
-//            questionsFragment.current_questions = data.getStringArrayExtra("questions");
+            String[] current_questions = data.getStringArrayExtra("questions");
             String[] answerKey = data.getStringArrayExtra("answerKey");
             String[] response = data.getStringArrayExtra("response");
 
@@ -170,6 +169,20 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
             txtScore.setVisibility(View.VISIBLE);
 
             txtScore.setText("ውጤት : " + score + "/" + answerKey.length + " (" + perc + "%) \nየፈጀብዎት ጊዜ :- " + timer);
+
+
+
+            resultButton.setOnClickListener(v -> {
+                Intent questions = new Intent(getApplicationContext(), AnswersActivity.class);
+
+//                questions.putExtra("queId", queId);
+                questions.putExtra("answerKey", answerKey);
+                questions.putExtra("response", response);
+                questions.putExtra("responseShouldBe", responseShouldBe);
+                questions.putExtra("questions", current_questions);
+
+                startActivity(questions);
+            });
         }
 
     }

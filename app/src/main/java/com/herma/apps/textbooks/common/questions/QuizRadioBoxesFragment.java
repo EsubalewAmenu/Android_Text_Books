@@ -100,7 +100,7 @@ public class QuizRadioBoxesFragment extends Fragment
 //                returnIntent.putExtra("queId", ((QuizActivity) mContext).queId);
                 returnIntent.putExtra("response", ((QuizActivity) mContext).response);
                 returnIntent.putExtra("responseShouldBe", ((QuizActivity) mContext).responseShouldBe);
-//                returnIntent.putExtra("questions", ((QuizActivity) mContext).questions);
+                returnIntent.putExtra("questions", ((QuizActivity) mContext).questions);
 //                returnIntent.putExtra("packege", ((QuizActivity) mContext).packege);
 //                returnIntent.putExtra("questionsWithAnswer", ((QuizActivity) mContext).questionsWithAnswer);
 
