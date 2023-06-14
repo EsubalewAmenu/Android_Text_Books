@@ -99,6 +99,7 @@ System.out.println("c.getString(\"answer_options\") is " );
                     questionsWithAnswer[i][8] = c.getJSONArray("correct_answer").get(0).toString(); //c.getString("correct_answer");
                     questionsWithAnswer[i][9] = c.getString("answer_description");
                     questionsWithAnswer[i][10] = c.getString("randomize_options");
+
                 }
 
 

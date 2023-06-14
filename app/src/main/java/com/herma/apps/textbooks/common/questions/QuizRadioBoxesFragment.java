@@ -255,18 +255,14 @@ public class QuizRadioBoxesFragment extends Fragment
 
                     ((QuizActivity)mContext).response[(currentPagePosition)-1] = choices.get(Integer.parseInt(cbPosition));
 
-                    int __ans = (((QuizActivity) mContext).answerKey[(currentPagePosition) - 1]).charAt(0);
-
-                    if(((QuizActivity) mContext).show_answer) {
-//                        if (((QuizActivity) mContext).answerKey[(currentPagePosition) - 1].equals(("***" + choices.get(Integer.parseInt(cbPosition)))))
-                        if(Integer.parseInt(cbPosition) == (__ans-65))
+                    if(true){//((QuizActivity) mContext).show_answer) {
+                        if(Integer.parseInt(cbPosition) == Integer.parseInt(radioButtonTypeQuestion[8]))
                             Toast.makeText(mContext, "ትክክል!", Toast.LENGTH_SHORT).show();
                         else
                             Toast.makeText(mContext, "ስህተት!", Toast.LENGTH_SHORT).show();
                     }
 
-//                    ((QuizActivity)mContext).responseShouldBe[(currentPagePosition)-1] = choices.get((__ans-65));
-                    ((QuizActivity)mContext).responseShouldBe[(currentPagePosition)-1] = choices.get(0);
+                    ((QuizActivity)mContext).responseShouldBe[(currentPagePosition)-1] = radioButtonTypeQuestion[8];//choices.get(0);
 
 
 
@@ -337,9 +333,7 @@ public class QuizRadioBoxesFragment extends Fragment
                 d.setBounds(0, 0, empty.getIntrinsicWidth(), empty.getIntrinsicHeight());
 
                 source = source.substring(2, source.length()-2);
-//        System.out.println("source is " + source );
-//        source.replace("localhost","datascienceplc.com");
-//        System.out.println("source is " + source );
+
                 new LoadImage().execute(source, d, questionRBTypeTextView);
                 return d;
             }
@@ -462,34 +456,5 @@ public class QuizRadioBoxesFragment extends Fragment
             nextOrFinishButton.setText(R.string.next);
         }
     }
-//    public void open(String write, String db_name) {
-//
-//        db = new DB(getContext(), db_name);
-//        try {
-//            if (write.equals("write"))
-//                db.writeDataBase();
-//            else
-//                db.createDataBase();
-//        } catch (IOException ioe) {
-//            throw new Error("Unable to create database");
-//        }
-//        try {
-//            db.openDataBase();
-//        } catch (SQLException sqle) {
-//            throw sqle;
-//        }
-//    }
-//    public void setSeen(String _id) { try{
-//        open("read", "full.hrm");
-//        Cursor c = db.getSelect("*", "que", "id="+_id);
-//
-//        if(c.moveToFirst()) {
-//            c = db.doExcute("UPDATE `que` SET `seen`='"+(c.getInt(c.getColumnIndex("seen"))+1)+"' WHERE `id`='"+_id+"';");
-//            c.moveToFirst();
-//
-//        }
-//        db.close();
-//    }catch (Exception kl ) { System.out.println(kl); } }
-
 
 }
