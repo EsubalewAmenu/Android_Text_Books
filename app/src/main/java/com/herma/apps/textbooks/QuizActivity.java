@@ -94,9 +94,9 @@ System.out.println("c.getString(\"answer_options\") is " );
                     questionsWithAnswer[i][3] = c.getJSONArray("answer_options").get(1).toString(); //c.getString("ans_b");
                     questionsWithAnswer[i][4] = c.getJSONArray("answer_options").get(2).toString(); //c.getString("ans_c");
                     questionsWithAnswer[i][5] = c.getJSONArray("answer_options").get(3).toString(); //c.getString("ans_d");
-                    questionsWithAnswer[i][6] = "test"; //c.getString("ans_e");
-                    questionsWithAnswer[i][7] = "test"; //c.getString("ans_f");
-                    questionsWithAnswer[i][8] = "test"; //c.getString("correct_answer");
+                    questionsWithAnswer[i][6] = ""; //c.getString("ans_e");
+                    questionsWithAnswer[i][7] = ""; //c.getString("ans_f");
+                    questionsWithAnswer[i][8] = c.getJSONArray("correct_answer").get(0).toString(); //c.getString("correct_answer");
                     questionsWithAnswer[i][9] = c.getString("answer_description");
                     questionsWithAnswer[i][10] = c.getString("randomize_options");
                 }
