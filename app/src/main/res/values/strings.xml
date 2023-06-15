@@ -138,6 +138,7 @@
     <string name="click_here_to_retry">Click here to retry</string>
     <string name="comments">Comments</string>
     <string name="quiz_on_this_unit">Quiz on this unit</string>
+    <string name="new_quiz_on_this_unit">Add quiz on this unit</string>
     <string name="theme_mode">Theme Mode</string>
     <string name="click_to_post">Click to post</string>
     <string name="see">See</string>

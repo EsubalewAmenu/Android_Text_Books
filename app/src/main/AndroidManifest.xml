@@ -16,13 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".AddQuizActivity"
+            android:exported="false" />
+        <activity
             android:name=".ChapterQuizHomeActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".CommentActivity"
             android:exported="false">
