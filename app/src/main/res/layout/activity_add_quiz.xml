@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".AddQuizActivity">
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/questionTextView"
@@ -20,7 +22,8 @@
         android:id="@+id/questionEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:inputType="text"
+        android:inputType="text|textMultiLine"
+        android:minLines="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/questionTextView" />
@@ -29,7 +32,7 @@
         android:id="@+id/option1TextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Option 1:"
+        android:text="Option A:"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +42,8 @@
         android:id="@+id/option1EditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:inputType="text"
+        android:inputType="text|textMultiLine"
+        android:minLines="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/option1TextView" />
@@ -48,7 +52,7 @@
         android:id="@+id/option2TextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Option 2:"
+        android:text="Option B:"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +62,8 @@
         android:id="@+id/option2EditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:inputType="text"
+        android:inputType="text|textMultiLine"
+        android:minLines="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/option2TextView" />
@@ -67,7 +72,7 @@
         android:id="@+id/option3TextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Option 3:"
+        android:text="Option C:"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,7 +82,8 @@
         android:id="@+id/option3EditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:inputType="text"
+        android:inputType="text|textMultiLine"
+        android:minLines="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/option3TextView" />
@@ -86,7 +92,7 @@
         android:id="@+id/option4TextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Option 4:"
+        android:text="Option D:"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,7 +102,8 @@
         android:id="@+id/option4EditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:inputType="text"
+        android:inputType="text|textMultiLine"
+        android:minLines="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/option4TextView" />
@@ -119,11 +126,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/correctAnswerTextView" />
 
+
     <TextView
         android:id="@+id/answerDescriptionTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Answer Description:"
+        android:layout_marginTop="16dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -133,9 +142,23 @@
         android:id="@+id/answerDescriptionEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:inputType="text"
+        android:inputType="text|textMultiLine"
+        android:minLines="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/answerDescriptionTextView" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/submitQuizButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            app:layout_constraintTop_toBottomOf="@+id/answerDescriptionEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
