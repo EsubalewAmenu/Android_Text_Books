@@ -4,13 +4,16 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +27,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.herma.apps.textbooks.common.ContentSubmittedActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,12 +43,13 @@ public class AddQuizActivity extends AppCompatActivity {
     private EditText questionEditText, option1EditText, option2EditText, option3EditText, option4EditText,
             answerDescriptionEditText;
     private Spinner correctAnswerSpinner;
-    private Button submitQuizButton;
+    private LinearLayout submitQuizButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_quiz);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         // Initialize views
@@ -215,6 +220,12 @@ public class AddQuizActivity extends AppCompatActivity {
 //                        System.out.println(response);
 
                         Toast.makeText(getApplicationContext(), getString(R.string.thanks_for_the_quiz), Toast.LENGTH_LONG).show();
+
+
+                        Intent addQuizActivityIntent = new Intent(AddQuizActivity.this, ContentSubmittedActivity.class);
+                        startActivity(addQuizActivityIntent);
+                        finish();
+
                     }
 
                 }, new Response.ErrorListener() {
@@ -258,5 +269,17 @@ public class AddQuizActivity extends AppCompatActivity {
 // Add the request to the RequestQueue.
         queue.add(stringRequest);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
