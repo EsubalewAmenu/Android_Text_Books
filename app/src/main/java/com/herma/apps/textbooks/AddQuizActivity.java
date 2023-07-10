@@ -91,12 +91,12 @@ public class AddQuizActivity extends AppCompatActivity {
                 }
 
                 if (option1.isEmpty()) {
-                    option1EditText.setError("Option 1 is required");
+                    option1EditText.setError("Option A is required");
                     return;
                 }
 
                 if (option2.isEmpty()) {
-                    option2EditText.setError("Option 2 is required");
+                    option2EditText.setError("Option B is required");
                     return;
                 }
 
@@ -108,6 +108,11 @@ public class AddQuizActivity extends AppCompatActivity {
                     TextView selectedTextView = (TextView) correctAnswerSpinner.getSelectedView();
                     selectedTextView.setError("Please select a correct answer");
                     selectedTextView.requestFocus();
+                    return;
+                }
+
+                if (option3.isEmpty() && !option4.isEmpty() ) {
+                    option3EditText.setError("Since Option D is not empty, Option C should not be required");
                     return;
                 }
 
