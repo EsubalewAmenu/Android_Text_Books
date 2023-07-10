@@ -150,6 +150,7 @@
     <string name="report_reason">Please enter the reason for reporting this comment:</string>
     <string name="report">Report</string>
     <string name="thanks_for_reporting">Thank you for reporting! We\'ll review the comment</string>
+    <string name="thanks_for_the_quiz">Thank you for quiz! We\'ll review it shortly.</string>
     <string name="connection_error">Connection Error. Please check your mobile data or Wi-Fi and try again.</string>
     <string name="connection_timeout">Connection Timeout!</string>
     <string name="no_comments_yet">No comments yet.\nBe the first one to share your thoughts.</string>

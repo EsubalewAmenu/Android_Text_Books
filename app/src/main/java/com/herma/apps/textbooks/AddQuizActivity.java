@@ -186,10 +186,10 @@ public class AddQuizActivity extends AppCompatActivity {
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("post comment response is ");
-                        System.out.println(response);
+//                        System.out.println("post comment response is ");
+//                        System.out.println(response);
 
-                        Toast.makeText(getApplicationContext(), getString(R.string.thanks_for_reporting), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.thanks_for_the_quiz), Toast.LENGTH_LONG).show();
                     }
 
                 }, new Response.ErrorListener() {
