@@ -272,29 +272,12 @@ public void commentRelateds(){
                                          @Override
                                          public void onClick(View view) {
                                              //            view -> Toast.makeText(ReadActivity.this, "Person Added", Toast.LENGTH_SHORT).show();
-                                             SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                             String token = pre.getString("token", "None");
-
-                                             boolean isExpired;
-
-                                             if (token.equals("None")) {
-                                                 isExpired = true;
-                                             }
-                                             else {
-                                                 isExpired = isTokenExpired(token);
-                                             }
-
-
-                                             if(!isExpired) {
-
+                                             if(isLoggedIn()){
                                              Intent commentIntent = new Intent(ReadActivity.this, CommentActivity.class);
                                              commentIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
                                              commentIntent.putExtra("subject", getIntent().getStringExtra("subject"));
                                              commentIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
                                              startActivity(commentIntent);
-                                             }else{
-                                                 Toast.makeText(ReadActivity.this, getString(R.string.sign_in_first), Toast.LENGTH_SHORT).show();
-
                                              }
                                          }
                                      }
@@ -309,66 +292,40 @@ public void commentRelateds(){
     mAddQuizFab.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent chapterQuizIntent = new Intent(ReadActivity.this, ChapterQuizHomeActivity.class);
-            chapterQuizIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
-            chapterQuizIntent.putExtra("subject", getIntent().getStringExtra("subject"));
-            chapterQuizIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
-            startActivity(chapterQuizIntent);
+            if(isLoggedIn()) {
+                Intent chapterQuizIntent = new Intent(ReadActivity.this, ChapterQuizHomeActivity.class);
+                chapterQuizIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
+                chapterQuizIntent.putExtra("subject", getIntent().getStringExtra("subject"));
+                chapterQuizIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
+                startActivity(chapterQuizIntent);
+            }
         }
     });
 }
-//    private void requestPhoneNumber() {
-//
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(ReadActivity.this);
-//        builder.setTitle(R.string.insert_phone_eg);
-//
-//// Set up the input
-//        final EditText input = new EditText(getApplicationContext());
-//// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-//        input.setInputType(InputType.TYPE_CLASS_PHONE);
-//
-//        input.setText(storedPhone);
-//
-//        builder.setView(input);
-//
-//// Set up the buttons
-//        builder.setPositiveButton(R.string.insert_phone, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-////                        m_Text = input.getText().toString();
-//
-////                if ((input.getText().toString()).matches("^(09|07)\\d{8}$")) {
-//                if ((input.getText().toString()).matches("^(09)\\d{8}$")) {
-////                    btnGiftReward.setVisibility(View.INVISIBLE);
-//                    endReward(input.getText().toString());
-//
-//                    ////////////
-//                    SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-//                    SharedPreferences.Editor editor = sharedPref.edit();
-//                    editor.putString("storedPhone", input.getText().toString());
-//                    editor.apply();
-//                    //////////////
-//                } else requestPhoneNumber();
-//
-////                System.out.println("inserted phone is " + input.getText().toString());
-//
-//            }
-//        });
-//        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.cancel();
-//
-////                btnGiftReward.setVisibility(View.INVISIBLE);
-//                Toast.makeText(ReadActivity.this, R.string.cancel_phone, Toast.LENGTH_LONG).show();
-//
-//            }
-//        });
-//
-//        builder.show();
-//
-//    }
+
+    public boolean isLoggedIn(){
+
+        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String token = pre.getString("token", "None");
+
+        boolean isExpired;
+
+        if (token.equals("None")) {
+            isExpired = true;
+        }
+        else {
+            isExpired = isTokenExpired(token);
+        }
+
+
+        if(!isExpired) {
+            return true;
+
+        }else{
+            Toast.makeText(ReadActivity.this, getString(R.string.sign_in_first), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -394,11 +351,13 @@ public void commentRelateds(){
                 openUrl("https://play.google.com/store/apps/developer?id=Herma%20plc");
                 return true;
             case R.id.action_add_quiz:
-                Intent addQuizActivityIntent = new Intent(ReadActivity.this, TermsAndConditionsActivity.class);
-                addQuizActivityIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
-                addQuizActivityIntent.putExtra("subject", getIntent().getStringExtra("subject"));
-                addQuizActivityIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
-                startActivity(addQuizActivityIntent);
+                if(isLoggedIn()) {
+                    Intent addQuizActivityIntent = new Intent(ReadActivity.this, TermsAndConditionsActivity.class);
+                    addQuizActivityIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
+                    addQuizActivityIntent.putExtra("subject", getIntent().getStringExtra("subject"));
+                    addQuizActivityIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
+                    startActivity(addQuizActivityIntent);
+                }
                 return true;
             case R.id.action_settings:
                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
@@ -445,7 +404,7 @@ public void commentRelateds(){
 
     public void rewardCountdown(double _minute) {  //
 
-//        txtTimerValue.setVisibility(View.VISIBLE);
+//        txtTimerValue.setVisibility(View.VISIB
 
         new CountDownTimer((long) (_minute * 60 * 1000), 1000) { // 30000 mili = 30 sec
 

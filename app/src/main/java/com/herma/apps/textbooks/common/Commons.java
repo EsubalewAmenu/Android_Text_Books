@@ -256,9 +256,8 @@ ProgressDialog progressBar;
                 connection = (HttpURLConnection) url.openConnection();
 
                 SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(context);
-                connection.setRequestProperty("Authorization", "Bearer "+pre.getString("token", "None"));
-//                connection.setRequestProperty ("username", SplashActivity.USERNAME);
-//                connection.setRequestProperty ("password", SplashActivity.PAZZWORD);
+                if(!pre.getString("token", "None").equalsIgnoreCase("None"))
+                    connection.setRequestProperty("Authorization", "Bearer "+pre.getString("token", "None"));
                 connection.setRequestProperty ("Content-Type", "application/pdf");
                 connection.setUseCaches(false);
 //            connection.setDoInput(true);
