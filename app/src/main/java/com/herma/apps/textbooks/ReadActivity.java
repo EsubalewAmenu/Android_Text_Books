@@ -86,10 +86,10 @@ public class ReadActivity extends AppCompatActivity {
     long reward_p_id, reward_minutes;
 
 
-    FloatingActionButton mAddFab, mAddQuizFab, mAddCommentFab, mNewQuizFab;
+    FloatingActionButton mAddFab, mAddQuizFab, mAddCommentFab;
 
     // These are taken to make visible and invisible along with FABs
-    TextView addQuizActionText, addCommentActionText, newQuizActionText;
+    TextView addQuizActionText, addCommentActionText;
 
     // to check whether sub FAB buttons are visible or not.
     Boolean isAllFabsVisible;
@@ -221,20 +221,17 @@ public void commentRelateds(){
     // FAB button
     mAddQuizFab = findViewById(R.id.add_quiz_fab);
     mAddCommentFab = findViewById(R.id.add_comment_fab);
-    mNewQuizFab = findViewById(R.id.add_new_quiz_fab);
 
     // Also register the action name text, of all the FABs.
     addQuizActionText = findViewById(R.id.add_quiz_action_text);
     addCommentActionText = findViewById(R.id.add_comment_action_text);
-    newQuizActionText = findViewById(R.id.add_new_quiz_action_text);
 
     // Now set all the FABs and all the action name texts as GONE
     mAddQuizFab.setVisibility(View.GONE);
     mAddCommentFab.setVisibility(View.GONE);
-    mNewQuizFab.setVisibility(View.GONE);
+
     addQuizActionText.setVisibility(View.GONE);
     addCommentActionText.setVisibility(View.GONE);
-    newQuizActionText.setVisibility(View.GONE);
 
     // make the boolean variable as false, as all the
     // action name texts and all the sub FABs are invisible
@@ -250,10 +247,8 @@ public void commentRelateds(){
             // the action name texts and FABs VISIBLE
             mAddQuizFab.show();
             mAddCommentFab.show();
-            mNewQuizFab.show();
             addQuizActionText.setVisibility(View.VISIBLE);
             addCommentActionText.setVisibility(View.VISIBLE);
-            newQuizActionText.setVisibility(View.VISIBLE);
 
             // make the boolean variable true as we
             // have set the sub FABs visibility to GONE
@@ -263,10 +258,8 @@ public void commentRelateds(){
             // all the action name texts and FABs GONE.
             mAddQuizFab.hide();
             mAddCommentFab.hide();
-            mNewQuizFab.hide();
             addQuizActionText.setVisibility(View.GONE);
             addCommentActionText.setVisibility(View.GONE);
-            newQuizActionText.setVisibility(View.GONE);
 
             // make the boolean variable false as we
             // have set the sub FABs visibility to GONE
@@ -321,16 +314,6 @@ public void commentRelateds(){
             chapterQuizIntent.putExtra("subject", getIntent().getStringExtra("subject"));
             chapterQuizIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
             startActivity(chapterQuizIntent);
-        }
-    });
-    mNewQuizFab.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent addQuizActivityIntent = new Intent(ReadActivity.this, TermsAndConditionsActivity.class);
-            addQuizActivityIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
-            addQuizActivityIntent.putExtra("subject", getIntent().getStringExtra("subject"));
-            addQuizActivityIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
-            startActivity(addQuizActivityIntent);
         }
     });
 }
@@ -409,6 +392,13 @@ public void commentRelateds(){
             case R.id.action_store:
                 Toast.makeText(ReadActivity.this, "More apps by us :)", Toast.LENGTH_SHORT).show();
                 openUrl("https://play.google.com/store/apps/developer?id=Herma%20plc");
+                return true;
+            case R.id.action_add_quiz:
+                Intent addQuizActivityIntent = new Intent(ReadActivity.this, TermsAndConditionsActivity.class);
+                addQuizActivityIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
+                addQuizActivityIntent.putExtra("subject", getIntent().getStringExtra("subject"));
+                addQuizActivityIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
+                startActivity(addQuizActivityIntent);
                 return true;
             case R.id.action_settings:
                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class));

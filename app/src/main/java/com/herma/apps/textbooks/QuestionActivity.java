@@ -300,36 +300,4 @@ public class QuestionActivity extends AppCompatActivity
         }
 
     };
-
-//    public void open(String write, String db_name) {
-//
-//        db = new DB(this, db_name);
-//        try {
-//            if (write.equals("write"))
-//                db.writeDataBase();
-//            else
-//                db.createDataBase();
-//        } catch (IOException ioe) {
-//            throw new Error("Unable to create database");
-//        }
-//        try {
-//            db.openDataBase();
-//        } catch (SQLException sqle) {
-//            throw sqle;
-//        }
-//    }
-
-//    public void setAd(){
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            tvAds.setText(Html.fromHtml(Ads, Html.FROM_HTML_MODE_COMPACT));
-//        } else {
-//            tvAds.setText(Html.fromHtml(Ads));
-//        }
-//
-//        tvAds.setTextSize(MainActivity.Ads_font);
-//        tvAds.setMovementMethod(LinkMovementMethod.getInstance());
-//        tvAds.setSelected(true);
-//
-//    }
 }

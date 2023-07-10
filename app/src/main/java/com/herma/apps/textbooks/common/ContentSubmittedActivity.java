@@ -18,6 +18,7 @@ public class ContentSubmittedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content_submitted);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(getString(R.string.thank_you));
 
         continueButton = (LinearLayout) findViewById(R.id.continueButton);
         continueButton.setOnClickListener(new View.OnClickListener() {

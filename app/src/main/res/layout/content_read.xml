@@ -49,7 +49,7 @@
         <!-- Make sure that you are constraining this
              button to the parent button -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_new_quiz_fab"
+            android:id="@+id/add_quiz_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -61,40 +61,6 @@
             app:layout_constraintBottom_toTopOf="@+id/add_fab"
             app:layout_constraintEnd_toEndOf="@+id/add_fab"
             app:layout_constraintStart_toStartOf="@+id/add_fab"
-            app:srcCompat="@drawable/ic_quiz" />
-
-        <!-- Action name text for the add quiz button -->
-        <!-- Make sure that you are constraining this Text to
-             the add quiz FAB button -->
-        <TextView
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:elevation="8dp"
-            android:id="@+id/add_new_quiz_action_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="@string/new_quiz_on_this_unit"
-            app:layout_constraintBottom_toBottomOf="@+id/add_new_quiz_fab"
-            app:layout_constraintEnd_toStartOf="@+id/add_new_quiz_fab"
-            app:layout_constraintTop_toTopOf="@+id/add_new_quiz_fab" />
-
-        <!-- Floating action button for add quiz -->
-        <!-- Make sure that you are constraining this
-             button to the parent button -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_quiz_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="24dp"
-            android:elevation="8dp"
-            app:backgroundTint="@color/colorPrimary"
-            app:fabSize="normal"
-            app:layout_constraintBottom_toTopOf="@+id/add_new_quiz_fab"
-            app:layout_constraintEnd_toEndOf="@+id/add_new_quiz_fab"
-            app:layout_constraintStart_toStartOf="@+id/add_new_quiz_fab"
             app:srcCompat="@drawable/ic_quiz" />
 
         <!-- Action name text for the add quiz button -->

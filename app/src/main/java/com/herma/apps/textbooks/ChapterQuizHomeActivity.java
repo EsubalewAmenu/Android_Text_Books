@@ -23,6 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.herma.apps.textbooks.common.TermsAndConditionsActivity;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -153,6 +154,14 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
         if(id == android.R.id.home){
             // Handle clicks on the back button (the left arrow in the toolbar)
             onBackPressed();
+            return true;
+        }
+        if( id == R.id.action_add_quiz) {
+            Intent addQuizActivityIntent = new Intent(ChapterQuizHomeActivity.this, TermsAndConditionsActivity.class);
+            addQuizActivityIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
+            addQuizActivityIntent.putExtra("subject", getIntent().getStringExtra("subject"));
+            addQuizActivityIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
+            startActivity(addQuizActivityIntent);
             return true;
         }
 

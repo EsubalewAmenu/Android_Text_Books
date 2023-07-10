@@ -20,6 +20,7 @@ public class TermsAndConditionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_terms_and_conditions);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(getString(R.string.add_quiz));
 
         // Set checkbox
         CheckBox acceptCheckBox = findViewById(R.id.acceptCheckBox);

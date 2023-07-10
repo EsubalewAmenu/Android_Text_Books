@@ -50,6 +50,7 @@ public class AddQuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_quiz);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(getString(R.string.add_quiz));
 
 
         // Initialize views
