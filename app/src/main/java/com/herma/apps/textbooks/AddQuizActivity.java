@@ -2,7 +2,9 @@ package com.herma.apps.textbooks;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -11,9 +13,23 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AddQuizActivity extends AppCompatActivity {
 
@@ -87,25 +103,12 @@ public class AddQuizActivity extends AppCompatActivity {
                     return;
                 }
 
-                System.out.println("fileName is " + getIntent().getStringExtra("fileName"));
-
-//                int[] correctAnswerArray = new int[1];
-//
-//                if(correctAnswer.equalsIgnoreCase("Option A")) correctAnswerArray[0] = 0;
-//                else if(correctAnswer.equalsIgnoreCase("Option B")) correctAnswerArray[0] = 1;
-//                else if(correctAnswer.equalsIgnoreCase("Option C")) correctAnswerArray[0] = 2;
-//                else if(correctAnswer.equalsIgnoreCase("Option D")) correctAnswerArray[0] = 3;
-
-//                int[] correctAnswerArray = new int[1];
                 JSONArray correctAnswerArray = new JSONArray();
 
                 if(correctAnswer.equalsIgnoreCase("Option A")) correctAnswerArray.put(0);
                 else if(correctAnswer.equalsIgnoreCase("Option B")) correctAnswerArray.put( 1);
                 else if(correctAnswer.equalsIgnoreCase("Option C")) correctAnswerArray.put( 2);
                 else if(correctAnswer.equalsIgnoreCase("Option D")) correctAnswerArray.put( 3);
-
-//                questionArray.put(0);
-
 
 
                 // Prepare data for submission
@@ -143,16 +146,18 @@ public class AddQuizActivity extends AppCompatActivity {
                     optionDArray.put(jsonObject);
                     optionsArray.put(optionDArray);
 
+                    quizData.put("chapter", getIntent().getStringExtra("fileName"));
                     quizData.put("question", questionArray);
                     quizData.put("options", optionsArray);
-                    quizData.put("correctAnswer", correctAnswerArray);
+                    quizData.put("correct_answers", correctAnswerArray);
 
                     JSONArray explanationArray = new JSONArray();
                     JSONObject explanationObject = new JSONObject();
                     explanationObject.put("p", answerDescription);
                     explanationArray.put(explanationObject);
 
-                    quizData.put("answerDescription", explanationArray);
+                    quizData.put("description", explanationArray);
+                    submitQuiz(quizData.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -168,4 +173,65 @@ public class AddQuizActivity extends AppCompatActivity {
 
     }
 
+    public void submitQuiz(String requestBody) throws JSONException {
+
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+
+        String url = SplashActivity.BASEAPI+"ds_quiz/v1/contribute";
+
+        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url ,
+
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("post comment response is ");
+                        System.out.println(response);
+
+                        Toast.makeText(getApplicationContext(), getString(R.string.thanks_for_reporting), Toast.LENGTH_LONG).show();
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try{
+                    Toast.makeText(getApplicationContext(), getString(R.string.connection_error), Toast.LENGTH_LONG).show();
+                }catch (Exception j){}
+            }
+
+        })
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", "Bearer "+pre.getString("token", "None"));
+                return params;
+            }
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                try {
+                    return requestBody == null ? null : requestBody.getBytes("utf-8");
+                } catch (UnsupportedEncodingException uee) {
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                    return null;
+                }
+            }
+        };
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        stringRequest.setTag(this);
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
+    }
 }
