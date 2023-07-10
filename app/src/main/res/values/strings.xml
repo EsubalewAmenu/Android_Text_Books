@@ -162,5 +162,6 @@
     <string name="theme_mode_dark">Dark</string>
 
     <string name="quiz_intro">Please be patient til we load the quiz for this unit.\n\nTelegram @ethio_textbooks 0923481783</string>
+    <string name="accept_the_terms">You should accept the terms and Conditions</string>
 
 </resources>

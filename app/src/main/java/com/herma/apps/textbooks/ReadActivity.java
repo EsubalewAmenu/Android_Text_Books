@@ -50,6 +50,7 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.android.gms.ads.rewarded.ServerSideVerificationOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.herma.apps.textbooks.common.Commons;
+import com.herma.apps.textbooks.common.TermsAndConditionsActivity;
 import com.herma.apps.textbooks.settings.SettingsActivity;
 import com.herma.apps.textbooks.ui.about.About_us;
 
@@ -325,7 +326,7 @@ public void commentRelateds(){
     mNewQuizFab.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent addQuizActivityIntent = new Intent(ReadActivity.this, AddQuizActivity.class);
+            Intent addQuizActivityIntent = new Intent(ReadActivity.this, TermsAndConditionsActivity.class);
             addQuizActivityIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
             addQuizActivityIntent.putExtra("subject", getIntent().getStringExtra("subject"));
             addQuizActivityIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
