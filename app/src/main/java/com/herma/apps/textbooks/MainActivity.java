@@ -16,10 +16,12 @@ import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +33,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -138,13 +141,12 @@ public class MainActivity extends AppCompatActivity
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
 
-//        drawerMenu = navigationView.getMenu();
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        setUserData(navigationView);
 
 
 //        try { grades = getGradesFromDB(MainActivity.this);} catch (Exception e) { e.printStackTrace(); }
@@ -743,5 +745,27 @@ public class MainActivity extends AppCompatActivity
         tvAds.setSelected(true);
         tvAds.setVisibility(View.VISIBLE);
 
+    }
+    public void setUserData(NavigationView navigationView){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String token = prefs.getString("token", "None");
+
+        if (!token.equals("None")) {
+            View navHeaderView = navigationView.getHeaderView(0);
+
+            ImageView userImage = navHeaderView.findViewById(R.id.userImage);
+            TextView userName = navHeaderView.findViewById(R.id.userName);
+            TextView userEmail = navHeaderView.findViewById(R.id.userEmail);
+
+            Glide.with(getApplicationContext())
+                    .load(prefs.getString("image", "None"))
+                    .into(userImage);
+
+            userName.setText(prefs.getString("first_name", "None"));
+            userEmail.setText(prefs.getString("user_email", "None"));
+
+            navigationView.setNavigationItemSelectedListener(this);
+
+        }
     }
 }
