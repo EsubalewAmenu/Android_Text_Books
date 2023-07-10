@@ -11,6 +11,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class AddQuizActivity extends AppCompatActivity {
 
     private EditText questionEditText, option1EditText, option2EditText, option3EditText, option4EditText,
@@ -83,8 +87,82 @@ public class AddQuizActivity extends AppCompatActivity {
                     return;
                 }
 
-                // TODO: Handle quiz submission logic here
-                // You can save the quiz data to a database
+                System.out.println("fileName is " + getIntent().getStringExtra("fileName"));
+
+//                int[] correctAnswerArray = new int[1];
+//
+//                if(correctAnswer.equalsIgnoreCase("Option A")) correctAnswerArray[0] = 0;
+//                else if(correctAnswer.equalsIgnoreCase("Option B")) correctAnswerArray[0] = 1;
+//                else if(correctAnswer.equalsIgnoreCase("Option C")) correctAnswerArray[0] = 2;
+//                else if(correctAnswer.equalsIgnoreCase("Option D")) correctAnswerArray[0] = 3;
+
+//                int[] correctAnswerArray = new int[1];
+                JSONArray correctAnswerArray = new JSONArray();
+
+                if(correctAnswer.equalsIgnoreCase("Option A")) correctAnswerArray.put(0);
+                else if(correctAnswer.equalsIgnoreCase("Option B")) correctAnswerArray.put( 1);
+                else if(correctAnswer.equalsIgnoreCase("Option C")) correctAnswerArray.put( 2);
+                else if(correctAnswer.equalsIgnoreCase("Option D")) correctAnswerArray.put( 3);
+
+//                questionArray.put(0);
+
+
+
+                // Prepare data for submission
+                JSONObject quizData = new JSONObject();
+                try {
+                    JSONArray questionArray = new JSONArray();
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("p", question);
+                    questionArray.put(jsonObject);
+
+                    JSONArray optionsArray = new JSONArray();
+                    jsonObject = new JSONObject();
+                    jsonObject.put("p", option1);
+
+                    JSONArray optionAArray = new JSONArray();
+                    optionAArray.put(jsonObject);
+                    optionsArray.put(optionAArray);
+
+                    jsonObject = new JSONObject();
+                    jsonObject.put("p", option2);
+
+                    JSONArray optionBArray = new JSONArray();
+                    optionBArray.put(jsonObject);
+                    optionsArray.put(optionBArray);
+
+                    jsonObject = new JSONObject();
+                    jsonObject.put("p", option3);
+                    JSONArray optionCArray = new JSONArray();
+                    optionCArray.put(jsonObject);
+                    optionsArray.put(optionCArray);
+
+                    jsonObject = new JSONObject();
+                    jsonObject.put("p", option4);
+                    JSONArray optionDArray = new JSONArray();
+                    optionDArray.put(jsonObject);
+                    optionsArray.put(optionDArray);
+
+                    quizData.put("question", questionArray);
+                    quizData.put("options", optionsArray);
+                    quizData.put("correctAnswer", correctAnswerArray);
+
+                    JSONArray explanationArray = new JSONArray();
+                    JSONObject explanationObject = new JSONObject();
+                    explanationObject.put("p", answerDescription);
+                    explanationArray.put(explanationObject);
+
+                    quizData.put("answerDescription", explanationArray);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+                // TODO: Send quizData to the web server for submission
+                // You can use networking libraries like Retrofit or Volley to handle the API request
+
+                // For testing purposes, log the prepared data
+                System.out.println("QuizData for submition" + quizData.toString());
             }
         });
 
