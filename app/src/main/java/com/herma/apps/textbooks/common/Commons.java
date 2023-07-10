@@ -68,7 +68,7 @@ public class Commons {
 
     Context context;
     DB db;
-    public final String WEBSITE = "https://datascienceplc.com/api";
+//    public final String WEBSITE = "https://datascienceplc.com/api";
 ProgressDialog progressBar;
 
     /** A numeric constant for request code */
@@ -152,16 +152,16 @@ ProgressDialog progressBar;
 
                         if (is_short) {
 
-                            downloadUrl = WEBSITE + "/ds_bm/v1/get_et_book/";//+ finalFileName; // Path where you want to download file.
+                            downloadUrl = SplashActivity.BASEAPI + "ds_bm/v1/get_et_book/";//+ finalFileName; // Path where you want to download file.
 //                            downloadUrl = WEBSITE + "/manager/api/items/get_for_books?cnt=eth&what=short&name=";//+ finalFileName; // Path where you want to download file.
                             asyncDownloader.execute(downloadUrl, chapterID, fEn);
 
                         } else if (finalFileName1.startsWith("new")) {
-                            downloadUrl = WEBSITE + "/ds_bm/v1/book/download/1-12-textbooks/";//+ finalFileName; // Path where you want to download file.
+                            downloadUrl = SplashActivity.BASEAPI + "ds_bm/v1/book/download/1-12-textbooks/";//+ finalFileName; // Path where you want to download file.
                             asyncDownloader.execute(downloadUrl, finalFileName1, fEn);
                         }else{
 //                            downloadUrl = WEBSITE + "/manager/api/items/get_for_books?cnt=eth&what=txt&name=";//+ finalFileName; // Path where you want to download file.
-                            downloadUrl = WEBSITE + "/ds_bm/v1/get_et_book/";//+ finalFileName; // Path where you want to download file.
+                            downloadUrl = SplashActivity.BASEAPI + "ds_bm/v1/get_et_book/";//+ finalFileName; // Path where you want to download file.
                         asyncDownloader.execute(downloadUrl, finalFileName1, fEn);
                     }
 
@@ -255,8 +255,10 @@ ProgressDialog progressBar;
                 URL url = new URL(params[0]+params[1]);
                 connection = (HttpURLConnection) url.openConnection();
 
-                connection.setRequestProperty ("username", SplashActivity.USERNAME);
-                connection.setRequestProperty ("password", SplashActivity.PAZZWORD);
+                SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(context);
+                connection.setRequestProperty("Authorization", "Bearer "+pre.getString("token", "None"));
+//                connection.setRequestProperty ("username", SplashActivity.USERNAME);
+//                connection.setRequestProperty ("password", SplashActivity.PAZZWORD);
                 connection.setRequestProperty ("Content-Type", "application/pdf");
                 connection.setUseCaches(false);
 //            connection.setDoInput(true);

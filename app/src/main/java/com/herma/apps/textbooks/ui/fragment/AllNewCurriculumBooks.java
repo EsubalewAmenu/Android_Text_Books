@@ -3,10 +3,12 @@ package com.herma.apps.textbooks.ui.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -62,7 +64,7 @@ public class AllNewCurriculumBooks extends Fragment implements SwipeRefreshLayou
     private boolean isLoading = false;
     public ArrayList<Object> items;
     String url,
-    defult ="https://datascienceplc.com/api/ds_bm/v1/";
+    defult = SplashActivity.BASEAPI+ "ds_bm/v1/";
     public RequestQueue queue;
     public int random = 0;
     public String searchQuery = "Grade 12", loadType = "all";
@@ -282,9 +284,9 @@ System.out.println("Error on sys:"+error);
                         @Override
                         public Map<String, String> getHeaders() throws AuthFailureError {
                             Map<String, String> params = new HashMap<>();
-                            params.put("username", SplashActivity.USERNAME);//public user
-                            params.put("password", SplashActivity.PAZZWORD);
-//                            params.put("Authorization", "Basic YmxvZ2VyX2FwaUBkYXRhc2NpZW5jZXBsYy5jb206cHVibGljLXBhc3N3b3Jk");
+                            SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getContext());
+                            params.put("Authorization", "Bearer "+pre.getString("token", "None"));
+
                             return params;
                         }
                     };

@@ -1,7 +1,9 @@
 package com.herma.apps.textbooks;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -27,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
@@ -157,7 +160,30 @@ public class AddQuizActivity extends AppCompatActivity {
                     explanationArray.put(explanationObject);
 
                     quizData.put("description", explanationArray);
-                    submitQuiz(quizData.toString());
+
+
+
+
+                    new AlertDialog.Builder(AddQuizActivity.this)
+                            .setTitle("Are you sure")
+                            .setMessage("Do you want to submit this quiz?")
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Continue with submission operation
+
+                                    try {
+                                        submitQuiz(quizData.toString());
+                                    } catch (JSONException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }
+                            })
+
+                            // A null listener allows the button to dismiss the dialog and take no further action.
+                            .setNegativeButton(R.string.cancel, null)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -167,7 +193,6 @@ public class AddQuizActivity extends AppCompatActivity {
                 // You can use networking libraries like Retrofit or Volley to handle the API request
 
                 // For testing purposes, log the prepared data
-                System.out.println("QuizData for submition" + quizData.toString());
             }
         });
 
