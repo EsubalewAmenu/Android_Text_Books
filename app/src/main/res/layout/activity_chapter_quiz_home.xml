@@ -11,17 +11,34 @@
             android:layout_marginStart="30dp"
             >
 
-            <TextView
-                android:textStyle="bold"
-                android:layout_gravity="center_horizontal|center_vertical|fill_horizontal|center|fill|start|end"
-                android:layout_weight="1.0"
-                android:id="@+id/tvQuizIntro"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:text="@string/quiz_intro"
-                android:textAllCaps="false"
-                android:textSize="18sp"/>
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/freelancer" />
 
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Telegram @ethio_textbooks 0923481783"
+        android:textSize="24sp"
+        android:gravity="center_vertical|center_horizontal"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp" />
+
+    <TextView
+        android:id="@+id/contentTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/quiz_intro"
+        android:textSize="16sp"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_marginTop="20dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="98dp" />
 
             <Button
                 android:id="@+id/btnQuizRetry"

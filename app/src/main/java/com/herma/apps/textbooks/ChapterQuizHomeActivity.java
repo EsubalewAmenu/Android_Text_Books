@@ -63,13 +63,14 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
         questions.putExtra("outof", 10);//etOutOf.getText().toString());
         questions.putExtra("que", questionsFromServer);
         startActivityForResult(questions, QUIZ_REQUEST);
+        btnQuizRetry.setVisibility(View.VISIBLE);
 
         btnQuizRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 //                if(isOnline()) {
-                btnQuizRetry.setEnabled(false);
+                btnQuizRetry.setVisibility(View.INVISIBLE);
 //                loadQuizApiCall();
 
 
@@ -82,6 +83,7 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
                 questions.putExtra("outof", 10);//etOutOf.getText().toString());
                 questions.putExtra("que", questionsFromServer);
                 startActivityForResult(questions, QUIZ_REQUEST);
+                btnQuizRetry.setVisibility(View.VISIBLE);
 
 
 //                }else
@@ -109,6 +111,7 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
                         questions.putExtra("outof", 10);//etOutOf.getText().toString());
                         questions.putExtra("que", response);
                         startActivityForResult(questions, QUIZ_REQUEST);
+                        btnQuizRetry.setVisibility(View.VISIBLE);
 
                     }
 
