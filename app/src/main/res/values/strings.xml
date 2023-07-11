@@ -167,7 +167,7 @@
     <string name="thank_you">Thank You!</string>
 
     <string name="quiz_not_found">Quiz not found</string>
-    <string name="no_quiz_added">So far, no quiz added for this unit. we\'ll try to add soon.</string>
+    <string name="no_quiz_added">So far, quiz not added for this unit. we\'ll try to add soon.</string>
     <string name="back">Back</string>
     <string name="practical">Practical!</string>
     <string name="signout">Sign out</string>
