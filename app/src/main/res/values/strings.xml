@@ -170,6 +170,7 @@
     <string name="no_quiz_added">So far, no quiz added for this unit. we\'ll try to add soon.</string>
     <string name="back">Back</string>
     <string name="practical">Practical!</string>
+    <string name="signout">Sign out</string>
 
 
 </resources>

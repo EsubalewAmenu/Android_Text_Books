@@ -42,8 +42,8 @@ import java.util.Map;
 
 public class SplashActivity extends AppCompatActivity {
 
-    public static String BASEAPI = "https://datascienceplc.com/api/";
-//    public static String BASEAPI = "https://dashencon.com/test/api/";
+//    public static String BASEAPI = "https://datascienceplc.com/api/";
+    public static String BASEAPI = "https://dashencon.com/test/api/";
     public RequestQueue queue;
     public static String USERNAME = "public-api-user", PAZZWORD = "public-api-password";
 
@@ -198,8 +198,8 @@ public class SplashActivity extends AppCompatActivity {
         jsonBody.put("registed_with", "google");
         final String requestBody = jsonBody.toString();
 
-//        System.out.println("login request to server");
-//        System.out.println(requestBody);
+        System.out.println("login request to server");
+        System.out.println(requestBody);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, BASEAPI+url ,
 
@@ -260,6 +260,9 @@ public class SplashActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
 
+                    }else{
+                        // Perform sign out
+                        mGoogleSignInClient.signOut();
                     }
                 } else {
                     // The error does not have a network response

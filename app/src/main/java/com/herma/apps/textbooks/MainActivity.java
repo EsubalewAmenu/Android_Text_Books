@@ -41,6 +41,11 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.herma.apps.textbooks.common.Commons;
 import com.herma.apps.textbooks.common.MainAdapter;
@@ -437,75 +442,6 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
     }
-//    public void setMenuItems(ArrayList<String> menuItemsArray){
-//
-//        drawerMenu.clear();
-//        for(int temp=0;temp<menuItemsArray.size();temp++){
-//            // groupId, itemId, order, title
-//            drawerMenu.add(1, 0, 0, menuItemsArray.get(temp)).setIcon(R.drawable.ic_menu_send);
-//        }
-//        drawerMenu.setGroupCheckable(1, true, true);
-//
-//        Menu communicateMenu = drawerMenu.addSubMenu("Communicate");
-//        communicateMenu.add(2, 50, 50, "Tell a friend (Link)").setIcon(R.drawable.ic_menu_share);
-////        communicateMenu.add(2, 51, 51, "Share app (apk)").setIcon(R.drawable.ic_menu_share);
-//
-//        Menu aboutMenu = drawerMenu.addSubMenu("About");
-//        aboutMenu.add(3, 56, 56, "Rate us on PlayStore").setIcon(android.R.drawable.star_on);
-//        aboutMenu.add(3, 57, 57, "More apps from us").setIcon(R.drawable.b_next);
-//        aboutMenu.add(3, 58, 58, "About").setIcon(R.drawable.about);
-//        aboutMenu.add(3, 59, 59, "Exit").setIcon(android.R.drawable.ic_delete);
-//
-//        if(getIntent().getStringExtra("choosedGrade") != null) changeFragment(gradeMap.get(getIntent().getStringExtra("choosedGrade")), getIntent().getStringExtra("choosedGrade"));
-//        else changeFragment((String)gradeMap.values().toArray()[0], (String)gradeMap.keySet().toArray()[0]);
-//
-//        item_click_listener = new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-////                System.out.println("Clicked item is " + item.toString() + " & id is " + item.getItemId());
-//
-//                  if(item.getItemId() == 0){
-////System.out.println("gradeMap.get(item.toString()) is " + gradeMap.get(item.toString()));
-//                      changeFragment(gradeMap.get(item.toString()), item.toString());
-//
-//                      SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-//                      SharedPreferences.Editor editor = sharedPref.edit();
-//                      editor.putString("choosedGrade", item.toString());
-//                      editor.apply();
-//
-//                  }else if(item.getItemId() == 50){// Tell a friend (Link)
-//                Intent intent4 = new Intent("android.intent.action.SEND");
-//                intent4.setType("text/plain");
-//                intent4.putExtra("android.intent.extra.TEXT", getString(R.string.share_link_pre) + " " + getString(R.string.app_name) + " " + getString(R.string.share_link_center) + " " + "https://play.google.com/store/apps/details?id="+getPackageName() + " "+ getString(R.string.share_link_pos));
-//                startActivity(Intent.createChooser(intent4, "SHARE VIA"));
-////                  }else if(item.getItemId() == 51){// Share app (apk)
-////                      shareApp(MainActivity.this,"titleTezt", "messageTezt", "subjectTezt");
-//                  }else if(item.getItemId() == 56){//Rate us
-//            Toast.makeText(MainActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
-//            rateApp();
-//                  }else if(item.getItemId() == 57){//More app
-//            Toast.makeText(MainActivity.this, "More apps by us :)", Toast.LENGTH_SHORT).show();
-//            openUrl("https://play.google.com/store/apps/developer?id=Herma%20plc");
-//                  }else if(item.getItemId() == 58){//About
-//            startActivity(new Intent(getApplicationContext(), About_us.class));
-//                  }else if(item.getItemId() == 59){//Exit
-//                      finish();
-//                      System.exit(0);
-//                  }
-//
-//                drawerLayout.closeDrawers();
-//                return true;
-//            }
-//        };
-//
-//        navigationView.setNavigationItemSelectedListener(item_click_listener);
-//        mDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout, toolbar,R.string.app_name,
-//                R.string.app_name);
-//        drawerLayout.setDrawerListener(mDrawerToggle);
-//        mDrawerToggle.syncState();
-//
-//    }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
@@ -573,6 +509,30 @@ public class MainActivity extends AppCompatActivity
             intent4.setType("text/plain");
             intent4.putExtra("android.intent.extra.TEXT", getString(R.string.share_link_pre) + " " + getString(R.string.app_name) + " " + getString(R.string.share_link_center) + " " + "https://play.google.com/store/apps/details?id=" + getPackageName() + " " + getString(R.string.share_link_pos));
             startActivity(Intent.createChooser(intent4, "SHARE VIA"));
+        }else if(id == R.id.action_logout){
+
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .requestProfile()
+                    .build();
+
+            GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+            // Perform sign out
+            mGoogleSignInClient.signOut()
+                    .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            SharedPreferences prefs = null;
+                            prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+                            prefs.edit().putString("token", "None").apply();
+
+                            Intent splashActivityIntent = new Intent(getApplicationContext(), SplashActivity.class);
+                            startActivity(splashActivityIntent);
+                        }
+                    });
+
         }else if(id == R.id.action_settings){
             startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
 //        } else if (id == R.id.nav_ad_free) {
@@ -766,6 +726,12 @@ public class MainActivity extends AppCompatActivity
 
             navigationView.setNavigationItemSelectedListener(this);
 
+        }else{
+
+// Hide the logout item
+            Menu menu = navigationView.getMenu();
+            MenuItem logoutItem = menu.findItem(R.id.action_logout);
+            logoutItem.setVisible(false);
         }
     }
 }
