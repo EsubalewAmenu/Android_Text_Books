@@ -622,24 +622,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-//    public void shareApp(Context context, String chooserTitle,
-//                                String message, String messageSubject) {
-//        ApplicationInfo app = getApplicationContext().getApplicationInfo();
-//        String filePath = app.sourceDir;
-//
-//        Intent intent = new Intent(Intent.ACTION_SEND);
-//
-//        // MIME of .apk is "application/vnd.android.package-archive".
-//        // but Bluetooth does not accept this. Let's use "*/*" instead.
-//        intent.setType("*/*");
-//
-//
-//        // Append file and send Intent
-//        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
-//        startActivity(Intent.createChooser(intent, "Share app via"));
-//
-//    }
-
     private void doApiCall() {
         new Handler().postDelayed(new Runnable() {
 
@@ -655,13 +637,19 @@ public class MainActivity extends AppCompatActivity
                             public void onResponse(String response) {
                                 if (response != null) {
                                     try {
-//                                        System.out.println(response);
+                                        System.out.println("ad request is ");
+                                        System.out.println(response);
                                         // Getting JSON Array node
                                         JSONObject jsonObj = new JSONObject(response);
 
                                         System.out.println("response code is " + jsonObj.getString("code"));
                                         if(jsonObj.getInt("code") == 200 ){
                                             Ads = jsonObj.getString("ad");
+
+                                                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                                prefs.edit().putString("last_update", jsonObj.getString("last_update") ).apply();
+
+
                                             if(Ads != "null"){
                                                 setAd(); myB = true;
                                             }else tvAds.setVisibility(View.GONE);

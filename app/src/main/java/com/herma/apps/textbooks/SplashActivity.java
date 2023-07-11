@@ -70,7 +70,7 @@ public class SplashActivity extends AppCompatActivity {
         if(languageCode.equals("None"))
             startActivity(new Intent(SplashActivity.this, SettingsActivity.class));
 
-        getLastUpdated();
+//        getLastUpdated();
 
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -307,65 +307,65 @@ public class SplashActivity extends AppCompatActivity {
         queue.add(stringRequest);
 
     }
-        private void getLastUpdated() {
-
-                    RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-
-                    String url = "DSSERVICE/v1/last_update";
-
-
-                    StringRequest stringRequest = new StringRequest(Request.Method.GET, BASEAPI+url ,
-
-                            new com.android.volley.Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    if (response != null) {
-//        response is {"success":true,"error":false,"activator":{"license_code":"5335","license_type":"1","out_date":"2021-09-22"}}
-
-                                        try {
-                                            // Getting JSON Array node
-                                            JSONObject jsonObj = new JSONObject(response);
-
-                                            if(jsonObj.getString("success").equals("true") ) {
-
-//                                                SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                                prefs.edit().putString("last_update", jsonObj.getString("last_update") ).apply();
-
-//                                                System.out.println(" adf response is " + jsonObj.getString("last_update"));
-                                            }
-
-                                        } catch (final JSONException e) {
-                                        }
-
-                                    }
-                                }
-
-                            }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                        }
-
-                    })
-                    {
-                        @Override
-                        public Map<String, String> getHeaders() throws AuthFailureError {
-                            Map<String, String> params = new HashMap<>();
-                            params.put("username", USERNAME);
-                            params.put("password", PAZZWORD);
-                            return params;
-                        }
-                    };
-
-                    stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                            10000,
-                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-                    stringRequest.setTag(this);
-// Add the request to the RequestQueue.
-                    queue.add(stringRequest);
-
-        }
+//        private void getLastUpdated() {
+//
+//                    RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+//
+//                    String url = "DSSERVICE/v1/last_update";
+//
+//
+//                    StringRequest stringRequest = new StringRequest(Request.Method.GET, BASEAPI+url ,
+//
+//                            new com.android.volley.Response.Listener<String>() {
+//                                @Override
+//                                public void onResponse(String response) {
+//                                    if (response != null) {
+////        response is {"success":true,"error":false,"activator":{"license_code":"5335","license_type":"1","out_date":"2021-09-22"}}
+//
+//                                        try {
+//                                            // Getting JSON Array node
+//                                            JSONObject jsonObj = new JSONObject(response);
+//
+//                                            if(jsonObj.getString("success").equals("true") ) {
+//
+////                                                SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                                                prefs.edit().putString("last_update", jsonObj.getString("last_update") ).apply();
+//
+////                                                System.out.println(" adf response is " + jsonObj.getString("last_update"));
+//                                            }
+//
+//                                        } catch (final JSONException e) {
+//                                        }
+//
+//                                    }
+//                                }
+//
+//                            }, new Response.ErrorListener() {
+//                        @Override
+//                        public void onErrorResponse(VolleyError error) {
+//                        }
+//
+//                    })
+//                    {
+//                        @Override
+//                        public Map<String, String> getHeaders() throws AuthFailureError {
+//                            Map<String, String> params = new HashMap<>();
+//                            params.put("username", USERNAME);
+//                            params.put("password", PAZZWORD);
+//                            return params;
+//                        }
+//                    };
+//
+//                    stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+//                            10000,
+//                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//
+//                    stringRequest.setTag(this);
+//// Add the request to the RequestQueue.
+//                    queue.add(stringRequest);
+//
+//        }
 
 
 }
