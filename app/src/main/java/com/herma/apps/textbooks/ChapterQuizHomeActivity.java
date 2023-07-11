@@ -156,6 +156,14 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.read, menu);
+
+        if(getIntent().getStringExtra("allow_add") != null)
+            if(getIntent().getStringExtra("allow_add").equalsIgnoreCase("quiz-no-add")) {
+                // Hide the add quiz item
+                MenuItem addQuizItem = menu.findItem(R.id.action_add_quiz);
+                addQuizItem.setVisible(false);
+            }
+
         return true;
     }
     @Override

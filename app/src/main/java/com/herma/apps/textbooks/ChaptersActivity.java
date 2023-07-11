@@ -1,5 +1,7 @@
 package com.herma.apps.textbooks;
 
+import static com.herma.apps.textbooks.common.TokenUtils.isTokenExpired;
+
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -224,11 +226,11 @@ public void setFromShort(String shortArrayList) throws JSONException {
         }
 
     }
-    public void openUnitToRead(Item item){
+    public void openUnitToRead(Item item) {
         fName = item.fileName;
         fEn = item.en;
 
-        if(getIntent().getStringExtra("subjectChapters")!=null && !is_short)
+        if (getIntent().getStringExtra("subjectChapters") != null && !is_short)
             isDBSouldBeUpdated(fName, fEn);
 
         File chapterFile = new File(FILEPATH + fName);
@@ -241,21 +243,63 @@ public void setFromShort(String shortArrayList) throws JSONException {
             chaptersIntent.putExtra("subject", getIntent().getStringExtra("name"));
             startActivity(chaptersIntent);
         } else {
+            if(fEn.equalsIgnoreCase("quiz") || fEn.equalsIgnoreCase("quiz-no-add")) {
+//                System.out.println("fEn is " + fEn);
+                openQuiz(item.chapName, getIntent().getStringExtra("name"), fName, fEn);
+            }else{
 //////////////////////////////
-try {
-    File booksDirectory = new File(FILEPATH);
-    if (!booksDirectory.exists()) System.out.println(booksDirectory.mkdirs());
-}catch (Exception kl){System.out.println("Exception on ChaptersActivity mkdirs " + kl);}
+            try {
+                File booksDirectory = new File(FILEPATH);
+                if (!booksDirectory.exists()) System.out.println(booksDirectory.mkdirs());
+            } catch (Exception kl) {
+                System.out.println("Exception on ChaptersActivity mkdirs " + kl);
+            }
 //////////////////////////////
 
-                    if(is_short){
-            new Commons(ChaptersActivity.this).messageDialog(ChaptersActivity.this, "d", R.string.no_file, 1234, fName, fEn, R.string.download, R.string.cancel, R.string.downloading, item.chapName, getIntent().getStringExtra("subject") , getIntent().getStringExtra("grade"), item.chapterID, is_short);
-        }else
-            new Commons(ChaptersActivity.this).messageDialog(ChaptersActivity.this, "d", R.string.no_file, 1234, fName, fEn, R.string.download, R.string.cancel, R.string.downloading, item.chapName, getIntent().getStringExtra("name"), "", "", is_short);
+            if (is_short) {
+                new Commons(ChaptersActivity.this).messageDialog(ChaptersActivity.this, "d", R.string.no_file, 1234, fName, fEn, R.string.download, R.string.cancel, R.string.downloading, item.chapName, getIntent().getStringExtra("subject"), getIntent().getStringExtra("grade"), item.chapterID, is_short);
+            } else
+                new Commons(ChaptersActivity.this).messageDialog(ChaptersActivity.this, "d", R.string.no_file, 1234, fName, fEn, R.string.download, R.string.cancel, R.string.downloading, item.chapName, getIntent().getStringExtra("name"), "", "", is_short);
         }
     }
+    }
+public void openQuiz(String chapterName, String subject, String fileName, String fEn){
+
+    if(isLoggedIn()) {
+
+        Intent chapterQuizIntent = new Intent(ChaptersActivity.this, ChapterQuizHomeActivity.class);
+        chapterQuizIntent.putExtra("chapterName", chapterName);
+        chapterQuizIntent.putExtra("subject", subject);
+        chapterQuizIntent.putExtra("fileName", fileName);
+        chapterQuizIntent.putExtra("allow_add", fEn);
+        startActivity(chapterQuizIntent);
+    }
+
+}
+
+    public boolean isLoggedIn(){
+
+        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String token = pre.getString("token", "None");
+
+        boolean isExpired;
+
+        if (token.equals("None")) {
+            isExpired = true;
+        }
+        else {
+            isExpired = isTokenExpired(token);
+        }
 
 
+        if(!isExpired) {
+            return true;
+
+        }else{
+            Toast.makeText(ChaptersActivity.this, getString(R.string.sign_in_first), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
     private void isDBSouldBeUpdated(String fileName, String fEn) {
 
 
