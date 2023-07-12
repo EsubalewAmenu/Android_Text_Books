@@ -148,17 +148,20 @@ public class AddQuizActivity extends AppCompatActivity {
                     optionBArray.put(jsonObject);
                     optionsArray.put(optionBArray);
 
-                    jsonObject = new JSONObject();
-                    jsonObject.put("p", option3);
-                    JSONArray optionCArray = new JSONArray();
-                    optionCArray.put(jsonObject);
-                    optionsArray.put(optionCArray);
-
-                    jsonObject = new JSONObject();
-                    jsonObject.put("p", option4);
-                    JSONArray optionDArray = new JSONArray();
-                    optionDArray.put(jsonObject);
-                    optionsArray.put(optionDArray);
+                    if (!option3.isEmpty()) {
+                        jsonObject = new JSONObject();
+                        jsonObject.put("p", option3);
+                        JSONArray optionCArray = new JSONArray();
+                        optionCArray.put(jsonObject);
+                        optionsArray.put(optionCArray);
+                    }
+                    if (!option4.isEmpty()) {
+                        jsonObject = new JSONObject();
+                        jsonObject.put("p", option4);
+                        JSONArray optionDArray = new JSONArray();
+                        optionDArray.put(jsonObject);
+                        optionsArray.put(optionDArray);
+                    }
 
                     quizData.put("chapter", getIntent().getStringExtra("fileName"));
                     quizData.put("question", questionArray);
@@ -166,12 +169,13 @@ public class AddQuizActivity extends AppCompatActivity {
                     quizData.put("correct_answers", correctAnswerArray);
 
                     JSONArray explanationArray = new JSONArray();
-                    JSONObject explanationObject = new JSONObject();
-                    explanationObject.put("p", answerDescription);
-                    explanationArray.put(explanationObject);
+                    if(!answerDescription.isEmpty()) {
+                        JSONObject explanationObject = new JSONObject();
+                        explanationObject.put("p", answerDescription);
+                        explanationArray.put(explanationObject);
+                    }
 
                     quizData.put("description", explanationArray);
-
 
 
 

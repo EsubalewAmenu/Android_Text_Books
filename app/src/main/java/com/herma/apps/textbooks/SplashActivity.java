@@ -42,8 +42,8 @@ import java.util.Map;
 
 public class SplashActivity extends AppCompatActivity {
 
-    public static String BASEAPI = "https://datascienceplc.com/api/";
-//    public static String BASEAPI = "https://dashencon.com/test/api/";
+//    public static String BASEAPI = "https://datascienceplc.com/api/";
+    public static String BASEAPI = "https://dashencon.com/test/api/";
     public RequestQueue queue;
     public static String USERNAME = "public-api-user", PAZZWORD = "public-api-password";
 
