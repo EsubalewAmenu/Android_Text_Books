@@ -285,7 +285,8 @@ System.out.println("Error on sys:"+error);
                         public Map<String, String> getHeaders() throws AuthFailureError {
                             Map<String, String> params = new HashMap<>();
                             SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getContext());
-                            params.put("Authorization", "Bearer "+pre.getString("token", "None"));
+                            if(!pre.getString("token", "None").equalsIgnoreCase("None"))
+                                params.put("Authorization", "Bearer "+pre.getString("token", "None"));
 
                             return params;
                         }
