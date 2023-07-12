@@ -332,7 +332,7 @@ public class QuizRadioBoxesFragment extends Fragment
                 d.addLevel(0, 0, empty);
                 d.setBounds(0, 0, empty.getIntrinsicWidth(), empty.getIntrinsicHeight());
 
-                source = source.substring(2, source.length()-2);
+//                source = source.substring(2, source.length()-2);
 
                 new LoadImage().execute(source, d, questionRBTypeTextView);
                 return d;
@@ -390,8 +390,8 @@ public class QuizRadioBoxesFragment extends Fragment
                     d.addLevel(0, 0, empty);
                     d.setBounds(0, 0, empty.getIntrinsicWidth(), empty.getIntrinsicHeight());
 
-                    source = source.substring(2, source.length() - 2);
-//        System.out.println("source is " + source );
+//                    source = source.substring(2, source.length() - 2);
+        System.out.println("source is " + source );
 //        source.replace("localhost","datascienceplc.com");
 //        System.out.println("source is " + source );
                     new LoadImage().execute(source, d, rb);

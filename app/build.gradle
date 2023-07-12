@@ -9,8 +9,8 @@ android {
         applicationId "com.herma.apps.textbooks"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 68
-        versionName "3.5.1"
+        versionCode 70
+        versionName "3.5.3"
         multiDexEnabled true
 
         ndk {
