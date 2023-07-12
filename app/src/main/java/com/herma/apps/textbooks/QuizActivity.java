@@ -79,7 +79,6 @@ public class QuizActivity extends AppCompatActivity
                 JSONArray datas = new JSONArray(que);
 
                 questionsWithAnswer = new String[datas.length()][11];
-System.out.println("c.getString(\"answer_options\") is " );
 
                 JSONObject c;
                 for (int i = 0; i < datas.length(); i++) {
