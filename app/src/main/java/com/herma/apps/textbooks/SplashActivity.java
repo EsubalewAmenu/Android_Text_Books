@@ -187,7 +187,7 @@ public class SplashActivity extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
-        String url = "wp/v2/users/register";
+        String url = "wp/v2/users/new_register";
 
         JSONObject jsonBody = new JSONObject();
         jsonBody.put("google_user_id", userId);
@@ -198,16 +198,16 @@ public class SplashActivity extends AppCompatActivity {
         jsonBody.put("registed_with", "google");
         final String requestBody = jsonBody.toString();
 
-//        System.out.println("login request to server");
-//        System.out.println(requestBody);
+        System.out.println("login request to server");
+        System.out.println(requestBody);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, BASEAPI+url ,
 
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-//                        System.out.println("server response is");
-//                        System.out.println(response);
+                        System.out.println("server response is");
+                        System.out.println(response);
 
                         try {
                             JSONObject jsonObj = new JSONObject(response);
@@ -230,6 +230,9 @@ public class SplashActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                String errorMessage = error.getMessage();
+                System.out.println("Error message: " + errorMessage);
                 // Check if the error has a network response
                 NetworkResponse response = error.networkResponse;
                 if (response != null) {
@@ -244,6 +247,7 @@ public class SplashActivity extends AppCompatActivity {
                     System.out.println("Error response body: " + responseBody);
                     if(statusCode == 409 ){
                         try {
+
                             JSONObject jsonObj = new JSONObject(responseBody);
 
                             prefs.edit().putString("token", jsonObj.getString("token")).apply();
