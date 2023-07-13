@@ -1,13 +1,14 @@
 workflows:
-  sample-workflow:
+  main-workflow:
     name: 1-12 Textbooks app Workflow
     max_build_duration: 120
     instance_type: mac_mini_m1
     scripts:
-        - name: Launch emulator
-          script: |
-            set -e # exit on first failed command
-
-            cd $ANDROID_HOME/tools
-            emulator -avd emulator &
-            adb wait-for-device
+      - name: Build Android App Bundle
+        working_directory: android
+        script: ./gradlew bundleRelease
+    artifacts:
+      - build/**/outputs/bundle/**/*.aab
+    cache:
+      cache_paths:
+        - $HOME/.gradle/caches
