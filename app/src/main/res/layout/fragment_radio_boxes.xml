@@ -32,6 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/questionRBTypeTextView"
         />
 
+
     <ScrollView
         android:id="@+id/contentInScrollView"
         android:layout_width="match_parent"
@@ -42,6 +43,10 @@
         app:layout_constraintTop_toBottomOf="@+id/dividerInRB"
         >
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
         <RadioGroup
             android:id="@+id/radioGroupForChoices"
             android:layout_width="match_parent"
@@ -51,6 +56,22 @@
 
         </RadioGroup>
 
+        <TextView
+            android:id="@+id/answerExplanationTextView"
+            style="?android:textAppearanceMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="1.2"
+            android:padding="16dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
+            tols:text="Title"
+            />
+        </LinearLayout>
     </ScrollView>
 
     <include

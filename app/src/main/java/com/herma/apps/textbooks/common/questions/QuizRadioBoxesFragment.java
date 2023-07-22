@@ -57,7 +57,7 @@ public class QuizRadioBoxesFragment extends Fragment
     private FragmentActivity mContext;
     private Button nextOrFinishButton;
     private Button previousButton;
-    private TextView questionRBTypeTextView;
+    private TextView questionRBTypeTextView, answerExplanationTextView;
     private RadioGroup radioGroupForChoices;
     private boolean atLeastOneChecked = false;
     private String questionId = "";
@@ -80,6 +80,7 @@ public class QuizRadioBoxesFragment extends Fragment
         nextOrFinishButton = rootView.findViewById(R.id.nextOrFinishButton);
         previousButton = rootView.findViewById(R.id.previousButton);
         questionRBTypeTextView = rootView.findViewById(R.id.questionRBTypeTextView);
+        answerExplanationTextView = rootView.findViewById(R.id.answerExplanationTextView);
         radioGroupForChoices = rootView.findViewById(R.id.radioGroupForChoices);
 
         nextOrFinishButton.setOnClickListener(v -> {
@@ -241,9 +242,6 @@ public class QuizRadioBoxesFragment extends Fragment
                 RadioButton radioButton = radioButtonArrayList.get(i);
                 if (radioButton.isChecked())
                 {
-
-                    radioButton.setBackgroundColor(Color.GREEN);
-
                     atLeastOneChecked = true;
 
                     String cbPosition = String.valueOf(radioButtonArrayList.indexOf(radioButton));
@@ -255,15 +253,40 @@ public class QuizRadioBoxesFragment extends Fragment
 
                     ((QuizActivity)mContext).response[(currentPagePosition)-1] = cbPosition;//choices.get(Integer.parseInt(cbPosition));
 
-                    if(true){//((QuizActivity) mContext).show_answer) {
-                        if(Integer.parseInt(cbPosition) == Integer.parseInt(radioButtonTypeQuestion[8]))
+                    if(true) {//((QuizActivity) mContext).show_answer) {
+                        if (Integer.parseInt(cbPosition) == Integer.parseInt(radioButtonTypeQuestion[8])){
                             Toast.makeText(mContext, "ትክክል!", Toast.LENGTH_SHORT).show();
-                        else
+                        radioButton.setBackgroundColor(Color.GREEN);
+                    }else {
+                            radioButton.setBackgroundColor(Color.RED);
                             Toast.makeText(mContext, "ስህተት!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        if(radioButtonTypeQuestion[9] != null && !radioButtonTypeQuestion[9].isEmpty()) {
+
+                            answerExplanationTextView.setText(Html.fromHtml("Explanation: \n"+radioButtonTypeQuestion[9], new Html.ImageGetter() {
+
+                                @Override
+                                public Drawable getDrawable(String source) {
+
+                                    LevelListDrawable d = new LevelListDrawable();
+                                    Drawable empty = getResources().getDrawable(R.drawable.icon);
+                                    d.addLevel(0, 0, empty);
+                                    d.setBounds(0, 0, empty.getIntrinsicWidth(), empty.getIntrinsicHeight());
+
+//                source = source.substring(2, source.length()-2);
+
+                                    new LoadImage().execute(source, d, answerExplanationTextView);
+                                    return d;
+                                }
+                            }, null));
+
+                            answerExplanationTextView.setVisibility(View.VISIBLE);
+                        }
+
                     }
 
                     ((QuizActivity)mContext).responseShouldBe[(currentPagePosition)-1] = radioButtonTypeQuestion[8];//choices.get(0);
-
 
 
                 } else
@@ -338,6 +361,7 @@ public class QuizRadioBoxesFragment extends Fragment
                 return d;
             }
         }, null));
+
 
 
 //        questionRBTypeTextView.setText("text" +radioButtonTypeQuestion[1]);
