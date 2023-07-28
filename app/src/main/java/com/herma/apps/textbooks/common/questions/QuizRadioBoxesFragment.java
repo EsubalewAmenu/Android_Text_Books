@@ -1,6 +1,7 @@
 package com.herma.apps.textbooks.common.questions;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -18,6 +19,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -29,6 +31,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.bumptech.glide.Glide;
 import com.herma.apps.textbooks.QuizActivity;
 import com.herma.apps.textbooks.R;
 
@@ -170,6 +173,19 @@ public class QuizRadioBoxesFragment extends Fragment
                 // mTv.invalidate() doesn't work as expected
                 CharSequence t = tv.getText();
                 tv.setText(t);
+
+
+                tv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Dialog dialog = new Dialog(tv.getContext());
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.dialog_zoomable_image);
+                        ZoomImageView imageView = dialog.findViewById(R.id.zoomable_image);
+                        Glide.with(tv.getContext()).load(bitmap).into(imageView);
+                        dialog.show();
+                    }
+                });
             }
         }
     }
