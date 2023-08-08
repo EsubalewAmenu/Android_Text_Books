@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class QuizActivity extends AppCompatActivity
 {
     final ArrayList<Fragment> fragmentArrayList = new ArrayList<>();
-    private TextView questionPositionTV;
+    private TextView questionPositionTV, questionToolbarTitle;
     private String totalQuestions = "1";
     private ViewPager questionsViewPager;
     public String[][] questionsWithAnswer;
@@ -44,7 +44,7 @@ public class QuizActivity extends AppCompatActivity
     TextView timerValue;
 
     public boolean show_answer;
-
+    Toolbar questionToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,11 +57,12 @@ public class QuizActivity extends AppCompatActivity
 
     }
     private void toolBarInit() {
-        Toolbar questionToolbar = findViewById(R.id.questionToolbar);
+        questionToolbar = findViewById(R.id.questionToolbar);
         questionToolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         questionToolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         questionPositionTV = questionToolbar.findViewById(R.id.questionPositionTV);
+        questionToolbarTitle = questionToolbar.findViewById(R.id.questionToolbarTitle);
 
         //questionToolbarTitle.setText("Questions");
     }
@@ -74,6 +75,9 @@ public class QuizActivity extends AppCompatActivity
 
             String que = getIntent().getStringExtra("que");
 
+            if(!getIntent().getStringExtra("title").isEmpty()){
+                questionToolbarTitle.setText(getIntent().getStringExtra("title"));
+            }
 
             try {
                 JSONArray datas = new JSONArray(que);

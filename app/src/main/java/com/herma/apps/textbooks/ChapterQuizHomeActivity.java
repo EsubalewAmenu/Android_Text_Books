@@ -108,6 +108,8 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
                                 questions.putExtra("showAnswer", false);//show_answer.isChecked());
                                 questions.putExtra("outof", 10);//etOutOf.getText().toString());
                                 questions.putExtra("que", response);
+                                questions.putExtra("title", getIntent().getStringExtra("chapterName"));
+
                                 startActivityForResult(questions, QUIZ_REQUEST);
                                 btnQuizRetry.setVisibility(View.VISIBLE);
 
