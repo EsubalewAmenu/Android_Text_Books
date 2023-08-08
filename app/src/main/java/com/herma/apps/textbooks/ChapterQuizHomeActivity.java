@@ -99,7 +99,7 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                                System.out.println("main resp is " + response);
+//                                System.out.println("main resp is " + response);
 
                         try {
                             JSONArray datas = new JSONArray(response);
@@ -129,7 +129,7 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
                 btnQuizRetry.setEnabled(true);
 
                 Toast.makeText(getApplicationContext(), getString(R.string.check_your_internet), Toast.LENGTH_SHORT).show();
-                System.out.println("main resp is error " + error);
+//                System.out.println("main resp is error " + error);
 
             }
 

@@ -78,7 +78,7 @@ public class QuizActivity extends AppCompatActivity
             try {
                 JSONArray datas = new JSONArray(que);
 
-                questionsWithAnswer = new String[datas.length()][11];
+                questionsWithAnswer = new String[datas.length()][17];
 
                 JSONObject c;
                 for (int i = 0; i < datas.length(); i++) {
@@ -96,6 +96,12 @@ public class QuizActivity extends AppCompatActivity
                     questionsWithAnswer[i][8] = c.getJSONArray("correct_answer").get(0).toString(); //c.getString("correct_answer");
                     questionsWithAnswer[i][9] = c.getString("answer_description");
                     questionsWithAnswer[i][10] = c.getString("randomize_options");
+                    questionsWithAnswer[i][11] = c.getString("author_username");
+                    questionsWithAnswer[i][12] = c.getString("author_name");
+                    questionsWithAnswer[i][13] = c.getString("likes");
+                    questionsWithAnswer[i][14] = c.getString("dislikes");
+                    questionsWithAnswer[i][15] = c.getString("is_user_liked");
+                    questionsWithAnswer[i][16] = c.getString("is_user_disliked");
 
                 }
 

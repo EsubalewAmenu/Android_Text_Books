@@ -31,17 +31,37 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.herma.apps.textbooks.CommentActivity;
 import com.herma.apps.textbooks.QuizActivity;
 import com.herma.apps.textbooks.R;
+import com.herma.apps.textbooks.ReadActivity;
+import com.herma.apps.textbooks.SplashActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -70,6 +90,10 @@ public class QuizRadioBoxesFragment extends Fragment
 
     List<String> choices;
 
+    private Button btnLike, btnDislike;//, btnComment;
+    private TextView tv_prepared_by;
+    Drawable normalLikeDrawable = null, activeLikeDrawable = null, normalDislikeDrawable = null, activeDislikeDrawable = null;
+
     public QuizRadioBoxesFragment()
     {
         // Required empty public constructor
@@ -85,6 +109,25 @@ public class QuizRadioBoxesFragment extends Fragment
         questionRBTypeTextView = rootView.findViewById(R.id.questionRBTypeTextView);
         answerExplanationTextView = rootView.findViewById(R.id.answerExplanationTextView);
         radioGroupForChoices = rootView.findViewById(R.id.radioGroupForChoices);
+
+        btnLike = rootView.findViewById(R.id.btn_like);
+        btnDislike = rootView.findViewById(R.id.btn_dislike);
+//        btnComment = rootView.findViewById(R.id.btn_reply);
+        tv_prepared_by = rootView.findViewById(R.id.tv_prepared_by);
+
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            normalLikeDrawable = getResources().getDrawable(R.drawable.ic_like, getContext().getTheme());
+            activeLikeDrawable = getResources().getDrawable(R.drawable.ic_like_active, getContext().getTheme());
+            normalDislikeDrawable = getResources().getDrawable(R.drawable.ic_dislike, getContext().getTheme());
+            activeDislikeDrawable = getResources().getDrawable(R.drawable.ic_dislike_active, getContext().getTheme());
+        } else {
+            normalLikeDrawable = getResources().getDrawable(R.drawable.ic_like);
+            activeLikeDrawable = getResources().getDrawable(R.drawable.ic_like_active);
+            normalDislikeDrawable = getResources().getDrawable(R.drawable.ic_dislike);
+            activeDislikeDrawable = getResources().getDrawable(R.drawable.ic_dislike_active);
+
+        }
 
         nextOrFinishButton.setOnClickListener(v -> {
 
@@ -119,22 +162,96 @@ public class QuizRadioBoxesFragment extends Fragment
         });
         previousButton.setOnClickListener(view -> mContext.onBackPressed());
 
+        Drawable finalActiveLikeDrawable = activeLikeDrawable;
+        Drawable finalNormalLikeDrawable = normalLikeDrawable;
+        Drawable finalActiveDislikeDrawable = activeDislikeDrawable;
+        Drawable finalNormalDislikeDrawable = normalDislikeDrawable;
+
+        btnLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (btnLike.getCompoundDrawables()[0] == finalNormalLikeDrawable) {
+                    btnLike.setCompoundDrawablesWithIntrinsicBounds(finalActiveLikeDrawable, null, null, null);
+                    btnLike.setText((Integer.parseInt(btnLike.getText().toString()) + 1)+"");
+
+
+                    if (btnDislike.getCompoundDrawables()[0] == finalActiveDislikeDrawable) {
+                        btnDislike.setCompoundDrawablesWithIntrinsicBounds(finalNormalDislikeDrawable, null, null, null);
+//                        btnDislike.setText((Integer.parseInt(btnDislike.getText().toString()) - 1)+"");
+                    }
+
+                    try {
+                        postInteraction(Integer.parseInt(questionId), "L", 0);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                } else {
+                    btnLike.setCompoundDrawablesWithIntrinsicBounds(finalNormalLikeDrawable, null, null, null);
+                    btnLike.setText((Integer.parseInt(btnLike.getText().toString()) - 1)+"");
+                    try {
+                        postInteraction(Integer.parseInt(questionId), "L", 1);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
+
+        Drawable finalNormalDislikeDrawable1 = normalDislikeDrawable;
+        Drawable finalActiveDislikeDrawable1 = activeDislikeDrawable;
+        Drawable finalActiveLikeDrawable1 = activeLikeDrawable;
+        Drawable finalNormalLikeDrawable1 = normalLikeDrawable;
+
+        btnDislike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (btnDislike.getCompoundDrawables()[0] == finalNormalDislikeDrawable1) {
+                    btnDislike.setCompoundDrawablesWithIntrinsicBounds(finalActiveDislikeDrawable1, null, null, null);
+//                    btnDislike.setText((Integer.parseInt(btnDislike.getText().toString()) + 1)+"");
+
+                    if (btnLike.getCompoundDrawables()[0] == finalActiveLikeDrawable1) {
+                        btnLike.setCompoundDrawablesWithIntrinsicBounds(finalNormalLikeDrawable1, null, null, null);
+                        btnLike.setText((Integer.parseInt(btnLike.getText().toString()) - 1)+"");
+                    }
+
+                    try {
+                        postInteraction(Integer.parseInt(questionId), "D", 0);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                } else {
+                    btnDislike.setCompoundDrawablesWithIntrinsicBounds(finalNormalDislikeDrawable1, null, null, null);
+//                    btnDislike.setText((Integer.parseInt(btnDislike.getText().toString()) - 1)+"");
+
+                    try {
+                        postInteraction(Integer.parseInt(questionId), "D", 1);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
+
+
+//        btnComment.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent commentIntent = new Intent(getActivity(), CommentActivity.class);
+//                commentIntent.putExtra("chapterName", "testChap");//getIntent().getStringExtra("chapterName"));
+//                commentIntent.putExtra("subject", "testSubj");//getIntent().getStringExtra("subject"));
+//                commentIntent.putExtra("fileName", "testFile");//getIntent().getStringExtra("fileName"));
+//                startActivity(commentIntent);
+//            }
+//        });
+
         return rootView;
     }
-//    public Drawable getDrawable(String source) {
-//        LevelListDrawable d = new LevelListDrawable();
-//        Drawable empty = getResources().getDrawable(R.drawable.icon);
-//        d.addLevel(0, 0, empty);
-//        d.setBounds(0, 0, empty.getIntrinsicWidth(), empty.getIntrinsicHeight());
-//
-//        source = source.substring(2, source.length()-2);
-////        System.out.println("source is " + source );
-////        source.replace("localhost","datascienceplc.com");
-////        System.out.println("source is " + source );
-//        new LoadImage().execute(source, d);
-//
-//        return d;
-//    }
 
     class LoadImage extends AsyncTask<Object, Void, Bitmap> {
 
@@ -418,7 +535,7 @@ public class QuizRadioBoxesFragment extends Fragment
             RadioButton rb = new RadioButton(mContext);
 //            rb.setText(choice);
 
-            System.out.println("rb.setText(choice); yes" + choice);
+//            System.out.println("rb.setText(choice); yes" + choice);
 
             rb.setText(Html.fromHtml(choice, new Html.ImageGetter() {
 
@@ -431,7 +548,7 @@ public class QuizRadioBoxesFragment extends Fragment
                     d.setBounds(0, 0, empty.getIntrinsicWidth(), empty.getIntrinsicHeight());
 
 //                    source = source.substring(2, source.length() - 2);
-        System.out.println("source is " + source );
+//        System.out.println("source is " + source );
 //        source.replace("localhost","datascienceplc.com");
 //        System.out.println("source is " + source );
                     new LoadImage().execute(source, d, rb);
@@ -495,6 +612,107 @@ public class QuizRadioBoxesFragment extends Fragment
         {
             nextOrFinishButton.setText(R.string.next);
         }
+
+        btnLike.setText(radioButtonTypeQuestion[13]+"");
+//            btnDislike.setText(comment.getDislike()+"");
+
+
+        if (radioButtonTypeQuestion[15].equals("1")) {
+            btnLike.setCompoundDrawablesWithIntrinsicBounds(activeLikeDrawable, null, null, null);
+        } else {
+            btnLike.setCompoundDrawablesWithIntrinsicBounds(normalLikeDrawable, null, null, null);
+        }
+
+        if (radioButtonTypeQuestion[16].equals("1")) {
+            btnDislike.setCompoundDrawablesWithIntrinsicBounds(activeDislikeDrawable, null, null, null);
+        } else {
+            btnDislike.setCompoundDrawablesWithIntrinsicBounds(normalDislikeDrawable, null, null, null);
+        }
+
+        tv_prepared_by.setText("Prepared by " + radioButtonTypeQuestion[12]);
+
     }
 
+    public void postInteraction(int comment_id, String like_or_dislike_or_delete, int is_remove) throws JSONException {
+
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+
+        String url = SplashActivity.BASEAPI+"wp/v2/post/like_dislike/"+comment_id;
+
+        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        JSONObject jsonBody = new JSONObject();
+        jsonBody.put("like_or_dislike", like_or_dislike_or_delete);
+        jsonBody.put("is_remove", is_remove);
+        final String requestBody = jsonBody.toString();
+
+        int REQUEST_METHOD = Request.Method.POST;
+        if(like_or_dislike_or_delete.equals("delete")) {
+            REQUEST_METHOD = Request.Method.DELETE;
+            url = SplashActivity.BASEAPI + "wp/v2/comment/delete/" + comment_id;
+        }
+        StringRequest stringRequest = new StringRequest(REQUEST_METHOD, url ,
+
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("post comment interaction success");
+//                        System.out.println(response);
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Check if the error has a network response
+                NetworkResponse response = error.networkResponse;
+                if (response != null) {
+                    // Get the error status code
+                    int statusCode = response.statusCode;
+
+                    // Get the error response body as a string
+                    String responseBody = new String(response.data, StandardCharsets.UTF_8);
+
+                    // Print the error details
+                    System.out.println("Error status code: " + statusCode);
+                    System.out.println("Error response body: " + responseBody);
+                } else {
+                    // The error does not have a network response
+                    System.out.println("Error message: " + error.getMessage());
+                }
+            }
+
+        })
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", "Bearer "+pre.getString("token", "None"));
+                return params;
+            }
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                try {
+                    return requestBody == null ? null : requestBody.getBytes("utf-8");
+                } catch (UnsupportedEncodingException uee) {
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                    return null;
+                }
+            }
+        };
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        stringRequest.setTag(this);
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
+    }
 }
