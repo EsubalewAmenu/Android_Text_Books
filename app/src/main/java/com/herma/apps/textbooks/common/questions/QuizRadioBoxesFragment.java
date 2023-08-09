@@ -42,10 +42,9 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.herma.apps.textbooks.CommentActivity;
+import com.herma.apps.textbooks.ui.profile.ProfileActivity;
 import com.herma.apps.textbooks.QuizActivity;
 import com.herma.apps.textbooks.R;
-import com.herma.apps.textbooks.ReadActivity;
 import com.herma.apps.textbooks.SplashActivity;
 
 import org.json.JSONException;
@@ -630,6 +629,16 @@ public class QuizRadioBoxesFragment extends Fragment
         }
 
         tv_prepared_by.setText("Prepared by " + radioButtonTypeQuestion[12]);
+
+        tv_prepared_by.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent profileIntent = new Intent(getContext(), ProfileActivity.class);
+                profileIntent.putExtra("username", radioButtonTypeQuestion[11]);
+                startActivity(profileIntent);
+            }
+        });
 
     }
 

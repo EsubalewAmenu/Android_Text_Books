@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/retry_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Retry"
+        android:visibility="gone" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/retry_button">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/profile_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_like"
+                android:visibility="gone"  />
+
+            <TextView
+                android:id="@+id/profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:text="User Name"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/follow_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:text="Follow"
+                android:visibility="gone" />
+
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/followersTab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
+            </com.google.android.material.tabs.TabLayout>
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/view_pager_followers"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="16dp">
+            </androidx.viewpager2.widget.ViewPager2>
+
+
+            <TextView
+                android:id="@+id/textview_contributions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:text="Contributions"
+                android:visibility="gone"  />
+
+            <ListView
+                android:id="@+id/contributedQuizList"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone" >
+            </ListView>
+
+            <!-- Other UI components like buttons, lists, etc. go here -->
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

@@ -1,13 +1,10 @@
 package com.herma.apps.textbooks;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,8 +12,6 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.view.View;
@@ -25,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -34,10 +28,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
@@ -57,9 +49,8 @@ import com.herma.apps.textbooks.ui.about.About_us;
 import com.herma.apps.textbooks.ui.fragment.AllNewCurriculumBooks;
 import com.herma.apps.textbooks.ui.fragment.BookFragment;
 import com.herma.apps.textbooks.ui.fragment.MyNewCurriculumBooks;
-import com.herma.apps.textbooks.ui.fragment.PremiumFragment;
 import com.herma.apps.textbooks.ui.fragment.QuestionsFragment;
-import com.herma.apps.textbooks.ui.fragment.RewardFragment;
+import com.herma.apps.textbooks.ui.profile.ProfileActivity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -73,15 +64,8 @@ import androidx.fragment.app.FragmentTransaction;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -713,6 +697,16 @@ public class MainActivity extends AppCompatActivity
             userEmail.setText(prefs.getString("user_email", "None"));
 
             navigationView.setNavigationItemSelectedListener(this);
+
+            navHeaderView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent profileIntent = new Intent(getApplicationContext(), ProfileActivity.class);
+                    profileIntent.putExtra("username", prefs.getString("username", "None"));
+                    startActivity(profileIntent);
+                }
+            });
+
 
         }else{
 

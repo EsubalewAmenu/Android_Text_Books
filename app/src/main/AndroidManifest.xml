@@ -82,9 +82,11 @@
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.profile.ProfileActivity"
+            android:hardwareAccelerated="true" />
+        <activity
             android:name=".common.TermsAndConditionsActivity"
-            android:hardwareAccelerated="true"
-            android:screenOrientation="portrait" />
+            android:hardwareAccelerated="true" />
         <activity
             android:name=".AnswersActivity"
             android:screenOrientation="portrait"
