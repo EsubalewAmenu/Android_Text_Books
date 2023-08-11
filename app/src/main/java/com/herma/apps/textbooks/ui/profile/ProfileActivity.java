@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     private String username;
     SharedPreferences prefs;
+
+
+    SearchView searchView;
+    MenuItem myActionMenuItem;
+
+    ViewPager2 viewPager;
+    TabLayout tabs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,14 +71,14 @@ public class ProfileActivity extends AppCompatActivity {
 
         username = getIntent().getStringExtra("username");
 
-        setTitle("@"+username);
-
         profile_name = findViewById(R.id.profile_name);
         textview_contributions = findViewById(R.id.textview_contributions);
         profile_image = findViewById(R.id.profile_image);
 
         contributedQuizList = findViewById(R.id.contributedQuizList);
 
+        viewPager = findViewById(R.id.view_pager_followers);
+        tabs = findViewById(R.id.followersTab);
 
 
         retryButton = findViewById(R.id.retry_button);
@@ -80,8 +88,6 @@ public class ProfileActivity extends AppCompatActivity {
         retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Hide the retry button initially when attempting to fetch again
-                retryButton.setVisibility(View.GONE);
                 // Try to fetch the data again
                 fetchDataFromBackend();
             }
@@ -91,6 +97,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
     private void fetchDataFromBackend(){
 
+        setTitle("@"+username);
 
         String apiUrl = new SplashActivity().BASEAPI + "wp/v2/users/profile/"+username;
 
@@ -100,15 +107,17 @@ public class ProfileActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                                System.out.println("main resp is " + response);
+//                                System.out.println("main resp is " + response);
 
                         try {
+                            retryButton.setVisibility(View.GONE);
 
                             contributedQuizList.setVisibility(View.VISIBLE);
                             profile_name.setVisibility(View.VISIBLE);
                             profile_image.setVisibility(View.VISIBLE);
                             textview_contributions.setVisibility(View.VISIBLE);
-
+                            viewPager.setVisibility(View.VISIBLE);
+                            tabs.setVisibility(View.VISIBLE);
 
                             JSONObject c = new JSONObject(response);
 
@@ -233,8 +242,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void followersTab(JSONArray followers, JSONArray followings){
-        ViewPager2 viewPager = findViewById(R.id.view_pager_followers);
-        TabLayout tabs = findViewById(R.id.followersTab);
 
         viewPager.setAdapter(new ViewPagerAdapter(this, followers, followings));
         TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(
@@ -265,6 +272,8 @@ public class ProfileActivity extends AppCompatActivity {
                 profile_image.setVisibility(View.GONE);
                 textview_contributions.setVisibility(View.GONE);
                 followButton.setVisibility(View.GONE);
+                viewPager.setVisibility(View.GONE);
+                tabs.setVisibility(View.GONE);
 
                 // Show the retry button and optionally set an error message as its text
                 retryButton.setVisibility(View.VISIBLE);
@@ -285,7 +294,33 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.profile, menu);
+
+
+
+        myActionMenuItem = menu.findItem( R.id.search);
+        searchView = (SearchView) myActionMenuItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                System.out.println("search query is " + query);
+
+                username = query;
+
+                fetchDataFromBackend();
+                if( ! searchView.isIconified()) {
+                    searchView.setIconified(true);
+                }
+                myActionMenuItem.collapseActionView();
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String s) {
+                // UserFeedback.show( "SearchOnQueryTextChanged: " + s);
+                return false;
+            }
+        });
+
         return true;
     }
     @Override

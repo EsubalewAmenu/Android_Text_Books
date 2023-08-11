@@ -12,15 +12,15 @@
     <string name="admob_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
 
 
-    <!--        <string name="adReward" translatable="false">not-created</string>-->
+<!--            <string name="adReward" translatable="false">not-created</string>-->
 
-    <!--        <string name="adReaderInt" translatable="false">ca-app-pub-1204280332090356/4140375546</string>-->
-    <!--        <string name="adQuestionsInt" translatable="false">ca-app-pub-1204280332090356/4231024821</string>-->
-    <!--        <string name="adQuestions" translatable="false">ca-app-pub-1204280332090356/4066179814</string>-->
-    <!--        <string name="adReader" translatable="false">ca-app-pub-1204280332090356/4536597886</string>-->
-    <!--        <string name="adChapter" translatable="false">ca-app-pub-1204280332090356/5574347382</string>-->
-    <!--        <string name="adHome" translatable="false">ca-app-pub-1204280332090356/4728169576</string>-->
-    <!--        <string name="admob_app_id" translatable="false">ca-app-pub-1204280332090356~6532205836</string>-->
+<!--            <string name="adReaderInt" translatable="false">ca-app-pub-1204280332090356/4140375546</string>-->
+<!--            <string name="adQuestionsInt" translatable="false">ca-app-pub-1204280332090356/4231024821</string>-->
+<!--            <string name="adQuestions" translatable="false">ca-app-pub-1204280332090356/4066179814</string>-->
+<!--            <string name="adReader" translatable="false">ca-app-pub-1204280332090356/4536597886</string>-->
+<!--            <string name="adChapter" translatable="false">ca-app-pub-1204280332090356/5574347382</string>-->
+<!--            <string name="adHome" translatable="false">ca-app-pub-1204280332090356/4728169576</string>-->
+<!--            <string name="admob_app_id" translatable="false">ca-app-pub-1204280332090356~6532205836</string>-->
 
     <!--        <string name="cancel_phone">ለጊዜው መሸለም አልፈለጉም። መሸለም ከፈለጉ ድጋሚ ማንበብ ይችላሉ።</string>-->
     <!--        <string name="insert_phone">አስገባ</string>-->
