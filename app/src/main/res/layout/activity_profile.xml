@@ -77,13 +77,13 @@
                 android:layout_marginTop="8dp"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:text="Contributions"
+                android:text="Quiz Contributions"
                 android:visibility="gone"  />
 
             <ListView
                 android:id="@+id/contributedQuizList"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="200dp"
                 android:layout_marginTop="16dp"
                 android:visibility="gone" >
             </ListView>

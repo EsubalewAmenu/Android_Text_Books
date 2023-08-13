@@ -107,7 +107,7 @@ public class ProfileActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-//                                System.out.println("main resp is " + response);
+                                System.out.println("main resp is " + response);
 
                         try {
                             retryButton.setVisibility(View.GONE);
@@ -145,7 +145,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 });
                             }
 
-                            populateListView();
+                            contributionsListView(c.getJSONArray("quiz_contributions"));
                             followersTab(c.getJSONArray("followers"),c.getJSONArray("followings"));
 
                         } catch (final JSONException e) {
@@ -283,10 +283,33 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-    private void populateListView() {
+    private void contributionsListView(JSONArray quizContributions) {
         // Sample static data
         List<String> contributedQuizListArray = new ArrayList<>();
-        contributedQuizListArray.add("Coming soon!");
+//        contributedQuizListArray.add("Coming soon!");
+
+        try {
+
+//            textview_contributions.setText("Quiz Contributions("+quizContributions.length()+")");
+
+            String fullQuestion;
+            for (int i = 0; i < quizContributions.length(); i++) {
+                JSONArray singleQuestion = quizContributions.getJSONObject(i).getJSONArray("question");
+                fullQuestion = "";
+                for (int j = 0; j < singleQuestion.length(); j++) {
+                    if(singleQuestion.getJSONObject(j).getString("type").equals("p"))
+                        fullQuestion += singleQuestion.getJSONObject(j).getString("content");
+                }
+                contributedQuizListArray.add(fullQuestion);
+            }
+            if(quizContributions.length() == 0){
+                contributedQuizListArray.add("No contributions found!");
+            }
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item_follow, R.id.name_text, contributedQuizListArray);
         contributedQuizList.setAdapter(adapter);
