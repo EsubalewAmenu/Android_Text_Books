@@ -107,7 +107,7 @@ public class ProfileActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                                System.out.println("main resp is " + response);
+//                                System.out.println("main resp is " + response);
 
                         try {
                             retryButton.setVisibility(View.GONE);
