@@ -90,6 +90,7 @@
     <string name="go_to_settings"> انتقل إلى الإعدادات </string>
     <string name="all_new_curriculum_books"> كافة كتب المناهج الجديدة </string>
     <string name="my_new_curriculum_books">كتب المناهج الجديدة المفضلة</string>
+    <string name="fav_old_curriculum_books">كتب المناهج القديمة المفضلة</string>
     <string name="load_more_text"> تحميل المزيد من التعليقات </string>
     <string name="settings_title"> الإعدادات </string>
     <string name="save_button_text"> حفظ </string>

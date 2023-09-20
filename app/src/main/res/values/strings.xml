@@ -125,6 +125,7 @@
     <string name="go_to_settings">Go to settings</string>
     <string name="all_new_curriculum_books">New curriculum books</string>
     <string name="my_new_curriculum_books">Favorite new Curriculum books</string>
+    <string name="fav_old_curriculum_books">Favorite old Curriculum books</string>
     <string name="load_more_text">Load more comments</string>
     <string name="settings_title">Settings</string>
     <string name="save_button_text">Save</string>

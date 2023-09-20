@@ -48,6 +48,7 @@ import com.herma.apps.textbooks.settings.SettingsActivity;
 import com.herma.apps.textbooks.ui.about.About_us;
 import com.herma.apps.textbooks.ui.fragment.AllNewCurriculumBooks;
 import com.herma.apps.textbooks.ui.fragment.BookFragment;
+import com.herma.apps.textbooks.ui.fragment.FavOldCurriculumBooks;
 import com.herma.apps.textbooks.ui.fragment.MyNewCurriculumBooks;
 import com.herma.apps.textbooks.ui.fragment.QuestionsFragment;
 import com.herma.apps.textbooks.ui.profile.ProfileActivity;
@@ -100,6 +101,7 @@ public class MainActivity extends AppCompatActivity
     QuestionsFragment questionsFragment;
     AllNewCurriculumBooks allNewCurriculumBooks;
     MyNewCurriculumBooks myNewCurriculumBooks;
+    FavOldCurriculumBooks favOldCurriculumBooks;
 
     SharedPreferences pre;
 
@@ -315,6 +317,20 @@ public class MainActivity extends AppCompatActivity
             }
 
             return arrayList;
+        }else if(choosedGrade == "fav"){
+            final Cursor subjectsCursor = db.getSelect("*", "books", "uc='fav' ORDER BY name ASC");
+            if (subjectsCursor.moveToFirst()) {
+                do {
+                    arrayList.add(new Item("", subjectsCursor.getString(2)+" (Grade "+subjectsCursor.getString(1)+")", subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
+                } while (subjectsCursor.moveToNext());
+            }
+
+            if(arrayList.size() == 0) {
+                openAllBooksFragment();
+                return null;
+            }
+
+            return arrayList;
         }
 
 
@@ -435,6 +451,8 @@ public class MainActivity extends AppCompatActivity
             openMyBooksFragment();
         } else if (id == R.id.nav_all_books) {
             openAllBooksFragment();
+        } else if (id == R.id.nav_fav_old_books) {
+            openMyFavOldBooksFragment();
         } else if (id == R.id.nav_g12) {
             changeFragment("1", "Grade 12");
         } else if (id == R.id.nav_g11) {
@@ -568,6 +586,17 @@ public class MainActivity extends AppCompatActivity
         mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.replace(R.id.containerView, myNewCurriculumBooks).commit();
         setTitle("My new curriculum books");
+
+
+        pre.edit().putString("choosedGrade", "my_b" ).apply();
+        pre.edit().putString("choosedGradeT", "My new curriculum books").apply();
+    }
+    public void openMyFavOldBooksFragment(){
+        favOldCurriculumBooks = new FavOldCurriculumBooks();
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.replace(R.id.containerView, favOldCurriculumBooks).commit();
+        setTitle("Favorite old curriculum books");
 
 
         pre.edit().putString("choosedGrade", "my_b" ).apply();

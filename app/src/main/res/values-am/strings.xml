@@ -90,6 +90,7 @@
     <string name="go_to_settings">ወደ ቅንብሮች ሂድ</string>
     <string name= "all_new_curriculum_books">ሁሉም አዲስ ሥርዓተ ትምህርት መጻሕፍት</string>
     <string name="my_new_curriculum_books">የመረትኳቸው አዲስ ሥርዓተ ትምህርት መጽሐፍት</string>
+    <string name="fav_old_curriculum_books">የመረትኳቸው የድሮ ሥርዓተ ትምህርት መጽሐፍት</string>
     <string name="load_more_text">ተጨማሪ አስተያየቶችን አምጣ</string>
     <string name= "settings_title">ቅንብሮች</string>
     <string name="save_button_text">አስቀምጥ</string>

@@ -198,6 +198,8 @@ public class ChaptersActivity extends AppCompatActivity {
                     if (getIntent().getStringExtra("subjectChapters") != null && !is_short)
                         isDBSouldBeUpdated(fName, fEn);
 
+                    saveOldBookAsFav();
+
                     item.setIcon(android.R.drawable.star_big_on);
                 }else{
                     if(removeFromFav(fName)){
@@ -339,8 +341,16 @@ public void openQuiz(String chapterName, String subject, String fileName, String
 
                 Cursor chap = db.getSelect("*", "chapters", "filename='" + fileName + "'" + chapterNamesList);
 
-            if(chapterNamesList.contains("filename='new_") && chap.moveToFirst())
+            if(chapterNamesList.contains("filename='new_") && chap.moveToFirst()) {
                 return true;
+            }else if(!chapterNamesList.contains("filename='new_") && chap.moveToFirst()) {
+                Cursor bookCursor = db.getSelect("*", "books", "id='" + chap.getString(1) + "'");
+
+                if(bookCursor.moveToFirst()) {
+                    if(bookCursor.getString(4).equals("fav"))
+                        return true;
+                }
+            }
 
         }
     return false;
@@ -363,9 +373,41 @@ public void openQuiz(String chapterName, String subject, String fileName, String
 
                     return true;
                 }
+            }else if(!chapterNamesList.contains("filename='new_") && chap.moveToFirst()) {
+                Cursor bookCursor = db.getSelect("*", "books", "id='" + chap.getString(1) + "'");
+
+                if(bookCursor.moveToFirst()) {
+
+                    contentValues = new ContentValues();
+                    contentValues.put("uc", "u" );
+                    db.update("books", contentValues, "id", chap.getString(1));
+                    return true;
+                }
             }
+
         }
         return false;
+    }
+
+    private void saveOldBookAsFav() {
+
+
+        if (arrayList.size() > 0) {
+            String chapterNamesList = "";
+            for (int k = 0; k < arrayList.size(); k++) {
+                chapterNamesList += " or filename='" + arrayList.get(k).fileName + "'";
+            }
+            System.out.println("old filenames are " + chapterNamesList);
+
+            Cursor chap = db.getSelect("*", "chapters", "filename='000000'" + chapterNamesList);
+
+            if(!chapterNamesList.contains("filename='new_") && chap.moveToFirst()) {
+                contentValues = new ContentValues();
+                contentValues.put("uc", "fav" );
+                db.update("books", contentValues, "id", chap.getString(1));
+
+            }
+        }
     }
 
     private void isDBSouldBeUpdated(String fileName, String fEn) {
