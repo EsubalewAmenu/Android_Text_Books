@@ -83,31 +83,6 @@ ProgressDialog progressBar;
      *
      * @return true if connected to the network
      */
-//    public boolean isOnline(Context context) {
-//        // Get a reference to the ConnectivityManager to check the state of network connectivity
-//        ConnectivityManager connectivityManager = (ConnectivityManager)
-//                context.getSystemService(context.CONNECTIVITY_SERVICE);
-//
-//        // Get details on the currently active default data network
-//        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-//        return networkInfo != null && networkInfo.isConnected();
-//    }
-//
-//    /**
-//     * When offline, show a snackbar message
-//     */
-//    public void showSnackbarOffline(View view) {
-//        Snackbar snackbar = Snackbar.make(
-//                view, R.string.snackbar_offline, Snackbar.LENGTH_LONG);
-//        // Set background color of the snackbar
-//        View sbView = snackbar.getView();
-//        sbView.setBackgroundColor(Color.WHITE);
-//        // Set background color of the snackbar
-//        TextView textView = sbView.findViewById(R.id.snackbar_text);
-//        textView.setTextColor(Color.BLACK);
-//        snackbar.show();
-//    }
-
     public void messageDialog(final Context context, final String serviceType, int title, int message, String fileName, final String fEn, int yesBtn, int noBtn, final int processHeader, String chapterName, String subject, String grade, String chapterID, boolean is_short) {
         cchapterName = chapterName; csubject = subject;
         final Dialog myDialog = new Dialog(context);

@@ -89,7 +89,7 @@
     <string name="no_network_message"> لا يمكننا اكتشاف اتصال الشبكة على هذا الجهاز. يرجى التحقق من بيانات الجوال أو شبكة Wi-Fi والمحاولة مرة أخرى. </string>
     <string name="go_to_settings"> انتقل إلى الإعدادات </string>
     <string name="all_new_curriculum_books"> كافة كتب المناهج الجديدة </string>
-    <string name="my_new_curriculum_books"> كتبي الجديدة في المناهج </string>
+    <string name="my_new_curriculum_books">كتب المناهج الجديدة المفضلة</string>
     <string name="load_more_text"> تحميل المزيد من التعليقات </string>
     <string name="settings_title"> الإعدادات </string>
     <string name="save_button_text"> حفظ </string>

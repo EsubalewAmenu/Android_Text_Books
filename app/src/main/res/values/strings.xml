@@ -124,7 +124,7 @@
     <string name="no_network_message">We cannot detect a network connection on this device. Please check your mobile data or Wi-Fi and try again.</string>
     <string name="go_to_settings">Go to settings</string>
     <string name="all_new_curriculum_books">New curriculum books</string>
-    <string name="my_new_curriculum_books">My new Curriculum books</string>
+    <string name="my_new_curriculum_books">Favorite new Curriculum books</string>
     <string name="load_more_text">Load more comments</string>
     <string name="settings_title">Settings</string>
     <string name="save_button_text">Save</string>
@@ -171,6 +171,7 @@
     <string name="back">Back</string>
     <string name="practical">Practical!</string>
     <string name="signout">Sign out</string>
+    <string name="favorite_subject">Favorite</string>
 
 
 </resources>

@@ -7,11 +7,11 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +32,7 @@ import com.herma.apps.textbooks.settings.SettingsActivity;
 import com.herma.apps.textbooks.ui.about.About_us;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -150,6 +150,9 @@ public class ChaptersActivity extends AppCompatActivity {
             adContainerView.setVisibility(View.GONE);
         }
 
+//        System.out.println("is subject saved");
+//        System.out.println(isSubjectSaved(fName));
+
     }
     public void setFromWeb(String chaptersJsonArray) throws JSONException {
         JSONArray datas = new JSONArray(chaptersJsonArray);
@@ -163,6 +166,12 @@ public class ChaptersActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.chapters, menu);
+
+        if(!isSubjectSavedAsFav(fName)) {
+            MenuItem item = menu.findItem(R.id.action_subject_favorite);
+            item.setIcon(android.R.drawable.star_big_off);
+        }
+
         return true;
     }
     @Override
@@ -176,6 +185,25 @@ public class ChaptersActivity extends AppCompatActivity {
             case R.id.action_delete_subject:
 
                 new Commons(ChaptersActivity.this).deleteSubjectDialog(ChaptersActivity.this, arrayList);
+
+                return true;
+
+            case R.id.action_subject_favorite:
+                Drawable currentIcon = item.getIcon();
+                Drawable starIcon = ContextCompat.getDrawable(this, android.R.drawable.star_big_off);
+
+                if (currentIcon != null && starIcon != null
+                        && currentIcon.getConstantState().equals(starIcon.getConstantState())) {
+                    // The icon of action_subject_favorite is star_big_off
+                    if (getIntent().getStringExtra("subjectChapters") != null && !is_short)
+                        isDBSouldBeUpdated(fName, fEn);
+
+                    item.setIcon(android.R.drawable.star_big_on);
+                }else{
+                    if(removeFromFav(fName)){
+                        item.setIcon(android.R.drawable.star_big_off);
+                    }
+                }
 
                 return true;
 
@@ -230,7 +258,7 @@ public void setFromShort(String shortArrayList) throws JSONException {
         fName = item.fileName;
         fEn = item.en;
 
-        if (getIntent().getStringExtra("subjectChapters") != null && !is_short)
+        if (getIntent().getStringExtra("subjectChapters") != null && !is_short && isSubjectSavedAsFav(fName))
             isDBSouldBeUpdated(fName, fEn);
 
         File chapterFile = new File(FILEPATH + fName);
@@ -300,6 +328,46 @@ public void openQuiz(String chapterName, String subject, String fileName, String
             return false;
         }
     }
+
+    private boolean isSubjectSavedAsFav(String fileName) {
+
+        if (arrayList.size() > 0) {
+                String chapterNamesList = "";
+                for (int k = 0; k < arrayList.size(); k++) {
+                    chapterNamesList += " or filename='" + arrayList.get(k).fileName + "'";
+                }
+
+                Cursor chap = db.getSelect("*", "chapters", "filename='" + fileName + "'" + chapterNamesList);
+
+            if(chapterNamesList.contains("filename='new_") && chap.moveToFirst())
+                return true;
+
+        }
+    return false;
+    }
+    private boolean removeFromFav(String fileName) {
+
+
+        if(arrayList.size()>0) {
+            String chapterNamesList = "";
+            for (int k = 0; k < arrayList.size(); k++) {
+                chapterNamesList += " or filename='" + arrayList.get(k).fileName + "'";
+            }
+            Cursor chap = db.getSelect("*", "chapters", "filename='" + fileName + "'" + chapterNamesList);
+
+            if(chapterNamesList.contains("filename='new_") && chap.moveToFirst()) {
+                db.deleteData("chapters", "subject_id="+chap.getString(1));
+                Cursor chapCursor = db.getSelect("*", "chapters", "filename='" + fileName + "'" + chapterNamesList);
+                if(!chapCursor.moveToFirst()) {
+                    db.deleteData("books", "id="+chap.getString(1));
+
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private void isDBSouldBeUpdated(String fileName, String fEn) {
 
 
@@ -317,7 +385,6 @@ public void openQuiz(String chapterName, String subject, String fileName, String
                 // get grade by using subject in gradeName and subject_slug in gradeInNum
                 // if not exist create grade by using subject for gradeName and subject_slug for gradeInNum
 
-                System.out.println("grade grade grade grade grade grade grade end" + grade );
                 Cursor chap = db.getSelect("*", "chapters", "filename='" + fileName + "'"+chapterNamesList);
                 if (chap.moveToFirst()) {
                     updateChapters(chap.getString(1),grade, subject, chapterNamesListAnd, fEn);
