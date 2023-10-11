@@ -159,35 +159,36 @@ public class MainActivity extends AppCompatActivity
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
 
-        adContainerView = findViewById(R.id.ad_view_container);
+                adContainerView = findViewById(R.id.ad_view_container);
 
-        AdRequest adRequest = new AdRequest.Builder().build();
+                AdRequest adRequest = new AdRequest.Builder().build();
 
-        if(new Commons(getApplicationContext()).showGoogleAd( 2)) {
+                if(new Commons(getApplicationContext()).showGoogleAd( 2)) {
 //            System.out.println("poiug yesss" );
 
-            // Since we're loading the banner based on the adContainerView size, we need to wait until this
-            // view is laid out before we can get the width.
-            adContainerView.post(new Runnable() {
-                @Override
-                public void run() {
-                    new Commons(getApplicationContext()).loadBanner(mAdView, getString(R.string.adHome), adContainerView, getWindowManager().getDefaultDisplay());
-                }
-            });
+                    // Since we're loading the banner based on the adContainerView size, we need to wait until this
+                    // view is laid out before we can get the width.
+                    adContainerView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            new Commons(getApplicationContext()).loadBanner(mAdView, getString(R.string.adHome), adContainerView, getWindowManager().getDefaultDisplay());
+                        }
+                    });
 
 
-        }else{
+                }else{
 //            System.out.println("poiug no " );
-            adContainerView.setVisibility(View.GONE);
-        }
+                    adContainerView.setVisibility(View.GONE);
+                }
 
 
-        tvAds = (TextView) findViewById(R.id.tvAds);
-        /// Ad here...
-        doApiCall();
+                tvAds = (TextView) findViewById(R.id.tvAds);
+                /// Ad here...
+                doApiCall();
+
+            }
+        });
 
     }
 

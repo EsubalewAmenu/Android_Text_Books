@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -33,6 +34,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+//import com.github.barteksc.pdfviewer.PDFView;
+//import com.github.barteksc.pdfviewer.listener.OnRenderListener;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnRenderListener;
 import com.google.android.gms.ads.AdRequest;
@@ -124,15 +127,10 @@ public class ReadActivity extends AppCompatActivity {
 //        txtTimerValue = (TextView) findViewById(R.id.timerValue);
 //        btnGiftReward = (ImageButton) findViewById(R.id.btnGiftReward);
 
+
         if (getIntent().getExtras() != null) {
 
             String filePath = getFilesDir().getPath() + "/Herma/books/";
-
-            MobileAds.initialize(this, new OnInitializationCompleteListener() {
-                @Override
-                public void onInitializationComplete(InitializationStatus initializationStatus) {
-                }
-            });
 
             try {
                 this.setTitle(getIntent().getStringExtra("chapterName") + " (" + getIntent().getStringExtra("subject") + ")");
@@ -141,53 +139,60 @@ public class ReadActivity extends AppCompatActivity {
                     pdfView.fromFile(f)
                             .onRender(new OnRenderListener() {
                                 @Override
-                                public void onInitiallyRendered(int nbPages, float pageWidth, float pageHeight) {
+                                public void onInitiallyRendered(int nbPages) {
+
+                                    MobileAds.initialize(ReadActivity.this, new OnInitializationCompleteListener() {
+                                        @Override
+                                        public void onInitializationComplete(InitializationStatus initializationStatus) {
 
 //                                    mAdView = findViewById(R.id.adView);
-                                    adContainerView = findViewById(R.id.ad_view_container);
+                                            adContainerView = findViewById(R.id.ad_view_container);
 
-                                    AdRequest adRequest = new AdRequest.Builder().build();
+                                            AdRequest adRequest = new AdRequest.Builder().build();
 
-                                    if (new Commons(getApplicationContext()).showGoogleAd(1)) {
+                                            if (new Commons(getApplicationContext()).showGoogleAd(1)) {
 
 //                                        mAdView.loadAd(adRequest);
 
-                                        adContainerView.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                new Commons(getApplicationContext()).loadBanner(mAdView, getString(R.string.adReader), adContainerView, getWindowManager().getDefaultDisplay());
-                                            }
-                                        });
+                                                adContainerView.post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        new Commons(getApplicationContext()).loadBanner(mAdView, getString(R.string.adReader), adContainerView, getWindowManager().getDefaultDisplay());
+                                                    }
+                                                });
 
 
-                                        InterstitialAd.load(getApplicationContext(), getString(R.string.adReaderInt), adRequest, new InterstitialAdLoadCallback() {
-                                            @Override
-                                            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                                                // The mInterstitialAd reference will be null until
-                                                // an ad is loaded.
+                                                InterstitialAd.load(getApplicationContext(), getString(R.string.adReaderInt), adRequest, new InterstitialAdLoadCallback() {
+                                                    @Override
+                                                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                                                        // The mInterstitialAd reference will be null until
+                                                        // an ad is loaded.
 
 //                                            System.out.println("request seconds remaining: isTheirReward");
 
-                                                SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-                                                storedPhone = sharedPref.getString("storedPhone", "0");
+                                                        SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+                                                        storedPhone = sharedPref.getString("storedPhone", "0");
 
 //                                                isThereReward();
 
-                                                mInterstitialAd = interstitialAd;
-                                                mInterstitialAd.show(ReadActivity.this);
+                                                        mInterstitialAd = interstitialAd;
+                                                        mInterstitialAd.show(ReadActivity.this);
+                                                    }
+
+                                                    @Override
+                                                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                                                        // Handle the error
+                                                        mInterstitialAd = null;
+                                                    }
+                                                });
+
+
+                                            } else {
+                                                adContainerView.setVisibility(View.GONE);
                                             }
+                                        }
+                                    });
 
-                                            @Override
-                                            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                                                // Handle the error
-                                                mInterstitialAd = null;
-                                            }
-                                        });
-
-
-                                    } else {
-                                        adContainerView.setVisibility(View.GONE);
-                                    }
 
                                 }
                             }).load();
@@ -213,7 +218,8 @@ public class ReadActivity extends AppCompatActivity {
 
         commentRelateds();
     }
-public void commentRelateds(){
+
+    public void commentRelateds(){
 
     // Register all the FABs with their IDs This FAB button is the Parent
     mAddFab = findViewById(R.id.add_fab);
