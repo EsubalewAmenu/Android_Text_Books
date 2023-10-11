@@ -9,8 +9,8 @@ android {
         applicationId "com.herma.apps.textbooks"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 76
-        versionName "3.5.9"
+        versionCode 77
+        versionName "3.6.0"
         multiDexEnabled true
 
         ndk {
@@ -73,6 +73,8 @@ dependencies {
     implementation 'com.google.ads.mediation:facebook:6.16.0.0'
     implementation 'com.google.ads.mediation:adcolony:4.8.0.2'
     implementation 'com.google.ads.mediation:applovin:11.11.3.0'
+
+    implementation 'com.google.android.ump:user-messaging-platform:2.1.0'
 
 
 // added for comment activity

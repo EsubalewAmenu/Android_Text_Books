@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.view.View;
@@ -39,6 +40,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.ump.ConsentDebugSettings;
+import com.google.android.ump.ConsentForm;
+import com.google.android.ump.ConsentInformation;
+import com.google.android.ump.ConsentInformation.OnConsentInfoUpdateSuccessListener;
+import com.google.android.ump.ConsentInformation.OnConsentInfoUpdateFailureListener;
+import com.google.android.ump.ConsentRequestParameters;
+import com.google.android.ump.UserMessagingPlatform;
 import com.herma.apps.textbooks.common.Commons;
 import com.herma.apps.textbooks.common.MainAdapter;
 import com.herma.apps.textbooks.common.DB;
@@ -110,6 +118,8 @@ public class MainActivity extends AppCompatActivity
     TextView tvAds;
     boolean myB = false;
 
+    private ConsentInformation consentInformation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         LanguageHelper.updateLanguage(this);
@@ -126,6 +136,49 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+//        ConsentDebugSettings debugSettings = new ConsentDebugSettings.Builder(this)
+//                .addTestDeviceHashedId("18998c6a0a39d135a063c156d3ac9339")
+//                .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
+//                .build();
+
+        // Set tag for under age of consent. false means users are not under age
+        // of consent.
+        ConsentRequestParameters params = new ConsentRequestParameters
+                .Builder()
+//                .setConsentDebugSettings(debugSettings)
+                .setTagForUnderAgeOfConsent(false)
+                .build();
+
+        consentInformation = UserMessagingPlatform.getConsentInformation(this);
+        consentInformation.requestConsentInfoUpdate(
+                this,
+                params,
+                (OnConsentInfoUpdateSuccessListener) () -> {
+                    UserMessagingPlatform.loadAndShowConsentFormIfRequired(
+                            this,
+                            (ConsentForm.OnConsentFormDismissedListener) loadAndShowError -> {
+                                if (loadAndShowError != null) {
+                                    // Consent gathering failed.
+                                    Log.w("consentInformation", String.format("%s: %s",
+                                            loadAndShowError.getErrorCode(),
+                                            loadAndShowError.getMessage()));
+                                }
+
+                                // Consent has been gathered.
+                            }
+                    );
+                },
+
+                (OnConsentInfoUpdateFailureListener) requestConsentError -> {
+                    // Consent gathering failed.
+                    Log.w("consentInformation", String.format("%s: %s",
+                            requestConsentError.getErrorCode(),
+                            requestConsentError.getMessage()));
+                });
+
+//        consentInformation.reset();
 
         db = new DB(getApplicationContext());
 
@@ -155,14 +208,16 @@ public class MainActivity extends AppCompatActivity
         choosedGradeT = pre.getString("choosedGradeT", "Grade 12");
 
         changeFragment(choosedGrade+"", choosedGradeT);
-
+//        System.out.println("is user consent");
+        if (consentInformation.canRequestAds()) {
+//            System.out.println(" yes user consent");
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
 
                 adContainerView = findViewById(R.id.ad_view_container);
 
-                AdRequest adRequest = new AdRequest.Builder().build();
+//                AdRequest adRequest = new AdRequest.Builder().build();
 
                 if(new Commons(getApplicationContext()).showGoogleAd( 2)) {
 //            System.out.println("poiug yesss" );
@@ -189,6 +244,8 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+
+        }
 
     }
 
