@@ -30,7 +30,7 @@ public class FavOldCurriculumBooks extends Fragment {
 
         try {
             MainActivity mainActivity = (MainActivity) getActivity();
-            ArrayList arrayList = mainActivity.getData(getActivity(), "fav");
+            ArrayList arrayList = mainActivity.getData(getActivity(), "fav", "old");
             MainAdapter adapter = mainActivity.setData(getActivity(), arrayList, "a");
 
             recyclerView.setAdapter(adapter);

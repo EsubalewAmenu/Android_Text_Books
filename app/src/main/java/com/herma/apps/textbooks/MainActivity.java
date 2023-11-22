@@ -356,27 +356,28 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public ArrayList getData(Context context, String choosedGrade) {
+    public ArrayList getData(Context context, String choosedGrade, String old_new) {
         db = new DB(context);
         ArrayList arrayList = new ArrayList<>();
 
-        if(choosedGrade == "new"){
-
-            final Cursor subjectsCursor = db.getSelect("*", "books", "uc='new' ORDER BY name ASC");
-            if (subjectsCursor.moveToFirst()) {
-                do {
-                    arrayList.add(new Item("", subjectsCursor.getString(2)+" (Grade "+subjectsCursor.getString(1)+")", subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
-                } while (subjectsCursor.moveToNext());
-            }
-
-            if(arrayList.size() == 0) {
-                openAllBooksFragment();
-                return null;
-            }
-
-            return arrayList;
-        }else if(choosedGrade == "fav"){
-            final Cursor subjectsCursor = db.getSelect("*", "books", "uc='fav' ORDER BY name ASC");
+//        if(old_new == "new"){
+//
+//            final Cursor subjectsCursor = db.getSelect("*", "books", "uc='new' or uc='newf' ORDER BY name ASC");
+//            if (subjectsCursor.moveToFirst()) {
+//                do {
+//                    arrayList.add(new Item("", subjectsCursor.getString(2)+" (Grade "+subjectsCursor.getString(1)+")", subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
+//                } while (subjectsCursor.moveToNext());
+//            }
+//
+//            if(arrayList.size() == 0) {
+//                openAllBooksFragment();
+//                return null;
+//            }
+//
+//            return arrayList;
+//        }else
+            if(choosedGrade.equals("newf")){
+            final Cursor subjectsCursor = db.getSelect("*", "books", "uc='newf' ORDER BY name ASC");
             if (subjectsCursor.moveToFirst()) {
                 do {
                     arrayList.add(new Item("", subjectsCursor.getString(2)+" (Grade "+subjectsCursor.getString(1)+")", subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
@@ -395,8 +396,11 @@ public class MainActivity extends AppCompatActivity
         // get if textbook or teacher guide
         final Cursor gradeCursor = db.getSelect("*", "grade", "id="+choosedGrade);
         gradeCursor.moveToFirst();
-
-        final Cursor subjectsCursor = db.getSelect("*", "books", "grade='" + gradeCursor.getString(2) + "' and gtype='" + gradeCursor.getString(3) + "' ORDER BY name ASC");
+        Cursor subjectsCursor;
+        if(old_new.equals("new")) {
+            subjectsCursor = db.getSelect("*", "books", "(uc='new' or uc='newf') and grade='" + choosedGrade + "' ORDER BY name ASC");
+        }else
+            subjectsCursor = db.getSelect("*", "books", "uc!='new' and uc!='newf' and grade='" + gradeCursor.getString(2) + "' and gtype='" + gradeCursor.getString(3) + "' ORDER BY name ASC");
         if (subjectsCursor.moveToFirst()) {
             do {
                 arrayList.add(new Item("", subjectsCursor.getString(2), subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
@@ -441,7 +445,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(Item item) {
 
-//                System.out.println("en p is " + item.en);
 
                 chaptersIntent = new Intent(context, ChaptersActivity.class);
                 chaptersIntent.putExtra("subj", item.fileName);

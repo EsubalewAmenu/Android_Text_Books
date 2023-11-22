@@ -32,7 +32,7 @@ public class MyNewCurriculumBooks extends Fragment {
 
         try {
             MainActivity mainActivity = (MainActivity) getActivity();
-            ArrayList arrayList = mainActivity.getData(getActivity(), "new");
+            ArrayList arrayList = mainActivity.getData(getActivity(), "newf", "new");
             MainAdapter adapter = mainActivity.setData(getActivity(), arrayList, "a");
 
             recyclerView.setAdapter(adapter);
