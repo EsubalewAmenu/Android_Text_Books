@@ -359,7 +359,6 @@ public class MainActivity extends AppCompatActivity
     public ArrayList getData(Context context, String choosedGrade, String old_new) {
         db = new DB(context);
         ArrayList arrayList = new ArrayList<>();
-        System.out.println("size of arrayList is  test" + arrayList.size());
 
 //        if(old_new == "new"){
 //
