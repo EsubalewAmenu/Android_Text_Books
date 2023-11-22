@@ -29,6 +29,7 @@ public class FavOldCurriculumBooks extends Fragment {
         recyclerView = (RecyclerView) root.findViewById(R.id.recyclerView);
 
         try {
+            System.out.println("test print from FavOldCurriculumBooks");
             MainActivity mainActivity = (MainActivity) getActivity();
             ArrayList arrayList = mainActivity.getData(getActivity(), "fav", "old");
             MainAdapter adapter = mainActivity.setData(getActivity(), arrayList, "a");

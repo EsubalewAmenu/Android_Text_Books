@@ -359,6 +359,7 @@ public class MainActivity extends AppCompatActivity
     public ArrayList getData(Context context, String choosedGrade, String old_new) {
         db = new DB(context);
         ArrayList arrayList = new ArrayList<>();
+        System.out.println("size of arrayList is  test" + arrayList.size());
 
 //        if(old_new == "new"){
 //
@@ -376,32 +377,36 @@ public class MainActivity extends AppCompatActivity
 //
 //            return arrayList;
 //        }else
-            if(choosedGrade.equals("newf")){
-            final Cursor subjectsCursor = db.getSelect("*", "books", "uc='newf' ORDER BY name ASC");
-            if (subjectsCursor.moveToFirst()) {
-                do {
-                    arrayList.add(new Item("", subjectsCursor.getString(2)+" (Grade "+subjectsCursor.getString(1)+")", subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
-                } while (subjectsCursor.moveToNext());
-            }
+//            if(choosedGrade.equals("newf")){
+//            final Cursor subjectsCursor = db.getSelect("*", "books", "uc='newf' ORDER BY name ASC");
+//            if (subjectsCursor.moveToFirst()) {
+//                do {
+//                    arrayList.add(new Item("", subjectsCursor.getString(2)+" (Grade "+subjectsCursor.getString(1)+")", subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
+//                } while (subjectsCursor.moveToNext());
+//            }
+//
+//            if(arrayList.size() == 0) {
+//                openAllBooksFragment();
+//                return null;
+//            }
+//
+//            return arrayList;
+//        }
 
-            if(arrayList.size() == 0) {
-                openAllBooksFragment();
-                return null;
-            }
 
-            return arrayList;
-        }
-
-
-        // get if textbook or teacher guide
-        final Cursor gradeCursor = db.getSelect("*", "grade", "id="+choosedGrade);
-        gradeCursor.moveToFirst();
         Cursor subjectsCursor;
-        if(old_new.equals("new")) {
-            subjectsCursor = db.getSelect("*", "books", "(uc='new' or uc='newf') and grade='" + choosedGrade + "' ORDER BY name ASC");
-        }else
+        if(choosedGrade.equals("fav") || choosedGrade.equals("newf")) {
+            subjectsCursor = db.getSelect("*", "books", "uc='"+choosedGrade+"' ORDER BY name ASC");
+        }else if(old_new.equals("new")) {
+            subjectsCursor = db.getSelect("*", "books", "(uc='new' or uc='newf') and grade='" + choosedGrade + "' ORDER BY name DESC");
+        }else {
+
+            // get if textbook or teacher guide
+            final Cursor gradeCursor = db.getSelect("*", "grade", "id="+choosedGrade);
+            gradeCursor.moveToFirst();
+
             subjectsCursor = db.getSelect("*", "books", "uc!='new' and uc!='newf' and grade='" + gradeCursor.getString(2) + "' and gtype='" + gradeCursor.getString(3) + "' ORDER BY name ASC");
-        if (subjectsCursor.moveToFirst()) {
+        }if (subjectsCursor.moveToFirst()) {
             do {
                 arrayList.add(new Item("", subjectsCursor.getString(2), subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
             } while (subjectsCursor.moveToNext());

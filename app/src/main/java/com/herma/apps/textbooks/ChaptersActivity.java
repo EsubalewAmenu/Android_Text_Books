@@ -341,13 +341,15 @@ public void openQuiz(String chapterName, String subject, String fileName, String
 
                 Cursor chap = db.getSelect("*", "chapters", "filename='" + fileName + "'" + chapterNamesList);
 
-            if(chapterNamesList.contains("filename='new_") && chap.moveToFirst()) {
-                return true;
-            }else if(!chapterNamesList.contains("filename='new_") && chap.moveToFirst()) {
+//            if(chapterNamesList.contains("filename='new_") && chap.moveToFirst()) {
+//                return true;
+//            }else
+                if(//!chapterNamesList.contains("filename='new_") &&
+                    chap.moveToFirst()) {
                 Cursor bookCursor = db.getSelect("*", "books", "id='" + chap.getString(1) + "'");
 
                 if(bookCursor.moveToFirst()) {
-                    if(bookCursor.getString(4).equals("fav"))
+                    if(bookCursor.getString(4).equals("fav") || bookCursor.getString(4).equals("newf"))
                         return true;
                 }
             }
@@ -401,9 +403,13 @@ public void openQuiz(String chapterName, String subject, String fileName, String
 
             Cursor chap = db.getSelect("*", "chapters", "filename='000000'" + chapterNamesList);
 
-            if(!chapterNamesList.contains("filename='new_") && chap.moveToFirst()) {
+            if(chap.moveToFirst()) {
                 contentValues = new ContentValues();
-                contentValues.put("uc", "fav" );
+                if(!chapterNamesList.contains("filename='new_"))
+                    contentValues.put("uc", "fav" );
+                else
+                    contentValues.put("uc", "newf" );
+
                 db.update("books", contentValues, "id", chap.getString(1));
 
             }

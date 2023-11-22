@@ -129,9 +129,15 @@ public class AllNewCurriculumBooks extends Fragment
         initialiseGrade(root);
 
         pre = PreferenceManager.getDefaultSharedPreferences(getContext());
+        try{
+            searchQuery = Integer.parseInt(pre.getString("userChoosedGrade", "12"))+"";
 
-        ArrayList arrayList = new MainActivity().getData(getActivity(), pre.getString("choosedGrade", "12"), "new");
-        MainAdapter adapter = new MainActivity().setData(getActivity(), arrayList, pre.getString("choosedGradeT", "Grade 12"));
+        } catch (Exception e) {
+            searchQuery = "12";
+        }
+        ArrayList arrayList = new MainActivity().getData(getActivity(),searchQuery, "new");
+        MainAdapter adapter = new MainActivity().setData(getActivity(), arrayList, pre.getString("userChoosedGradeT", "Grade 12"));
+        mRecyclerView.setAdapter(adapter);
 
     return root;
     }
@@ -198,8 +204,8 @@ public class AllNewCurriculumBooks extends Fragment
                 mRecyclerView.setAdapter(adapter);
 
 
-                pre.edit().putString("choosedGrade", item.id + "" ).apply();
-                pre.edit().putString("choosedGradeT", item.gradeName).apply();
+                pre.edit().putString("userChoosedGrade", item.id + "" ).apply();
+                pre.edit().putString("userChoosedGradeT", item.gradeName).apply();
             }
         });
         // Set Horizontal Layout Manager
