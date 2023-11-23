@@ -707,7 +707,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void doApiCall() {
-        System.out.println("test print from api call");
         new Handler().postDelayed(new Runnable() {
 
             @Override
@@ -718,13 +717,9 @@ public class MainActivity extends AppCompatActivity
 
                 SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-                pre.edit().putString("last_update", "2023-11-22 12:39:52" ).apply();
 
-
-System.out.println("last udated date is " + pre.getString("last_update", "2021-10-22 12:39:52"));
-
-StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                        SplashActivity.BASEAPI+"DSSERVICE/v1/updates?number_of_ad=1&app=1-12-textbooks&last_updated="+pre.getString("last_update", "2022-11-22 12:39:52"),
+                StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                        SplashActivity.BASEAPI+"DSSERVICE/v1/updates?number_of_ad=1&app=1-12-textbooks&last_updated="+pre.getString("last_update", "2020-11-22 12:39:52"),
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
