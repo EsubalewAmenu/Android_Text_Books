@@ -240,7 +240,6 @@ public class MainActivity extends AppCompatActivity
 
 
                 }else{
-//            System.out.println("poiug no " );
                     adContainerView.setVisibility(View.GONE);
                 }
 
