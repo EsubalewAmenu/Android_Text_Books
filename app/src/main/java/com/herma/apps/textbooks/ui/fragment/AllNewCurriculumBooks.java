@@ -60,7 +60,6 @@ public class AllNewCurriculumBooks extends Fragment
     public boolean isLastPage = false;
     private int totalPage = 10;
     private boolean isLoading = false;
-    public ArrayList<Object> items;
     String url,
     defult = SplashActivity.BASEAPI+ "ds_bm/v1/";
     public RequestQueue queue;
@@ -256,7 +255,7 @@ public class AllNewCurriculumBooks extends Fragment
 
                                     if (response != null) {
                                         try {
-                                            parseAllBooks(response);
+//                                            parseAllBooks(response);
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
@@ -318,52 +317,6 @@ System.out.println("Error on sys:"+error);
             }, 1500);
 //        }
     }
-    private void parseAllBooks(String response) throws Exception {
-
-        try {
-            // Getting JSON Array node
-            JSONArray datas = new JSONArray(response);
-
-            items = new ArrayList<Object>();
-            for (int i = 0; i < datas.length(); i++) {
-                JSONObject c = datas.getJSONObject(i);
-                ////////////////////////////////////////
-                postItem = new PostItem();
-                postItem.setSubjectName(c.getString("name").trim());
-                postItem.setSubjectGrade(c.getString("category").trim());
-                postItem.setSubjectEn(c.getString("en").trim());
-                postItem.setSubjectChapters(c.getJSONArray("chapters"));
-//                                                postItem.setWriterName(c.getJSONObject("blogwriter").getString("writername"));
-                items.add(postItem);
-            }
-            if(items.size()>0 && adapter.getItemCount()>0)
-                adapter.removeLoading();
-            adapter.addItems((ArrayList<Object>) items);
-
-                                    // check weather is last page or not
-//                                    if (currentPage < totalPage) {
-
-                                        adapter.addLoading();
-//                                    } else {
-//                                        isLastPage = true;
-//                                    }
-                                    isLoading = false;
-        } catch (Exception e) {
-            adapter.removeLoading();
-            Log.e("api json parse", "Json parsing error: " + e.getMessage());
-//                                            runOnUiThread(new Runnable() {
-//                                                @Override
-//                                                public void run() {
-////                                          Toast.makeText(getApplicationContext(),
-////                                                  "Json parsing error: " + e.getMessage(),
-////                                                  Toast.LENGTH_LONG).show();
-//                                                }
-//                                            });
-
-        }
-
-    }
-
     /**
      * Check if there is the network connectivity
      *

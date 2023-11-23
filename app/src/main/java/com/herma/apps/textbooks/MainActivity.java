@@ -1,6 +1,7 @@
 package com.herma.apps.textbooks;
 
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,11 +22,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
@@ -51,6 +54,7 @@ import com.herma.apps.textbooks.common.Commons;
 import com.herma.apps.textbooks.common.MainAdapter;
 import com.herma.apps.textbooks.common.DB;
 import com.herma.apps.textbooks.common.Item;
+import com.herma.apps.textbooks.common.PostItem;
 import com.herma.apps.textbooks.settings.LanguageHelper;
 import com.herma.apps.textbooks.settings.SettingsActivity;
 import com.herma.apps.textbooks.ui.about.About_us;
@@ -70,10 +74,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
@@ -319,7 +326,6 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                 return true;
             case R.id.action_exit:
-
                 System.exit(0);
                 return true;
         }
@@ -701,39 +707,51 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void doApiCall() {
+        System.out.println("test print from api call");
         new Handler().postDelayed(new Runnable() {
 
             @Override
             public void run() {
 
                 RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-// Request a string response from the provided URL.
+                // Request a string response from the provided URL.
 
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, SplashActivity.BASEAPI+"DSSERVICE/v1/ad/1-12-textbooks/1",
+                SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+                pre.edit().putString("last_update", "2023-11-22 12:39:52" ).apply();
+
+
+System.out.println("last udated date is " + pre.getString("last_update", "2021-10-22 12:39:52"));
+
+StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                        SplashActivity.BASEAPI+"DSSERVICE/v1/updates?number_of_ad=1&app=1-12-textbooks&last_updated="+pre.getString("last_update", "2022-11-22 12:39:52"),
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
                                 if (response != null) {
                                     try {
-                                        System.out.println("ad request is ");
-                                        System.out.println(response);
+//                                        System.out.println("ad request is ");
+//                                        System.out.println(response);
                                         // Getting JSON Array node
                                         JSONObject jsonObj = new JSONObject(response);
 
-                                        System.out.println("response code is " + jsonObj.getString("code"));
-                                        if(jsonObj.getInt("code") == 200 ){
+//                                        System.out.println("response code is " + jsonObj.getString("code"));
+                                        if(jsonObj.getString("code").equals("new_updates") ){
                                             Ads = jsonObj.getString("ad");
 
-                                                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                                prefs.edit().putString("last_update", jsonObj.getString("last_update") ).apply();
+                                                pre.edit().putString("last_update", jsonObj.getString("last_update") ).apply();
 
 
                                             if(Ads != "null"){
                                                 setAd(); myB = true;
                                             }else tvAds.setVisibility(View.GONE);
+
+                                            parseAllBooks(jsonObj.getString("books"));
                                         }else tvAds.setVisibility(View.GONE);
 
-                                    } catch (final JSONException e) { tvAds.setVisibility(View.GONE); }
+                                    } catch (final Exception e) {
+                                        //tvAds.setVisibility(View.GONE);
+                                    }
 
                                 }
                             }
@@ -759,6 +777,123 @@ public class MainActivity extends AppCompatActivity
         }, 1500);
     }
 
+    private void parseAllBooks(String response) throws Exception {
+
+        try {
+            // Getting JSON Array node
+            JSONArray datas = new JSONArray(response);
+
+//            ArrayList<Object> items = new ArrayList<Object>();
+            for (int i = 0; i < datas.length(); i++) {
+                JSONObject c = datas.getJSONObject(i);
+                ////////////////////////////////////////
+//                PostItem postItem = new PostItem();
+//                postItem.setSubjectName(c.getString("name").trim());
+//                postItem.setSubjectGrade(c.getString("category").trim());
+//                postItem.setSubjectEn(c.getString("en").trim());
+//                postItem.setSubjectChapters(c.getJSONArray("chapters"));
+//                items.add(postItem);
+
+                isDBSouldBeUpdated(setFromWeb(c.getString("chapters"), c.getString("en").trim()),
+                        c.getString("category").trim(),
+                        c.getString("name").trim(),
+                        c.getString("en").trim()
+                        );
+
+            }
+//            System.out.println("updated items count is " + items.size());
+
+
+        } catch (Exception e) {}
+
+    }
+
+    public ArrayList<Item> setFromWeb(String chaptersJsonArray, String en) throws JSONException {
+        ArrayList<Item> arrayList = new ArrayList<>();
+
+        JSONArray datas = new JSONArray(chaptersJsonArray);
+
+        for(int i = 0; i < datas.length(); i++){
+            JSONObject c = datas.getJSONObject(i);
+            arrayList.add(new Item("0", c.getString("name") , c.getString("file_name"), en, R.drawable.icon, "#000000"));
+        }
+        return arrayList;
+    }
+
+    private void isDBSouldBeUpdated(ArrayList<Item> arrayList, String grade, String subject, String fEn) {
+        if(arrayList.size()>0){
+            if(arrayList.get(0).chapterID=="0") {
+                String chapterNamesList ="", chapterNamesListAnd ="";
+                for (int k=0;k<arrayList.size();k++) {
+                    System.out.println("arrayList.get(k).chapName " + arrayList.get(k).chapName);
+                    chapterNamesList += " or filename='"+arrayList.get(k).fileName+"'";
+                    chapterNamesListAnd += " and filename!='"+arrayList.get(k).fileName+"'";
+                }
+                // grade table
+                grade = grade.replace("Grade ", "");
+
+                // get grade by using subject in gradeName and subject_slug in gradeInNum
+                // if not exist create grade by using subject for gradeName and subject_slug for gradeInNum
+                Cursor chap = db.getSelect("*", "chapters", "filename='x'"+chapterNamesList);
+                if (chap.moveToFirst()) {
+                    updateChapters(arrayList, chap.getString(1),grade, subject, chapterNamesListAnd, fEn);
+                }else{
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("grade", grade);
+                    contentValues.put("name", subject);
+                    contentValues.put("uc", "new");
+                    contentValues.put("gtype", System.currentTimeMillis());
+                    contentValues.put("p", fEn);
+                    db.insert("books",contentValues);
+
+                    Cursor bookCursor = db.getSelect("*", "books", "name='" + subject + "' and grade='"+grade+"' and uc='new'");
+                    if (bookCursor.moveToFirst()) {
+                        updateChapters(arrayList, bookCursor.getString(0),grade, subject, chapterNamesListAnd, fEn);
+                    }
+                }
+            }
+        }
+
+    }
+
+    private void updateChapters(ArrayList<Item> arrayList, String subject_id, String subject_slug, String course, String chapterNamesListAnd, String fEn) {
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("grade", subject_slug );
+        contentValues.put("name", course );
+        contentValues.put("uc", "new" );
+        contentValues.put("p", fEn );
+        db.update("books", contentValues, "id", subject_id);
+
+        final Cursor allChaptersFromDb = db.getSelect("*", "chapters", "subject_id='" + subject_id + "'");
+        if (allChaptersFromDb.moveToFirst()) {
+            do {
+                for (int i = 0; i < arrayList.size(); i++) {
+                    if(allChaptersFromDb.getString(3).equals(arrayList.get(i).fileName) ) {
+                        contentValues = new ContentValues();
+                        contentValues.put("chaptername", arrayList.get(i).chapName );
+                        db.update("chapters", contentValues, "id", allChaptersFromDb.getString(0));
+                    }
+                }
+
+            } while (allChaptersFromDb.moveToNext());
+        }
+
+        for (int i = 0; i < arrayList.size(); i++) {
+            final Cursor singleChapter = db.getSelect("*", "chapters", "filename='" + arrayList.get(i).fileName + "'");
+            if (!singleChapter.moveToFirst()) {
+
+                contentValues = new ContentValues();
+                contentValues.put("subject_id", subject_id);
+                contentValues.put("chaptername", arrayList.get(i).chapName);
+                contentValues.put("filename", arrayList.get(i).fileName);
+                db.insert("chapters",contentValues);
+            }
+        }
+
+        db.deleteData("chapters", "subject_id="+subject_id+" and (filename!='00000'"+chapterNamesListAnd+")");
+
+    }
     public void setAd(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             tvAds.setText(Html.fromHtml(Ads, Html.FROM_HTML_MODE_COMPACT));

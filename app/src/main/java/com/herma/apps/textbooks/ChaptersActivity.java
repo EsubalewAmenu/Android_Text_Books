@@ -195,8 +195,8 @@ public class ChaptersActivity extends AppCompatActivity {
                 if (currentIcon != null && starIcon != null
                         && currentIcon.getConstantState().equals(starIcon.getConstantState())) {
                     // The icon of action_subject_favorite is star_big_off
-                    if (getIntent().getStringExtra("subjectChapters") != null && !is_short)
-                        isDBSouldBeUpdated(fName, fEn);
+//                    if (getIntent().getStringExtra("subjectChapters") != null && !is_short)
+//                        isDBSouldBeUpdated(fName, fEn);
 
                     saveOldBookAsFav();
 
@@ -260,8 +260,8 @@ public void setFromShort(String shortArrayList) throws JSONException {
         fName = item.fileName;
         fEn = item.en;
 
-        if (getIntent().getStringExtra("subjectChapters") != null && !is_short && isSubjectSavedAsFav(fName))
-            isDBSouldBeUpdated(fName, fEn);
+//        if (getIntent().getStringExtra("subjectChapters") != null && !is_short && isSubjectSavedAsFav(fName))
+//            isDBSouldBeUpdated(fName, fEn);
 
         File chapterFile = new File(FILEPATH + fName);
         if (chapterFile.exists()) {
@@ -416,44 +416,44 @@ public void openQuiz(String chapterName, String subject, String fileName, String
         }
     }
 
-    private void isDBSouldBeUpdated(String fileName, String fEn) {
-
-
-        if(arrayList.size()>0){
-            if(arrayList.get(0).chapterID=="0") {
-                String chapterNamesList ="", chapterNamesListAnd ="";
-                for (int k=0;k<arrayList.size();k++) {
-                    chapterNamesList += " or filename='"+arrayList.get(k).fileName+"'";
-                    chapterNamesListAnd += " and filename!='"+arrayList.get(k).fileName+"'";
-                }
-                // grade table
-                String subject = getIntent().getStringExtra("name");
-                String grade = getIntent().getStringExtra("grade").replace("Grade ", "");
-
-                // get grade by using subject in gradeName and subject_slug in gradeInNum
-                // if not exist create grade by using subject for gradeName and subject_slug for gradeInNum
-
-                Cursor chap = db.getSelect("*", "chapters", "filename='" + fileName + "'"+chapterNamesList);
-                if (chap.moveToFirst()) {
-                    updateChapters(chap.getString(1),grade, subject, chapterNamesListAnd, fEn);
-                }else{
-                    contentValues = new ContentValues();
-                    contentValues.put("grade", grade);
-                    contentValues.put("name", subject);
-                    contentValues.put("uc", "new");
-                    contentValues.put("gtype", System.currentTimeMillis());
-                    contentValues.put("p", fEn);
-                    db.insert("books",contentValues);
-
-                    Cursor bookCursor = db.getSelect("*", "books", "name='" + subject + "' and grade='"+grade+"' and uc='new'");
-                    if (bookCursor.moveToFirst()) {
-                        updateChapters(bookCursor.getString(0),grade, subject, chapterNamesListAnd, fEn);
-                    }
-                }
-            }
-        }
-
-    }
+//    private void isDBSouldBeUpdated(String fileName, String fEn) {
+//
+//
+//        if(arrayList.size()>0){
+//            if(arrayList.get(0).chapterID=="0") {
+//                String chapterNamesList ="", chapterNamesListAnd ="";
+//                for (int k=0;k<arrayList.size();k++) {
+//                    chapterNamesList += " or filename='"+arrayList.get(k).fileName+"'";
+//                    chapterNamesListAnd += " and filename!='"+arrayList.get(k).fileName+"'";
+//                }
+//                // grade table
+//                String subject = getIntent().getStringExtra("name");
+//                String grade = getIntent().getStringExtra("grade").replace("Grade ", "");
+//
+//                // get grade by using subject in gradeName and subject_slug in gradeInNum
+//                // if not exist create grade by using subject for gradeName and subject_slug for gradeInNum
+//
+//                Cursor chap = db.getSelect("*", "chapters", "filename='" + fileName + "'"+chapterNamesList);
+//                if (chap.moveToFirst()) {
+//                    updateChapters(chap.getString(1),grade, subject, chapterNamesListAnd, fEn);
+//                }else{
+//                    contentValues = new ContentValues();
+//                    contentValues.put("grade", grade);
+//                    contentValues.put("name", subject);
+//                    contentValues.put("uc", "new");
+//                    contentValues.put("gtype", System.currentTimeMillis());
+//                    contentValues.put("p", fEn);
+//                    db.insert("books",contentValues);
+//
+//                    Cursor bookCursor = db.getSelect("*", "books", "name='" + subject + "' and grade='"+grade+"' and uc='new'");
+//                    if (bookCursor.moveToFirst()) {
+//                        updateChapters(bookCursor.getString(0),grade, subject, chapterNamesListAnd, fEn);
+//                    }
+//                }
+//            }
+//        }
+//
+//    }
 
     private void updateChapters(String subject_id, String subject_slug, String course, String chapterNamesListAnd, String fEn) {
 
