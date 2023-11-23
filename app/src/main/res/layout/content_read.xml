@@ -7,25 +7,27 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:orientation="vertical">
 
+    <!-- LinearLayout to hold PDFView and ad_view_container -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <!-- PDFView -->
+        <com.github.barteksc.pdfviewer.PDFView
+            android:id="@+id/pdfView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <!-- Ad View Container at the bottom -->
         <FrameLayout
             android:id="@+id/ad_view_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_alignParentBottom="true" />
-
-        <com.github.barteksc.pdfviewer.PDFView
-            android:id="@+id/pdfView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
     </LinearLayout>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -39,7 +41,7 @@
             android:layout_alignParentBottom="true"
             android:layout_gravity="end"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="40dp"
             android:src="@android:drawable/ic_menu_add"
             app:backgroundTint="@color/colorPrimary"
             app:fabSize="normal"
@@ -116,5 +118,6 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </RelativeLayout>
