@@ -339,7 +339,7 @@ System.out.println("Error on sys:"+error);
      */
     public void showNetworkDialog(final boolean isOnline) {
             // Create an AlertDialog.Builder
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.Theme_AppCompat_Dialog_Alert);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AppTheme_Dark);
             // Set an Icon and title, and message
             builder.setIcon(R.drawable.ic_warning);
             builder.setTitle(getString(R.string.no_network_title));

@@ -419,7 +419,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private void setNoMoreReplies() {
 
         loadMoreViewHolder.btnLoadMore.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
-        loadMoreViewHolder.btnLoadMore.setTextColor(ContextCompat.getColor(context, R.color.cardview_dark_background));
+        loadMoreViewHolder.btnLoadMore.setTextColor(ContextCompat.getColor(context, R.color.dark_gray));
         loadMoreViewHolder.btnLoadMore.setText(context.getString(R.string.end_of_replies));
         loadMoreViewHolder.btnLoadMore.setEnabled(false);
         loadMoreViewHolder.btnLoadMore.setVisibility(View.VISIBLE);
@@ -442,7 +442,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void setNoMoreComment() {
 
         loadMoreViewHolder.btnLoadMore.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
-        loadMoreViewHolder.btnLoadMore.setTextColor(ContextCompat.getColor(context, R.color.cardview_dark_background));
+        loadMoreViewHolder.btnLoadMore.setTextColor(ContextCompat.getColor(context, R.color.dark_gray));
         loadMoreViewHolder.btnLoadMore.setText(context.getString(R.string.end_of_comments));
         loadMoreViewHolder.btnLoadMore.setEnabled(false);
 

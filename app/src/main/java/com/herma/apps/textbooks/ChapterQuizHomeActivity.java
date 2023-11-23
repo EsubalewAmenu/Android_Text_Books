@@ -15,6 +15,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.preference.PreferenceManager;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -75,12 +76,12 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
         btnQuizRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(btnQuizRetry.getText().toString().equals(getString(R.string.back))) {
+                if (btnQuizRetry.getText().toString().equals(getString(R.string.back))) {
                     finish();
-                }else if(isOnline()) {
-                btnQuizRetry.setVisibility(View.INVISIBLE);
-                loadQuizApiCall();
-                }else
+                } else if (isOnline()) {
+                    btnQuizRetry.setVisibility(View.INVISIBLE);
+                    loadQuizApiCall();
+                } else
                     Toast.makeText(getApplicationContext(), getString(R.string.check_your_internet), Toast.LENGTH_SHORT).show();
 
             }
@@ -90,7 +91,7 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
 
     private void loadQuizApiCall() {
 
-        String quizApiUrl = new SplashActivity().BASEAPI + "ds_quiz/v1/questions/"+chapter;
+        String quizApiUrl = new SplashActivity().BASEAPI + "ds_quiz/v1/questions/" + chapter;
 
         queue = Volley.newRequestQueue(this);
 
@@ -103,7 +104,7 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
 
                         try {
                             JSONArray datas = new JSONArray(response);
-                            if(datas.length() > 0){
+                            if (datas.length() > 0) {
                                 Intent questions = new Intent(ChapterQuizHomeActivity.this, QuizActivity.class);
                                 questions.putExtra("showAnswer", false);//show_answer.isChecked());
                                 questions.putExtra("outof", 10);//etOutOf.getText().toString());
@@ -113,7 +114,7 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
                                 startActivityForResult(questions, QUIZ_REQUEST);
                                 btnQuizRetry.setVisibility(View.VISIBLE);
 
-                            }else{
+                            } else {
                                 titleTextView.setText(getString(R.string.quiz_not_found));
                                 contentTextView.setText(getString(R.string.no_quiz_added));
                                 btnQuizRetry.setText(getString(R.string.back));
@@ -139,7 +140,7 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("Authorization", "Bearer "+pre.getString("token", "None"));
+                params.put("Authorization", "Bearer " + pre.getString("token", "None"));
 
                 return params;
             }
@@ -159,8 +160,8 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.read, menu);
 
-        if(getIntent().getStringExtra("allow_add") != null)
-            if(getIntent().getStringExtra("allow_add").equalsIgnoreCase("quiz-no-add")) {
+        if (getIntent().getStringExtra("allow_add") != null)
+            if (getIntent().getStringExtra("allow_add").equalsIgnoreCase("quiz-no-add")) {
                 // Hide the add quiz item
                 MenuItem addQuizItem = menu.findItem(R.id.action_add_quiz);
                 addQuizItem.setVisible(false);
@@ -168,46 +169,47 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
 
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            case R.id.action_rate:
-                Toast.makeText(ChapterQuizHomeActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
-                rateApp();
-                return true;
-            case R.id.action_store:
-                Toast.makeText(ChapterQuizHomeActivity.this, "More apps by us :)", Toast.LENGTH_SHORT).show();
-                openUrl("https://play.google.com/store/apps/developer?id=Herma%20plc");
-                return true;
-            case R.id.action_add_quiz:
-                if(isLoggedIn()) {
-                    Intent addQuizActivityIntent = new Intent(ChapterQuizHomeActivity.this, TermsAndConditionsActivity.class);
-                    addQuizActivityIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
-                    addQuizActivityIntent.putExtra("subject", getIntent().getStringExtra("subject"));
-                    addQuizActivityIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
-                    startActivity(addQuizActivityIntent);
-                }
-                return true;
-            case R.id.action_settings:
-                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-                return true;
-            case R.id.action_about:
-                startActivity(new Intent(getApplicationContext(), About_us.class));
-                return true;
-            case R.id.action_exit:
-                super.onBackPressed();
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        } else if (id == R.id.action_rate) {
+            Toast.makeText(ChapterQuizHomeActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
+            rateApp();
+            return true;
+        } else if (id == R.id.action_store) {
+            Toast.makeText(ChapterQuizHomeActivity.this, "More apps by us :)", Toast.LENGTH_SHORT).show();
+            openUrl("https://play.google.com/store/apps/developer?id=Herma%20plc");
+            return true;
+        } else if (id == R.id.action_add_quiz) {
+            if (isLoggedIn()) {
+                Intent addQuizActivityIntent = new Intent(ChapterQuizHomeActivity.this, TermsAndConditionsActivity.class);
+                addQuizActivityIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
+                addQuizActivityIntent.putExtra("subject", getIntent().getStringExtra("subject"));
+                addQuizActivityIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
+                startActivity(addQuizActivityIntent);
+            }
+            return true;
+        } else if (id == R.id.action_settings) {
+            startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+            return true;
+        } else if (id == R.id.action_about) {
+            startActivity(new Intent(getApplicationContext(), About_us.class));
+            return true;
+        } else if (id == R.id.action_exit) {
+            super.onBackPressed();
 //                return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
 
-    public boolean isLoggedIn(){
+    public boolean isLoggedIn() {
 
         SharedPreferences pre = android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String token = pre.getString("token", "None");
@@ -216,20 +218,20 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
 
         if (token.equals("None")) {
             isExpired = true;
-        }
-        else {
+        } else {
             isExpired = isTokenExpired(token);
         }
 
 
-        if(!isExpired) {
+        if (!isExpired) {
             return true;
 
-        }else{
+        } else {
             Toast.makeText(ChapterQuizHomeActivity.this, getString(R.string.sign_in_first), Toast.LENGTH_SHORT).show();
             return false;
         }
     }
+
     public boolean isOnline() {
         // Get a reference to the ConnectivityManager to check the state of network connectivity
         ConnectivityManager connectivityManager = (ConnectivityManager)
@@ -239,6 +241,7 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
     }
+
     private void rateApp() {
         try {
             Intent rateIntent = rateIntentForUrl("market://details");
@@ -307,7 +310,6 @@ public class ChapterQuizHomeActivity extends AppCompatActivity {
             txtScore.setVisibility(View.VISIBLE);
 
             txtScore.setText("ውጤት : " + score + "/" + answerKey.length + " (" + perc + "%) \nየፈጀብዎት ጊዜ :- " + timer);
-
 
 
 //            resultButton.setOnClickListener(v -> {

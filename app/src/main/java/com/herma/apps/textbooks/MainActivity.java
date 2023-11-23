@@ -310,24 +310,27 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id) {
-            case R.id.action_rate:
+        if( id == R.id.action_rate){
                 Toast.makeText(MainActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
                 rateApp();
                 return true;
-            case R.id.action_store:
+        }else if ( id == R.id.action_store){
                 Toast.makeText(MainActivity.this, "More apps by us :)", Toast.LENGTH_SHORT).show();
                 openUrl("https://play.google.com/store/apps/developer?id=Herma%20plc");
                 return true;
-            case R.id.action_about:
+
+    }else if ( id ==  R.id.action_about){
                 startActivity(new Intent(getApplicationContext(), About_us.class));
                 return true;
-            case R.id.action_settings:
+
+}else if ( id ==  R.id.action_settings){
                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                 return true;
-            case R.id.action_exit:
+
+        }else if ( id ==  R.id.action_exit){
                 System.exit(0);
                 return true;
+
         }
         return super.onOptionsItemSelected(item);
     }

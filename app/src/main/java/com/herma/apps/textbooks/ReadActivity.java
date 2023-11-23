@@ -84,7 +84,7 @@ public class ReadActivity extends AppCompatActivity {
 
     private RewardedAd mRewardedAd;
 
-//    TextView txtTimerValue;
+    //    TextView txtTimerValue;
 //    ImageButton btnGiftReward;
     long reward_p_id, reward_minutes;
 
@@ -103,7 +103,7 @@ public class ReadActivity extends AppCompatActivity {
 
 // Apply the theme
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (prefs.getString("themeMode","light").equals("dark")) {
+        if (prefs.getString("themeMode", "light").equals("dark")) {
             setTheme(R.style.AppTheme_Dark);
         } else {
             setTheme(R.style.AppTheme);
@@ -219,97 +219,97 @@ public class ReadActivity extends AppCompatActivity {
         commentRelateds();
     }
 
-    public void commentRelateds(){
+    public void commentRelateds() {
 
-    // Register all the FABs with their IDs This FAB button is the Parent
-    mAddFab = findViewById(R.id.add_fab);
+        // Register all the FABs with their IDs This FAB button is the Parent
+        mAddFab = findViewById(R.id.add_fab);
 
-    // FAB button
-    mAddQuizFab = findViewById(R.id.add_quiz_fab);
-    mAddCommentFab = findViewById(R.id.add_comment_fab);
+        // FAB button
+        mAddQuizFab = findViewById(R.id.add_quiz_fab);
+        mAddCommentFab = findViewById(R.id.add_comment_fab);
 
-    // Also register the action name text, of all the FABs.
-    addQuizActionText = findViewById(R.id.add_quiz_action_text);
-    addCommentActionText = findViewById(R.id.add_comment_action_text);
+        // Also register the action name text, of all the FABs.
+        addQuizActionText = findViewById(R.id.add_quiz_action_text);
+        addCommentActionText = findViewById(R.id.add_comment_action_text);
 
-    // Now set all the FABs and all the action name texts as GONE
-    mAddQuizFab.setVisibility(View.GONE);
-    mAddCommentFab.setVisibility(View.GONE);
+        // Now set all the FABs and all the action name texts as GONE
+        mAddQuizFab.setVisibility(View.GONE);
+        mAddCommentFab.setVisibility(View.GONE);
 
-    addQuizActionText.setVisibility(View.GONE);
-    addCommentActionText.setVisibility(View.GONE);
+        addQuizActionText.setVisibility(View.GONE);
+        addCommentActionText.setVisibility(View.GONE);
 
-    // make the boolean variable as false, as all the
-    // action name texts and all the sub FABs are invisible
-    isAllFabsVisible = false;
+        // make the boolean variable as false, as all the
+        // action name texts and all the sub FABs are invisible
+        isAllFabsVisible = false;
 
-    // We will make all the FABs and action name texts
-    // visible only when Parent FAB button is clicked So
-    // we have to handle the Parent FAB button first, by
-    // using setOnClickListener you can see below
-    mAddFab.setOnClickListener(view -> {
-        if (!isAllFabsVisible) {
-            // when isAllFabsVisible becomes true make all
-            // the action name texts and FABs VISIBLE
-            mAddQuizFab.show();
-            mAddCommentFab.show();
-            addQuizActionText.setVisibility(View.VISIBLE);
-            addCommentActionText.setVisibility(View.VISIBLE);
+        // We will make all the FABs and action name texts
+        // visible only when Parent FAB button is clicked So
+        // we have to handle the Parent FAB button first, by
+        // using setOnClickListener you can see below
+        mAddFab.setOnClickListener(view -> {
+            if (!isAllFabsVisible) {
+                // when isAllFabsVisible becomes true make all
+                // the action name texts and FABs VISIBLE
+                mAddQuizFab.show();
+                mAddCommentFab.show();
+                addQuizActionText.setVisibility(View.VISIBLE);
+                addCommentActionText.setVisibility(View.VISIBLE);
 
-            // make the boolean variable true as we
-            // have set the sub FABs visibility to GONE
-            isAllFabsVisible = true;
-        } else {
-            // when isAllFabsVisible becomes true make
-            // all the action name texts and FABs GONE.
-            mAddQuizFab.hide();
-            mAddCommentFab.hide();
-            addQuizActionText.setVisibility(View.GONE);
-            addCommentActionText.setVisibility(View.GONE);
+                // make the boolean variable true as we
+                // have set the sub FABs visibility to GONE
+                isAllFabsVisible = true;
+            } else {
+                // when isAllFabsVisible becomes true make
+                // all the action name texts and FABs GONE.
+                mAddQuizFab.hide();
+                mAddCommentFab.hide();
+                addQuizActionText.setVisibility(View.GONE);
+                addCommentActionText.setVisibility(View.GONE);
 
-            // make the boolean variable false as we
-            // have set the sub FABs visibility to GONE
-            isAllFabsVisible = false;
-        }
-    });
-    // below is the sample action to handle add person FAB. Here it shows simple Toast msg.
-    // The Toast will be shown only when they are visible and only when user clicks on them
-    mAddCommentFab.setOnClickListener(new View.OnClickListener() {
-                                         @Override
-                                         public void onClick(View view) {
-                                             //            view -> Toast.makeText(ReadActivity.this, "Person Added", Toast.LENGTH_SHORT).show();
-                                             if(isLoggedIn()){
-                                             Intent commentIntent = new Intent(ReadActivity.this, CommentActivity.class);
-                                             commentIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
-                                             commentIntent.putExtra("subject", getIntent().getStringExtra("subject"));
-                                             commentIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
-                                             startActivity(commentIntent);
-                                             }
-                                         }
-                                     }
-    );
+                // make the boolean variable false as we
+                // have set the sub FABs visibility to GONE
+                isAllFabsVisible = false;
+            }
+        });
+        // below is the sample action to handle add person FAB. Here it shows simple Toast msg.
+        // The Toast will be shown only when they are visible and only when user clicks on them
+        mAddCommentFab.setOnClickListener(new View.OnClickListener() {
+                                              @Override
+                                              public void onClick(View view) {
+                                                  //            view -> Toast.makeText(ReadActivity.this, "Person Added", Toast.LENGTH_SHORT).show();
+                                                  if (isLoggedIn()) {
+                                                      Intent commentIntent = new Intent(ReadActivity.this, CommentActivity.class);
+                                                      commentIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
+                                                      commentIntent.putExtra("subject", getIntent().getStringExtra("subject"));
+                                                      commentIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
+                                                      startActivity(commentIntent);
+                                                  }
+                                              }
+                                          }
+        );
 
-    // below is the sample action to handle add alarm FAB. Here it shows simple Toast msg
-    // The Toast will be shown only when they are visible and only when user clicks on them
+        // below is the sample action to handle add alarm FAB. Here it shows simple Toast msg
+        // The Toast will be shown only when they are visible and only when user clicks on them
 //    mAddQuizFab.setOnClickListener(
 //            view -> Toast.makeText(ReadActivity.this, R.string.coming_soon, Toast.LENGTH_SHORT
 //            ).show());
 
-    mAddQuizFab.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            if(isLoggedIn()) {
-                Intent chapterQuizIntent = new Intent(ReadActivity.this, ChapterQuizHomeActivity.class);
-                chapterQuizIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
-                chapterQuizIntent.putExtra("subject", getIntent().getStringExtra("subject"));
-                chapterQuizIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
-                startActivity(chapterQuizIntent);
+        mAddQuizFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isLoggedIn()) {
+                    Intent chapterQuizIntent = new Intent(ReadActivity.this, ChapterQuizHomeActivity.class);
+                    chapterQuizIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
+                    chapterQuizIntent.putExtra("subject", getIntent().getStringExtra("subject"));
+                    chapterQuizIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
+                    startActivity(chapterQuizIntent);
+                }
             }
-        }
-    });
-}
+        });
+    }
 
-    public boolean isLoggedIn(){
+    public boolean isLoggedIn() {
 
         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String token = pre.getString("token", "None");
@@ -318,16 +318,15 @@ public class ReadActivity extends AppCompatActivity {
 
         if (token.equals("None")) {
             isExpired = true;
-        }
-        else {
+        } else {
             isExpired = isTokenExpired(token);
         }
 
 
-        if(!isExpired) {
+        if (!isExpired) {
             return true;
 
-        }else{
+        } else {
             Toast.makeText(ReadActivity.this, getString(R.string.sign_in_first), Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -344,35 +343,34 @@ public class ReadActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            case R.id.action_rate:
-                Toast.makeText(ReadActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
-                rateApp();
-                return true;
-            case R.id.action_store:
-                Toast.makeText(ReadActivity.this, "More apps by us :)", Toast.LENGTH_SHORT).show();
-                openUrl("https://play.google.com/store/apps/developer?id=Herma%20plc");
-                return true;
-            case R.id.action_add_quiz:
-                if(isLoggedIn()) {
-                    Intent addQuizActivityIntent = new Intent(ReadActivity.this, TermsAndConditionsActivity.class);
-                    addQuizActivityIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
-                    addQuizActivityIntent.putExtra("subject", getIntent().getStringExtra("subject"));
-                    addQuizActivityIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
-                    startActivity(addQuizActivityIntent);
-                }
-                return true;
-            case R.id.action_settings:
-                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-                return true;
-            case R.id.action_about:
-                startActivity(new Intent(getApplicationContext(), About_us.class));
-                return true;
-            case R.id.action_exit:
-                super.onBackPressed();
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        } else if (id == R.id.action_rate) {
+            Toast.makeText(ReadActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
+            rateApp();
+            return true;
+        } else if (id == R.id.action_store) {
+            Toast.makeText(ReadActivity.this, "More apps by us :)", Toast.LENGTH_SHORT).show();
+            openUrl("https://play.google.com/store/apps/developer?id=Herma%20plc");
+            return true;
+        } else if (id == R.id.action_add_quiz) {
+            if (isLoggedIn()) {
+                Intent addQuizActivityIntent = new Intent(ReadActivity.this, TermsAndConditionsActivity.class);
+                addQuizActivityIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
+                addQuizActivityIntent.putExtra("subject", getIntent().getStringExtra("subject"));
+                addQuizActivityIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
+                startActivity(addQuizActivityIntent);
+            }
+            return true;
+        } else if (id == R.id.action_settings) {
+            startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+            return true;
+        } else if (id == R.id.action_about) {
+            startActivity(new Intent(getApplicationContext(), About_us.class));
+            return true;
+        } else if (id == R.id.action_exit) {
+            super.onBackPressed();
 //                return true;
         }
         return super.onOptionsItemSelected(item);
@@ -555,14 +553,15 @@ public class ReadActivity extends AppCompatActivity {
 
                                     SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-                                    String custom_data="";
+                                    String custom_data = "";
                                     try {
                                         JSONObject jsonBody = new JSONObject();
                                         jsonBody.put("phone", _phone);
                                         jsonBody.put("email", pre.getString("email", "1"));
                                         jsonBody.put("reward_p_id", reward_p_id);
                                         custom_data = jsonBody.toString();
-                                    }catch (Exception kl){}
+                                    } catch (Exception kl) {
+                                    }
 
                                     ServerSideVerificationOptions options = new ServerSideVerificationOptions
                                             .Builder()

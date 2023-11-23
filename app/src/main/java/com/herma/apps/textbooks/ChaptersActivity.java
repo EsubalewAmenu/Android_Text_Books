@@ -65,7 +65,7 @@ public class ChaptersActivity extends AppCompatActivity {
 
 // Apply the theme
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (prefs.getString("themeMode","light").equals("dark")) {
+        if (prefs.getString("themeMode", "light").equals("dark")) {
             setTheme(R.style.AppTheme_Dark);
         } else {
             setTheme(R.style.AppTheme);
@@ -76,7 +76,7 @@ public class ChaptersActivity extends AppCompatActivity {
         // Add back button to the toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        FILEPATH = getFilesDir().getPath()+"/Herma/books/";
+        FILEPATH = getFilesDir().getPath() + "/Herma/books/";
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         arrayList = new ArrayList<>();
@@ -85,17 +85,19 @@ public class ChaptersActivity extends AppCompatActivity {
 
         if (getIntent().getExtras() != null) {
 
-            if(getIntent().getStringExtra("unitsArrayList") != null){
+            if (getIntent().getStringExtra("unitsArrayList") != null) {
 
                 try {
-                    this.setTitle(getIntent().getStringExtra("subject") + "(" + getIntent().getStringExtra("grade")+")");
+                    this.setTitle(getIntent().getStringExtra("subject") + "(" + getIntent().getStringExtra("grade") + ")");
                     setFromShort(getIntent().getStringExtra("unitsArrayList"));
                     is_short = true;
-                } catch (JSONException e) { System.out.println("JSONException on chapters parsing ");e.printStackTrace(); }
+                } catch (JSONException e) {
+                    System.out.println("JSONException on chapters parsing ");
+                    e.printStackTrace();
+                }
 
-            }
-            else if(getIntent().getStringExtra("subjectChapters") != null){
-                    this.setTitle(getIntent().getStringExtra("name") + "(" + getIntent().getStringExtra("grade")+")");
+            } else if (getIntent().getStringExtra("subjectChapters") != null) {
+                this.setTitle(getIntent().getStringExtra("name") + "(" + getIntent().getStringExtra("grade") + ")");
                 try {
                     fEn = getIntent().getStringExtra("p");
                     setFromWeb(getIntent().getStringExtra("subjectChapters"));
@@ -103,10 +105,10 @@ public class ChaptersActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 is_short = false;
-                }else{
-                    this.setTitle(getIntent().getStringExtra("name") );//+ "(" + getIntent().getStringExtra("title")+")");
-                    setData(getIntent().getStringExtra("subj"),  getIntent().getStringExtra("p"));
-                    is_short = false;
+            } else {
+                this.setTitle(getIntent().getStringExtra("name"));//+ "(" + getIntent().getStringExtra("title")+")");
+                setData(getIntent().getStringExtra("subj"), getIntent().getStringExtra("p"));
+                is_short = false;
             }
         }
 
@@ -135,7 +137,7 @@ public class ChaptersActivity extends AppCompatActivity {
 
         AdRequest adRequest = new AdRequest.Builder().build();
 
-        if(new Commons(getApplicationContext()).showGoogleAd( 2)) {
+        if (new Commons(getApplicationContext()).showGoogleAd(2)) {
 //            mAdView.loadAd(adRequest);
             // Since we're loading the banner based on the adContainerView size, we need to wait until this
             // view is laid out before we can get the width.
@@ -146,7 +148,7 @@ public class ChaptersActivity extends AppCompatActivity {
                 }
             });
 
-        }else{
+        } else {
             adContainerView.setVisibility(View.GONE);
         }
 
@@ -154,108 +156,109 @@ public class ChaptersActivity extends AppCompatActivity {
 //        System.out.println(isSubjectSaved(fName));
 
     }
+
     public void setFromWeb(String chaptersJsonArray) throws JSONException {
         JSONArray datas = new JSONArray(chaptersJsonArray);
 
-        for(int i = 0; i < datas.length(); i++){
+        for (int i = 0; i < datas.length(); i++) {
             JSONObject c = datas.getJSONObject(i);
-            arrayList.add(new Item("0", c.getString("name") , c.getString("file_name"), fEn, R.drawable.icon, "#000000"));
+            arrayList.add(new Item("0", c.getString("name"), c.getString("file_name"), fEn, R.drawable.icon, "#000000"));
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.chapters, menu);
 
-        if(!isSubjectSavedAsFav(fName)) {
+        if (!isSubjectSavedAsFav(fName)) {
             MenuItem item = menu.findItem(R.id.action_subject_favorite);
             item.setIcon(android.R.drawable.star_big_off);
         }
 
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id) {
-            case android.R.id.home: // handle back arrow click here
-                finish(); // close this activity and return to preview activity (if there is any)
-                return true;
-            case R.id.action_delete_subject:
+        if (id == android.R.id.home) { // handle back arrow click here
+            finish(); // close this activity and return to preview activity (if there is any)
+            return true;
+        } else if (id == R.id.action_delete_subject) {
 
-                new Commons(ChaptersActivity.this).deleteSubjectDialog(ChaptersActivity.this, arrayList);
+            new Commons(ChaptersActivity.this).deleteSubjectDialog(ChaptersActivity.this, arrayList);
 
-                return true;
+            return true;
 
-            case R.id.action_subject_favorite:
-                Drawable currentIcon = item.getIcon();
-                Drawable starIcon = ContextCompat.getDrawable(this, android.R.drawable.star_big_off);
+        } else if (id == R.id.action_subject_favorite) {
+            Drawable currentIcon = item.getIcon();
+            Drawable starIcon = ContextCompat.getDrawable(this, android.R.drawable.star_big_off);
 
-                if (currentIcon != null && starIcon != null
-                        && currentIcon.getConstantState().equals(starIcon.getConstantState())) {
-                    // The icon of action_subject_favorite is star_big_off
-//                    if (getIntent().getStringExtra("subjectChapters") != null && !is_short)
-//                        isDBSouldBeUpdated(fName, fEn);
+            if (currentIcon != null && starIcon != null
+                    && currentIcon.getConstantState().equals(starIcon.getConstantState())) {
+                saveOldBookAsFav();
 
-                    saveOldBookAsFav();
-
-                    item.setIcon(android.R.drawable.star_big_on);
-                }else{
-                    if(removeFromFav(fName)){
-                        item.setIcon(android.R.drawable.star_big_off);
-                    }
+                item.setIcon(android.R.drawable.star_big_on);
+            } else {
+                if (removeFromFav(fName)) {
+                    item.setIcon(android.R.drawable.star_big_off);
                 }
+            }
 
-                return true;
+            return true;
 
-            case R.id.action_settings:
-                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-                return true;
-            case R.id.action_rate:
-                Toast.makeText(ChaptersActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
-                rateApp();
-                return true;
-            case R.id.action_store:
-                Toast.makeText(ChaptersActivity.this, "More apps by us :)", Toast.LENGTH_SHORT).show();
-                openUrl("https://play.google.com/store/apps/developer?id=Herma%20plc");
-                return true;
-            case R.id.action_about:
-                startActivity(new Intent(getApplicationContext(), About_us.class));
-                return true;
-            case R.id.action_exit:
-                super.onBackPressed();
-                return true;
+        } else if (id == R.id.action_settings) {
+            startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+            return true;
+        } else if (id == R.id.action_rate) {
+            Toast.makeText(ChaptersActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
+            rateApp();
+            return true;
+        } else if (id == R.id.action_store) {
+            Toast.makeText(ChaptersActivity.this, "More apps by us :)", Toast.LENGTH_SHORT).show();
+            openUrl("https://play.google.com/store/apps/developer?id=Herma%20plc");
+            return true;
+        } else if (id == R.id.action_about) {
+            startActivity(new Intent(getApplicationContext(), About_us.class));
+            return true;
+        } else if (id == R.id.action_exit) {
+            super.onBackPressed();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
-public void setFromShort(String shortArrayList) throws JSONException {
 
-                                        JSONObject jsonObj = new JSONObject(shortArrayList);
+    public void setFromShort(String shortArrayList) throws JSONException {
 
-                                    JSONArray datas = jsonObj.getJSONArray("chap");
-                                    JSONObject c;
+        JSONObject jsonObj = new JSONObject(shortArrayList);
 
-    arrayList = new ArrayList<>();
+        JSONArray datas = jsonObj.getJSONArray("chap");
+        JSONObject c;
 
-                                    for (int i = 0; i < datas.length(); i++) {
+        arrayList = new ArrayList<>();
 
-                                        c = datas.getJSONObject(i);
-                                        arrayList.add(new Item(c.getString("id"), c.getString("chaptername"), c.getString("file_url"), "en", R.drawable.icon, "#000000"));
-                                    }
+        for (int i = 0; i < datas.length(); i++) {
 
-}
-    public void setData(String subj, String p){
+            c = datas.getJSONObject(i);
+            arrayList.add(new Item(c.getString("id"), c.getString("chaptername"), c.getString("file_url"), "en", R.drawable.icon, "#000000"));
+        }
+
+    }
+
+    public void setData(String subj, String p) {
 //        open(getApplicationContext(),"read", "books.hrm");
         DB db = new DB(getApplicationContext());
         final Cursor subjectsCursor = db.getSelect("*", "chapters", "subject_id='" + subj + "' ORDER BY chaptername ASC");
         if (subjectsCursor.moveToFirst()) {
             do {
-                arrayList.add(new Item("", subjectsCursor.getString(2) , subjectsCursor.getString(3), p, R.drawable.icon, "#000000"));
+                arrayList.add(new Item("", subjectsCursor.getString(2), subjectsCursor.getString(3), p, R.drawable.icon, "#000000"));
             } while (subjectsCursor.moveToNext());
         }
 
     }
+
     public void openUnitToRead(Item item) {
         fName = item.fileName;
         fEn = item.en;
@@ -273,41 +276,42 @@ public void setFromShort(String shortArrayList) throws JSONException {
             chaptersIntent.putExtra("subject", getIntent().getStringExtra("name"));
             startActivity(chaptersIntent);
         } else {
-            if(fEn.equalsIgnoreCase("quiz") || fEn.equalsIgnoreCase("quiz-no-add")) {
+            if (fEn.equalsIgnoreCase("quiz") || fEn.equalsIgnoreCase("quiz-no-add")) {
 //                System.out.println("fEn is " + fEn);
                 openQuiz(item.chapName, getIntent().getStringExtra("name"), fName, fEn);
-            }else{
+            } else {
 //////////////////////////////
-            try {
-                File booksDirectory = new File(FILEPATH);
-                if (!booksDirectory.exists()) System.out.println(booksDirectory.mkdirs());
-            } catch (Exception kl) {
-                System.out.println("Exception on ChaptersActivity mkdirs " + kl);
-            }
+                try {
+                    File booksDirectory = new File(FILEPATH);
+                    if (!booksDirectory.exists()) System.out.println(booksDirectory.mkdirs());
+                } catch (Exception kl) {
+                    System.out.println("Exception on ChaptersActivity mkdirs " + kl);
+                }
 //////////////////////////////
 
-            if (is_short) {
-                new Commons(ChaptersActivity.this).messageDialog(ChaptersActivity.this, "d", R.string.no_file, 1234, fName, fEn, R.string.download, R.string.cancel, R.string.downloading, item.chapName, getIntent().getStringExtra("subject"), getIntent().getStringExtra("grade"), item.chapterID, is_short);
-            } else
-                new Commons(ChaptersActivity.this).messageDialog(ChaptersActivity.this, "d", R.string.no_file, 1234, fName, fEn, R.string.download, R.string.cancel, R.string.downloading, item.chapName, getIntent().getStringExtra("name"), "", "", is_short);
+                if (is_short) {
+                    new Commons(ChaptersActivity.this).messageDialog(ChaptersActivity.this, "d", R.string.no_file, 1234, fName, fEn, R.string.download, R.string.cancel, R.string.downloading, item.chapName, getIntent().getStringExtra("subject"), getIntent().getStringExtra("grade"), item.chapterID, is_short);
+                } else
+                    new Commons(ChaptersActivity.this).messageDialog(ChaptersActivity.this, "d", R.string.no_file, 1234, fName, fEn, R.string.download, R.string.cancel, R.string.downloading, item.chapName, getIntent().getStringExtra("name"), "", "", is_short);
+            }
         }
     }
+
+    public void openQuiz(String chapterName, String subject, String fileName, String fEn) {
+
+        if (isLoggedIn()) {
+
+            Intent chapterQuizIntent = new Intent(ChaptersActivity.this, ChapterQuizHomeActivity.class);
+            chapterQuizIntent.putExtra("chapterName", chapterName);
+            chapterQuizIntent.putExtra("subject", subject);
+            chapterQuizIntent.putExtra("fileName", fileName);
+            chapterQuizIntent.putExtra("allow_add", fEn);
+            startActivity(chapterQuizIntent);
+        }
+
     }
-public void openQuiz(String chapterName, String subject, String fileName, String fEn){
 
-    if(isLoggedIn()) {
-
-        Intent chapterQuizIntent = new Intent(ChaptersActivity.this, ChapterQuizHomeActivity.class);
-        chapterQuizIntent.putExtra("chapterName", chapterName);
-        chapterQuizIntent.putExtra("subject", subject);
-        chapterQuizIntent.putExtra("fileName", fileName);
-        chapterQuizIntent.putExtra("allow_add", fEn);
-        startActivity(chapterQuizIntent);
-    }
-
-}
-
-    public boolean isLoggedIn(){
+    public boolean isLoggedIn() {
 
         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String token = pre.getString("token", "None");
@@ -316,16 +320,15 @@ public void openQuiz(String chapterName, String subject, String fileName, String
 
         if (token.equals("None")) {
             isExpired = true;
-        }
-        else {
+        } else {
             isExpired = isTokenExpired(token);
         }
 
 
-        if(!isExpired) {
+        if (!isExpired) {
             return true;
 
-        }else{
+        } else {
             Toast.makeText(ChaptersActivity.this, getString(R.string.sign_in_first), Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -334,54 +337,55 @@ public void openQuiz(String chapterName, String subject, String fileName, String
     private boolean isSubjectSavedAsFav(String fileName) {
 
         if (arrayList.size() > 0) {
-                String chapterNamesList = "";
-                for (int k = 0; k < arrayList.size(); k++) {
-                    chapterNamesList += " or filename='" + arrayList.get(k).fileName + "'";
-                }
+            String chapterNamesList = "";
+            for (int k = 0; k < arrayList.size(); k++) {
+                chapterNamesList += " or filename='" + arrayList.get(k).fileName + "'";
+            }
 
-                Cursor chap = db.getSelect("*", "chapters", "filename='" + fileName + "'" + chapterNamesList);
+            Cursor chap = db.getSelect("*", "chapters", "filename='" + fileName + "'" + chapterNamesList);
 
 //            if(chapterNamesList.contains("filename='new_") && chap.moveToFirst()) {
 //                return true;
 //            }else
-                if(//!chapterNamesList.contains("filename='new_") &&
+            if (//!chapterNamesList.contains("filename='new_") &&
                     chap.moveToFirst()) {
                 Cursor bookCursor = db.getSelect("*", "books", "id='" + chap.getString(1) + "'");
 
-                if(bookCursor.moveToFirst()) {
-                    if(bookCursor.getString(4).equals("fav") || bookCursor.getString(4).equals("newf"))
+                if (bookCursor.moveToFirst()) {
+                    if (bookCursor.getString(4).equals("fav") || bookCursor.getString(4).equals("newf"))
                         return true;
                 }
             }
 
         }
-    return false;
+        return false;
     }
+
     private boolean removeFromFav(String fileName) {
 
 
-        if(arrayList.size()>0) {
+        if (arrayList.size() > 0) {
             String chapterNamesList = "";
             for (int k = 0; k < arrayList.size(); k++) {
                 chapterNamesList += " or filename='" + arrayList.get(k).fileName + "'";
             }
             Cursor chap = db.getSelect("*", "chapters", "filename='" + fileName + "'" + chapterNamesList);
 
-            if(chapterNamesList.contains("filename='new_") && chap.moveToFirst()) {
-                db.deleteData("chapters", "subject_id="+chap.getString(1));
+            if (chapterNamesList.contains("filename='new_") && chap.moveToFirst()) {
+                db.deleteData("chapters", "subject_id=" + chap.getString(1));
                 Cursor chapCursor = db.getSelect("*", "chapters", "filename='" + fileName + "'" + chapterNamesList);
-                if(!chapCursor.moveToFirst()) {
-                    db.deleteData("books", "id="+chap.getString(1));
+                if (!chapCursor.moveToFirst()) {
+                    db.deleteData("books", "id=" + chap.getString(1));
 
                     return true;
                 }
-            }else if(!chapterNamesList.contains("filename='new_") && chap.moveToFirst()) {
+            } else if (!chapterNamesList.contains("filename='new_") && chap.moveToFirst()) {
                 Cursor bookCursor = db.getSelect("*", "books", "id='" + chap.getString(1) + "'");
 
-                if(bookCursor.moveToFirst()) {
+                if (bookCursor.moveToFirst()) {
 
                     contentValues = new ContentValues();
-                    contentValues.put("uc", "u" );
+                    contentValues.put("uc", "u");
                     db.update("books", contentValues, "id", chap.getString(1));
                     return true;
                 }
@@ -403,12 +407,12 @@ public void openQuiz(String chapterName, String subject, String fileName, String
 
             Cursor chap = db.getSelect("*", "chapters", "filename='000000'" + chapterNamesList);
 
-            if(chap.moveToFirst()) {
+            if (chap.moveToFirst()) {
                 contentValues = new ContentValues();
-                if(!chapterNamesList.contains("filename='new_"))
-                    contentValues.put("uc", "fav" );
+                if (!chapterNamesList.contains("filename='new_"))
+                    contentValues.put("uc", "fav");
                 else
-                    contentValues.put("uc", "newf" );
+                    contentValues.put("uc", "newf");
 
                 db.update("books", contentValues, "id", chap.getString(1));
 
@@ -460,10 +464,10 @@ public void openQuiz(String chapterName, String subject, String fileName, String
 //        db.executeCommand("UPDATE books set grade='"+ subject_slug +"', name='"+course+"', p='"+fEn+"' WHERE id="+subject_id);
 
         contentValues = new ContentValues();
-        contentValues.put("grade", subject_slug );
-        contentValues.put("name", course );
-        contentValues.put("uc", "new" );
-        contentValues.put("p", fEn );
+        contentValues.put("grade", subject_slug);
+        contentValues.put("name", course);
+        contentValues.put("uc", "new");
+        contentValues.put("p", fEn);
         db.update("books", contentValues, "id", subject_id);
 
         final Cursor allChaptersFromDb = db.getSelect("*", "chapters", "subject_id='" + subject_id + "'");
@@ -476,12 +480,12 @@ public void openQuiz(String chapterName, String subject, String fileName, String
                 for (int i = 0; i < arrayList.size(); i++) {
                     // update unit where chapterName,arrayList.get(i).fileName
                     // or create on chapters table by using subject_id, arrayList.get(i).chapterName,arrayList.get(i).fileName, fEn
-                    if(allChaptersFromDb.getString(3) == arrayList.get(i).fileName ) {
+                    if (allChaptersFromDb.getString(3) == arrayList.get(i).fileName) {
                         isExist = true;
 //                        db.executeCommand("UPDATE chapters set chaptername='"+ arrayList.get(i).chapName +"' WHERE id="+allChaptersFromDb.getInt(0));
 
                         contentValues = new ContentValues();
-                        contentValues.put("chaptername", arrayList.get(i).chapName );
+                        contentValues.put("chaptername", arrayList.get(i).chapName);
                         db.update("chapters", contentValues, "id", allChaptersFromDb.getString(0));
                     }
                 }
@@ -504,13 +508,14 @@ public void openQuiz(String chapterName, String subject, String fileName, String
                 contentValues.put("subject_id", subject_id);
                 contentValues.put("chaptername", arrayList.get(i).chapName);
                 contentValues.put("filename", arrayList.get(i).fileName);
-                db.insert("chapters",contentValues);
+                db.insert("chapters", contentValues);
             }
         }
 
-        db.deleteData("chapters", "subject_id="+subject_id+" and (filename!='00000'"+chapterNamesListAnd+")");
+        db.deleteData("chapters", "subject_id=" + subject_id + " and (filename!='00000'" + chapterNamesListAnd + ")");
 
     }
+
     private void rateApp() {
         try {
             Intent rateIntent = rateIntentForUrl("market://details");

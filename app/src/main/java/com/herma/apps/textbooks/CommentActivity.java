@@ -509,7 +509,7 @@ public class CommentActivity extends AppCompatActivity {
 
     public void showNetworkDialog() {
         // Create an AlertDialog.Builder
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog_Alert);
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this, R.style.AppTheme_Dark);
         // Set an Icon and title, and message
         builder.setIcon(R.drawable.ic_warning);
         builder.setTitle(getString(R.string.no_network_title));
