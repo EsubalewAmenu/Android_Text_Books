@@ -9,8 +9,8 @@ android {
         applicationId "com.herma.apps.textbooks"
         minSdkVersion 19
         targetSdkVersion 34
-        versionCode 78
-        versionName "3.6.1"
+        versionCode 79
+        versionName "3.6.2"
         multiDexEnabled true
 
         ndk {
@@ -71,7 +71,7 @@ dependencies {
 
     implementation 'com.facebook.android:audience-network-sdk:6.16.0'
     implementation 'com.google.ads.mediation:facebook:6.16.0.0'
-    implementation 'com.google.ads.mediation:adcolony:4.8.0.2'
+    implementation 'com.google.ads.mediation:adcolony:4.8.0.1'
     implementation 'com.google.ads.mediation:applovin:11.11.3.0'
 
     implementation 'com.google.android.ump:user-messaging-platform:2.1.0'
