@@ -1,13 +1,11 @@
 package com.herma.apps.textbooks;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,11 +13,12 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.view.Display;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,29 +28,42 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.ads.AdListener;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.ump.ConsentDebugSettings;
+import com.google.android.ump.ConsentForm;
+import com.google.android.ump.ConsentInformation;
+import com.google.android.ump.ConsentInformation.OnConsentInfoUpdateSuccessListener;
+import com.google.android.ump.ConsentInformation.OnConsentInfoUpdateFailureListener;
+import com.google.android.ump.ConsentRequestParameters;
+import com.google.android.ump.UserMessagingPlatform;
 import com.herma.apps.textbooks.common.Commons;
 import com.herma.apps.textbooks.common.MainAdapter;
 import com.herma.apps.textbooks.common.DB;
 import com.herma.apps.textbooks.common.Item;
+import com.herma.apps.textbooks.common.PostItem;
 import com.herma.apps.textbooks.settings.LanguageHelper;
 import com.herma.apps.textbooks.settings.SettingsActivity;
 import com.herma.apps.textbooks.ui.about.About_us;
 import com.herma.apps.textbooks.ui.fragment.AllNewCurriculumBooks;
 import com.herma.apps.textbooks.ui.fragment.BookFragment;
+import com.herma.apps.textbooks.ui.fragment.FavOldCurriculumBooks;
 import com.herma.apps.textbooks.ui.fragment.MyNewCurriculumBooks;
-import com.herma.apps.textbooks.ui.fragment.PremiumFragment;
 import com.herma.apps.textbooks.ui.fragment.QuestionsFragment;
-import com.herma.apps.textbooks.ui.fragment.RewardFragment;
+import com.herma.apps.textbooks.ui.profile.ProfileActivity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -62,18 +74,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -108,6 +116,7 @@ public class MainActivity extends AppCompatActivity
     QuestionsFragment questionsFragment;
     AllNewCurriculumBooks allNewCurriculumBooks;
     MyNewCurriculumBooks myNewCurriculumBooks;
+    FavOldCurriculumBooks favOldCurriculumBooks;
 
     SharedPreferences pre;
 
@@ -116,26 +125,79 @@ public class MainActivity extends AppCompatActivity
     TextView tvAds;
     boolean myB = false;
 
+    private ConsentInformation consentInformation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         LanguageHelper.updateLanguage(this);
+
+// Apply the theme
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (prefs.getString("themeMode","light").equals("dark")) {
+            setTheme(R.style.AppTheme_Dark);
+        } else {
+            setTheme(R.style.AppTheme);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+//        ConsentDebugSettings debugSettings = new ConsentDebugSettings.Builder(this)
+//                .addTestDeviceHashedId("18998c6a0a39d135a063c156d3ac9339")
+//                .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
+//                .build();
+
+        // Set tag for under age of consent. false means users are not under age
+        // of consent.
+        ConsentRequestParameters params = new ConsentRequestParameters
+                .Builder()
+//                .setConsentDebugSettings(debugSettings)
+                .setTagForUnderAgeOfConsent(false)
+                .build();
+
+        consentInformation = UserMessagingPlatform.getConsentInformation(this);
+        consentInformation.requestConsentInfoUpdate(
+                this,
+                params,
+                (OnConsentInfoUpdateSuccessListener) () -> {
+                    UserMessagingPlatform.loadAndShowConsentFormIfRequired(
+                            this,
+                            (ConsentForm.OnConsentFormDismissedListener) loadAndShowError -> {
+                                if (loadAndShowError != null) {
+                                    // Consent gathering failed.
+                                    Log.w("consentInformation", String.format("%s: %s",
+                                            loadAndShowError.getErrorCode(),
+                                            loadAndShowError.getMessage()));
+                                }
+
+                                // Consent has been gathered.
+                            }
+                    );
+                },
+
+                (OnConsentInfoUpdateFailureListener) requestConsentError -> {
+                    // Consent gathering failed.
+                    Log.w("consentInformation", String.format("%s: %s",
+                            requestConsentError.getErrorCode(),
+                            requestConsentError.getMessage()));
+                });
+
+//        consentInformation.reset();
 
         db = new DB(getApplicationContext());
 
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
 
-//        drawerMenu = navigationView.getMenu();
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        setUserData(navigationView);
 
 
 //        try { grades = getGradesFromDB(MainActivity.this);} catch (Exception e) { e.printStackTrace(); }
@@ -153,39 +215,43 @@ public class MainActivity extends AppCompatActivity
         choosedGradeT = pre.getString("choosedGradeT", "Grade 12");
 
         changeFragment(choosedGrade+"", choosedGradeT);
-
+//        System.out.println("is user consent");
+        if (consentInformation.canRequestAds()) {
+//            System.out.println(" yes user consent");
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
+
+                adContainerView = findViewById(R.id.ad_view_container);
+
+//                AdRequest adRequest = new AdRequest.Builder().build();
+
+                if(new Commons(getApplicationContext()).showGoogleAd( 2)) {
+//            System.out.println("poiug yesss" );
+
+                    // Since we're loading the banner based on the adContainerView size, we need to wait until this
+                    // view is laid out before we can get the width.
+                    adContainerView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            new Commons(getApplicationContext()).loadBanner(mAdView, getString(R.string.adHome), adContainerView, getWindowManager().getDefaultDisplay());
+                        }
+                    });
+
+
+                }else{
+                    adContainerView.setVisibility(View.GONE);
+                }
+
+
+                tvAds = (TextView) findViewById(R.id.tvAds);
+                /// Ad here...
+                doApiCall();
+
             }
         });
 
-        adContainerView = findViewById(R.id.ad_view_container);
-
-        AdRequest adRequest = new AdRequest.Builder().build();
-
-        if(new Commons(getApplicationContext()).showGoogleAd( 2)) {
-//            System.out.println("poiug yesss" );
-
-            // Since we're loading the banner based on the adContainerView size, we need to wait until this
-            // view is laid out before we can get the width.
-            adContainerView.post(new Runnable() {
-                @Override
-                public void run() {
-                    new Commons(getApplicationContext()).loadBanner(mAdView, getString(R.string.adHome), adContainerView, getWindowManager().getDefaultDisplay());
-                }
-            });
-
-
-        }else{
-//            System.out.println("poiug no " );
-            adContainerView.setVisibility(View.GONE);
         }
-
-
-        tvAds = (TextView) findViewById(R.id.tvAds);
-        /// Ad here...
-        doApiCall();
 
     }
 
@@ -243,25 +309,27 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id) {
-            case R.id.action_rate:
+        if( id == R.id.action_rate){
                 Toast.makeText(MainActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
                 rateApp();
                 return true;
-            case R.id.action_store:
+        }else if ( id == R.id.action_store){
                 Toast.makeText(MainActivity.this, "More apps by us :)", Toast.LENGTH_SHORT).show();
                 openUrl("https://play.google.com/store/apps/developer?id=Herma%20plc");
                 return true;
-            case R.id.action_about:
+
+    }else if ( id ==  R.id.action_about){
                 startActivity(new Intent(getApplicationContext(), About_us.class));
                 return true;
-            case R.id.action_settings:
+
+}else if ( id ==  R.id.action_settings){
                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                 return true;
-            case R.id.action_exit:
 
+        }else if ( id ==  R.id.action_exit){
                 System.exit(0);
                 return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -273,6 +341,7 @@ public class MainActivity extends AppCompatActivity
 
 //        if (requestCode == QUESTIONNAIRE_REQUEST)
 //        {
+
         if (resultCode == RESULT_OK) {
 
 
@@ -295,34 +364,56 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public ArrayList getData(Context context, String choosedGrade) {
+    public ArrayList getData(Context context, String choosedGrade, String old_new) {
         db = new DB(context);
         ArrayList arrayList = new ArrayList<>();
 
-        if(choosedGrade == "new"){
+//        if(old_new == "new"){
+//
+//            final Cursor subjectsCursor = db.getSelect("*", "books", "uc='new' or uc='newf' ORDER BY name ASC");
+//            if (subjectsCursor.moveToFirst()) {
+//                do {
+//                    arrayList.add(new Item("", subjectsCursor.getString(2)+" (Grade "+subjectsCursor.getString(1)+")", subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
+//                } while (subjectsCursor.moveToNext());
+//            }
+//
+//            if(arrayList.size() == 0) {
+//                openAllBooksFragment();
+//                return null;
+//            }
+//
+//            return arrayList;
+//        }else
+//            if(choosedGrade.equals("newf")){
+//            final Cursor subjectsCursor = db.getSelect("*", "books", "uc='newf' ORDER BY name ASC");
+//            if (subjectsCursor.moveToFirst()) {
+//                do {
+//                    arrayList.add(new Item("", subjectsCursor.getString(2)+" (Grade "+subjectsCursor.getString(1)+")", subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
+//                } while (subjectsCursor.moveToNext());
+//            }
+//
+//            if(arrayList.size() == 0) {
+//                openAllBooksFragment();
+//                return null;
+//            }
+//
+//            return arrayList;
+//        }
 
-            final Cursor subjectsCursor = db.getSelect("*", "books", "uc='new' ORDER BY name ASC");
-            if (subjectsCursor.moveToFirst()) {
-                do {
-                    arrayList.add(new Item("", subjectsCursor.getString(2)+" (Grade "+subjectsCursor.getString(1)+")", subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
-                } while (subjectsCursor.moveToNext());
-            }
 
-            if(arrayList.size() == 0) {
-                openAllBooksFragment();
-                return null;
-            }
+        Cursor subjectsCursor;
+        if(choosedGrade.equals("fav") || choosedGrade.equals("newf")) {
+            subjectsCursor = db.getSelect("*", "books", "uc='"+choosedGrade+"' ORDER BY name ASC");
+        }else if(old_new.equals("new")) {
+            subjectsCursor = db.getSelect("*", "books", "(uc='new' or uc='newf') and grade='" + choosedGrade + "' ORDER BY name DESC");
+        }else {
 
-            return arrayList;
-        }
+            // get if textbook or teacher guide
+            final Cursor gradeCursor = db.getSelect("*", "grade", "id="+choosedGrade);
+            gradeCursor.moveToFirst();
 
-
-        // get if textbook or teacher guide
-        final Cursor gradeCursor = db.getSelect("*", "grade", "id="+choosedGrade);
-        gradeCursor.moveToFirst();
-
-        final Cursor subjectsCursor = db.getSelect("*", "books", "grade='" + gradeCursor.getString(2) + "' and gtype='" + gradeCursor.getString(3) + "' ORDER BY name ASC");
-        if (subjectsCursor.moveToFirst()) {
+            subjectsCursor = db.getSelect("*", "books", "uc!='new' and uc!='newf' and grade='" + gradeCursor.getString(2) + "' and gtype='" + gradeCursor.getString(3) + "' ORDER BY name ASC");
+        }if (subjectsCursor.moveToFirst()) {
             do {
                 arrayList.add(new Item("", subjectsCursor.getString(2), subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
             } while (subjectsCursor.moveToNext());
@@ -366,7 +457,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(Item item) {
 
-//                System.out.println("en p is " + item.en);
 
                 chaptersIntent = new Intent(context, ChaptersActivity.class);
                 chaptersIntent.putExtra("subj", item.fileName);
@@ -425,75 +515,6 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
     }
-//    public void setMenuItems(ArrayList<String> menuItemsArray){
-//
-//        drawerMenu.clear();
-//        for(int temp=0;temp<menuItemsArray.size();temp++){
-//            // groupId, itemId, order, title
-//            drawerMenu.add(1, 0, 0, menuItemsArray.get(temp)).setIcon(R.drawable.ic_menu_send);
-//        }
-//        drawerMenu.setGroupCheckable(1, true, true);
-//
-//        Menu communicateMenu = drawerMenu.addSubMenu("Communicate");
-//        communicateMenu.add(2, 50, 50, "Tell a friend (Link)").setIcon(R.drawable.ic_menu_share);
-////        communicateMenu.add(2, 51, 51, "Share app (apk)").setIcon(R.drawable.ic_menu_share);
-//
-//        Menu aboutMenu = drawerMenu.addSubMenu("About");
-//        aboutMenu.add(3, 56, 56, "Rate us on PlayStore").setIcon(android.R.drawable.star_on);
-//        aboutMenu.add(3, 57, 57, "More apps from us").setIcon(R.drawable.b_next);
-//        aboutMenu.add(3, 58, 58, "About").setIcon(R.drawable.about);
-//        aboutMenu.add(3, 59, 59, "Exit").setIcon(android.R.drawable.ic_delete);
-//
-//        if(getIntent().getStringExtra("choosedGrade") != null) changeFragment(gradeMap.get(getIntent().getStringExtra("choosedGrade")), getIntent().getStringExtra("choosedGrade"));
-//        else changeFragment((String)gradeMap.values().toArray()[0], (String)gradeMap.keySet().toArray()[0]);
-//
-//        item_click_listener = new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-////                System.out.println("Clicked item is " + item.toString() + " & id is " + item.getItemId());
-//
-//                  if(item.getItemId() == 0){
-////System.out.println("gradeMap.get(item.toString()) is " + gradeMap.get(item.toString()));
-//                      changeFragment(gradeMap.get(item.toString()), item.toString());
-//
-//                      SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-//                      SharedPreferences.Editor editor = sharedPref.edit();
-//                      editor.putString("choosedGrade", item.toString());
-//                      editor.apply();
-//
-//                  }else if(item.getItemId() == 50){// Tell a friend (Link)
-//                Intent intent4 = new Intent("android.intent.action.SEND");
-//                intent4.setType("text/plain");
-//                intent4.putExtra("android.intent.extra.TEXT", getString(R.string.share_link_pre) + " " + getString(R.string.app_name) + " " + getString(R.string.share_link_center) + " " + "https://play.google.com/store/apps/details?id="+getPackageName() + " "+ getString(R.string.share_link_pos));
-//                startActivity(Intent.createChooser(intent4, "SHARE VIA"));
-////                  }else if(item.getItemId() == 51){// Share app (apk)
-////                      shareApp(MainActivity.this,"titleTezt", "messageTezt", "subjectTezt");
-//                  }else if(item.getItemId() == 56){//Rate us
-//            Toast.makeText(MainActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
-//            rateApp();
-//                  }else if(item.getItemId() == 57){//More app
-//            Toast.makeText(MainActivity.this, "More apps by us :)", Toast.LENGTH_SHORT).show();
-//            openUrl("https://play.google.com/store/apps/developer?id=Herma%20plc");
-//                  }else if(item.getItemId() == 58){//About
-//            startActivity(new Intent(getApplicationContext(), About_us.class));
-//                  }else if(item.getItemId() == 59){//Exit
-//                      finish();
-//                      System.exit(0);
-//                  }
-//
-//                drawerLayout.closeDrawers();
-//                return true;
-//            }
-//        };
-//
-//        navigationView.setNavigationItemSelectedListener(item_click_listener);
-//        mDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout, toolbar,R.string.app_name,
-//                R.string.app_name);
-//        drawerLayout.setDrawerListener(mDrawerToggle);
-//        mDrawerToggle.syncState();
-//
-//    }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
@@ -503,6 +524,8 @@ public class MainActivity extends AppCompatActivity
             openMyBooksFragment();
         } else if (id == R.id.nav_all_books) {
             openAllBooksFragment();
+        } else if (id == R.id.nav_fav_old_books) {
+            openMyFavOldBooksFragment();
         } else if (id == R.id.nav_g12) {
             changeFragment("1", "Grade 12");
         } else if (id == R.id.nav_g11) {
@@ -561,6 +584,30 @@ public class MainActivity extends AppCompatActivity
             intent4.setType("text/plain");
             intent4.putExtra("android.intent.extra.TEXT", getString(R.string.share_link_pre) + " " + getString(R.string.app_name) + " " + getString(R.string.share_link_center) + " " + "https://play.google.com/store/apps/details?id=" + getPackageName() + " " + getString(R.string.share_link_pos));
             startActivity(Intent.createChooser(intent4, "SHARE VIA"));
+        }else if(id == R.id.action_logout){
+
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .requestProfile()
+                    .build();
+
+            GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+            // Perform sign out
+            mGoogleSignInClient.signOut()
+                    .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            SharedPreferences prefs = null;
+                            prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+                            prefs.edit().putString("token", "None").apply();
+
+                            Intent splashActivityIntent = new Intent(getApplicationContext(), SplashActivity.class);
+                            startActivity(splashActivityIntent);
+                        }
+                    });
+
         }else if(id == R.id.action_settings){
             startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
 //        } else if (id == R.id.nav_ad_free) {
@@ -581,6 +628,9 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_college_books) {
             openUrl("https://play.google.com/store/apps/details?id=com.herma.apps.collegebooks&hl=en_US&gl=US");
+            return true;
+        } else if (id == R.id.nav_expertsway) {
+            openUrl("https://play.google.com/store/apps/details?id=com.herma.apps.expertsway");
             return true;
 //        } else if (id == R.id.nav_add_books) {
 //            openUrl("https://docs.google.com/forms/d/e/1FAIpQLSfCJtHIIZYY0CJe0V0W4GLkgr1407qMG3RwOs2KTqiIxt53ig/viewform?usp=sf_link");
@@ -609,6 +659,17 @@ public class MainActivity extends AppCompatActivity
         mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.replace(R.id.containerView, myNewCurriculumBooks).commit();
         setTitle("My new curriculum books");
+
+
+        pre.edit().putString("choosedGrade", "my_b" ).apply();
+        pre.edit().putString("choosedGradeT", "My new curriculum books").apply();
+    }
+    public void openMyFavOldBooksFragment(){
+        favOldCurriculumBooks = new FavOldCurriculumBooks();
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.replace(R.id.containerView, favOldCurriculumBooks).commit();
+        setTitle("Favorite old curriculum books");
 
 
         pre.edit().putString("choosedGrade", "my_b" ).apply();
@@ -647,24 +708,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-//    public void shareApp(Context context, String chooserTitle,
-//                                String message, String messageSubject) {
-//        ApplicationInfo app = getApplicationContext().getApplicationInfo();
-//        String filePath = app.sourceDir;
-//
-//        Intent intent = new Intent(Intent.ACTION_SEND);
-//
-//        // MIME of .apk is "application/vnd.android.package-archive".
-//        // but Bluetooth does not accept this. Let's use "*/*" instead.
-//        intent.setType("*/*");
-//
-//
-//        // Append file and send Intent
-//        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
-//        startActivity(Intent.createChooser(intent, "Share app via"));
-//
-//    }
-
     private void doApiCall() {
         new Handler().postDelayed(new Runnable() {
 
@@ -672,27 +715,40 @@ public class MainActivity extends AppCompatActivity
             public void run() {
 
                 RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-// Request a string response from the provided URL.
+                // Request a string response from the provided URL.
 
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, SplashActivity.BASEAPI+"DSSERVICE/v1/ad/1-12-textbooks/1",
+                SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+
+                StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                        SplashActivity.BASEAPI+"DSSERVICE/v1/updates?number_of_ad=1&app=1-12-textbooks&last_updated="+pre.getString("last_update", "2020-11-22 12:39:52"),
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
                                 if (response != null) {
                                     try {
+//                                        System.out.println("ad request is ");
 //                                        System.out.println(response);
                                         // Getting JSON Array node
                                         JSONObject jsonObj = new JSONObject(response);
 
-                                        System.out.println("response code is " + jsonObj.getString("code"));
-                                        if(jsonObj.getInt("code") == 200 ){
+//                                        System.out.println("response code is " + jsonObj.getString("code"));
+                                        if(jsonObj.getString("code").equals("new_updates") ){
                                             Ads = jsonObj.getString("ad");
+
+                                                pre.edit().putString("last_update", jsonObj.getString("last_update") ).apply();
+
+
                                             if(Ads != "null"){
                                                 setAd(); myB = true;
                                             }else tvAds.setVisibility(View.GONE);
+
+                                            parseAllBooks(jsonObj.getString("books"));
                                         }else tvAds.setVisibility(View.GONE);
 
-                                    } catch (final JSONException e) { tvAds.setVisibility(View.GONE); }
+                                    } catch (final Exception e) {
+                                        //tvAds.setVisibility(View.GONE);
+                                    }
 
                                 }
                             }
@@ -718,6 +774,123 @@ public class MainActivity extends AppCompatActivity
         }, 1500);
     }
 
+    private void parseAllBooks(String response) throws Exception {
+
+        try {
+            // Getting JSON Array node
+            JSONArray datas = new JSONArray(response);
+
+//            ArrayList<Object> items = new ArrayList<Object>();
+            for (int i = 0; i < datas.length(); i++) {
+                JSONObject c = datas.getJSONObject(i);
+                ////////////////////////////////////////
+//                PostItem postItem = new PostItem();
+//                postItem.setSubjectName(c.getString("name").trim());
+//                postItem.setSubjectGrade(c.getString("category").trim());
+//                postItem.setSubjectEn(c.getString("en").trim());
+//                postItem.setSubjectChapters(c.getJSONArray("chapters"));
+//                items.add(postItem);
+
+                isDBSouldBeUpdated(setFromWeb(c.getString("chapters"), c.getString("en").trim()),
+                        c.getString("category").trim(),
+                        c.getString("name").trim(),
+                        c.getString("en").trim()
+                        );
+
+            }
+//            System.out.println("updated items count is " + items.size());
+
+
+        } catch (Exception e) {}
+
+    }
+
+    public ArrayList<Item> setFromWeb(String chaptersJsonArray, String en) throws JSONException {
+        ArrayList<Item> arrayList = new ArrayList<>();
+
+        JSONArray datas = new JSONArray(chaptersJsonArray);
+
+        for(int i = 0; i < datas.length(); i++){
+            JSONObject c = datas.getJSONObject(i);
+            arrayList.add(new Item("0", c.getString("name") , c.getString("file_name"), en, R.drawable.icon, "#000000"));
+        }
+        return arrayList;
+    }
+
+    private void isDBSouldBeUpdated(ArrayList<Item> arrayList, String grade, String subject, String fEn) {
+        if(arrayList.size()>0){
+            if(arrayList.get(0).chapterID=="0") {
+                String chapterNamesList ="", chapterNamesListAnd ="";
+                for (int k=0;k<arrayList.size();k++) {
+                    System.out.println("arrayList.get(k).chapName " + arrayList.get(k).chapName);
+                    chapterNamesList += " or filename='"+arrayList.get(k).fileName+"'";
+                    chapterNamesListAnd += " and filename!='"+arrayList.get(k).fileName+"'";
+                }
+                // grade table
+                grade = grade.replace("Grade ", "");
+
+                // get grade by using subject in gradeName and subject_slug in gradeInNum
+                // if not exist create grade by using subject for gradeName and subject_slug for gradeInNum
+                Cursor chap = db.getSelect("*", "chapters", "filename='x'"+chapterNamesList);
+                if (chap.moveToFirst()) {
+                    updateChapters(arrayList, chap.getString(1),grade, subject, chapterNamesListAnd, fEn);
+                }else{
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("grade", grade);
+                    contentValues.put("name", subject);
+                    contentValues.put("uc", "new");
+                    contentValues.put("gtype", System.currentTimeMillis());
+                    contentValues.put("p", fEn);
+                    db.insert("books",contentValues);
+
+                    Cursor bookCursor = db.getSelect("*", "books", "name='" + subject + "' and grade='"+grade+"' and uc='new'");
+                    if (bookCursor.moveToFirst()) {
+                        updateChapters(arrayList, bookCursor.getString(0),grade, subject, chapterNamesListAnd, fEn);
+                    }
+                }
+            }
+        }
+
+    }
+
+    private void updateChapters(ArrayList<Item> arrayList, String subject_id, String subject_slug, String course, String chapterNamesListAnd, String fEn) {
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("grade", subject_slug );
+        contentValues.put("name", course );
+        contentValues.put("uc", "new" );
+        contentValues.put("p", fEn );
+        db.update("books", contentValues, "id", subject_id);
+
+        final Cursor allChaptersFromDb = db.getSelect("*", "chapters", "subject_id='" + subject_id + "'");
+        if (allChaptersFromDb.moveToFirst()) {
+            do {
+                for (int i = 0; i < arrayList.size(); i++) {
+                    if(allChaptersFromDb.getString(3).equals(arrayList.get(i).fileName) ) {
+                        contentValues = new ContentValues();
+                        contentValues.put("chaptername", arrayList.get(i).chapName );
+                        db.update("chapters", contentValues, "id", allChaptersFromDb.getString(0));
+                    }
+                }
+
+            } while (allChaptersFromDb.moveToNext());
+        }
+
+        for (int i = 0; i < arrayList.size(); i++) {
+            final Cursor singleChapter = db.getSelect("*", "chapters", "filename='" + arrayList.get(i).fileName + "'");
+            if (!singleChapter.moveToFirst()) {
+
+                contentValues = new ContentValues();
+                contentValues.put("subject_id", subject_id);
+                contentValues.put("chaptername", arrayList.get(i).chapName);
+                contentValues.put("filename", arrayList.get(i).fileName);
+                db.insert("chapters",contentValues);
+            }
+        }
+
+        db.deleteData("chapters", "subject_id="+subject_id+" and (filename!='00000'"+chapterNamesListAnd+")");
+
+    }
     public void setAd(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             tvAds.setText(Html.fromHtml(Ads, Html.FROM_HTML_MODE_COMPACT));
@@ -730,5 +903,43 @@ public class MainActivity extends AppCompatActivity
         tvAds.setSelected(true);
         tvAds.setVisibility(View.VISIBLE);
 
+    }
+    public void setUserData(NavigationView navigationView){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String token = prefs.getString("token", "None");
+
+        if (!token.equals("None")) {
+            View navHeaderView = navigationView.getHeaderView(0);
+
+            ImageView userImage = navHeaderView.findViewById(R.id.userImage);
+            TextView userName = navHeaderView.findViewById(R.id.userName);
+            TextView userEmail = navHeaderView.findViewById(R.id.userEmail);
+
+            Glide.with(getApplicationContext())
+                    .load(prefs.getString("image", "None"))
+                    .into(userImage);
+
+            userName.setText(prefs.getString("first_name", "None"));
+            userEmail.setText(prefs.getString("user_email", "None"));
+
+            navigationView.setNavigationItemSelectedListener(this);
+
+            navHeaderView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent profileIntent = new Intent(getApplicationContext(), ProfileActivity.class);
+                    profileIntent.putExtra("username", prefs.getString("username", "None"));
+                    startActivity(profileIntent);
+                }
+            });
+
+
+        }else{
+
+// Hide the logout item
+            Menu menu = navigationView.getMenu();
+            MenuItem logoutItem = menu.findItem(R.id.action_logout);
+            logoutItem.setVisible(false);
+        }
     }
 }

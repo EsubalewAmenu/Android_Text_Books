@@ -1,5 +1,7 @@
 package com.herma.apps.textbooks;
 
+import static com.herma.apps.textbooks.common.TokenUtils.isTokenExpired;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -41,12 +43,14 @@ import java.util.Map;
 public class SplashActivity extends AppCompatActivity {
 
     public static String BASEAPI = "https://datascienceplc.com/api/";
-//    public String BASEAPI = "https://192.168.8.101:8082/wp/ds/api/";
+//    public static String BASEAPI = "https://dashencon.com/test/api/";
     public RequestQueue queue;
     public static String USERNAME = "public-api-user", PAZZWORD = "public-api-password";
 
     GoogleSignInClient mGoogleSignInClient;
     int RC_SIGN_IN = 9001;
+
+    SharedPreferences prefs = null;
 
     private static int SPLASH_SCREEN_TIME_OUT = 1050;
     @Override
@@ -60,13 +64,13 @@ public class SplashActivity extends AppCompatActivity {
         //can cover the entire screen.
         setContentView(R.layout.activity_splash);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String languageCode = prefs.getString("language_code", "None");
 
         if(languageCode.equals("None"))
             startActivity(new Intent(SplashActivity.this, SettingsActivity.class));
 
-        getLastUpdated();
+//        getLastUpdated();
 
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -77,9 +81,19 @@ public class SplashActivity extends AppCompatActivity {
 
 
 
+            String token = prefs.getString("token", "None");
 
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account != null) {
+        boolean isExpired;
+
+            if (token.equals("None")) {
+                isExpired = true;
+            }
+            else {
+                isExpired = isTokenExpired(token);
+            }
+
+//        if(!(prefs.getString("token", "None")).equals("None")){
+                if(!isExpired){
             // The user is already signed in
 
             findViewById(R.id.sign_in_button).setVisibility(View.INVISIBLE);
@@ -173,7 +187,7 @@ public class SplashActivity extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
-        String url = "wp/v2/users/register";
+        String url = "wp/v2/users/new_register";
 
         JSONObject jsonBody = new JSONObject();
         jsonBody.put("google_user_id", userId);
@@ -184,30 +198,41 @@ public class SplashActivity extends AppCompatActivity {
         jsonBody.put("registed_with", "google");
         final String requestBody = jsonBody.toString();
 
-//        System.out.println("login request to server");
-//        System.out.println(requestBody);
+        System.out.println("login request to server");
+        System.out.println(requestBody);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, BASEAPI+url ,
 
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-//                        System.out.println(response);
+                        System.out.println("server response is");
+                        System.out.println(response);
 
-                        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        try {
+                            JSONObject jsonObj = new JSONObject(response);
 
-                        pre.edit().putString("google_user_id", userId).apply();
-                        pre.edit().putString("given_name", givenName).apply();
-                        pre.edit().putString("family_name", familyName).apply();
-                        pre.edit().putString("email", userEmail).apply();
-                        pre.edit().putString("registed_with", "google").apply();
+                            prefs.edit().putString("token", jsonObj.getString("token")).apply();
+                            prefs.edit().putString("user_email", jsonObj.getString("user_email")).apply();
+                            prefs.edit().putString("user_nicename", jsonObj.getString("user_nicename")).apply();
+                            prefs.edit().putString("user_display_name", jsonObj.getString("user_display_name")).apply();
+                            prefs.edit().putString("username", jsonObj.getString("username")).apply();
+                            prefs.edit().putString("first_name", jsonObj.getString("first_name")).apply();
+                            prefs.edit().putString("last_name", jsonObj.getString("last_name")).apply();
+                            prefs.edit().putString("image", jsonObj.getString("image")).apply();
 
                         openMainActivity();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                String errorMessage = error.getMessage();
+                System.out.println("Error message: " + errorMessage);
                 // Check if the error has a network response
                 NetworkResponse response = error.networkResponse;
                 if (response != null) {
@@ -221,16 +246,27 @@ public class SplashActivity extends AppCompatActivity {
                     System.out.println("Error status code: " + statusCode);
                     System.out.println("Error response body: " + responseBody);
                     if(statusCode == 409 ){
+                        try {
 
-                        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            JSONObject jsonObj = new JSONObject(responseBody);
 
-                        pre.edit().putString("userId", userId).apply();
-                        pre.edit().putString("given_name", givenName).apply();
-                        pre.edit().putString("family_name", familyName).apply();
-                        pre.edit().putString("email", userEmail).apply();
-                        pre.edit().putString("registed_with", "'google'").apply();
+                            prefs.edit().putString("token", jsonObj.getString("token")).apply();
+                            prefs.edit().putString("user_email", jsonObj.getString("user_email")).apply();
+                            prefs.edit().putString("user_nicename", jsonObj.getString("user_nicename")).apply();
+                            prefs.edit().putString("user_display_name", jsonObj.getString("user_display_name")).apply();
+                            prefs.edit().putString("username", jsonObj.getString("username")).apply();
+                            prefs.edit().putString("first_name", jsonObj.getString("first_name")).apply();
+                            prefs.edit().putString("last_name", jsonObj.getString("last_name")).apply();
+                            prefs.edit().putString("image", jsonObj.getString("image")).apply();
 
                         openMainActivity();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }else{
+                        // Perform sign out
+                        mGoogleSignInClient.signOut();
                     }
                 } else {
                     // The error does not have a network response
@@ -240,15 +276,15 @@ public class SplashActivity extends AppCompatActivity {
 
         })
         {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-//                params.put("username", USERNAME);
-//                params.put("password", PAZZWORD);
-                params.put("Content-Type", "application/json; charset=utf-8");
-                params.put("Content-Length", String.valueOf(requestBody.getBytes().length));
-                return params;
-            }
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<>();
+////                params.put("username", USERNAME);
+////                params.put("password", PAZZWORD);
+//                params.put("Content-Type", "application/json; charset=utf-8");
+//                params.put("Content-Length", String.valueOf(requestBody.getBytes().length));
+//                return params;
+//            }
             @Override
             public String getBodyContentType() {
                 return "application/json; charset=utf-8";
@@ -275,65 +311,4 @@ public class SplashActivity extends AppCompatActivity {
         queue.add(stringRequest);
 
     }
-        private void getLastUpdated() {
-
-                    RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-
-                    String url = "DSSERVICE/v1/last_update";
-
-
-                    StringRequest stringRequest = new StringRequest(Request.Method.GET, BASEAPI+url ,
-
-                            new com.android.volley.Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    if (response != null) {
-//        response is {"success":true,"error":false,"activator":{"license_code":"5335","license_type":"1","out_date":"2021-09-22"}}
-
-                                        try {
-                                            // Getting JSON Array node
-                                            JSONObject jsonObj = new JSONObject(response);
-
-                                            if(jsonObj.getString("success").equals("true") ) {
-
-                                                SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                                pre.edit().putString("last_update", jsonObj.getString("last_update") ).apply();
-
-//                                                System.out.println(" adf response is " + jsonObj.getString("last_update"));
-                                            }
-
-                                        } catch (final JSONException e) {
-                                        }
-
-                                    }
-                                }
-
-                            }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                        }
-
-                    })
-                    {
-                        @Override
-                        public Map<String, String> getHeaders() throws AuthFailureError {
-                            Map<String, String> params = new HashMap<>();
-                            params.put("username", USERNAME);
-                            params.put("password", PAZZWORD);
-                            return params;
-                        }
-                    };
-
-                    stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                            10000,
-                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-                    stringRequest.setTag(this);
-// Add the request to the RequestQueue.
-                    queue.add(stringRequest);
-
-        }
-
-
 }

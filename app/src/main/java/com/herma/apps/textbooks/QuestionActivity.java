@@ -160,11 +160,9 @@ public class QuestionActivity extends AppCompatActivity
             try {
 
                 JSONObject jsonObj = new JSONObject(que);
-
-
                 JSONArray datas = jsonObj.getJSONArray("ques");
 
-                questionsWithAnswer = new String[datas.length()][10];
+                questionsWithAnswer = new String[datas.length()][11];
 
                 JSONObject c;
                 for (int i = 0; i < datas.length(); i++) {
@@ -180,9 +178,6 @@ public class QuestionActivity extends AppCompatActivity
                     questionsWithAnswer[i][7] = c.getString("ans_f");
                     questionsWithAnswer[i][8] = c.getString("correct_ans");
                     questionsWithAnswer[i][9] = c.getString("details");
-//                    questionsWithAnswer[i][] = c.getString("");
-
-//                    chapMap.put(("Unit " + c.getString("chapter")), c.getString("chapter"));
                 }
 
 
@@ -200,7 +195,6 @@ public class QuestionActivity extends AppCompatActivity
 //                }while(questionsWithAnswer.length!=per_exam);
 //
 //            }
-
         queId = new String[questionsWithAnswer.length];
         answerKey = new String[questionsWithAnswer.length];
         response = new String[questionsWithAnswer.length];
@@ -306,36 +300,4 @@ public class QuestionActivity extends AppCompatActivity
         }
 
     };
-
-//    public void open(String write, String db_name) {
-//
-//        db = new DB(this, db_name);
-//        try {
-//            if (write.equals("write"))
-//                db.writeDataBase();
-//            else
-//                db.createDataBase();
-//        } catch (IOException ioe) {
-//            throw new Error("Unable to create database");
-//        }
-//        try {
-//            db.openDataBase();
-//        } catch (SQLException sqle) {
-//            throw sqle;
-//        }
-//    }
-
-//    public void setAd(){
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            tvAds.setText(Html.fromHtml(Ads, Html.FROM_HTML_MODE_COMPACT));
-//        } else {
-//            tvAds.setText(Html.fromHtml(Ads));
-//        }
-//
-//        tvAds.setTextSize(MainActivity.Ads_font);
-//        tvAds.setMovementMethod(LinkMovementMethod.getInstance());
-//        tvAds.setSelected(true);
-//
-//    }
 }

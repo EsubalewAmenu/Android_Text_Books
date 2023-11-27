@@ -1,11 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tols="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/voteBlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/btn_like"
+            style="@style/TextButtonStyle"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_like"
+            android:text="0" />
+
+        <Button
+            android:id="@+id/btn_dislike"
+            style="@style/TextButtonStyle"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_dislike"/>
+        <!--            android:text="69"-->
+<!--        <Button-->
+<!--            android:id="@+id/btn_reply"-->
+<!--            style="@style/TextButtonStyle"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:drawableStart="@drawable/ic_reply" />-->
+
+        <TextView
+            android:id="@+id/tv_prepared_by"
+            style="@style/TextButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Prepared by Esubalew" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <TextView
         android:id="@+id/questionRBTypeTextView"
@@ -18,9 +58,8 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tols:text="Title"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/voteBlock"
+        tols:text="Title" />
 
     <View
         android:id="@+id/dividerInRB"
@@ -29,8 +68,8 @@
         android:background="@color/divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/questionRBTypeTextView"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/questionRBTypeTextView" />
+
 
     <ScrollView
         android:id="@+id/contentInScrollView"
@@ -39,18 +78,36 @@
         app:layout_constraintBottom_toTopOf="@+id/include"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dividerInRB"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/dividerInRB">
 
-        <RadioGroup
-            android:id="@+id/radioGroupForChoices"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
-        </RadioGroup>
+            <RadioGroup
+                android:id="@+id/radioGroupForChoices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/answerExplanationTextView"
+                style="?android:textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingMultiplier="1.2"
+                android:padding="16dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="16sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tols:text="Title" />
+        </LinearLayout>
     </ScrollView>
 
     <include
@@ -61,9 +118,15 @@
         android:layout_alignParentBottom="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        >
+        app:layout_constraintStart_toStartOf="parent">
 
     </include>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,5 +6,21 @@
         <item key="or">@string/lang_or</item>
         <item key="ar">@string/lang_ar</item>
     </string-array>
+
+    <string-array name="themeMode">
+        <item key="light">@string/theme_mode_light</item>
+        <item key="dark">@string/theme_mode_dark</item>
+    </string-array>
+
+
+    <!-- Define the options for the correctAnswerSpinner -->
+    <string-array name="correct_answer_options">
+        <item>Select the answer</item>
+        <item>Option A</item>
+        <item>Option B</item>
+        <item>Option C</item>
+        <item>Option D</item>
+    </string-array>
+
 </resources>
 

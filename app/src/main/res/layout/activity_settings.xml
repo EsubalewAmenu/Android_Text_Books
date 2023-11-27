@@ -40,6 +40,29 @@
         android:entries="@array/languages"
         android:prompt="@string/select_language_prompt" />
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/theme_mode"
+        android:textSize="18sp"
+        android:textColor="@color/dark_gray"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <Spinner
+        android:id="@+id/theme_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/spinner_background"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:textSize="16sp"
+        android:textColor="@color/dark_gray"
+        android:entries="@array/themeMode"
+        android:prompt="@string/theme_mode" />
+
     <Button
         android:id="@+id/save_button"
         android:layout_width="match_parent"

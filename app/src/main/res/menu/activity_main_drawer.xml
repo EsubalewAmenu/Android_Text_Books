@@ -6,12 +6,16 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_my_books"
-            android:icon="@android:drawable/ic_dialog_dialer"
+            android:icon="@android:drawable/star_big_on"
             android:title="@string/my_new_curriculum_books" />
         <item
             android:id="@+id/nav_all_books"
             android:icon="@android:drawable/ic_dialog_dialer"
             android:title="@string/all_new_curriculum_books" />
+        <item
+            android:id="@+id/nav_fav_old_books"
+            android:icon="@android:drawable/star_big_on"
+            android:title="@string/fav_old_curriculum_books" />
         <item
             android:id="@+id/nav_g12"
             android:icon="@android:drawable/ic_dialog_dialer"
@@ -92,6 +96,10 @@
                 android:id="@+id/nav_college_books"
                 android:icon="@android:drawable/ic_dialog_dialer"
                 android:title="@string/college_books" />
+            <item
+                android:id="@+id/nav_expertsway"
+                android:icon="@android:drawable/ic_dialog_dialer"
+                android:title="@string/experts_way" />
 <!--            <item-->
 <!--                android:id="@+id/nav_add_books"-->
 <!--                android:icon="@android:drawable/ic_dialog_dialer"-->
@@ -129,6 +137,10 @@
                 android:id="@+id/action_settings"
                 android:icon="@drawable/setting"
                 android:title="@string/settings_title"/>
+            <item
+                android:id="@+id/action_logout"
+                android:icon="@drawable/common_google_signin_btn_icon_dark"
+                android:title="@string/signout"/>
             <item
                 android:id="@+id/nav_exit"
                 android:icon="@android:drawable/ic_delete"

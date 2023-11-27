@@ -297,9 +297,11 @@ public class CommentActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
-                params.put("password", pre.getString("google_user_id", "1"));//SplashActivity.PAZZWORD);
-                params.put("login_with", pre.getString("registed_with", "1"));
+//                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
+//                params.put("password", pre.getString("google_user_id", "1"));//SplashActivity.PAZZWORD);
+//                params.put("login_with", pre.getString("registed_with", "1"));
+
+                params.put("Authorization", "Bearer "+pre.getString("token", "None"));
                 return params;
             }
             @Override
@@ -345,7 +347,7 @@ public class CommentActivity extends AppCompatActivity {
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-//                        System.out.println("request response is ");
+//                        System.out.println("request comment response is ");
 //                        System.out.println(response);
 
                         if (response != null) {
@@ -418,9 +420,9 @@ public class CommentActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
-                params.put("password", pre.getString("google_user_id", "1"));//SplashActivity.PAZZWORD);
-                params.put("login_with", pre.getString("registed_with", "1"));
+//                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
+//                params.put("password", pre.getString("google_user_id", "1"));//SplashActivity.PAZZWORD);
+                params.put("Authorization", "Bearer "+pre.getString("token", "None"));
                 return params;
             }
             @Override
@@ -507,7 +509,7 @@ public class CommentActivity extends AppCompatActivity {
 
     public void showNetworkDialog() {
         // Create an AlertDialog.Builder
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog_Alert);
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this, R.style.AppTheme_Dark);
         // Set an Icon and title, and message
         builder.setIcon(R.drawable.ic_warning);
         builder.setTitle(getString(R.string.no_network_title));

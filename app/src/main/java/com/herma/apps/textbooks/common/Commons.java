@@ -68,7 +68,7 @@ public class Commons {
 
     Context context;
     DB db;
-    public final String WEBSITE = "https://datascienceplc.com/api";
+//    public final String WEBSITE = "https://datascienceplc.com/api";
 ProgressDialog progressBar;
 
     /** A numeric constant for request code */
@@ -83,31 +83,6 @@ ProgressDialog progressBar;
      *
      * @return true if connected to the network
      */
-//    public boolean isOnline(Context context) {
-//        // Get a reference to the ConnectivityManager to check the state of network connectivity
-//        ConnectivityManager connectivityManager = (ConnectivityManager)
-//                context.getSystemService(context.CONNECTIVITY_SERVICE);
-//
-//        // Get details on the currently active default data network
-//        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-//        return networkInfo != null && networkInfo.isConnected();
-//    }
-//
-//    /**
-//     * When offline, show a snackbar message
-//     */
-//    public void showSnackbarOffline(View view) {
-//        Snackbar snackbar = Snackbar.make(
-//                view, R.string.snackbar_offline, Snackbar.LENGTH_LONG);
-//        // Set background color of the snackbar
-//        View sbView = snackbar.getView();
-//        sbView.setBackgroundColor(Color.WHITE);
-//        // Set background color of the snackbar
-//        TextView textView = sbView.findViewById(R.id.snackbar_text);
-//        textView.setTextColor(Color.BLACK);
-//        snackbar.show();
-//    }
-
     public void messageDialog(final Context context, final String serviceType, int title, int message, String fileName, final String fEn, int yesBtn, int noBtn, final int processHeader, String chapterName, String subject, String grade, String chapterID, boolean is_short) {
         cchapterName = chapterName; csubject = subject;
         final Dialog myDialog = new Dialog(context);
@@ -152,16 +127,16 @@ ProgressDialog progressBar;
 
                         if (is_short) {
 
-                            downloadUrl = WEBSITE + "/ds_bm/v1/get_et_book/";//+ finalFileName; // Path where you want to download file.
+                            downloadUrl = SplashActivity.BASEAPI + "ds_bm/v1/get_et_book/";//+ finalFileName; // Path where you want to download file.
 //                            downloadUrl = WEBSITE + "/manager/api/items/get_for_books?cnt=eth&what=short&name=";//+ finalFileName; // Path where you want to download file.
                             asyncDownloader.execute(downloadUrl, chapterID, fEn);
 
                         } else if (finalFileName1.startsWith("new")) {
-                            downloadUrl = WEBSITE + "/ds_bm/v1/book/download/1-12-textbooks/";//+ finalFileName; // Path where you want to download file.
+                            downloadUrl = SplashActivity.BASEAPI + "ds_bm/v1/book/download/1-12-textbooks/";//+ finalFileName; // Path where you want to download file.
                             asyncDownloader.execute(downloadUrl, finalFileName1, fEn);
                         }else{
 //                            downloadUrl = WEBSITE + "/manager/api/items/get_for_books?cnt=eth&what=txt&name=";//+ finalFileName; // Path where you want to download file.
-                            downloadUrl = WEBSITE + "/ds_bm/v1/get_et_book/";//+ finalFileName; // Path where you want to download file.
+                            downloadUrl = SplashActivity.BASEAPI + "ds_bm/v1/get_et_book/";//+ finalFileName; // Path where you want to download file.
                         asyncDownloader.execute(downloadUrl, finalFileName1, fEn);
                     }
 
@@ -255,8 +230,9 @@ ProgressDialog progressBar;
                 URL url = new URL(params[0]+params[1]);
                 connection = (HttpURLConnection) url.openConnection();
 
-                connection.setRequestProperty ("username", SplashActivity.USERNAME);
-                connection.setRequestProperty ("password", SplashActivity.PAZZWORD);
+                SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(context);
+                if(!pre.getString("token", "None").equalsIgnoreCase("None"))
+                    connection.setRequestProperty("Authorization", "Bearer "+pre.getString("token", "None"));
                 connection.setRequestProperty ("Content-Type", "application/pdf");
                 connection.setUseCaches(false);
 //            connection.setDoInput(true);

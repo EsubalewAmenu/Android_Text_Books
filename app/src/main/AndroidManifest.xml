@@ -16,6 +16,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".AddQuizActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChapterQuizHomeActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".CommentActivity"
             android:exported="false">
             <meta-data
@@ -26,6 +36,9 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_app_id" />
+        <meta-data
+            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
+            android:value="true"/>
 
         <activity
             android:name=".MainActivity"
@@ -33,12 +46,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ReadActivity"
-            android:hardwareAccelerated="true"
-            />
-
+            android:hardwareAccelerated="true" />
         <activity
             android:name=".ChaptersActivity"
-            android:hardwareAccelerated="true"/>
+            android:hardwareAccelerated="true" />
         <activity
             android:name=".SplashActivity"
             android:exported="true"
@@ -64,6 +75,21 @@
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".QuizActivity"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".common.ContentSubmittedActivity"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.profile.ProfileActivity"
+            android:hardwareAccelerated="true" />
+        <activity
+            android:name=".common.TermsAndConditionsActivity"
+            android:hardwareAccelerated="true" />
         <activity
             android:name=".AnswersActivity"
             android:screenOrientation="portrait"

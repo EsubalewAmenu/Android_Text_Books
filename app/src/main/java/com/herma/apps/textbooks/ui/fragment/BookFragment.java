@@ -30,7 +30,7 @@ public class BookFragment extends Fragment {
         recyclerView = (RecyclerView) root.findViewById(R.id.recyclerView);
 
         try {
-            ArrayList arrayList = new MainActivity().getData(getActivity(), requireArguments().getString("choosedGrade"));
+            ArrayList arrayList = new MainActivity().getData(getActivity(), requireArguments().getString("choosedGrade"), "old");
             MainAdapter adapter = new MainActivity().setData(getActivity(), arrayList, requireArguments().getString("title"));
 
             recyclerView.setAdapter(adapter);

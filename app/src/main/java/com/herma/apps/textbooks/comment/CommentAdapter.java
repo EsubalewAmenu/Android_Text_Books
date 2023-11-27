@@ -419,7 +419,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private void setNoMoreReplies() {
 
         loadMoreViewHolder.btnLoadMore.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
-        loadMoreViewHolder.btnLoadMore.setTextColor(ContextCompat.getColor(context, R.color.cardview_dark_background));
+        loadMoreViewHolder.btnLoadMore.setTextColor(ContextCompat.getColor(context, R.color.dark_gray));
         loadMoreViewHolder.btnLoadMore.setText(context.getString(R.string.end_of_replies));
         loadMoreViewHolder.btnLoadMore.setEnabled(false);
         loadMoreViewHolder.btnLoadMore.setVisibility(View.VISIBLE);
@@ -442,7 +442,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void setNoMoreComment() {
 
         loadMoreViewHolder.btnLoadMore.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
-        loadMoreViewHolder.btnLoadMore.setTextColor(ContextCompat.getColor(context, R.color.cardview_dark_background));
+        loadMoreViewHolder.btnLoadMore.setTextColor(ContextCompat.getColor(context, R.color.dark_gray));
         loadMoreViewHolder.btnLoadMore.setText(context.getString(R.string.end_of_comments));
         loadMoreViewHolder.btnLoadMore.setEnabled(false);
 
@@ -621,9 +621,11 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
-                params.put("password", pre.getString("google_user_id", "1"));//SplashActivity.PAZZWORD);
-                params.put("login_with", pre.getString("registed_with", "1"));
+//                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
+//                params.put("password", pre.getString("google_user_id", "1"));//SplashActivity.PAZZWORD);
+//                params.put("login_with", pre.getString("registed_with", "1"));
+
+                params.put("Authorization", "Bearer "+pre.getString("token", "None"));
                 return params;
             }
             @Override
@@ -772,9 +774,11 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
-                params.put("password", pre.getString("google_user_id", "1"));//SplashActivity.PAZZWORD);
-                params.put("login_with", pre.getString("registed_with", "1"));
+//                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
+//                params.put("password", pre.getString("google_user_id", "1"));//SplashActivity.PAZZWORD);
+//                params.put("login_with", pre.getString("registed_with", "1"));
+
+                params.put("Authorization", "Bearer "+pre.getString("token", "None"));
                 return params;
             }
             @Override
@@ -857,9 +861,11 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
-                params.put("password", pre.getString("google_user_id", "1"));//SplashActivity.PAZZWORD);
-                params.put("login_with", pre.getString("registed_with", "1"));
+//                params.put("username", pre.getString("email", "1"));//SplashActivity.USERNAME);
+//                params.put("password", pre.getString("google_user_id", "1"));//SplashActivity.PAZZWORD);
+//                params.put("login_with", pre.getString("registed_with", "1"));
+
+                params.put("Authorization", "Bearer "+pre.getString("token", "None"));
                 return params;
             }
             @Override

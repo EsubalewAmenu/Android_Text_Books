@@ -18,7 +18,7 @@ import java.util.Locale;
 
 public class LanguageHelper {
 
-    private static final String LANGUAGE_CODE_KEY = "language_code";
+    public static final String LANGUAGE_CODE_KEY = "language_code";
 
     public static void setLanguage(Context context, String languageCode) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

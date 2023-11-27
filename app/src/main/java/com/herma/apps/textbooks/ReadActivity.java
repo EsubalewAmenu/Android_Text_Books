@@ -1,5 +1,7 @@
 package com.herma.apps.textbooks;
 
+import static com.herma.apps.textbooks.common.TokenUtils.isTokenExpired;
+
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -31,6 +34,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+//import com.github.barteksc.pdfviewer.PDFView;
+//import com.github.barteksc.pdfviewer.listener.OnRenderListener;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnRenderListener;
 import com.google.android.gms.ads.AdRequest;
@@ -48,6 +53,7 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.android.gms.ads.rewarded.ServerSideVerificationOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.herma.apps.textbooks.common.Commons;
+import com.herma.apps.textbooks.common.TermsAndConditionsActivity;
 import com.herma.apps.textbooks.settings.SettingsActivity;
 import com.herma.apps.textbooks.ui.about.About_us;
 
@@ -78,7 +84,7 @@ public class ReadActivity extends AppCompatActivity {
 
     private RewardedAd mRewardedAd;
 
-//    TextView txtTimerValue;
+    //    TextView txtTimerValue;
 //    ImageButton btnGiftReward;
     long reward_p_id, reward_minutes;
 
@@ -93,6 +99,16 @@ public class ReadActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+// Apply the theme
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (prefs.getString("themeMode", "light").equals("dark")) {
+            setTheme(R.style.AppTheme_Dark);
+        } else {
+            setTheme(R.style.AppTheme);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read);
 
@@ -111,15 +127,10 @@ public class ReadActivity extends AppCompatActivity {
 //        txtTimerValue = (TextView) findViewById(R.id.timerValue);
 //        btnGiftReward = (ImageButton) findViewById(R.id.btnGiftReward);
 
+
         if (getIntent().getExtras() != null) {
 
             String filePath = getFilesDir().getPath() + "/Herma/books/";
-
-            MobileAds.initialize(this, new OnInitializationCompleteListener() {
-                @Override
-                public void onInitializationComplete(InitializationStatus initializationStatus) {
-                }
-            });
 
             try {
                 this.setTitle(getIntent().getStringExtra("chapterName") + " (" + getIntent().getStringExtra("subject") + ")");
@@ -128,53 +139,60 @@ public class ReadActivity extends AppCompatActivity {
                     pdfView.fromFile(f)
                             .onRender(new OnRenderListener() {
                                 @Override
-                                public void onInitiallyRendered(int nbPages, float pageWidth, float pageHeight) {
+                                public void onInitiallyRendered(int nbPages) {
+
+                                    MobileAds.initialize(ReadActivity.this, new OnInitializationCompleteListener() {
+                                        @Override
+                                        public void onInitializationComplete(InitializationStatus initializationStatus) {
 
 //                                    mAdView = findViewById(R.id.adView);
-                                    adContainerView = findViewById(R.id.ad_view_container);
+                                            adContainerView = findViewById(R.id.ad_view_container);
 
-                                    AdRequest adRequest = new AdRequest.Builder().build();
+                                            AdRequest adRequest = new AdRequest.Builder().build();
 
-                                    if (new Commons(getApplicationContext()).showGoogleAd(1)) {
+                                            if (new Commons(getApplicationContext()).showGoogleAd(1)) {
 
 //                                        mAdView.loadAd(adRequest);
 
-                                        adContainerView.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                new Commons(getApplicationContext()).loadBanner(mAdView, getString(R.string.adReader), adContainerView, getWindowManager().getDefaultDisplay());
-                                            }
-                                        });
+                                                adContainerView.post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        new Commons(getApplicationContext()).loadBanner(mAdView, getString(R.string.adReader), adContainerView, getWindowManager().getDefaultDisplay());
+                                                    }
+                                                });
 
 
-                                        InterstitialAd.load(getApplicationContext(), getString(R.string.adReaderInt), adRequest, new InterstitialAdLoadCallback() {
-                                            @Override
-                                            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                                                // The mInterstitialAd reference will be null until
-                                                // an ad is loaded.
+                                                InterstitialAd.load(getApplicationContext(), getString(R.string.adReaderInt), adRequest, new InterstitialAdLoadCallback() {
+                                                    @Override
+                                                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                                                        // The mInterstitialAd reference will be null until
+                                                        // an ad is loaded.
 
 //                                            System.out.println("request seconds remaining: isTheirReward");
 
-                                                SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-                                                storedPhone = sharedPref.getString("storedPhone", "0");
+                                                        SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+                                                        storedPhone = sharedPref.getString("storedPhone", "0");
 
 //                                                isThereReward();
 
-                                                mInterstitialAd = interstitialAd;
-                                                mInterstitialAd.show(ReadActivity.this);
+                                                        mInterstitialAd = interstitialAd;
+                                                        mInterstitialAd.show(ReadActivity.this);
+                                                    }
+
+                                                    @Override
+                                                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                                                        // Handle the error
+                                                        mInterstitialAd = null;
+                                                    }
+                                                });
+
+
+                                            } else {
+                                                adContainerView.setVisibility(View.GONE);
                                             }
+                                        }
+                                    });
 
-                                            @Override
-                                            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                                                // Handle the error
-                                                mInterstitialAd = null;
-                                            }
-                                        });
-
-
-                                    } else {
-                                        adContainerView.setVisibility(View.GONE);
-                                    }
 
                                 }
                             }).load();
@@ -200,139 +218,119 @@ public class ReadActivity extends AppCompatActivity {
 
         commentRelateds();
     }
-public void commentRelateds(){
 
-    // Register all the FABs with their IDs This FAB button is the Parent
-    mAddFab = findViewById(R.id.add_fab);
+    public void commentRelateds() {
 
-    // FAB button
-    mAddQuizFab = findViewById(R.id.add_quiz_fab);
-    mAddCommentFab = findViewById(R.id.add_comment_fab);
+        // Register all the FABs with their IDs This FAB button is the Parent
+        mAddFab = findViewById(R.id.add_fab);
 
-    // Also register the action name text, of all the FABs.
-    addQuizActionText = findViewById(R.id.add_quiz_action_text);
-    addCommentActionText = findViewById(R.id.add_comment_action_text);
+        // FAB button
+        mAddQuizFab = findViewById(R.id.add_quiz_fab);
+        mAddCommentFab = findViewById(R.id.add_comment_fab);
 
-    // Now set all the FABs and all the action name texts as GONE
-    mAddQuizFab.setVisibility(View.GONE);
-    mAddCommentFab.setVisibility(View.GONE);
-    addQuizActionText.setVisibility(View.GONE);
-    addCommentActionText.setVisibility(View.GONE);
+        // Also register the action name text, of all the FABs.
+        addQuizActionText = findViewById(R.id.add_quiz_action_text);
+        addCommentActionText = findViewById(R.id.add_comment_action_text);
 
-    // make the boolean variable as false, as all the
-    // action name texts and all the sub FABs are invisible
-    isAllFabsVisible = false;
+        // Now set all the FABs and all the action name texts as GONE
+        mAddQuizFab.setVisibility(View.GONE);
+        mAddCommentFab.setVisibility(View.GONE);
 
-    // We will make all the FABs and action name texts
-    // visible only when Parent FAB button is clicked So
-    // we have to handle the Parent FAB button first, by
-    // using setOnClickListener you can see below
-    mAddFab.setOnClickListener(view -> {
-        if (!isAllFabsVisible) {
-            // when isAllFabsVisible becomes true make all
-            // the action name texts and FABs VISIBLE
-            mAddQuizFab.show();
-            mAddCommentFab.show();
-            addQuizActionText.setVisibility(View.VISIBLE);
-            addCommentActionText.setVisibility(View.VISIBLE);
+        addQuizActionText.setVisibility(View.GONE);
+        addCommentActionText.setVisibility(View.GONE);
 
-            // make the boolean variable true as we
-            // have set the sub FABs visibility to GONE
-            isAllFabsVisible = true;
+        // make the boolean variable as false, as all the
+        // action name texts and all the sub FABs are invisible
+        isAllFabsVisible = false;
+
+        // We will make all the FABs and action name texts
+        // visible only when Parent FAB button is clicked So
+        // we have to handle the Parent FAB button first, by
+        // using setOnClickListener you can see below
+        mAddFab.setOnClickListener(view -> {
+            if (!isAllFabsVisible) {
+                // when isAllFabsVisible becomes true make all
+                // the action name texts and FABs VISIBLE
+                mAddQuizFab.show();
+                mAddCommentFab.show();
+                addQuizActionText.setVisibility(View.VISIBLE);
+                addCommentActionText.setVisibility(View.VISIBLE);
+
+                // make the boolean variable true as we
+                // have set the sub FABs visibility to GONE
+                isAllFabsVisible = true;
+            } else {
+                // when isAllFabsVisible becomes true make
+                // all the action name texts and FABs GONE.
+                mAddQuizFab.hide();
+                mAddCommentFab.hide();
+                addQuizActionText.setVisibility(View.GONE);
+                addCommentActionText.setVisibility(View.GONE);
+
+                // make the boolean variable false as we
+                // have set the sub FABs visibility to GONE
+                isAllFabsVisible = false;
+            }
+        });
+        // below is the sample action to handle add person FAB. Here it shows simple Toast msg.
+        // The Toast will be shown only when they are visible and only when user clicks on them
+        mAddCommentFab.setOnClickListener(new View.OnClickListener() {
+                                              @Override
+                                              public void onClick(View view) {
+                                                  //            view -> Toast.makeText(ReadActivity.this, "Person Added", Toast.LENGTH_SHORT).show();
+                                                  if (isLoggedIn()) {
+                                                      Intent commentIntent = new Intent(ReadActivity.this, CommentActivity.class);
+                                                      commentIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
+                                                      commentIntent.putExtra("subject", getIntent().getStringExtra("subject"));
+                                                      commentIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
+                                                      startActivity(commentIntent);
+                                                  }
+                                              }
+                                          }
+        );
+
+        // below is the sample action to handle add alarm FAB. Here it shows simple Toast msg
+        // The Toast will be shown only when they are visible and only when user clicks on them
+//    mAddQuizFab.setOnClickListener(
+//            view -> Toast.makeText(ReadActivity.this, R.string.coming_soon, Toast.LENGTH_SHORT
+//            ).show());
+
+        mAddQuizFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isLoggedIn()) {
+                    Intent chapterQuizIntent = new Intent(ReadActivity.this, ChapterQuizHomeActivity.class);
+                    chapterQuizIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
+                    chapterQuizIntent.putExtra("subject", getIntent().getStringExtra("subject"));
+                    chapterQuizIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
+                    startActivity(chapterQuizIntent);
+                }
+            }
+        });
+    }
+
+    public boolean isLoggedIn() {
+
+        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String token = pre.getString("token", "None");
+
+        boolean isExpired;
+
+        if (token.equals("None")) {
+            isExpired = true;
         } else {
-            // when isAllFabsVisible becomes true make
-            // all the action name texts and FABs GONE.
-            mAddQuizFab.hide();
-            mAddCommentFab.hide();
-            addQuizActionText.setVisibility(View.GONE);
-            addCommentActionText.setVisibility(View.GONE);
-
-            // make the boolean variable false as we
-            // have set the sub FABs visibility to GONE
-            isAllFabsVisible = false;
+            isExpired = isTokenExpired(token);
         }
-    });
-    // below is the sample action to handle add person FAB. Here it shows simple Toast msg.
-    // The Toast will be shown only when they are visible and only when user clicks on them
-    mAddCommentFab.setOnClickListener(new View.OnClickListener() {
-                                         @Override
-                                         public void onClick(View view) {
-                                             //            view -> Toast.makeText(ReadActivity.this, "Person Added", Toast.LENGTH_SHORT).show();
-                                             SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                             String userEmail = pre.getString("email", "1");
-                                             if(userEmail.contains("@")) {
 
-                                             Intent commentIntent = new Intent(ReadActivity.this, CommentActivity.class);
-                                             commentIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
-                                             commentIntent.putExtra("subject", getIntent().getStringExtra("subject"));
-                                             commentIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
-                                             startActivity(commentIntent);
-                                             }else{
-                                                 Toast.makeText(ReadActivity.this, getString(R.string.sign_in_first), Toast.LENGTH_SHORT).show();
 
-                                             }
-                                         }
-                                     }
-    );
+        if (!isExpired) {
+            return true;
 
-    // below is the sample action to handle add alarm FAB. Here it shows simple Toast msg
-    // The Toast will be shown only when they are visible and only when user clicks on them
-    mAddQuizFab.setOnClickListener(
-            view -> Toast.makeText(ReadActivity.this, R.string.coming_soon, Toast.LENGTH_SHORT
-            ).show());
-}
-//    private void requestPhoneNumber() {
-//
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(ReadActivity.this);
-//        builder.setTitle(R.string.insert_phone_eg);
-//
-//// Set up the input
-//        final EditText input = new EditText(getApplicationContext());
-//// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-//        input.setInputType(InputType.TYPE_CLASS_PHONE);
-//
-//        input.setText(storedPhone);
-//
-//        builder.setView(input);
-//
-//// Set up the buttons
-//        builder.setPositiveButton(R.string.insert_phone, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-////                        m_Text = input.getText().toString();
-//
-////                if ((input.getText().toString()).matches("^(09|07)\\d{8}$")) {
-//                if ((input.getText().toString()).matches("^(09)\\d{8}$")) {
-////                    btnGiftReward.setVisibility(View.INVISIBLE);
-//                    endReward(input.getText().toString());
-//
-//                    ////////////
-//                    SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-//                    SharedPreferences.Editor editor = sharedPref.edit();
-//                    editor.putString("storedPhone", input.getText().toString());
-//                    editor.apply();
-//                    //////////////
-//                } else requestPhoneNumber();
-//
-////                System.out.println("inserted phone is " + input.getText().toString());
-//
-//            }
-//        });
-//        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.cancel();
-//
-////                btnGiftReward.setVisibility(View.INVISIBLE);
-//                Toast.makeText(ReadActivity.this, R.string.cancel_phone, Toast.LENGTH_LONG).show();
-//
-//            }
-//        });
-//
-//        builder.show();
-//
-//    }
+        } else {
+            Toast.makeText(ReadActivity.this, getString(R.string.sign_in_first), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -345,26 +343,34 @@ public void commentRelateds(){
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            case R.id.action_rate:
-                Toast.makeText(ReadActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
-                rateApp();
-                return true;
-            case R.id.action_store:
-                Toast.makeText(ReadActivity.this, "More apps by us :)", Toast.LENGTH_SHORT).show();
-                openUrl("https://play.google.com/store/apps/developer?id=Herma%20plc");
-                return true;
-            case R.id.action_settings:
-                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-                return true;
-            case R.id.action_about:
-                startActivity(new Intent(getApplicationContext(), About_us.class));
-                return true;
-            case R.id.action_exit:
-                super.onBackPressed();
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        } else if (id == R.id.action_rate) {
+            Toast.makeText(ReadActivity.this, "Rate this app :)", Toast.LENGTH_SHORT).show();
+            rateApp();
+            return true;
+        } else if (id == R.id.action_store) {
+            Toast.makeText(ReadActivity.this, "More apps by us :)", Toast.LENGTH_SHORT).show();
+            openUrl("https://play.google.com/store/apps/developer?id=Herma%20plc");
+            return true;
+        } else if (id == R.id.action_add_quiz) {
+            if (isLoggedIn()) {
+                Intent addQuizActivityIntent = new Intent(ReadActivity.this, TermsAndConditionsActivity.class);
+                addQuizActivityIntent.putExtra("chapterName", getIntent().getStringExtra("chapterName"));
+                addQuizActivityIntent.putExtra("subject", getIntent().getStringExtra("subject"));
+                addQuizActivityIntent.putExtra("fileName", getIntent().getStringExtra("fileName"));
+                startActivity(addQuizActivityIntent);
+            }
+            return true;
+        } else if (id == R.id.action_settings) {
+            startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+            return true;
+        } else if (id == R.id.action_about) {
+            startActivity(new Intent(getApplicationContext(), About_us.class));
+            return true;
+        } else if (id == R.id.action_exit) {
+            super.onBackPressed();
 //                return true;
         }
         return super.onOptionsItemSelected(item);
@@ -402,7 +408,7 @@ public void commentRelateds(){
 
     public void rewardCountdown(double _minute) {  //
 
-//        txtTimerValue.setVisibility(View.VISIBLE);
+//        txtTimerValue.setVisibility(View.VISIB
 
         new CountDownTimer((long) (_minute * 60 * 1000), 1000) { // 30000 mili = 30 sec
 
@@ -547,14 +553,15 @@ public void commentRelateds(){
 
                                     SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-                                    String custom_data="";
+                                    String custom_data = "";
                                     try {
                                         JSONObject jsonBody = new JSONObject();
                                         jsonBody.put("phone", _phone);
                                         jsonBody.put("email", pre.getString("email", "1"));
                                         jsonBody.put("reward_p_id", reward_p_id);
                                         custom_data = jsonBody.toString();
-                                    }catch (Exception kl){}
+                                    } catch (Exception kl) {
+                                    }
 
                                     ServerSideVerificationOptions options = new ServerSideVerificationOptions
                                             .Builder()

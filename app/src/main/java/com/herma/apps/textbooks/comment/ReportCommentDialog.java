@@ -117,9 +117,11 @@ public class ReportCommentDialog {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("username", pre.getString("email", "1"));
-                params.put("password", pre.getString("google_user_id", "1"));
-                params.put("login_with", pre.getString("registed_with", "1"));
+//                params.put("username", pre.getString("email", "1"));
+//                params.put("password", pre.getString("google_user_id", "1"));
+//                params.put("login_with", pre.getString("registed_with", "1"));
+
+                params.put("Authorization", "Bearer "+pre.getString("token", "None"));
                 return params;
             }
             @Override

@@ -3,10 +3,12 @@ package com.herma.apps.textbooks.ui.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +21,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -30,17 +31,18 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.herma.apps.textbooks.MainActivity;
 import com.herma.apps.textbooks.R;
 import com.herma.apps.textbooks.SplashActivity;
 import com.herma.apps.textbooks.common.GradeAdapter;
 import com.herma.apps.textbooks.common.GradeItem;
+import com.herma.apps.textbooks.common.MainAdapter;
 import com.herma.apps.textbooks.common.PaginationListener;
 import com.herma.apps.textbooks.common.PostItem;
 import com.herma.apps.textbooks.common.PostRecyclerAdapter;
 
 import org.apache.http.conn.ConnectTimeoutException;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.SocketException;
@@ -48,21 +50,18 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
-public class AllNewCurriculumBooks extends Fragment implements SwipeRefreshLayout.OnRefreshListener
+public class AllNewCurriculumBooks extends Fragment
 {
     LinearLayoutManager layoutManager;
     RecyclerView mRecyclerView;
-    SwipeRefreshLayout swipeRefresh;
     public PostRecyclerAdapter adapter;
     public int nextPageNumber = 1;
     public boolean isLastPage = false;
     private int totalPage = 10;
     private boolean isLoading = false;
-    public ArrayList<Object> items;
     String url,
-    defult ="https://datascienceplc.com/api/ds_bm/v1/";
+    defult = SplashActivity.BASEAPI+ "ds_bm/v1/";
     public RequestQueue queue;
     public int random = 0;
     public String searchQuery = "Grade 12", loadType = "all";
@@ -80,9 +79,8 @@ public class AllNewCurriculumBooks extends Fragment implements SwipeRefreshLayou
     GradeAdapter adapterGrade;
     // Linear Layout Manager
     LinearLayoutManager HorizontalLayoutGrade;
-    View ChildViewGrade;
-    int RecyclerViewItemPositionGrade;
-    int byGrade = 0;
+
+    SharedPreferences pre;
     ////////////////////////////////
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -91,10 +89,8 @@ public class AllNewCurriculumBooks extends Fragment implements SwipeRefreshLayou
 
 
         mRecyclerView = (RecyclerView) root.findViewById(R.id.recyclerView);
-        swipeRefresh = (SwipeRefreshLayout) root.findViewById(R.id.swipeRefresh);
 
         url = defult;
-        swipeRefresh.setOnRefreshListener(this);
 
         mRecyclerView.setHasFixedSize(true);
         // use a linear layout manager
@@ -105,7 +101,7 @@ public class AllNewCurriculumBooks extends Fragment implements SwipeRefreshLayou
         mRecyclerView.setAdapter(adapter);
         adapter.addLoading();
 
-        doApiCall();
+//        doApiCall();
 
         /**
          * add scroll listener while user reach in bottom load more will call
@@ -115,7 +111,7 @@ public class AllNewCurriculumBooks extends Fragment implements SwipeRefreshLayou
             protected void loadMoreItems() {
                 isLoading = true;
                 nextPageNumber++;
-                doApiCall();
+//                doApiCall();
             }
 
             @Override
@@ -130,6 +126,17 @@ public class AllNewCurriculumBooks extends Fragment implements SwipeRefreshLayou
         });
 
         initialiseGrade(root);
+
+        pre = PreferenceManager.getDefaultSharedPreferences(getContext());
+        try{
+            searchQuery = Integer.parseInt(pre.getString("userChoosedGrade", "12"))+"";
+
+        } catch (Exception e) {
+            searchQuery = "12";
+        }
+        ArrayList arrayList = new MainActivity().getData(getActivity(),searchQuery, "new");
+        MainAdapter adapter = new MainActivity().setData(getActivity(), arrayList, pre.getString("userChoosedGradeT", "Grade 12"));
+        mRecyclerView.setAdapter(adapter);
 
     return root;
     }
@@ -176,7 +183,7 @@ public class AllNewCurriculumBooks extends Fragment implements SwipeRefreshLayou
             @Override
             public void onItemClick(GradeItem item) {
 
-                searchQuery = item.gradeName;
+//                searchQuery = item.gradeName;
 //                haveNext = true;
 //
 //                random = new Random().nextInt((99999 - 1) + 1) + 1;
@@ -188,7 +195,16 @@ public class AllNewCurriculumBooks extends Fragment implements SwipeRefreshLayou
 //                isLastPage = false;
                 nextPageNumber = 1;
                 adapter.clear();
-                doApiCall();
+//                doApiCall();
+
+                ArrayList arrayList = new MainActivity().getData(getActivity(), item.id + "", "new");
+                MainAdapter adapter = new MainActivity().setData(getActivity(), arrayList, item.gradeName);
+
+                mRecyclerView.setAdapter(adapter);
+
+
+                pre.edit().putString("userChoosedGrade", item.id + "" ).apply();
+                pre.edit().putString("userChoosedGradeT", item.gradeName).apply();
             }
         });
         // Set Horizontal Layout Manager
@@ -239,7 +255,7 @@ public class AllNewCurriculumBooks extends Fragment implements SwipeRefreshLayou
 
                                     if (response != null) {
                                         try {
-                                            parseAllBooks(response);
+//                                            parseAllBooks(response);
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
@@ -270,7 +286,6 @@ public class AllNewCurriculumBooks extends Fragment implements SwipeRefreshLayou
                                         Toast.LENGTH_LONG).show();
 System.out.println("Error on sys:"+error);
                                 try{
-                                    swipeRefresh.setRefreshing(false);
                                 }catch(Exception k){}
 
                             }
@@ -282,9 +297,10 @@ System.out.println("Error on sys:"+error);
                         @Override
                         public Map<String, String> getHeaders() throws AuthFailureError {
                             Map<String, String> params = new HashMap<>();
-                            params.put("username", SplashActivity.USERNAME);//public user
-                            params.put("password", SplashActivity.PAZZWORD);
-//                            params.put("Authorization", "Basic YmxvZ2VyX2FwaUBkYXRhc2NpZW5jZXBsYy5jb206cHVibGljLXBhc3N3b3Jk");
+                            SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getContext());
+                            if(!pre.getString("token", "None").equalsIgnoreCase("None"))
+                                params.put("Authorization", "Bearer "+pre.getString("token", "None"));
+
                             return params;
                         }
                     };
@@ -300,65 +316,6 @@ System.out.println("Error on sys:"+error);
                 }
             }, 1500);
 //        }
-    }
-    private void parseAllBooks(String response) throws Exception {
-
-        try {
-            // Getting JSON Array node
-            JSONArray datas = new JSONArray(response);
-
-            items = new ArrayList<Object>();
-            for (int i = 0; i < datas.length(); i++) {
-                JSONObject c = datas.getJSONObject(i);
-                ////////////////////////////////////////
-                postItem = new PostItem();
-                postItem.setSubjectName(c.getString("name").trim());
-                postItem.setSubjectGrade(c.getString("category").trim());
-                postItem.setSubjectEn(c.getString("en").trim());
-                postItem.setSubjectChapters(c.getJSONArray("chapters"));
-//                                                postItem.setWriterName(c.getJSONObject("blogwriter").getString("writername"));
-                items.add(postItem);
-            }
-            if(items.size()>0 && adapter.getItemCount()>0)
-                adapter.removeLoading();
-            adapter.addItems((ArrayList<Object>) items);
-                                    swipeRefresh.setRefreshing(false);
-
-                                    // check weather is last page or not
-//                                    if (currentPage < totalPage) {
-
-                                        adapter.addLoading();
-//                                    } else {
-//                                        isLastPage = true;
-//                                    }
-                                    isLoading = false;
-        } catch (Exception e) {
-            adapter.removeLoading();
-            Log.e("api json parse", "Json parsing error: " + e.getMessage());
-//                                            runOnUiThread(new Runnable() {
-//                                                @Override
-//                                                public void run() {
-////                                          Toast.makeText(getApplicationContext(),
-////                                                  "Json parsing error: " + e.getMessage(),
-////                                                  Toast.LENGTH_LONG).show();
-//                                                }
-//                                            });
-
-        }
-
-    }
-
-    @Override
-    public void onRefresh() {
-
-        random = new Random().nextInt((99999 - 1) + 1) + 1;
-
-        url =defult;
-
-        nextPageNumber = 1;
-        isLastPage = false;
-        adapter.clear();
-        doApiCall();
     }
     /**
      * Check if there is the network connectivity
@@ -382,7 +339,7 @@ System.out.println("Error on sys:"+error);
      */
     public void showNetworkDialog(final boolean isOnline) {
             // Create an AlertDialog.Builder
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.Theme_AppCompat_Dialog_Alert);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AppTheme_Dark);
             // Set an Icon and title, and message
             builder.setIcon(R.drawable.ic_warning);
             builder.setTitle(getString(R.string.no_network_title));

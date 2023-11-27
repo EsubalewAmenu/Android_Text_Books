@@ -12,19 +12,19 @@
     <string name="admob_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
 
 
-<!--        <string name="adQuestionsInt" translatable="false">ca-app-pub-8011674951494696/7993749596</string>-->
-<!--        <string name="adReaderInt" translatable="false">ca-app-pub-8011674951494696/4934737105</string>-->
-<!--        <string name="adHome" translatable="false">ca-app-pub-8011674951494696/8312993039</string>-->
-<!--        <string name="adChapter" translatable="false">ca-app-pub-8011674951494696/7079802411</string>-->
-<!--        <string name="adQuestions" translatable="false">ca-app-pub-8011674951494696/4170948875</string>-->
-<!--        <string name="adReader" translatable="false">ca-app-pub-8011674951494696/3605507555</string>-->
-<!--        <string name="adReward" translatable="false">ca-app-pub-8011674951494696/2726130955</string>-->
+<!--            <string name="adReward" translatable="false">not-created</string>-->
 
-<!--        <string name="admob_app_id" translatable="false">ca-app-pub-8011674951494696~8662393111</string>-->
+<!--            <string name="adReaderInt" translatable="false">ca-app-pub-1204280332090356/4140375546</string>-->
+<!--            <string name="adQuestionsInt" translatable="false">ca-app-pub-1204280332090356/4231024821</string>-->
+<!--            <string name="adQuestions" translatable="false">ca-app-pub-1204280332090356/4066179814</string>-->
+<!--            <string name="adReader" translatable="false">ca-app-pub-1204280332090356/4536597886</string>-->
+<!--            <string name="adChapter" translatable="false">ca-app-pub-1204280332090356/5574347382</string>-->
+<!--            <string name="adHome" translatable="false">ca-app-pub-1204280332090356/4728169576</string>-->
+<!--            <string name="admob_app_id" translatable="false">ca-app-pub-1204280332090356~6532205836</string>-->
 
-<!--        <string name="cancel_phone">ለጊዜው መሸለም አልፈለጉም። መሸለም ከፈለጉ ድጋሚ ማንበብ ይችላሉ።</string>-->
-<!--        <string name="insert_phone">አስገባ</string>-->
-<!--        <string name="insert_phone_eg">የሚሸለሙበትን የኢትዮጵያ ስልክ ቁጥር ያስገቡ (ለምሳሌ:- 0923481783)</string>-->
+    <!--        <string name="cancel_phone">ለጊዜው መሸለም አልፈለጉም። መሸለም ከፈለጉ ድጋሚ ማንበብ ይችላሉ።</string>-->
+    <!--        <string name="insert_phone">አስገባ</string>-->
+    <!--        <string name="insert_phone_eg">የሚሸለሙበትን የኢትዮጵያ ስልክ ቁጥር ያስገቡ (ለምሳሌ:- 0923481783)</string>-->
 
     <string name="lang_en" translatable="false">English</string>
     <string name="lang_am" translatable="false">\u12a0\u121b\u122d\u129b</string>
@@ -118,12 +118,14 @@
     <string name="startReward">StartReward</string>
     <string name="reward_intro">click here to order payment .... mnamn</string>
     <string name="college_books">College Books (App link)</string>
+    <string name="experts_way">ExpertsWay (App link)</string>
     <string name="add_books">Upload Book</string>
     <string name="no_network_title">No Network Available</string>
     <string name="no_network_message">We cannot detect a network connection on this device. Please check your mobile data or Wi-Fi and try again.</string>
     <string name="go_to_settings">Go to settings</string>
     <string name="all_new_curriculum_books">New curriculum books</string>
-    <string name="my_new_curriculum_books">My new Curriculum books</string>
+    <string name="my_new_curriculum_books">Favorite new Curriculum books</string>
+    <string name="fav_old_curriculum_books">Favorite old Curriculum books</string>
     <string name="load_more_text">Load more comments</string>
     <string name="settings_title">Settings</string>
     <string name="save_button_text">Save</string>
@@ -137,6 +139,8 @@
     <string name="click_here_to_retry">Click here to retry</string>
     <string name="comments">Comments</string>
     <string name="quiz_on_this_unit">Quiz on this unit</string>
+    <string name="new_quiz_on_this_unit">Add quiz on this unit</string>
+    <string name="theme_mode">Theme Mode</string>
     <string name="click_to_post">Click to post</string>
     <string name="see">See</string>
     <string name="replies"> replies</string>
@@ -147,11 +151,28 @@
     <string name="report_reason">Please enter the reason for reporting this comment:</string>
     <string name="report">Report</string>
     <string name="thanks_for_reporting">Thank you for reporting! We\'ll review the comment</string>
+    <string name="thanks_for_the_quiz">Thank you for quiz! We\'ll review it shortly.</string>
     <string name="connection_error">Connection Error. Please check your mobile data or Wi-Fi and try again.</string>
     <string name="connection_timeout">Connection Timeout!</string>
     <string name="no_comments_yet">No comments yet.\nBe the first one to share your thoughts.</string>
     <string name="write_your_comment">Write your feedback/comment/suggestion....</string>
     <string name="confirem_delete">Confirm Delete</string>
     <string name="confirem_delete_message">Are you sure you want to delete this item?</string>
+
+    <string name="theme_mode_light">Light</string>
+    <string name="theme_mode_dark">Dark</string>
+
+    <string name="quiz_intro">Please be patient til we load the quiz for this unit.</string>
+    <string name="accept_the_terms">You should accept the terms and Conditions</string>
+    <string name="add_quiz">Add Quiz</string>
+    <string name="thank_you">Thank You!</string>
+
+    <string name="quiz_not_found">Quiz not found</string>
+    <string name="no_quiz_added">So far, quiz not added for this unit. we\'ll try to add soon.</string>
+    <string name="back">Back</string>
+    <string name="practical">Practical!</string>
+    <string name="signout">Sign out</string>
+    <string name="favorite_subject">Favorite</string>
+
 
 </resources>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/questionTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Question:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/questionEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="text|textMultiLine"
+        android:minLines="2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/questionTextView" />
+
+    <TextView
+        android:id="@+id/option1TextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Option A:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/questionEditText" />
+
+    <EditText
+        android:id="@+id/option1EditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="text|textMultiLine"
+        android:minLines="2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/option1TextView" />
+
+    <TextView
+        android:id="@+id/option2TextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Option B:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/option1EditText" />
+
+    <EditText
+        android:id="@+id/option2EditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="text|textMultiLine"
+        android:minLines="2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/option2TextView" />
+
+    <TextView
+        android:id="@+id/option3TextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Option C:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/option2EditText" />
+
+    <EditText
+        android:id="@+id/option3EditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="text|textMultiLine"
+        android:minLines="2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/option3TextView" />
+
+    <TextView
+        android:id="@+id/option4TextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Option D:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/option3EditText" />
+
+    <EditText
+        android:id="@+id/option4EditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="text|textMultiLine"
+        android:minLines="2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/option4TextView" />
+
+    <TextView
+        android:id="@+id/correctAnswerTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Select Correct Answer:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/option4EditText" />
+
+    <Spinner
+        android:id="@+id/correctAnswerSpinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/correctAnswerTextView" />
+
+
+    <TextView
+        android:id="@+id/answerDescriptionTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Answer Explanation:"
+        android:layout_marginTop="16dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/correctAnswerSpinner" />
+
+    <EditText
+        android:id="@+id/answerDescriptionEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="text|textMultiLine"
+        android:minLines="2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/answerDescriptionTextView" />
+
+<!--        <Button-->
+<!--            android:id="@+id/submitQuizButton"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Submit"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/answerDescriptionEditText"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            />-->
+
+        <LinearLayout
+            android:id="@+id/submitQuizButton"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:background="@drawable/button_background"
+            android:clickable="true"
+            android:gravity="center"
+
+            app:layout_constraintTop_toBottomOf="@+id/answerDescriptionEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="normal" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
