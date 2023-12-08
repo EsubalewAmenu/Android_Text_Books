@@ -371,21 +371,28 @@ public class ChaptersActivity extends AppCompatActivity {
             }
             Cursor chap = db.getSelect("*", "chapters", "filename='" + fileName + "'" + chapterNamesList);
 
-            if (chapterNamesList.contains("filename='new_") && chap.moveToFirst()) {
-                db.deleteData("chapters", "subject_id=" + chap.getString(1));
-                Cursor chapCursor = db.getSelect("*", "chapters", "filename='" + fileName + "'" + chapterNamesList);
-                if (!chapCursor.moveToFirst()) {
-                    db.deleteData("books", "id=" + chap.getString(1));
-
-                    return true;
-                }
-            } else if (!chapterNamesList.contains("filename='new_") && chap.moveToFirst()) {
+//            if (chapterNamesList.contains("filename='new_") && chap.moveToFirst()) {
+//                db.deleteData("chapters", "subject_id=" + chap.getString(1));
+//                Cursor chapCursor = db.getSelect("*", "chapters", "filename='" + fileName + "'" + chapterNamesList);
+//                if (!chapCursor.moveToFirst()) {
+//                    db.deleteData("books", "id=" + chap.getString(1));
+//
+//                    return true;
+//                }
+//            } else
+                if (//!chapterNamesList.contains("filename='new_") &&
+                     chap.moveToFirst()) {
                 Cursor bookCursor = db.getSelect("*", "books", "id='" + chap.getString(1) + "'");
 
                 if (bookCursor.moveToFirst()) {
 
                     contentValues = new ContentValues();
-                    contentValues.put("uc", "u");
+
+                    if(!chapterNamesList.contains("filename='new_"))
+                        contentValues.put("uc", "u");
+                    else
+                        contentValues.put("uc", "new");
+
                     db.update("books", contentValues, "id", chap.getString(1));
                     return true;
                 }

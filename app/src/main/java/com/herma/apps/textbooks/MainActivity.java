@@ -413,7 +413,9 @@ public class MainActivity extends AppCompatActivity
             gradeCursor.moveToFirst();
 
             subjectsCursor = db.getSelect("*", "books", "uc!='new' and uc!='newf' and grade='" + gradeCursor.getString(2) + "' and gtype='" + gradeCursor.getString(3) + "' ORDER BY name ASC");
-        }if (subjectsCursor.moveToFirst()) {
+        }
+
+        if (subjectsCursor.moveToFirst()) {
             do {
                 arrayList.add(new Item("", subjectsCursor.getString(2), subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
             } while (subjectsCursor.moveToNext());
