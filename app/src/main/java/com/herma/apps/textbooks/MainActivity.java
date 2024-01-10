@@ -406,6 +406,15 @@ public class MainActivity extends AppCompatActivity
             subjectsCursor = db.getSelect("*", "books", "uc='"+choosedGrade+"' ORDER BY name ASC");
         }else if(old_new.equals("new")) {
             subjectsCursor = db.getSelect("*", "books", "(uc='new' or uc='newf') and grade='" + choosedGrade + "' ORDER BY name DESC");
+
+            if (subjectsCursor.moveToFirst()) {
+                do {
+                    arrayList.add(new Item("", subjectsCursor.getString(2), subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
+                } while (subjectsCursor.moveToNext());
+            }
+
+            subjectsCursor = db.getSelect("*", "books", "(uc='new' or uc='newf') and grade='" + choosedGrade + "' ORDER BY name DESC");
+
         }else {
 
             // get if textbook or teacher guide
