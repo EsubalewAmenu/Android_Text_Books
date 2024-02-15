@@ -14,14 +14,14 @@
 
             <string name="adReward" translatable="false">not-created</string>
 
-            <string name="adReaderInt" translatable="false">ca-app-pub-1204280332090356/6775149536</string>
-            <string name="adQuestionsInt" translatable="false">ca-app-pub-1204280332090356/3027476214</string>
-            <string name="adQuestions" translatable="false">ca-app-pub-1204280332090356/8335589317</string>
-            <string name="adReader" translatable="false">ca-app-pub-1204280332090356/7315835893</string>
-            <string name="adChapter" translatable="false">ca-app-pub-1204280332090356/5306155197</string>
-            <string name="adHome" translatable="false">ca-app-pub-1204280332090356/5543589224</string>
+            <string name="adReaderInt" translatable="false">ca-app-pub-8011674951494696/4934737105</string>
+            <string name="adQuestionsInt" translatable="false">ca-app-pub-8011674951494696/7993749596</string>
+            <string name="adQuestions" translatable="false">ca-app-pub-8011674951494696/4170948875</string>
+            <string name="adReader" translatable="false">ca-app-pub-8011674951494696/3605507555</string>
+            <string name="adChapter" translatable="false">ca-app-pub-8011674951494696/7079802411</string>
+            <string name="adHome" translatable="false">ca-app-pub-8011674951494696/8312993039</string>
 
-            <string name="admob_app_id" translatable="false">ca-app-pub-1204280332090356~6532205836</string>
+            <string name="admob_app_id" translatable="false">ca-app-pub-8011674951494696~8662393111</string>
 
     <!--        <string name="cancel_phone">ለጊዜው መሸለም አልፈለጉም። መሸለም ከፈለጉ ድጋሚ ማንበብ ይችላሉ።</string>-->
     <!--        <string name="insert_phone">አስገባ</string>-->
