@@ -88,6 +88,10 @@
             android:id="@+id/nav_g7t"
             android:icon="@android:drawable/ic_dialog_dialer"
             android:title="@string/menu_g7t" />
+        <item
+            android:id="@+id/nav_blockchain"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/blockchain" />
     </group>
 
     <item android:title="@string/others">
