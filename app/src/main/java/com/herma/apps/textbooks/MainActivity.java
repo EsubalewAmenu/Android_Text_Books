@@ -573,6 +573,8 @@ public class MainActivity extends AppCompatActivity
             changeFragment("17", "Grade 8 T. Guide");
         } else if (id == R.id.nav_g7t) {
             changeFragment("18", "Grade 7 T. Guide");
+        } else if (id == R.id.nav_blockchain) {
+
         } else if (id == R.id.nav_questions) {
 
 //            Fragmentbundle = new Bundle();
