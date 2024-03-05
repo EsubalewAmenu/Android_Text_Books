@@ -243,16 +243,17 @@ public class MainActivity extends AppCompatActivity
                     adContainerView.setVisibility(View.GONE);
                 }
 
-
-                tvAds = (TextView) findViewById(R.id.tvAds);
                 /// Ad here...
-                doApiCall();
+
 
             }
         });
 
         }
 
+
+        tvAds = (TextView) findViewById(R.id.tvAds);
+        doApiCall();
     }
 
     /** Called when leaving the activity */
@@ -407,13 +408,14 @@ public class MainActivity extends AppCompatActivity
         }else if(old_new.equals("new")) {
             subjectsCursor = db.getSelect("*", "books", "(uc='new' or uc='newf') and grade='" + choosedGrade + "' ORDER BY name DESC");
 
-            if (subjectsCursor.moveToFirst()) {
-                do {
-                    arrayList.add(new Item("", subjectsCursor.getString(2), subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
-                } while (subjectsCursor.moveToNext());
-            }
+//            if (subjectsCursor.moveToFirst()) {
+//                do {
+//                    System.out.println("DSSERVICE " +subjectsCursor.getString(2)+" "+ subjectsCursor.getString(0)+" "+ subjectsCursor.getString(6));
+//                    arrayList.add(new Item("", subjectsCursor.getString(2), subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
+//                } while (subjectsCursor.moveToNext());
+//            }
 
-            subjectsCursor = db.getSelect("*", "books", "(uc='new' or uc='newf') and grade='" + choosedGrade + "' ORDER BY name DESC");
+//            subjectsCursor = db.getSelect("*", "books", "(uc='new' or uc='newf') and grade='" + choosedGrade + "' ORDER BY name DESC");
 
         }else {
 
@@ -534,7 +536,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_my_books) {
             openMyBooksFragment();
         } else if (id == R.id.nav_all_books) {
-            openAllBooksFragment();
+            openAllBooksFragment("new", "All new curriculum books");
         } else if (id == R.id.nav_fav_old_books) {
             openMyFavOldBooksFragment();
         } else if (id == R.id.nav_g12) {
@@ -574,7 +576,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_g7t) {
             changeFragment("18", "Grade 7 T. Guide");
         } else if (id == R.id.nav_blockchain) {
-
+            openAllBooksFragment("blockchain", "Blockchain");
         } else if (id == R.id.nav_questions) {
 
 //            Fragmentbundle = new Bundle();
@@ -688,12 +690,18 @@ public class MainActivity extends AppCompatActivity
         pre.edit().putString("choosedGrade", "my_b" ).apply();
         pre.edit().putString("choosedGradeT", "My new curriculum books").apply();
     }
-    public void openAllBooksFragment(){
+    public void openAllBooksFragment(String type, String title){
         allNewCurriculumBooks = new AllNewCurriculumBooks();
+
+        Bundle args = new Bundle();
+        args.putString("type", type);
+        allNewCurriculumBooks.setArguments(args);
+
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.replace(R.id.containerView, allNewCurriculumBooks).commit();
-        setTitle("All new curriculum books");
+//        setTitle("All new curriculum books");
+        setTitle(title);
 
 
         pre.edit().putString("choosedGrade", "all_b" ).apply();
@@ -703,7 +711,7 @@ public class MainActivity extends AppCompatActivity
         if(grade.equals("my_b")){
             openMyBooksFragment();
         }else if(grade.equals("all_b")){
-            openAllBooksFragment();
+            openAllBooksFragment("all_b", "All new curriculum books");
         }else {
             Fragmentbundle = new Bundle();
             //0
@@ -732,7 +740,6 @@ public class MainActivity extends AppCompatActivity
 
                 SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-
                 StringRequest stringRequest = new StringRequest(Request.Method.GET,
                         SplashActivity.BASEAPI+"DSSERVICE/v1/updates?number_of_ad=1&app=1-12-textbooks&last_updated="+pre.getString("last_update", "2020-11-22 12:39:52"),
                         new Response.Listener<String>() {
@@ -745,22 +752,27 @@ public class MainActivity extends AppCompatActivity
                                         // Getting JSON Array node
                                         JSONObject jsonObj = new JSONObject(response);
 
-//                                        System.out.println("response code is " + jsonObj.getString("code"));
+//                                        System.out.println("response code is '" + jsonObj.getString("code")+"'");
                                         if(jsonObj.getString("code").equals("new_updates") ){
-                                            Ads = jsonObj.getString("ad");
+
+                                            parseAllBooks(jsonObj.getString("books"));
+
 
                                                 pre.edit().putString("last_update", jsonObj.getString("last_update") ).apply();
 
+                                            Ads = jsonObj.getString("ad");
 
-                                            if(Ads != "null"){
+                                            if(!Ads.equals("null")){
                                                 setAd(); myB = true;
                                             }else tvAds.setVisibility(View.GONE);
 
-                                            parseAllBooks(jsonObj.getString("books"));
-                                        }else tvAds.setVisibility(View.GONE);
+
+                                        }else{
+                                            tvAds.setVisibility(View.GONE);
+                                        }
 
                                     } catch (final Exception e) {
-                                        //tvAds.setVisibility(View.GONE);
+                                        tvAds.setVisibility(View.GONE);
                                     }
 
                                 }
@@ -787,8 +799,7 @@ public class MainActivity extends AppCompatActivity
         }, 1500);
     }
 
-    private void parseAllBooks(String response) throws Exception {
-
+    private void parseAllBooks(String response) {
         try {
             // Getting JSON Array node
             JSONArray datas = new JSONArray(response);
@@ -803,7 +814,6 @@ public class MainActivity extends AppCompatActivity
 //                postItem.setSubjectEn(c.getString("en").trim());
 //                postItem.setSubjectChapters(c.getJSONArray("chapters"));
 //                items.add(postItem);
-
                 isDBSouldBeUpdated(setFromWeb(c.getString("chapters"), c.getString("en").trim()),
                         c.getString("category").trim(),
                         c.getString("name").trim(),
@@ -814,7 +824,7 @@ public class MainActivity extends AppCompatActivity
 //            System.out.println("updated items count is " + items.size());
 
 
-        } catch (Exception e) {}
+        } catch (Exception e) {System.out.println("Exception on parseAllBooks " + e);}
 
     }
 
@@ -832,7 +842,7 @@ public class MainActivity extends AppCompatActivity
 
     private void isDBSouldBeUpdated(ArrayList<Item> arrayList, String grade, String subject, String fEn) {
         if(arrayList.size()>0){
-            if(arrayList.get(0).chapterID=="0") {
+            if(arrayList.get(0).chapterID.equals("0")) {
                 String chapterNamesList ="", chapterNamesListAnd ="";
                 for (int k=0;k<arrayList.size();k++) {
                     System.out.println("arrayList.get(k).chapName " + arrayList.get(k).chapName);

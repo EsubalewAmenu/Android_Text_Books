@@ -125,17 +125,27 @@ public class AllNewCurriculumBooks extends Fragment
             }
         });
 
-        initialiseGrade(root);
-
         pre = PreferenceManager.getDefaultSharedPreferences(getContext());
-        try{
-            searchQuery = Integer.parseInt(pre.getString("userChoosedGrade", "12"))+"";
 
-        } catch (Exception e) {
-            searchQuery = "12";
+        String pageType = getArguments().getString("type");
+        String userChoosedGradeT = "Blockchain Tech";
+        if(pageType.equals("blockchain")){
+            searchQuery = "15";
+        }else {
+            initialiseGrade(root);
+
+            try {
+                searchQuery = Integer.parseInt(pre.getString("userChoosedGrade", "12")) + "";
+
+            } catch (Exception e) {
+                searchQuery = "12";
+            }
+
+            userChoosedGradeT = pre.getString("userChoosedGradeT", "Grade 12");
         }
         ArrayList arrayList = new MainActivity().getData(getActivity(),searchQuery, "new");
-        MainAdapter adapter = new MainActivity().setData(getActivity(), arrayList, pre.getString("userChoosedGradeT", "Grade 12"));
+        MainAdapter adapter = new MainActivity().setData(getActivity(), arrayList, userChoosedGradeT);
+
         mRecyclerView.setAdapter(adapter);
 
     return root;
