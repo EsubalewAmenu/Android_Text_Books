@@ -858,15 +858,19 @@ public class MainActivity extends AppCompatActivity
                 if (chap.moveToFirst()) {
                     updateChapters(arrayList, chap.getString(1),grade, subject, chapterNamesListAnd, fEn);
                 }else{
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put("grade", grade);
-                    contentValues.put("name", subject);
-                    contentValues.put("uc", "new");
-                    contentValues.put("gtype", System.currentTimeMillis());
-                    contentValues.put("p", fEn);
-                    db.insert("books",contentValues);
 
                     Cursor bookCursor = db.getSelect("*", "books", "name='" + subject + "' and grade='"+grade+"' and uc='new'");
+                    if (bookCursor.getCount() == 0) {
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put("grade", grade);
+                        contentValues.put("name", subject);
+                        contentValues.put("uc", "new");
+                        contentValues.put("gtype", System.currentTimeMillis());
+                        contentValues.put("p", fEn);
+                        db.insert("books",contentValues);
+                    }
+
+                    bookCursor = db.getSelect("*", "books", "name='" + subject + "' and grade='"+grade+"' and uc='new'");
                     if (bookCursor.moveToFirst()) {
                         updateChapters(arrayList, bookCursor.getString(0),grade, subject, chapterNamesListAnd, fEn);
                     }
