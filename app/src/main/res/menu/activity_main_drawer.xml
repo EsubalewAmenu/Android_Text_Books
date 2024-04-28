@@ -20,78 +20,78 @@
             android:id="@+id/nav_old_books"
             android:icon="@android:drawable/ic_dialog_dialer"
             android:title="@string/old_curriculum_books" />
-        <item
-            android:id="@+id/nav_g12"
-            android:icon="@android:drawable/ic_dialog_dialer"
-            android:title="@string/menu_g12" />
-        <item
-            android:id="@+id/nav_g11"
-            android:icon="@android:drawable/ic_dialog_dialer"
-            android:title="@string/menu_g11" />
-        <item
-            android:id="@+id/nav_g10"
-            android:icon="@android:drawable/ic_dialog_dialer"
-            android:title="@string/menu_g10" />
-        <item
-            android:id="@+id/nav_g9"
-            android:icon="@android:drawable/ic_dialog_dialer"
-            android:title="@string/menu_g9" />
-        <item
-            android:id="@+id/nav_g8"
-            android:icon="@android:drawable/ic_dialog_dialer"
-            android:title="@string/menu_g8" />
-        <item
-            android:id="@+id/nav_g7"
-            android:icon="@android:drawable/ic_dialog_dialer"
-            android:title="@string/menu_g7" />
-        <item
-            android:id="@+id/nav_g6"
-            android:icon="@android:drawable/ic_dialog_dialer"
-            android:title="@string/menu_g6" />
-        <item
-            android:id="@+id/nav_g5"
-            android:icon="@android:drawable/ic_dialog_dialer"
-            android:title="@string/menu_g5" />
-        <item
-            android:id="@+id/nav_g4"
-            android:icon="@android:drawable/ic_dialog_dialer"
-            android:title="@string/menu_g4" />
-        <item
-            android:id="@+id/nav_g3"
-            android:icon="@android:drawable/ic_dialog_dialer"
-            android:title="@string/menu_g3" />
-        <item
-            android:id="@+id/nav_g2"
-            android:icon="@android:drawable/ic_dialog_dialer"
-            android:title="@string/menu_g2" />
-        <item
-            android:id="@+id/nav_g1"
-            android:icon="@android:drawable/ic_dialog_dialer"
-            android:title="@string/menu_g1" />
-        <item
-            android:id="@+id/nav_g12t"
-            android:icon="@android:drawable/ic_dialog_dialer"
-            android:title="@string/menu_g12t" />
-        <item
-            android:id="@+id/nav_g11t"
-            android:icon="@android:drawable/ic_dialog_dialer"
-            android:title="@string/menu_g11t" />
-        <item
-            android:id="@+id/nav_g10t"
-            android:icon="@android:drawable/ic_dialog_dialer"
-            android:title="@string/menu_g10t" />
-        <item
-            android:id="@+id/nav_g9t"
-            android:icon="@android:drawable/ic_dialog_dialer"
-            android:title="@string/menu_g9t" />
-        <item
-            android:id="@+id/nav_g8t"
-            android:icon="@android:drawable/ic_dialog_dialer"
-            android:title="@string/menu_g8t" />
-        <item
-            android:id="@+id/nav_g7t"
-            android:icon="@android:drawable/ic_dialog_dialer"
-            android:title="@string/menu_g7t" />
+<!--        <item-->
+<!--            android:id="@+id/nav_g12"-->
+<!--            android:icon="@android:drawable/ic_dialog_dialer"-->
+<!--            android:title="@string/menu_g12" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_g11"-->
+<!--            android:icon="@android:drawable/ic_dialog_dialer"-->
+<!--            android:title="@string/menu_g11" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_g10"-->
+<!--            android:icon="@android:drawable/ic_dialog_dialer"-->
+<!--            android:title="@string/menu_g10" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_g9"-->
+<!--            android:icon="@android:drawable/ic_dialog_dialer"-->
+<!--            android:title="@string/menu_g9" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_g8"-->
+<!--            android:icon="@android:drawable/ic_dialog_dialer"-->
+<!--            android:title="@string/menu_g8" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_g7"-->
+<!--            android:icon="@android:drawable/ic_dialog_dialer"-->
+<!--            android:title="@string/menu_g7" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_g6"-->
+<!--            android:icon="@android:drawable/ic_dialog_dialer"-->
+<!--            android:title="@string/menu_g6" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_g5"-->
+<!--            android:icon="@android:drawable/ic_dialog_dialer"-->
+<!--            android:title="@string/menu_g5" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_g4"-->
+<!--            android:icon="@android:drawable/ic_dialog_dialer"-->
+<!--            android:title="@string/menu_g4" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_g3"-->
+<!--            android:icon="@android:drawable/ic_dialog_dialer"-->
+<!--            android:title="@string/menu_g3" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_g2"-->
+<!--            android:icon="@android:drawable/ic_dialog_dialer"-->
+<!--            android:title="@string/menu_g2" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_g1"-->
+<!--            android:icon="@android:drawable/ic_dialog_dialer"-->
+<!--            android:title="@string/menu_g1" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_g12t"-->
+<!--            android:icon="@android:drawable/ic_dialog_dialer"-->
+<!--            android:title="@string/menu_g12t" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_g11t"-->
+<!--            android:icon="@android:drawable/ic_dialog_dialer"-->
+<!--            android:title="@string/menu_g11t" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_g10t"-->
+<!--            android:icon="@android:drawable/ic_dialog_dialer"-->
+<!--            android:title="@string/menu_g10t" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_g9t"-->
+<!--            android:icon="@android:drawable/ic_dialog_dialer"-->
+<!--            android:title="@string/menu_g9t" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_g8t"-->
+<!--            android:icon="@android:drawable/ic_dialog_dialer"-->
+<!--            android:title="@string/menu_g8t" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_g7t"-->
+<!--            android:icon="@android:drawable/ic_dialog_dialer"-->
+<!--            android:title="@string/menu_g7t" />-->
         <item
             android:id="@+id/nav_blockchain"
             android:icon="@android:drawable/ic_dialog_dialer"

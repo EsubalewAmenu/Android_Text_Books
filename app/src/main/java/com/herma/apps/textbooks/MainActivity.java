@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity
         choosedGrade = pre.getString("choosedGrade", "1");
         choosedGradeT = pre.getString("choosedGradeT", "Grade 12");
 
-        changeFragment(choosedGrade+"", choosedGradeT);
+//        changeFragment(choosedGrade+"", choosedGradeT);
 //        System.out.println("is user consent");
         if (consentInformation.canRequestAds()) {
 //            System.out.println(" yes user consent");
@@ -541,42 +541,42 @@ public class MainActivity extends AppCompatActivity
             openBooksFragment("old", "Old curriculum books");
         } else if (id == R.id.nav_fav_old_books) {
             openMyFavOldBooksFragment();
-        } else if (id == R.id.nav_g12) {
-            changeFragment("1", "Grade 12");
-        } else if (id == R.id.nav_g11) {
-            changeFragment("2", "Grade 11");
-        } else if (id == R.id.nav_g10) {
-            changeFragment("3", "Grade 10");
-        } else if (id == R.id.nav_g9) {
-            changeFragment("4", "Grade 9");
-        } else if (id == R.id.nav_g8) {
-            changeFragment("5", "Grade 8");
-        } else if (id == R.id.nav_g7) {
-            changeFragment("6", "Grade 7");
-        } else if (id == R.id.nav_g6) {
-            changeFragment("7", "Grade 6");
-        } else if (id == R.id.nav_g5) {
-            changeFragment("8", "Grade 5");
-        } else if (id == R.id.nav_g4) {
-            changeFragment("11", "Grade 4");
-        } else if (id == R.id.nav_g3) {
-            changeFragment("12", "Grade 3");
-        } else if (id == R.id.nav_g2) {
-            changeFragment("13", "Grade 2");
-        } else if (id == R.id.nav_g1) {
-            changeFragment("14", "Grade 1");
-        } else if (id == R.id.nav_g12t) {
-            changeFragment("9", "Grade 12 T. Guide");
-        } else if (id == R.id.nav_g11t) {
-            changeFragment("10", "Grade 11 T. Guide");
-        } else if (id == R.id.nav_g10t) {
-            changeFragment("15", "Grade 10 T. Guide");
-        } else if (id == R.id.nav_g9t) {
-            changeFragment("16", "Grade 9 T. Guide");
-        } else if (id == R.id.nav_g8t) {
-            changeFragment("17", "Grade 8 T. Guide");
-        } else if (id == R.id.nav_g7t) {
-            changeFragment("18", "Grade 7 T. Guide");
+//        } else if (id == R.id.nav_g12) {
+//            changeFragment("1", "Grade 12");
+//        } else if (id == R.id.nav_g11) {
+//            changeFragment("2", "Grade 11");
+//        } else if (id == R.id.nav_g10) {
+//            changeFragment("3", "Grade 10");
+//        } else if (id == R.id.nav_g9) {
+//            changeFragment("4", "Grade 9");
+//        } else if (id == R.id.nav_g8) {
+//            changeFragment("5", "Grade 8");
+//        } else if (id == R.id.nav_g7) {
+//            changeFragment("6", "Grade 7");
+//        } else if (id == R.id.nav_g6) {
+//            changeFragment("7", "Grade 6");
+//        } else if (id == R.id.nav_g5) {
+//            changeFragment("8", "Grade 5");
+//        } else if (id == R.id.nav_g4) {
+//            changeFragment("11", "Grade 4");
+//        } else if (id == R.id.nav_g3) {
+//            changeFragment("12", "Grade 3");
+//        } else if (id == R.id.nav_g2) {
+//            changeFragment("13", "Grade 2");
+//        } else if (id == R.id.nav_g1) {
+//            changeFragment("14", "Grade 1");
+//        } else if (id == R.id.nav_g12t) {
+//            changeFragment("9", "Grade 12 T. Guide");
+//        } else if (id == R.id.nav_g11t) {
+//            changeFragment("10", "Grade 11 T. Guide");
+//        } else if (id == R.id.nav_g10t) {
+//            changeFragment("15", "Grade 10 T. Guide");
+//        } else if (id == R.id.nav_g9t) {
+//            changeFragment("16", "Grade 9 T. Guide");
+//        } else if (id == R.id.nav_g8t) {
+//            changeFragment("17", "Grade 8 T. Guide");
+//        } else if (id == R.id.nav_g7t) {
+//            changeFragment("18", "Grade 7 T. Guide");
         } else if (id == R.id.nav_blockchain) {
             openBooksFragment("blockchain", "Blockchain");
         } else if (id == R.id.nav_questions) {
@@ -709,27 +709,27 @@ public class MainActivity extends AppCompatActivity
         pre.edit().putString("choosedGrade", "all_b" ).apply();
         pre.edit().putString("choosedGradeT", "All new curriculum books").apply();
     }
-    public void changeFragment(String grade, String title){
-        if(grade.equals("my_b")){
-            openMyBooksFragment();
-        }else if(grade.equals("all_b")){
-            openBooksFragment("all_b", "All new curriculum books");
-        }else {
-            Fragmentbundle = new Bundle();
-            //0
-            BookFragment bookFragment = new BookFragment();
-            Fragmentbundle.putString("choosedGrade", grade);
-            Fragmentbundle.putString("title", title);
-            bookFragment.setArguments(Fragmentbundle);
-            mFragmentManager = getSupportFragmentManager();
-            mFragmentTransaction = mFragmentManager.beginTransaction();
-            mFragmentTransaction.replace(R.id.containerView, bookFragment).commit();
-            setTitle(title);
-
-            pre.edit().putString("choosedGrade", grade).apply();
-            pre.edit().putString("choosedGradeT", title).apply();
-        }
-    }
+//    public void changeFragment(String grade, String title){
+//        if(grade.equals("my_b")){
+//            openMyBooksFragment();
+//        }else if(grade.equals("all_b")){
+//            openBooksFragment("all_b", "All new curriculum books");
+//        }else {
+//            Fragmentbundle = new Bundle();
+//            //0
+//            BookFragment bookFragment = new BookFragment();
+//            Fragmentbundle.putString("choosedGrade", grade);
+//            Fragmentbundle.putString("title", title);
+//            bookFragment.setArguments(Fragmentbundle);
+//            mFragmentManager = getSupportFragmentManager();
+//            mFragmentTransaction = mFragmentManager.beginTransaction();
+//            mFragmentTransaction.replace(R.id.containerView, bookFragment).commit();
+//            setTitle(title);
+//
+//            pre.edit().putString("choosedGrade", grade).apply();
+//            pre.edit().putString("choosedGradeT", title).apply();
+//        }
+//    }
 
     private void doApiCall() {
         new Handler().postDelayed(new Runnable() {
