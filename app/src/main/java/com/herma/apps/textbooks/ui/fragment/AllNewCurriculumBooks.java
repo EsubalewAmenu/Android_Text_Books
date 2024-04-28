@@ -134,14 +134,13 @@ public class AllNewCurriculumBooks extends Fragment
         }else {
 
             try {
-                searchQuery = Integer.parseInt(pre.getString("userChoosedGrade", "1")) + "";
+                searchQuery = Integer.parseInt(pre.getString("grade_"+pageType, "12")) + "";
 
             } catch (Exception e) {
-                searchQuery = "1";
+                searchQuery = "12";
             }
             initialiseGrade(pageType, root);
 
-            userChoosedGradeT = pre.getString("userChoosedGradeT", "Grade 12");
         }
         ArrayList arrayList = new MainActivity().getData(getActivity(),searchQuery, pageType);
         MainAdapter adapter = new MainActivity().setData(getActivity(), arrayList, userChoosedGradeT);
@@ -203,16 +202,6 @@ public class AllNewCurriculumBooks extends Fragment
             @Override
             public void onItemClick(GradeItem item) {
 
-//                searchQuery = item.gradeName;
-//                haveNext = true;
-//
-//                random = new Random().nextInt((99999 - 1) + 1) + 1;
-//                byCategory = item.id;
-//                url = "https://datascienceplc.com/apps/manager/api/items/blog/bycategory?category=" + item.gradeName;
-//
-//                itemCount = 0;
-//                currentPage = PAGE_START;
-//                isLastPage = false;
                 nextPageNumber = 1;
                 adapter.clear();
 //                doApiCall();
@@ -222,13 +211,7 @@ public class AllNewCurriculumBooks extends Fragment
 
                 mRecyclerView.setAdapter(adapter);
 
-                if(type.equals("old")){
-                    pre.edit().putString("choosedGrade", item.id+"").apply();
-                    pre.edit().putString("choosedGradeT", item.gradeName).apply();
-                }else {
-                    pre.edit().putString("userChoosedGrade", item.id + "").apply();
-                    pre.edit().putString("userChoosedGradeT", item.gradeName).apply();
-                }
+                pre.edit().putString("grade_"+type, item.id+"").apply();
             }
         });
         // Set Horizontal Layout Manager

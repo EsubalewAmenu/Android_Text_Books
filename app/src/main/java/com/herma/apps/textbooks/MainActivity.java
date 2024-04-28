@@ -59,7 +59,6 @@ import com.herma.apps.textbooks.settings.LanguageHelper;
 import com.herma.apps.textbooks.settings.SettingsActivity;
 import com.herma.apps.textbooks.ui.about.About_us;
 import com.herma.apps.textbooks.ui.fragment.AllNewCurriculumBooks;
-import com.herma.apps.textbooks.ui.fragment.BookFragment;
 import com.herma.apps.textbooks.ui.fragment.FavOldCurriculumBooks;
 import com.herma.apps.textbooks.ui.fragment.MyNewCurriculumBooks;
 import com.herma.apps.textbooks.ui.fragment.QuestionsFragment;
@@ -199,20 +198,12 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         setUserData(navigationView);
 
-
-//        try { grades = getGradesFromDB(MainActivity.this);} catch (Exception e) { e.printStackTrace(); }
-
-
-//        if (getIntent().getExtras() != null) {
-////            spin.setSelection(getIntent().getIntExtra("choosedGrade", 0)-1);
-//            p = getIntent().getStringExtra("choosedP");
-//            choosedGrade = getIntent().getIntExtra("choosedGrade", 1);
-//            choosedGradeT = getIntent().getStringExtra("choosedGradeT");
-//        }
-
         pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        choosedGrade = pre.getString("choosedGrade", "1");
-        choosedGradeT = pre.getString("choosedGradeT", "Grade 12");
+
+        openBooksFragment(pre.getString("nav_type", "new"), pre.getString("nav_type_title", "All new curriculum books"));
+
+//        choosedGrade = pre.getString("choosedGrade", "1");
+//        choosedGradeT = pre.getString("choosedGradeT", "Grade 12");
 
 //        changeFragment(choosedGrade+"", choosedGradeT);
 //        System.out.println("is user consent");
@@ -366,56 +357,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     public ArrayList getData(Context context, String choosedGrade, String old_new) {
+        System.out.println(" item.id is type a " + choosedGrade + " " + old_new);
         db = new DB(context);
         ArrayList arrayList = new ArrayList<>();
-
-//        if(old_new == "new"){
-//
-//            final Cursor subjectsCursor = db.getSelect("*", "books", "uc='new' or uc='newf' ORDER BY name ASC");
-//            if (subjectsCursor.moveToFirst()) {
-//                do {
-//                    arrayList.add(new Item("", subjectsCursor.getString(2)+" (Grade "+subjectsCursor.getString(1)+")", subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
-//                } while (subjectsCursor.moveToNext());
-//            }
-//
-//            if(arrayList.size() == 0) {
-//                openAllBooksFragment();
-//                return null;
-//            }
-//
-//            return arrayList;
-//        }else
-//            if(choosedGrade.equals("newf")){
-//            final Cursor subjectsCursor = db.getSelect("*", "books", "uc='newf' ORDER BY name ASC");
-//            if (subjectsCursor.moveToFirst()) {
-//                do {
-//                    arrayList.add(new Item("", subjectsCursor.getString(2)+" (Grade "+subjectsCursor.getString(1)+")", subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
-//                } while (subjectsCursor.moveToNext());
-//            }
-//
-//            if(arrayList.size() == 0) {
-//                openAllBooksFragment();
-//                return null;
-//            }
-//
-//            return arrayList;
-//        }
-
 
         Cursor subjectsCursor;
         if(choosedGrade.equals("fav") || choosedGrade.equals("newf")) {
             subjectsCursor = db.getSelect("*", "books", "uc='"+choosedGrade+"' ORDER BY name ASC");
         }else if(old_new.equals("new")) {
             subjectsCursor = db.getSelect("*", "books", "(uc='new' or uc='newf') and grade='" + choosedGrade + "' ORDER BY name DESC");
-
-//            if (subjectsCursor.moveToFirst()) {
-//                do {
-//                    System.out.println("DSSERVICE " +subjectsCursor.getString(2)+" "+ subjectsCursor.getString(0)+" "+ subjectsCursor.getString(6));
-//                    arrayList.add(new Item("", subjectsCursor.getString(2), subjectsCursor.getString(0), subjectsCursor.getString(6), 0, "#09A9FF"));
-//                } while (subjectsCursor.moveToNext());
-//            }
-
-//            subjectsCursor = db.getSelect("*", "books", "(uc='new' or uc='newf') and grade='" + choosedGrade + "' ORDER BY name DESC");
 
         }else {
 
@@ -433,37 +383,6 @@ public class MainActivity extends AppCompatActivity
         }
         return arrayList;
     }
-//    public ArrayList<String[]> getGradesFromDB(Context context) throws Exception {
-//
-//        ArrayList<String[]> dbGrades = new ArrayList<>();
-//
-//        open(context,"read", "books.hrm");
-//        final Cursor gradeCursor = db.getSelect("*", "grade", "1");
-//        if (gradeCursor.moveToFirst()) {
-//            do {
-//                dbGrades.add(new String[]{gradeCursor.getString(1), gradeCursor.getString(2), gradeCursor.getString(3)});//grade name, num, p
-//            } while (gradeCursor.moveToNext());
-//        }
-//
-//
-//        return dbGrades;
-//    }
-//    public Map<String, String> getSubjectsFromDB(Context context, String grade) throws Exception {
-//
-//        Map<String, String> dbSubjects = new HashMap<>();
-//
-////        open(context,"read", "books.hrm");
-//        final Cursor gradeCursor = db.getSelect("*", "grade", "1");
-//        if (gradeCursor.moveToFirst()) {
-//            do {
-//                dbSubjects.put(gradeCursor.getString(1), gradeCursor.getInt(0)+"");
-////                dbGrades.add(new String[]{gradeCursor.getString(1), gradeCursor.getString(2), gradeCursor.getString(3)});//grade name, num, p
-//            } while (gradeCursor.moveToNext());
-//        }
-//
-//
-//        return dbSubjects;
-//    }
     public MainAdapter setData(final Context context, ArrayList arrayList, String a){
 
         MainAdapter adapter = new MainAdapter(context, arrayList, new MainAdapter.ItemListener() {
@@ -482,23 +401,6 @@ public class MainActivity extends AppCompatActivity
         });
         return adapter;
     }
-//    public void open(Context context, String write, String db_name) {
-//
-//        db = new DB(context, db_name);
-//        try {
-//            if (write.equals("write"))
-//                db.writeDataBase();
-//            else
-//                db.createDataBase();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            db.openDataBase();
-//        } catch (SQLException sqle) {
-//            throw sqle;
-//        }
-//    }
     private void rateApp() {
         try {
             Intent rateIntent = rateIntentForUrl("market://details");
@@ -541,60 +443,14 @@ public class MainActivity extends AppCompatActivity
             openBooksFragment("old", "Old curriculum books");
         } else if (id == R.id.nav_fav_old_books) {
             openMyFavOldBooksFragment();
-//        } else if (id == R.id.nav_g12) {
-//            changeFragment("1", "Grade 12");
-//        } else if (id == R.id.nav_g11) {
-//            changeFragment("2", "Grade 11");
-//        } else if (id == R.id.nav_g10) {
-//            changeFragment("3", "Grade 10");
-//        } else if (id == R.id.nav_g9) {
-//            changeFragment("4", "Grade 9");
-//        } else if (id == R.id.nav_g8) {
-//            changeFragment("5", "Grade 8");
-//        } else if (id == R.id.nav_g7) {
-//            changeFragment("6", "Grade 7");
-//        } else if (id == R.id.nav_g6) {
-//            changeFragment("7", "Grade 6");
-//        } else if (id == R.id.nav_g5) {
-//            changeFragment("8", "Grade 5");
-//        } else if (id == R.id.nav_g4) {
-//            changeFragment("11", "Grade 4");
-//        } else if (id == R.id.nav_g3) {
-//            changeFragment("12", "Grade 3");
-//        } else if (id == R.id.nav_g2) {
-//            changeFragment("13", "Grade 2");
-//        } else if (id == R.id.nav_g1) {
-//            changeFragment("14", "Grade 1");
-//        } else if (id == R.id.nav_g12t) {
-//            changeFragment("9", "Grade 12 T. Guide");
-//        } else if (id == R.id.nav_g11t) {
-//            changeFragment("10", "Grade 11 T. Guide");
-//        } else if (id == R.id.nav_g10t) {
-//            changeFragment("15", "Grade 10 T. Guide");
-//        } else if (id == R.id.nav_g9t) {
-//            changeFragment("16", "Grade 9 T. Guide");
-//        } else if (id == R.id.nav_g8t) {
-//            changeFragment("17", "Grade 8 T. Guide");
-//        } else if (id == R.id.nav_g7t) {
-//            changeFragment("18", "Grade 7 T. Guide");
         } else if (id == R.id.nav_blockchain) {
             openBooksFragment("blockchain", "Blockchain");
         } else if (id == R.id.nav_questions) {
-
-//            Fragmentbundle = new Bundle();
-            //0
-             questionsFragment = new QuestionsFragment();
-//            Fragmentbundle.putString("choosedGrade", grade);
-//            Fragmentbundle.putString("title", "Worksheet");
-//            questionsFragment.setArguments(Fragmentbundle);
+            questionsFragment = new QuestionsFragment();
             mFragmentManager = getSupportFragmentManager();
             mFragmentTransaction = mFragmentManager.beginTransaction();
             mFragmentTransaction.replace(R.id.containerView, questionsFragment).commit();
             setTitle("Worksheet");
-
-
-//            pre.edit().putString("choosedGrade", "17" ).apply();
-//            pre.edit().putString("choosedGradeT", "Worksheet").apply();
 
         }else if (id == R.id.nav_share) {
             Intent intent4 = new Intent("android.intent.action.SEND");
@@ -694,6 +550,7 @@ public class MainActivity extends AppCompatActivity
     }
     public void openBooksFragment(String type, String title){
         allNewCurriculumBooks = new AllNewCurriculumBooks();
+        pre.edit().putString("nav_type", type).apply();
 
         Bundle args = new Bundle();
         args.putString("type", type);
@@ -706,31 +563,12 @@ public class MainActivity extends AppCompatActivity
         setTitle(title);
 
 
-        pre.edit().putString("choosedGrade", "all_b" ).apply();
-        pre.edit().putString("choosedGradeT", "All new curriculum books").apply();
+        if(type.equals("old")){
+            pre.edit().putString("nav_type_title", "Old curriculum books").apply();
+        }else {
+            pre.edit().putString("nav_type_title", "All new curriculum books").apply();
+        }
     }
-//    public void changeFragment(String grade, String title){
-//        if(grade.equals("my_b")){
-//            openMyBooksFragment();
-//        }else if(grade.equals("all_b")){
-//            openBooksFragment("all_b", "All new curriculum books");
-//        }else {
-//            Fragmentbundle = new Bundle();
-//            //0
-//            BookFragment bookFragment = new BookFragment();
-//            Fragmentbundle.putString("choosedGrade", grade);
-//            Fragmentbundle.putString("title", title);
-//            bookFragment.setArguments(Fragmentbundle);
-//            mFragmentManager = getSupportFragmentManager();
-//            mFragmentTransaction = mFragmentManager.beginTransaction();
-//            mFragmentTransaction.replace(R.id.containerView, bookFragment).commit();
-//            setTitle(title);
-//
-//            pre.edit().putString("choosedGrade", grade).apply();
-//            pre.edit().putString("choosedGradeT", title).apply();
-//        }
-//    }
-
     private void doApiCall() {
         new Handler().postDelayed(new Runnable() {
 
@@ -809,13 +647,6 @@ public class MainActivity extends AppCompatActivity
 //            ArrayList<Object> items = new ArrayList<Object>();
             for (int i = 0; i < datas.length(); i++) {
                 JSONObject c = datas.getJSONObject(i);
-                ////////////////////////////////////////
-//                PostItem postItem = new PostItem();
-//                postItem.setSubjectName(c.getString("name").trim());
-//                postItem.setSubjectGrade(c.getString("category").trim());
-//                postItem.setSubjectEn(c.getString("en").trim());
-//                postItem.setSubjectChapters(c.getJSONArray("chapters"));
-//                items.add(postItem);
                 isDBSouldBeUpdated(setFromWeb(c.getString("chapters"), c.getString("en").trim()),
                         c.getString("category").trim(),
                         c.getString("name").trim(),
