@@ -54,7 +54,6 @@ import com.herma.apps.textbooks.common.Commons;
 import com.herma.apps.textbooks.common.MainAdapter;
 import com.herma.apps.textbooks.common.DB;
 import com.herma.apps.textbooks.common.Item;
-import com.herma.apps.textbooks.common.PostItem;
 import com.herma.apps.textbooks.settings.LanguageHelper;
 import com.herma.apps.textbooks.settings.SettingsActivity;
 import com.herma.apps.textbooks.ui.about.About_us;
@@ -357,11 +356,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     public ArrayList getData(Context context, String choosedGrade, String old_new) {
-        System.out.println(" item.id is type a " + choosedGrade + " " + old_new);
         db = new DB(context);
         ArrayList arrayList = new ArrayList<>();
 
-        Cursor subjectsCursor;
+        Cursor subjectsCursor = null;
         if(choosedGrade.equals("fav") || choosedGrade.equals("newf")) {
             subjectsCursor = db.getSelect("*", "books", "uc='"+choosedGrade+"' ORDER BY name ASC");
         }else if(old_new.equals("new")) {
@@ -373,7 +371,10 @@ public class MainActivity extends AppCompatActivity
             final Cursor gradeCursor = db.getSelect("*", "grade", "id="+choosedGrade);
             gradeCursor.moveToFirst();
 
-            subjectsCursor = db.getSelect("*", "books", "uc!='new' and uc!='newf' and grade='" + gradeCursor.getString(2) + "' and gtype='" + gradeCursor.getString(3) + "' ORDER BY name ASC");
+            if(old_new.equals("blockchain"))
+                subjectsCursor = db.getSelect("*", "books", "(uc='new' or uc='newf') and grade='15' ORDER BY name ASC");
+            else
+                subjectsCursor = db.getSelect("*", "books", "uc!='new' and uc!='newf' and grade='" + gradeCursor.getString(2) + "' and gtype='" + gradeCursor.getString(3) + "' ORDER BY name ASC");
         }
 
         if (subjectsCursor.moveToFirst()) {
@@ -559,15 +560,10 @@ public class MainActivity extends AppCompatActivity
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.replace(R.id.containerView, allNewCurriculumBooks).commit();
-//        setTitle("All new curriculum books");
+
         setTitle(title);
+        pre.edit().putString("nav_type_title", title).apply();
 
-
-        if(type.equals("old")){
-            pre.edit().putString("nav_type_title", "Old curriculum books").apply();
-        }else {
-            pre.edit().putString("nav_type_title", "All new curriculum books").apply();
-        }
     }
     private void doApiCall() {
         new Handler().postDelayed(new Runnable() {
@@ -579,7 +575,6 @@ public class MainActivity extends AppCompatActivity
                 // Request a string response from the provided URL.
 
                 SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
                 StringRequest stringRequest = new StringRequest(Request.Method.GET,
                         SplashActivity.BASEAPI+"DSSERVICE/v1/updates?number_of_ad=1&app=1-12-textbooks&last_updated="+pre.getString("last_update", "2020-11-22 12:39:52"),
                         new Response.Listener<String>() {
@@ -678,7 +673,6 @@ public class MainActivity extends AppCompatActivity
             if(arrayList.get(0).chapterID.equals("0")) {
                 String chapterNamesList ="", chapterNamesListAnd ="";
                 for (int k=0;k<arrayList.size();k++) {
-                    System.out.println("arrayList.get(k).chapName " + arrayList.get(k).chapName);
                     chapterNamesList += " or filename='"+arrayList.get(k).fileName+"'";
                     chapterNamesListAnd += " and filename!='"+arrayList.get(k).fileName+"'";
                 }
@@ -691,7 +685,6 @@ public class MainActivity extends AppCompatActivity
                 if (chap.moveToFirst()) {
                     updateChapters(arrayList, chap.getString(1),grade, subject, chapterNamesListAnd, fEn);
                 }else{
-
                     Cursor bookCursor = db.getSelect("*", "books", "name='" + subject + "' and grade='"+grade+"' and uc='new'");
                     if (bookCursor.getCount() == 0) {
                         ContentValues contentValues = new ContentValues();

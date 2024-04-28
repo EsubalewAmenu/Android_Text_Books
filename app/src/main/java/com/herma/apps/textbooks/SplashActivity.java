@@ -276,15 +276,6 @@ public class SplashActivity extends AppCompatActivity {
 
         })
         {
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<>();
-////                params.put("username", USERNAME);
-////                params.put("password", PAZZWORD);
-//                params.put("Content-Type", "application/json; charset=utf-8");
-//                params.put("Content-Length", String.valueOf(requestBody.getBytes().length));
-//                return params;
-//            }
             @Override
             public String getBodyContentType() {
                 return "application/json; charset=utf-8";
