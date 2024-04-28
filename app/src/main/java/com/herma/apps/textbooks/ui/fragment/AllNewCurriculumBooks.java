@@ -132,18 +132,18 @@ public class AllNewCurriculumBooks extends Fragment
         if(pageType.equals("blockchain")){
             searchQuery = "15";
         }else {
-            initialiseGrade(root);
 
             try {
-                searchQuery = Integer.parseInt(pre.getString("userChoosedGrade", "12")) + "";
+                searchQuery = Integer.parseInt(pre.getString("userChoosedGrade", "1")) + "";
 
             } catch (Exception e) {
-                searchQuery = "12";
+                searchQuery = "1";
             }
+            initialiseGrade(pageType, root);
 
             userChoosedGradeT = pre.getString("userChoosedGradeT", "Grade 12");
         }
-        ArrayList arrayList = new MainActivity().getData(getActivity(),searchQuery, "new");
+        ArrayList arrayList = new MainActivity().getData(getActivity(),searchQuery, pageType);
         MainAdapter adapter = new MainActivity().setData(getActivity(), arrayList, userChoosedGradeT);
 
         mRecyclerView.setAdapter(adapter);
@@ -151,7 +151,7 @@ public class AllNewCurriculumBooks extends Fragment
     return root;
     }
 
-    private void initialiseGrade(View root) {
+    private void initialiseGrade(String type, View root) {
         // initialisation with id's
         recyclerViewGrade
                 = (RecyclerView) root.findViewById(
@@ -164,30 +164,40 @@ public class AllNewCurriculumBooks extends Fragment
                 gradeRecyclerViewLayoutManager);
         // Adding items to RecyclerView.
         ArrayList<GradeItem> source = new ArrayList<GradeItem>();
-        source.add(new GradeItem(12,"Grade 12"));
-        source.add(new GradeItem(11,"Grade 11"));
-        source.add(new GradeItem(10,"Grade 10"));
-        source.add(new GradeItem(9,"Grade 9"));
-        source.add(new GradeItem(8,"Grade 8"));
-        source.add(new GradeItem(7,"Grade 7"));
-        source.add(new GradeItem(6,"Grade 6"));
-        source.add(new GradeItem(5,"Grade 5"));
-        source.add(new GradeItem(4,"Grade 4"));
-        source.add(new GradeItem(3,"Grade 3"));
-        source.add(new GradeItem(2,"Grade 2"));
-        source.add(new GradeItem(1,"Grade 1"));
-//        source.add(new GradeItem(12,getString(R.string.menu_g12)));
-//        source.add(new GradeItem(11,getString(R.string.menu_g11)));
-//        source.add(new GradeItem(10,getString(R.string.menu_g10)));
-//        source.add(new GradeItem(9,getString(R.string.menu_g9)));
-//        source.add(new GradeItem(8,getString(R.string.menu_g8)));
-//        source.add(new GradeItem(7,getString(R.string.menu_g7)));
-//        source.add(new GradeItem(6,getString(R.string.menu_g6)));
-//        source.add(new GradeItem(5,getString(R.string.menu_g5)));
-//        source.add(new GradeItem(4,getString(R.string.menu_g4)));
-//        source.add(new GradeItem(3,getString(R.string.menu_g3)));
-//        source.add(new GradeItem(2,getString(R.string.menu_g2)));
-//        source.add(new GradeItem(1,getString(R.string.menu_g1)));
+        if(type.equals("old")){
+
+            source.add(new GradeItem(1,"Grade 12"));
+            source.add(new GradeItem(2,"Grade 11"));
+            source.add(new GradeItem(3,"Grade 10"));
+            source.add(new GradeItem(4,"Grade 9"));
+            source.add(new GradeItem(5,"Grade 8"));
+            source.add(new GradeItem(6,"Grade 7"));
+            source.add(new GradeItem(7,"Grade 6"));
+            source.add(new GradeItem(8,"Grade 5"));
+            source.add(new GradeItem(11,"Grade 4"));
+            source.add(new GradeItem(12,"Grade 3"));
+            source.add(new GradeItem(13,"Grade 2"));
+            source.add(new GradeItem(14,"Grade 1"));
+            source.add(new GradeItem(9,"Grade 12 T. Guide"));
+            source.add(new GradeItem(10,"Grade 11 T. Guide"));
+            source.add(new GradeItem(15,"Grade 10 T. Guide"));
+            source.add(new GradeItem(16,"Grade 9 T. Guide"));
+            source.add(new GradeItem(17,"Grade 8 T. Guide"));
+            source.add(new GradeItem(18,"Grade 7 T. Guide"));
+        }else {
+            source.add(new GradeItem(12, "Grade 12"));
+            source.add(new GradeItem(11, "Grade 11"));
+            source.add(new GradeItem(10, "Grade 10"));
+            source.add(new GradeItem(9, "Grade 9"));
+            source.add(new GradeItem(8, "Grade 8"));
+            source.add(new GradeItem(7, "Grade 7"));
+            source.add(new GradeItem(6, "Grade 6"));
+            source.add(new GradeItem(5, "Grade 5"));
+            source.add(new GradeItem(4, "Grade 4"));
+            source.add(new GradeItem(3, "Grade 3"));
+            source.add(new GradeItem(2, "Grade 2"));
+            source.add(new GradeItem(1, "Grade 1"));
+        }
 
         adapterGrade = new GradeAdapter(source, new GradeAdapter.OnGradeItemListener() {
             @Override
@@ -207,14 +217,18 @@ public class AllNewCurriculumBooks extends Fragment
                 adapter.clear();
 //                doApiCall();
 
-                ArrayList arrayList = new MainActivity().getData(getActivity(), item.id + "", "new");
+                ArrayList arrayList = new MainActivity().getData(getActivity(), item.id + "", type);
                 MainAdapter adapter = new MainActivity().setData(getActivity(), arrayList, item.gradeName);
 
                 mRecyclerView.setAdapter(adapter);
 
-
-                pre.edit().putString("userChoosedGrade", item.id + "" ).apply();
-                pre.edit().putString("userChoosedGradeT", item.gradeName).apply();
+                if(type.equals("old")){
+                    pre.edit().putString("choosedGrade", item.id+"").apply();
+                    pre.edit().putString("choosedGradeT", item.gradeName).apply();
+                }else {
+                    pre.edit().putString("userChoosedGrade", item.id + "").apply();
+                    pre.edit().putString("userChoosedGradeT", item.gradeName).apply();
+                }
             }
         });
         // Set Horizontal Layout Manager

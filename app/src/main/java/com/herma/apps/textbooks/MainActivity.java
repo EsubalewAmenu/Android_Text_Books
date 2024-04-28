@@ -536,7 +536,9 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_my_books) {
             openMyBooksFragment();
         } else if (id == R.id.nav_all_books) {
-            openAllBooksFragment("new", "All new curriculum books");
+            openBooksFragment("new", "All new curriculum books");
+        } else if (id == R.id.nav_old_books) {
+            openBooksFragment("old", "Old curriculum books");
         } else if (id == R.id.nav_fav_old_books) {
             openMyFavOldBooksFragment();
         } else if (id == R.id.nav_g12) {
@@ -576,7 +578,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_g7t) {
             changeFragment("18", "Grade 7 T. Guide");
         } else if (id == R.id.nav_blockchain) {
-            openAllBooksFragment("blockchain", "Blockchain");
+            openBooksFragment("blockchain", "Blockchain");
         } else if (id == R.id.nav_questions) {
 
 //            Fragmentbundle = new Bundle();
@@ -690,7 +692,7 @@ public class MainActivity extends AppCompatActivity
         pre.edit().putString("choosedGrade", "my_b" ).apply();
         pre.edit().putString("choosedGradeT", "My new curriculum books").apply();
     }
-    public void openAllBooksFragment(String type, String title){
+    public void openBooksFragment(String type, String title){
         allNewCurriculumBooks = new AllNewCurriculumBooks();
 
         Bundle args = new Bundle();
@@ -711,7 +713,7 @@ public class MainActivity extends AppCompatActivity
         if(grade.equals("my_b")){
             openMyBooksFragment();
         }else if(grade.equals("all_b")){
-            openAllBooksFragment("all_b", "All new curriculum books");
+            openBooksFragment("all_b", "All new curriculum books");
         }else {
             Fragmentbundle = new Bundle();
             //0
