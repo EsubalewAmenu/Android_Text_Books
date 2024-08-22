@@ -73,6 +73,14 @@ public class DB extends SQLiteOpenHelper {
 		}
 
 	}
+	@Override
+	public synchronized void close() {
+		if (myDataBase != null) {
+			myDataBase.close();
+		}
+		super.close();
+	}
+
 	public void opendatabase() throws SQLException {
 		String myPath = context.getFilesDir().getPath()+"/" + DB_NAME;
 		myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);

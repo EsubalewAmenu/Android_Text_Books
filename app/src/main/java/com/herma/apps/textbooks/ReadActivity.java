@@ -66,11 +66,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.security.spec.KeySpec;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
 public class ReadActivity extends AppCompatActivity {
 
@@ -123,6 +133,11 @@ public class ReadActivity extends AppCompatActivity {
 //            getSupportActionBar().setDisplayShowHomeEnabled(true);
 //        }
 
+//      mAdView = findViewById(R.id.adView);
+        adContainerView = findViewById(R.id.ad_view_container);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+
         pdfView = (PDFView) findViewById(R.id.pdfView);
 //        txtTimerValue = (TextView) findViewById(R.id.timerValue);
 //        btnGiftReward = (ImageButton) findViewById(R.id.btnGiftReward);
@@ -134,69 +149,55 @@ public class ReadActivity extends AppCompatActivity {
 
             try {
                 this.setTitle(getIntent().getStringExtra("chapterName") + " (" + getIntent().getStringExtra("subject") + ")");
-                if (new Commons(ReadActivity.this).dec(filePath, getIntent().getStringExtra("fileName") + ".pdf", getIntent().getStringExtra("p"))) {
+                if (dec(filePath, getIntent().getStringExtra("fileName") + ".pdf", getIntent().getStringExtra("p"))) {
                     f = new File(ReadActivity.this.getFilesDir() + "nor.pdf");
+
                     pdfView.fromFile(f)
                             .onRender(new OnRenderListener() {
                                 @Override
                                 public void onInitiallyRendered(int nbPages) {
 
-                                    MobileAds.initialize(ReadActivity.this, new OnInitializationCompleteListener() {
-                                        @Override
-                                        public void onInitializationComplete(InitializationStatus initializationStatus) {
-
-//                                    mAdView = findViewById(R.id.adView);
-                                            adContainerView = findViewById(R.id.ad_view_container);
-
-                                            AdRequest adRequest = new AdRequest.Builder().build();
-
-                                            if (new Commons(getApplicationContext()).showGoogleAd(1)) {
-
-//                                        mAdView.loadAd(adRequest);
-
-                                                adContainerView.post(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        new Commons(getApplicationContext()).loadBanner(mAdView, getString(R.string.adReader), adContainerView, getWindowManager().getDefaultDisplay());
-                                                    }
-                                                });
+                    MobileAds.initialize(ReadActivity.this, new OnInitializationCompleteListener() {
+                        @Override
+                        public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
 
 
-                                                InterstitialAd.load(getApplicationContext(), getString(R.string.adReaderInt), adRequest, new InterstitialAdLoadCallback() {
-                                                    @Override
-                                                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                                                        // The mInterstitialAd reference will be null until
-                                                        // an ad is loaded.
-
-//                                            System.out.println("request seconds remaining: isTheirReward");
-
-                                                        SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-                                                        storedPhone = sharedPref.getString("storedPhone", "0");
-
-//                                                isThereReward();
-
-                                                        mInterstitialAd = interstitialAd;
-                                                        mInterstitialAd.show(ReadActivity.this);
-                                                    }
-
-                                                    @Override
-                                                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                                                        // Handle the error
-                                                        mInterstitialAd = null;
-                                                    }
-                                                });
-
-
-                                            } else {
-                                                adContainerView.setVisibility(View.GONE);
-                                            }
-                                        }
-                                    });
+                                adContainerView.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        new Commons(getApplicationContext()).loadBanner(mAdView, getString(R.string.adReader), adContainerView, getWindowManager().getDefaultDisplay());
+                                    }
+                                });
+//
+//
+//                                InterstitialAd.load(getApplicationContext(), getString(R.string.adReaderInt), adRequest, new InterstitialAdLoadCallback() {
+//                                    @Override
+//                                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+//                                        // The mInterstitialAd reference will be null until
+//                                        // an ad is loaded.
+////
+////                                        SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+////                                        storedPhone = sharedPref.getString("storedPhone", "0");
+//
+////                                                isThereReward();
+//
+//                                        mInterstitialAd = interstitialAd;
+//                                        mInterstitialAd.show(ReadActivity.this);
+//                                    }
+//
+//                                    @Override
+//                                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+//                                        // Handle the error
+//                                        mInterstitialAd = null;
+//                                    }
+//                                });
+//
+                        }
+                    });
 
 
                                 }
                             }).load();
-
 
                 }
             } catch (Exception e) {
@@ -406,240 +407,279 @@ public class ReadActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void rewardCountdown(double _minute) {  //
+    public boolean dec(String filePath, String fileName, String p) {
+        try {
+            byte[] salt = {69, 121, 101, 45, 62, 118, 101, 114, 69, 121, 101, 45, 62, 118, 101, 114};
 
-//        txtTimerValue.setVisibility(View.VISIB
+            SecretKeyFactory factory = SecretKeyFactory
+                    .getInstance("PBKDF2WithHmacSHA1");
+            String fullPassword = p + fileName;
+            KeySpec keySpec = new PBEKeySpec(fullPassword.toCharArray(), salt, 65536,
+                    256);
+            SecretKey tmp = factory.generateSecret(keySpec);
+            SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
 
-        new CountDownTimer((long) (_minute * 60 * 1000), 1000) { // 30000 mili = 30 sec
+            // file decryption
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 
-            public void onTick(long millisUntilFinished) {
-//                System.out.println("seconds remaining: " + millisUntilFinished / 1000);
-
-
-                int secs = (int) (millisUntilFinished / 1000);
-                int mins = secs / 60;
-                secs = secs % 60;
-//                int milliseconds = (int) (millisUntilFinished % 1000);
-//                System.out.println(mins + ":"
-//                                + String.format("%02d", secs)
-////                    + ":"+ String.format("%03d", milliseconds)
-//                );
-
-//                txtTimerValue.setText(mins + ":" + String.format("%02d", secs));
-
+            IvParameterSpec ivspec = new IvParameterSpec(new byte[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
+            cipher.init(Cipher.DECRYPT_MODE, secret, ivspec);
+            FileInputStream fis = new FileInputStream(filePath + fileName.substring(0, fileName.length() - 4));
+            FileOutputStream fos = new FileOutputStream(getFilesDir() + "nor.pdf");
+            byte[] in = new byte[64];
+            int read;
+            while ((read = fis.read(in)) != -1) {
+                byte[] output = cipher.update(in, 0, read);
+                if (output != null)
+                    fos.write(output);
             }
 
-            public void onFinish() {
-//                btnGiftReward.setVisibility(View.VISIBLE);
-//                txtTimerValue.setVisibility(View.INVISIBLE);
-                System.out.println("reward done!");
-            }
-        }.start();
-    }
-
-    public boolean isThereReward() {
-
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-
-        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String email = pre.getString("email", "1");
-
-        String pattern = "^[a-zA-Z0-9._%+-]+@gmail\\.com$";
-        if (!email.matches(pattern))
-            return false;
-
-        String url = "ds_rewards/v1/is_reward_open/1-12-textbooks?email=" + email;
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, SplashActivity.BASEAPI + url,
-
-                new com.android.volley.Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println(response);
-
-                        if (response != null) {
-                            try {
-//                                        System.out.println(response);
-                                // Getting JSON Array node
-                                JSONObject jsonObj = new JSONObject(response);
-
-                                System.out.println("response code is " + jsonObj.getString("code"));
-                                if (jsonObj.getInt("code") == 200) {
-                                    jsonObj = new JSONObject(jsonObj.getString("response"));
-                                    reward_p_id = jsonObj.getLong("id");
-                                    reward_minutes = jsonObj.getLong("minutes");
-
-                                    System.out.println("value of id = " + reward_p_id + " and valude of mun is " + reward_minutes);
-                                    if (reward_p_id > 0 && reward_minutes > 0) {
-                                        // show counter
-                                        rewardCountdown(reward_minutes);
-                                    }
-                                }
-
-                            } catch (final JSONException e) {
-                            }
-
-                        }
-
-                    }
-
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // Check if the error has a network response
-                NetworkResponse response = error.networkResponse;
-                if (response != null) {
-                    // Get the error status code
-                    int statusCode = response.statusCode;
-
-                    // Get the error response body as a string
-                    String responseBody = new String(response.data, StandardCharsets.UTF_8);
-
-                    // Print the error details
-                    System.out.println("Error status code: " + statusCode);
-                    System.out.println("Error response body: " + responseBody);
-                } else {
-                    // The error does not have a network response
-                    System.out.println("Error message: " + error.getMessage());
-                }
-            }
-
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("username", SplashActivity.USERNAME);
-                params.put("password", SplashActivity.PAZZWORD);
-                return params;
-            }
-
-        };
-
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        stringRequest.setTag(this);
-// Add the request to the RequestQueue.
-        queue.add(stringRequest);
-
+            byte[] output = cipher.doFinal();
+            if (output != null)
+                fos.write(output);
+            fis.close();
+            fos.flush();
+            fos.close();
+        }catch (Exception lkj) {
+            try{ File file = new File(filePath + fileName.substring(0, fileName.length() - 4));
+                if (file.exists())file.delete();}catch (Exception ds){}
+        }
         return true;
     }
-
-
-    public void endReward(String _phone) {
-
-        AdRequest adRequest = new AdRequest.Builder().build();
-        RewardedAd.load(this, getString(R.string.adReward),
-                adRequest, new RewardedAdLoadCallback() {
-                    @Override
-                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                        // Handle the error.
-                        Log.d(TAG, loadAdError.toString());
-                        mRewardedAd = null;
-                    }
-
-                    @Override
-                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
-                        Log.d(TAG, "Ad was loaded.");
-                        mRewardedAd = rewardedAd;
-                        if (mRewardedAd != null) {
-                            mRewardedAd.show(ReadActivity.this, new OnUserEarnedRewardListener() {
-                                @Override
-                                public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                                    // Handle the reward.
-                                    Log.d(TAG, "The user earned the reward.");
-
-                                    SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-                                    String custom_data = "";
-                                    try {
-                                        JSONObject jsonBody = new JSONObject();
-                                        jsonBody.put("phone", _phone);
-                                        jsonBody.put("email", pre.getString("email", "1"));
-                                        jsonBody.put("reward_p_id", reward_p_id);
-                                        custom_data = jsonBody.toString();
-                                    } catch (Exception kl) {
-                                    }
-
-                                    ServerSideVerificationOptions options = new ServerSideVerificationOptions
-                                            .Builder()
-                                            .setCustomData(custom_data)
-                                            .build();
-                                    rewardedAd.setServerSideVerificationOptions(options);
-                                }
-                            });
-                        } else {
-                            Log.d(TAG, "The rewarded ad wasn't ready yet.");
-                        }
-
-                    }
-                });
-
+//    public void rewardCountdown(double _minute) {  //
 //
-////        System.out.println("endReward() reward done!");
-//        OkHttpClient rewardClient = new OkHttpClient();
+////        txtTimerValue.setVisibility(View.VISIB
 //
-//        Request request = new Request.Builder()
-//                .header("username", SplashActivity.USERNAME)
-//                .header("password", SplashActivity.PAZZWORD)
-//                .url(new Commons(this).WEBSITE + "/reward/api/items/end_reward?phone=" + _phone + "&id=" + rewardId )
-//                .build();
-//        rewardClient.newCall(request).enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                btnGiftReward.setVisibility(View.VISIBLE);
-//                e.printStackTrace();
+//        new CountDownTimer((long) (_minute * 60 * 1000), 1000) { // 30000 mili = 30 sec
+//
+//            public void onTick(long millisUntilFinished) {
+////                System.out.println("seconds remaining: " + millisUntilFinished / 1000);
+//
+//
+//                int secs = (int) (millisUntilFinished / 1000);
+//                int mins = secs / 60;
+//                secs = secs % 60;
+////                int milliseconds = (int) (millisUntilFinished % 1000);
+////                System.out.println(mins + ":"
+////                                + String.format("%02d", secs)
+//////                    + ":"+ String.format("%03d", milliseconds)
+////                );
+//
+////                txtTimerValue.setText(mins + ":" + String.format("%02d", secs));
+//
 //            }
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                if (response.isSuccessful()) {
-//                    final String myResponse = response.body().string();
-//                    ReadActivity.this.runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-////                            System.out.println("endReward() reward done!");
-////                            {"success":true,"error":false,"message":"REWARDED","amount":"0.50000000","currency_code":"ETB"}
-////
-////                            System.out.println("seconds remaining: " + myResponse);
 //
+//            public void onFinish() {
+////                btnGiftReward.setVisibility(View.VISIBLE);
+////                txtTimerValue.setVisibility(View.INVISIBLE);
+//                System.out.println("reward done!");
+//            }
+//        }.start();
+//    }
+
+//    public boolean isThereReward() {
 //
+//        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+//
+//        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//        String email = pre.getString("email", "1");
+//
+//        String pattern = "^[a-zA-Z0-9._%+-]+@gmail\\.com$";
+//        if (!email.matches(pattern))
+//            return false;
+//
+//        String url = "ds_rewards/v1/is_reward_open/1-12-textbooks?email=" + email;
+//
+//        StringRequest stringRequest = new StringRequest(Request.Method.GET, SplashActivity.BASEAPI + url,
+//
+//                new com.android.volley.Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        System.out.println(response);
+//
+//                        if (response != null) {
 //                            try {
-//                                JSONObject reader = new JSONObject(myResponse);
-//                                if((reader.getString("success")).equals("true") && (reader.getString("message")).equals("REWARDED")){
+////                                        System.out.println(response);
+//                                // Getting JSON Array node
+//                                JSONObject jsonObj = new JSONObject(response);
 //
+//                                System.out.println("response code is " + jsonObj.getString("code"));
+//                                if (jsonObj.getInt("code") == 200) {
+//                                    jsonObj = new JSONObject(jsonObj.getString("response"));
+//                                    reward_p_id = jsonObj.getLong("id");
+//                                    reward_minutes = jsonObj.getLong("minutes");
 //
-//                                    System.out.println("display_message = " + reader.getString("display_message"));
-//
-//                                    AlertDialog.Builder builder;
-//                                    builder = new AlertDialog.Builder(ReadActivity.this);
-////                                    $result->amount.$result->currency_code." ሽልማትዎን መዝግበናል። እኛጋር ያልዎት ከ 2 ብር ከበለጠ ወደስልኮ እንልካለን። ስላነበቡ_እናመሰግናለን!"
-//                                    builder.setMessage(reader.getString("display_message")) .setTitle("REWARDED!")
-//                                            .setCancelable(true)
-//                                            .setPositiveButton(R.string.እሺ, new DialogInterface.OnClickListener() {
-//                                                public void onClick(DialogInterface dialog, int id) {
-////                                                    finish();
-//                                                }
-//                                            });
-//
-//                                    //Creating dialog box
-//                                    AlertDialog alert = builder.create();
-//                                    //Setting the title manually
-////                                    alert.setTitle("AlertDialogExample");
-//                                    alert.show();
-//
+//                                    System.out.println("value of id = " + reward_p_id + " and valude of mun is " + reward_minutes);
+//                                    if (reward_p_id > 0 && reward_minutes > 0) {
+//                                        // show counter
+//                                        rewardCountdown(reward_minutes);
+//                                    }
 //                                }
 //
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
+//                            } catch (final JSONException e) {
 //                            }
 //
 //                        }
-//                    });
+//
+//                    }
+//
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                // Check if the error has a network response
+//                NetworkResponse response = error.networkResponse;
+//                if (response != null) {
+//                    // Get the error status code
+//                    int statusCode = response.statusCode;
+//
+//                    // Get the error response body as a string
+//                    String responseBody = new String(response.data, StandardCharsets.UTF_8);
+//
+//                    // Print the error details
+//                    System.out.println("Error status code: " + statusCode);
+//                    System.out.println("Error response body: " + responseBody);
+//                } else {
+//                    // The error does not have a network response
+//                    System.out.println("Error message: " + error.getMessage());
 //                }
 //            }
-//        });
 //
-    }
+//        }) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<>();
+//                params.put("username", SplashActivity.USERNAME);
+//                params.put("password", SplashActivity.PAZZWORD);
+//                return params;
+//            }
+//
+//        };
+//
+//        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+//                10000,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//
+//        stringRequest.setTag(this);
+//// Add the request to the RequestQueue.
+//        queue.add(stringRequest);
+//
+//        return true;
+//    }
+
+
+//    public void endReward(String _phone) {
+//
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        RewardedAd.load(this, getString(R.string.adReward),
+//                adRequest, new RewardedAdLoadCallback() {
+//                    @Override
+//                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+//                        // Handle the error.
+//                        Log.d(TAG, loadAdError.toString());
+//                        mRewardedAd = null;
+//                    }
+//
+//                    @Override
+//                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
+//                        Log.d(TAG, "Ad was loaded.");
+//                        mRewardedAd = rewardedAd;
+//                        if (mRewardedAd != null) {
+//                            mRewardedAd.show(ReadActivity.this, new OnUserEarnedRewardListener() {
+//                                @Override
+//                                public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+//                                    // Handle the reward.
+//                                    Log.d(TAG, "The user earned the reward.");
+//
+//                                    SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//
+//                                    String custom_data = "";
+//                                    try {
+//                                        JSONObject jsonBody = new JSONObject();
+//                                        jsonBody.put("phone", _phone);
+//                                        jsonBody.put("email", pre.getString("email", "1"));
+//                                        jsonBody.put("reward_p_id", reward_p_id);
+//                                        custom_data = jsonBody.toString();
+//                                    } catch (Exception kl) {
+//                                    }
+//
+//                                    ServerSideVerificationOptions options = new ServerSideVerificationOptions
+//                                            .Builder()
+//                                            .setCustomData(custom_data)
+//                                            .build();
+//                                    rewardedAd.setServerSideVerificationOptions(options);
+//                                }
+//                            });
+//                        } else {
+//                            Log.d(TAG, "The rewarded ad wasn't ready yet.");
+//                        }
+//
+//                    }
+//                });
+//
+////
+//////        System.out.println("endReward() reward done!");
+////        OkHttpClient rewardClient = new OkHttpClient();
+////
+////        Request request = new Request.Builder()
+////                .header("username", SplashActivity.USERNAME)
+////                .header("password", SplashActivity.PAZZWORD)
+////                .url(new Commons(this).WEBSITE + "/reward/api/items/end_reward?phone=" + _phone + "&id=" + rewardId )
+////                .build();
+////        rewardClient.newCall(request).enqueue(new Callback() {
+////            @Override
+////            public void onFailure(Call call, IOException e) {
+////                btnGiftReward.setVisibility(View.VISIBLE);
+////                e.printStackTrace();
+////            }
+////            @Override
+////            public void onResponse(Call call, Response response) throws IOException {
+////                if (response.isSuccessful()) {
+////                    final String myResponse = response.body().string();
+////                    ReadActivity.this.runOnUiThread(new Runnable() {
+////                        @Override
+////                        public void run() {
+//////                            System.out.println("endReward() reward done!");
+//////                            {"success":true,"error":false,"message":"REWARDED","amount":"0.50000000","currency_code":"ETB"}
+//////
+//////                            System.out.println("seconds remaining: " + myResponse);
+////
+////
+////                            try {
+////                                JSONObject reader = new JSONObject(myResponse);
+////                                if((reader.getString("success")).equals("true") && (reader.getString("message")).equals("REWARDED")){
+////
+////
+////                                    System.out.println("display_message = " + reader.getString("display_message"));
+////
+////                                    AlertDialog.Builder builder;
+////                                    builder = new AlertDialog.Builder(ReadActivity.this);
+//////                                    $result->amount.$result->currency_code." ሽልማትዎን መዝግበናል። እኛጋር ያልዎት ከ 2 ብር ከበለጠ ወደስልኮ እንልካለን። ስላነበቡ_እናመሰግናለን!"
+////                                    builder.setMessage(reader.getString("display_message")) .setTitle("REWARDED!")
+////                                            .setCancelable(true)
+////                                            .setPositiveButton(R.string.እሺ, new DialogInterface.OnClickListener() {
+////                                                public void onClick(DialogInterface dialog, int id) {
+//////                                                    finish();
+////                                                }
+////                                            });
+////
+////                                    //Creating dialog box
+////                                    AlertDialog alert = builder.create();
+////                                    //Setting the title manually
+//////                                    alert.setTitle("AlertDialogExample");
+////                                    alert.show();
+////
+////                                }
+////
+////                            } catch (JSONException e) {
+////                                e.printStackTrace();
+////                            }
+////
+////                        }
+////                    });
+////                }
+////            }
+////        });
+////
+//    }
 }

@@ -326,45 +326,6 @@ ProgressDialog progressBar;
                 }
         }
     }
-    public boolean dec(String filePath, String fileName, String p) {
-        try {
-            byte[] salt = {69, 121, 101, 45, 62, 118, 101, 114, 69, 121, 101, 45, 62, 118, 101, 114};
-
-            SecretKeyFactory factory = SecretKeyFactory
-                    .getInstance("PBKDF2WithHmacSHA1");
-            String fullPassword = p + fileName;
-            KeySpec keySpec = new PBEKeySpec(fullPassword.toCharArray(), salt, 65536,
-                    256);
-            SecretKey tmp = factory.generateSecret(keySpec);
-            SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
-
-            // file decryption
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-
-            IvParameterSpec ivspec = new IvParameterSpec(new byte[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
-            cipher.init(Cipher.DECRYPT_MODE, secret, ivspec);
-            FileInputStream fis = new FileInputStream(filePath + fileName.substring(0, fileName.length() - 4));
-            FileOutputStream fos = new FileOutputStream(context.getFilesDir() + "nor.pdf");
-            byte[] in = new byte[64];
-            int read;
-            while ((read = fis.read(in)) != -1) {
-                byte[] output = cipher.update(in, 0, read);
-                if (output != null)
-                    fos.write(output);
-            }
-
-            byte[] output = cipher.doFinal();
-            if (output != null)
-                fos.write(output);
-            fis.close();
-            fos.flush();
-            fos.close();
-        }catch (Exception lkj) {
-            try{ File file = new File(filePath + fileName.substring(0, fileName.length() - 4));
-                if (file.exists())file.delete();}catch (Exception ds){}
-        }
-        return true;
-    }
 
 
     public boolean showGoogleAd(int licenseLevel){
