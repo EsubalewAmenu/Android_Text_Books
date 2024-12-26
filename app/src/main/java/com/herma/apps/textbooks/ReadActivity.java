@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.util.Log;
@@ -21,6 +23,7 @@ import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +41,7 @@ import com.android.volley.toolbox.Volley;
 //import com.github.barteksc.pdfviewer.listener.OnRenderListener;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnRenderListener;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
@@ -61,6 +65,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -107,6 +112,8 @@ public class ReadActivity extends AppCompatActivity {
     // to check whether sub FAB buttons are visible or not.
     Boolean isAllFabsVisible;
 
+    AdRequest adRequest = new AdRequest.Builder().build();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -136,7 +143,6 @@ public class ReadActivity extends AppCompatActivity {
 //      mAdView = findViewById(R.id.adView);
         adContainerView = findViewById(R.id.ad_view_container);
 
-        AdRequest adRequest = new AdRequest.Builder().build();
 
         pdfView = (PDFView) findViewById(R.id.pdfView);
 //        txtTimerValue = (TextView) findViewById(R.id.timerValue);
@@ -153,51 +159,12 @@ public class ReadActivity extends AppCompatActivity {
                     f = new File(ReadActivity.this.getFilesDir() + "nor.pdf");
 
                     pdfView.fromFile(f)
-                            .onRender(new OnRenderListener() {
-                                @Override
-                                public void onInitiallyRendered(int nbPages) {
+                            .load();
 
-                    MobileAds.initialize(ReadActivity.this, new OnInitializationCompleteListener() {
-                        @Override
-                        public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
+//                    openInterstitialAd();
+                    // Delay the call to openInterstitialAd() by 30 seconds
+                    new Handler(Looper.getMainLooper()).postDelayed(this::openInterstitialAd, 30000); // 30 sec = 30000
 
-
-                                adContainerView.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        new Commons(getApplicationContext()).loadBanner(mAdView, getString(R.string.adReader), adContainerView, getWindowManager().getDefaultDisplay());
-                                    }
-                                });
-//
-//
-//                                InterstitialAd.load(getApplicationContext(), getString(R.string.adReaderInt), adRequest, new InterstitialAdLoadCallback() {
-//                                    @Override
-//                                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-//                                        // The mInterstitialAd reference will be null until
-//                                        // an ad is loaded.
-////
-////                                        SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-////                                        storedPhone = sharedPref.getString("storedPhone", "0");
-//
-////                                                isThereReward();
-//
-//                                        mInterstitialAd = interstitialAd;
-//                                        mInterstitialAd.show(ReadActivity.this);
-//                                    }
-//
-//                                    @Override
-//                                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-//                                        // Handle the error
-//                                        mInterstitialAd = null;
-//                                    }
-//                                });
-//
-                        }
-                    });
-
-
-                                }
-                            }).load();
 
                 }
             } catch (Exception e) {
@@ -218,6 +185,65 @@ public class ReadActivity extends AppCompatActivity {
         /////////////
 
         commentRelateds();
+    }
+
+
+    public void openInterstitialAd(){
+
+
+        MobileAds.initialize(ReadActivity.this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
+
+
+                adContainerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        AdView adView = new Commons(getApplicationContext()).loadBanner(mAdView, getString(R.string.adReader), adContainerView, getWindowManager().getDefaultDisplay());
+
+                        adView.setAdListener(new AdListener() {
+                            @Override
+                            public void onAdLoaded() {
+                                ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) mAddFab.getLayoutParams();
+                                params.setMargins(
+                                        params.leftMargin,
+                                        params.topMargin,
+                                        params.rightMargin,
+                                        170 // Add some extra margin
+                                );
+                                mAddFab.setLayoutParams(params);
+                            }
+                        });
+
+                    }
+                });
+
+
+
+                InterstitialAd.load(getApplicationContext(), getString(R.string.adReaderInt), adRequest, new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        // The mInterstitialAd reference will be null until
+                        // an ad is loaded.
+//
+//                                        SharedPreferences sharedPref = ReadActivity.this.getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+//                                        storedPhone = sharedPref.getString("storedPhone", "0");
+
+//                                                isThereReward();
+
+                        mInterstitialAd = interstitialAd;
+                        mInterstitialAd.show(ReadActivity.this);
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error
+                        mInterstitialAd = null;
+                    }
+                });
+
+            }
+        });
     }
 
     public void commentRelateds() {

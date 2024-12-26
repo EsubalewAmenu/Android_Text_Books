@@ -363,7 +363,7 @@ ProgressDialog progressBar;
         }
     }
 
-    public void loadBanner(AdView adView, String AD_UNIT_ID, FrameLayout adContainerView, Display display) {
+    public AdView loadBanner(AdView adView, String AD_UNIT_ID, FrameLayout adContainerView, Display display) {
         // Create an ad request.
         adView = new AdView(context);
         adView.setAdUnitId(AD_UNIT_ID);
@@ -377,6 +377,8 @@ ProgressDialog progressBar;
 
         // Start loading the ad in the background.
         adView.loadAd(adRequest);
+
+        return adView;
     }
 
     public AdSize getAdSize(FrameLayout adContainerView, Display display) {
