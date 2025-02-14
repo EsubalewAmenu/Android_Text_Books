@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:background="?android:attr/selectableItemBackground">
+
+    <!-- Reward Date -->
+    <TextView
+        android:id="@+id/rewardDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="2025-01-15"
+        android:textSize="14sp"
+        android:padding="4dp" />
+
+    <!-- Reward Amount -->
+    <TextView
+        android:id="@+id/rewardAmount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="+50 Points"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:padding="4dp" />
+
+    <!-- Reward Status -->
+    <TextView
+        android:id="@+id/rewardStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Pending"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:padding="4dp"
+        android:textColor="#F44336" /> <!-- Red for Pending -->
+</LinearLayout>

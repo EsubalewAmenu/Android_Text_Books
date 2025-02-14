@@ -119,8 +119,11 @@
     <string name="not_registed">You are not registered as a Premium user. Please register.</string>
     <string name="fill_the_form">Please fill the above in advance.</string>
     <string name="you_can_download_again">You can download it again at any time :)</string>
-    <string name="menu_ad_reward">Reward</string>
 
+    <string name="rewarded">Rewarded!</string>
+    <string name="reward_added">Your reward added to your profile. Thank you for reading!</string>
+
+    <string name="menu_ad_reward">Reward</string>
     <string name="startReward">StartReward</string>
     <string name="reward_intro">click here to order payment .... mnamn</string>
     <string name="college_books">College Books (App link)</string>
@@ -181,6 +184,23 @@
     <string name="signout">Sign out</string>
     <string name="favorite_subject">Favorite</string>
     <string name="blockchain">Blockchain Tech</string>
+    <string name="enable_location_service">Location services are turned off. Please enable them to get your current location.</string>
+    <string name="enable">Enable</string>
+    <string name="enable_location">Enable Location</string>
+    <string name="location_permission_not_granted">Location permission not granted!</string>
+    <string name="payment_ordered">Payment Ordered. Please wait...</string>
+    <string name="order_payment">Order Payment</string>
+    <string name="total_rewards">Total Rewards:</string>
+    <string name="pending_0">Pending: 0</string>
+    <string name="paid_0">Paid: 0</string>
+    <string name="load_more">Load More</string>
+    <string name="minimum_payment_order">"The minimum payment order allowed is "</string>
+    <string name="etb">" ETB."</string>
+    <string name="already_ordere">You have already ordered. Please wait until your queue is processed.</string>
+    <string name="payment_ordered_successfully">Payment ordered successfully!</string>
+    <string name="reward_receiver_ethiotel_phone_number">Reward receiver EthioTel Phone Number</string>
+    <string name="request_payment">Request Payment</string>
+    <string name="invalid_ethiopian_phone_number">Invalid Ethiopian phone number!</string>
 
 
 </resources>

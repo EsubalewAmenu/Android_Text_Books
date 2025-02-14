@@ -2,16 +2,25 @@ package com.herma.apps.textbooks;
 
 import static com.herma.apps.textbooks.common.TokenUtils.isTokenExpired;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -28,6 +37,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Task;
 import com.herma.apps.textbooks.settings.LanguageHelper;
 import com.herma.apps.textbooks.settings.SettingsActivity;
@@ -35,15 +46,18 @@ import com.herma.apps.textbooks.settings.SettingsActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class SplashActivity extends AppCompatActivity {
 
-    public static String BASEAPI = "https://datascienceplc.com/api/";
-//    public static String BASEAPI = "https://dashencon.com/test/api/";
+//    public static String BASEAPI = "https://datascienceplc.com/api/";
+    public static String BASEAPI = "http://192.168.0.185:8040/api/";
     public RequestQueue queue;
     public static String USERNAME = "public-api-user", PAZZWORD = "public-api-password";
 
@@ -124,9 +138,31 @@ public class SplashActivity extends AppCompatActivity {
             });
         }
 
+/////////////////////
 
+// localhost
+        prefs.edit().putString("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwNDAiLCJpYXQiOjE3MzY3NTQxMTcsIm5iZiI6MTczNjc1NDExNywiZXhwIjoxODMxMzYyMTE3LCJkYXRhIjp7InVzZXIiOnsiaWQiOiIxIn19fQ.Eh78qJD1JrlMeSMwAnF19FyJM4u5mtCHL0uK5iQgCqI").apply();
+        prefs.edit().putString("user_email", "dsfas@fdfds.dfs").apply();
+        prefs.edit().putString("user_nicename", "Admin").apply();
+        prefs.edit().putString("user_display_name", "Admin").apply();
+        prefs.edit().putString("username", "cfew").apply();
+        prefs.edit().putString("first_name", "Admin").apply();
+        prefs.edit().putString("last_name", "Admin").apply();
+        prefs.edit().putString("image", "https://media-cldnry.s-nbcnews.com/image/upload/t_fit-1000w,f_avif,q_auto:eco,dpr_2/rockcms/2022-11/avatar-mc-221123-02-78d2b5.jpg").apply();
 
+// server
+//        prefs.edit().putString("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2RhdGFzY2llbmNlcGxjLmNvbSIsImlhdCI6MTczNzAyNTMwNSwibmJmIjoxNzM3MDI1MzA1LCJleHAiOjE4MDAwOTczMDUsImRhdGEiOnsidXNlciI6eyJpZCI6IjQ3In19fQ.QjdnEG9cav1Nfy4qTqDg1COQnuzMeyQ_sqsqGJUDhOY").apply();
+//        prefs.edit().putString("user_email", "sabaesubalew@gmail.com").apply();
+//        prefs.edit().putString("user_nicename", "Saba").apply();
+//        prefs.edit().putString("user_display_name", "Saba").apply();
+//        prefs.edit().putString("username", "hana").apply();
+//        prefs.edit().putString("first_name", "Saba").apply();
+//        prefs.edit().putString("last_name", "Esubalew").apply();
+//        prefs.edit().putString("image", "https://secure.gravatar.com/avatar/e2f5ae079ba807ea9353bea4cf49b8f4?s=96&d=mm&r=g").apply();
+
+//            openMainActivity();
     }
+
 
     private void openMainActivity() {
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
