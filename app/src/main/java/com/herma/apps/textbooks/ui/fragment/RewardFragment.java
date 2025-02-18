@@ -227,7 +227,7 @@ public class RewardFragment extends Fragment {
 
                                 try {
                                     // Update the reward summary
-                                    pendingRewardAmount = jsonObject.getDouble("pending_reward_amount_ETB");
+                                    pendingRewardAmount = jsonObject.getDouble("pending_reward_amount_ETB") + jsonObject.getDouble("confirmed_for_payment_ETB") + jsonObject.getDouble("panny_ETB");
                                     double paidRewardAmount = jsonObject.getDouble("paid_reward_amount_ETB");
                                     min_payout = jsonObject.getDouble("min_payout");
 

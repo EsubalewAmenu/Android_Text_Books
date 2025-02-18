@@ -56,8 +56,8 @@ import java.util.Map;
 
 public class SplashActivity extends AppCompatActivity {
 
-//    public static String BASEAPI = "https://datascienceplc.com/api/";
-    public static String BASEAPI = "http://192.168.0.185:8040/api/";
+    public static String BASEAPI = "https://datascienceplc.com/api/";
+//    public static String BASEAPI = "http://192.168.0.185:8040/api/";
     public RequestQueue queue;
     public static String USERNAME = "public-api-user", PAZZWORD = "public-api-password";
 
@@ -141,14 +141,14 @@ public class SplashActivity extends AppCompatActivity {
 /////////////////////
 
 // localhost
-        prefs.edit().putString("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwNDAiLCJpYXQiOjE3MzY3NTQxMTcsIm5iZiI6MTczNjc1NDExNywiZXhwIjoxODMxMzYyMTE3LCJkYXRhIjp7InVzZXIiOnsiaWQiOiIxIn19fQ.Eh78qJD1JrlMeSMwAnF19FyJM4u5mtCHL0uK5iQgCqI").apply();
-        prefs.edit().putString("user_email", "dsfas@fdfds.dfs").apply();
-        prefs.edit().putString("user_nicename", "Admin").apply();
-        prefs.edit().putString("user_display_name", "Admin").apply();
-        prefs.edit().putString("username", "cfew").apply();
-        prefs.edit().putString("first_name", "Admin").apply();
-        prefs.edit().putString("last_name", "Admin").apply();
-        prefs.edit().putString("image", "https://media-cldnry.s-nbcnews.com/image/upload/t_fit-1000w,f_avif,q_auto:eco,dpr_2/rockcms/2022-11/avatar-mc-221123-02-78d2b5.jpg").apply();
+//        prefs.edit().putString("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwNDAiLCJpYXQiOjE3MzY3NTQxMTcsIm5iZiI6MTczNjc1NDExNywiZXhwIjoxODMxMzYyMTE3LCJkYXRhIjp7InVzZXIiOnsiaWQiOiIxIn19fQ.Eh78qJD1JrlMeSMwAnF19FyJM4u5mtCHL0uK5iQgCqI").apply();
+//        prefs.edit().putString("user_email", "dsfas@fdfds.dfs").apply();
+//        prefs.edit().putString("user_nicename", "Admin").apply();
+//        prefs.edit().putString("user_display_name", "Admin").apply();
+//        prefs.edit().putString("username", "cfew").apply();
+//        prefs.edit().putString("first_name", "Admin").apply();
+//        prefs.edit().putString("last_name", "Admin").apply();
+//        prefs.edit().putString("image", "https://media-cldnry.s-nbcnews.com/image/upload/t_fit-1000w,f_avif,q_auto:eco,dpr_2/rockcms/2022-11/avatar-mc-221123-02-78d2b5.jpg").apply();
 
 // server
 //        prefs.edit().putString("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2RhdGFzY2llbmNlcGxjLmNvbSIsImlhdCI6MTczNzAyNTMwNSwibmJmIjoxNzM3MDI1MzA1LCJleHAiOjE4MDAwOTczMDUsImRhdGEiOnsidXNlciI6eyJpZCI6IjQ3In19fQ.QjdnEG9cav1Nfy4qTqDg1COQnuzMeyQ_sqsqGJUDhOY").apply();
@@ -223,7 +223,7 @@ public class SplashActivity extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
-        String url = "wp/v2/users/new_register";
+        String url = "wp/v2/users/register";
 
         JSONObject jsonBody = new JSONObject();
         jsonBody.put("google_user_id", userId);
